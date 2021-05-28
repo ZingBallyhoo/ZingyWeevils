@@ -1,13 +1,7 @@
 ﻿@page
 
 <!DOCTYPE html>
-<!--[if IE 8]>
-    <html lang="en" class="ie8"> <![endif]-->
-<!--[if IE 9]>
-    <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!-->
 <html lang="en">
-<!--<![endif]-->
 <head>
     <title>Weevil World | A Virtual World online, on Apple &amp; on Android</title>
     <meta itemprop="description" content="Weevil World is available to play online, on iOS and on Android devices! Play &amp; chat with friends, shop for the latest items, decorate your house &amp; explore the world.">
@@ -17,67 +11,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/favicon.ico">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin">
-
-    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="https://web.archive.org/web/20201202160834cs_/https://www.weevilworld.com/css/blog.css?v=14">
-
-    <link href="https://fonts.googleapis.com/css?family=McLaren" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet" type="text/css">
-
-    <link href="https://web.archive.org/web/20201202160834cs_/https://www.weevilworld.com/unify/css/featherlight.min.css" type="text/css" rel="stylesheet"/>
-
-    <link href="https://web.archive.org/web/20201202160834cs_/https://www.weevilworld.com/unify/css/jquery.bxslider.css" type="text/css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/css/blog.trim.css?v=14">
     <link rel="stylesheet" href="/WeevilWorld/TemplateData/style.css">
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
+    
+    
     <script src="/WeevilWorld/TemplateData/UnityProgress.js"></script>
-
+    <script src="/WeevilWorld/v268/Build/UnityLoader.js"></script>
+    
+    <script type="text/javascript">
+        var nonce = "";
+        var user = "";
+        var gameInstance;
+        var gameLoaded = false;
+        var startTime = new Date().getTime();
+    
+        function getNonce() {
+            // console.log("Giving nonce to unity");
+            gameInstance.SendMessage('(singleton) SocketServerConnection', 'SetUser', user);
+            gameInstance.SendMessage('(singleton) SocketServerConnection', 'SetNonce', nonce);
+            if (!gameLoaded) {
+                gameLoaded = true;
+            }
+        }
+    
+        function loadNonce() {
+            // $.ajax(
+            //     {
+            //         type: "GET",
+            //         url: "https://web.archive.org/web/20201202160834/https://lb.binweevils.com/weevil/nonce",
+            //         dataType: 'json',
+            //         xhrFields: {
+            //             withCredentials: true
+            //         },
+            //         crossDomain: true,
+            //         beforeSend: function (xhr) {
+            //         },
+            //         success: function (response) {
+            //             nonce = response.nonce;
+            //             user = response.name;
+            //         },
+            //         error: function (xhr) {
+            //         }
+            //     }
+            // );
+        }
+        
+        function recomputeHeight() {
+            //set pages min height
+            var height = $(window).height() - $("#container-header").height() - $(".footer-v1").height();
+            $(".white-content").css("min-height", height);
+        }
+    
+        jQuery(window).resize(recomputeHeight);
+        
+        jQuery(document).ready(function () {            
+            recomputeHeight();
+    
+            try {
+                loadNonce();
+                //detect if we are on mobile
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    jQuery("div.webgl-content").hide();
+                    jQuery("#gameContainer2").show();
+                    jQuery("#container-content-home").css("min-height", "");
+                } else {
+                    gameInstance = UnityLoader.instantiate("gameContainer", "/WeevilWorld/v268/Build/04.json", {onProgress: UnityProgress});
+                }
+            } catch (err) {
+                console.log(err)
+            }
+            
+            //mini-menu rollover
+            jQuery("img.img-hover").hover(
+                function() {
+                    $(this).data("img-original", $(this).attr("src"));
+                    $(this).attr("src", $(this).data("img-over"));
+                }, function() {
+                    $(this).attr("src", $(this).data("img-original"));
+                }
+            );    
+        });
+    </script>
 </head>
 
 <body>
 <div class="wrapper" style="background-color: #35c0ff">
-
     <div class="container" id="container-header">
         <div class="header">
             <div class="row nav-bar">
-
                 <div class="col-md-2 col-sm-2 col-xs-2">
                     <a class="logo logo-home" href="https://web.archive.org/web/20201202160834/https://www.weevilworld.com/">
                         <img src="/assets/ww/logo_beta.png" alt=""/>
                     </a>
                 </div>
                 <div class="col-lg-7 hidden-md hidden-sm hidden-xs nav-center">
-                    <img class="nav-green-bg" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/nav.png" alt=""/>
+                    <img class="nav-green-bg" src="/assets/img/blog/navbar/nav.png" alt=""/>
                     <div class="nav-icons">
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/membership/payment/package">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/nav-membership1.png" data-img-over="/assets/img/blog/navbar/nav-membership2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/nav-membership1.png" data-img-over="/assets/img/blog/navbar/nav-membership2.png" alt=""/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/http://news.binweevils.com/">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/nav-blog1.png" data-img-over="/assets/img/blog/navbar/nav-blog2.png" alt=""/>
+                            <img class="img-hover" src="assets/img/blog/navbar/nav-blog1.png" data-img-over="/assets/img/blog/navbar/nav-blog2.png" alt=""/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/parents_overview">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/nav-parents1.png" data-img-over="/assets/img/blog/navbar/nav-parents2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/nav-parents1.png" data-img-over="/assets/img/blog/navbar/nav-parents2.png" alt=""/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://support55pixels.helpshift.com/a/bin-weevils/" target="_blank">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/nav-help1.png" data-img-over="/assets/img/blog/navbar/nav-help2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/nav-help1.png" data-img-over="/assets/img/blog/navbar/nav-help2.png" alt=""/>
                         </a>
                     </div>
                 </div>
                 <div class="hidden-lg visible-md hidden-sm hidden-xs nav-center-medium">
-                    <img class="nav-green-bg-medium" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/medium/nav.png" alt=""/>
+                    <img class="nav-green-bg-medium" src="/assets/img/blog/navbar/medium/nav.png" alt=""/>
                     <div class="nav-icons-medium">
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/membership/payment/package">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/medium/nav-membership1.png" data-img-over="/assets/img/blog/navbar/medium/nav-membership2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-membership1.png" data-img-over="/assets/img/blog/navbar/medium/nav-membership2.png" alt=""/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/http://news.binweevils.com/">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/medium/nav-blog1.png" data-img-over="/assets/img/blog/navbar/medium/nav-blog2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-blog1.png" data-img-over="/assets/img/blog/navbar/medium/nav-blog2.png" alt=""/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/parents_overview">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/medium/nav-parents1.png" data-img-over="/assets/img/blog/navbar/medium/nav-parents2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-parents1.png" data-img-over="/assets/img/blog/navbar/medium/nav-parents2.png" alt=""/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://support55pixels.helpshift.com/a/bin-weevils/" target="_blank">
-                            <img class="img-hover" src="https://web.archive.org/web/20201202160834im_/https://www.weevilworld.com/assets/img/blog/navbar/medium/nav-help1.png" data-img-over="/assets/img/blog/navbar/medium/nav-help2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-help1.png" data-img-over="/assets/img/blog/navbar/medium/nav-help2.png" alt=""/>
                         </a>
                     </div>
                 </div>
@@ -88,8 +151,6 @@
                         </a>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -115,18 +176,14 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
-
     <!--/row-->
 </div>
 <!--/container-->
 <!--=== End Content Part ===-->
 
 <!--=== Footer ===-->
-<input type="hidden" id="current_url" value="aHR0cDovL3d3dy53ZWV2aWx3b3JsZC5jb20=">
 <div class="footer-v1">
     <div class="footer">
         <div class="container">
@@ -189,140 +246,7 @@
     </div>
 </div>
 <!--=== End Footer ===-->
-
 <!--/wrapper-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/external/jquery/jquery.min.js"></script>
-<script src="https://web.archive.org/web/20201202160834js_/https://www.weevilworld.com/js/blog.js?v=14"></script>
-
-<script src="/WeevilWorld/v268/Build/UnityLoader.js"></script>
-
-<script type="text/javascript">
-    var nonce = "";
-    var user = "";
-    var gameInstance;
-    var gameLoaded = false;
-    var startTime = new Date().getTime();
-
-    function getNonce() {
-//        console.log("Giving nonce to unity");
-        gameInstance.SendMessage('(singleton) SocketServerConnection', 'SetUser', user);
-        gameInstance.SendMessage('(singleton) SocketServerConnection', 'SetNonce', nonce);
-        if (!gameLoaded) {
-            ga('send', 'event', 'LoaderTimes', 'LoginPageLoaded', 'seconds', new Date().getTime() - startTime);
-            gameLoaded = true;
-        }
-    }
-
-    jQuery(window).bind(
-        "beforeunload",
-        function () {
-            if (!gameLoaded) {
-                ga('send', 'event', 'LoaderTimes', 'PlayerLeftPage', 'seconds', new Date().getTime() - startTime);
-            }
-        });
-
-    function loadNonce() {
-        // $.ajax(
-        //     {
-        //         type: "GET",
-        //         url: "https://web.archive.org/web/20201202160834/https://lb.binweevils.com/weevil/nonce",
-        //         dataType: 'json',
-        //         xhrFields: {
-        //             withCredentials: true
-        //         },
-        //         crossDomain: true,
-        //         beforeSend: function (xhr) {
-        //         },
-        //         success: function (response) {
-        //             nonce = response.nonce;
-        //             user = response.name;
-        //         },
-        //         error: function (xhr) {
-        //         }
-        //     }
-        // );
-    }
-
-    function openUrlInNewWindow(url) {
-//        swal({
-//                    title: "Are you sure?",
-//                    text: "You will not be able to recover this imaginary file!",
-//                    type: "warning",
-//                    showCancelButton: true,
-//                    confirmButtonColor: "#35c0ff",
-//                    confirmButtonText: "Yes, delete it!"
-//                },
-//                function(){
-        window.open(url, '_blank');
-//                });
-
-    }
-
-
-    //set pages min height
-    var height = $(window).height() - $("#container-header").height() - $(".footer-v1").height();
-    $(".white-content").css("min-height", height);
-
-    jQuery(document).ready(function () {
-        App.init();
-
-        try {
-            loadNonce();
-            //detect if we are on mobile
-            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                jQuery("div.webgl-content").hide();
-                jQuery("#gameContainer2").show();
-                jQuery("#container-content-home").css("min-height", "");
-            } else {
-                gameInstance = UnityLoader.instantiate("gameContainer", "/WeevilWorld/v268/Build/04.json", {onProgress: UnityProgress});
-            }
-        } catch (err) {
-            console.log(err)
-        }
-
-        //scroll to the top on click
-        $('.back-to-top').click(function () {
-            $('body,html').animate({
-                scrollTop: 0
-            }, 1000);
-            return false;
-        });
-
-        //make anchor scroll slowly
-        $('.slow-scroll').click(function () {
-            $('html, body').animate({
-                scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
-            }, 1000);
-            return false;
-        });
-
-    });
-</script>
-
-<!--[if lt IE 9]>
-    <script src="/js/blog-ie9.js"></script>
-
-<![endif]-->
 
 </body>
-</html><!--
-FILE ARCHIVED ON 16:08:34 Dec 02, 2020 AND RETRIEVED FROM THE
-INTERNET ARCHIVE ON 23:35:26 May 24, 2021.
-JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
-
-ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
-SECTION 108(a)(3)).
--->
-<!--
-playback timings (ms):
-captures_list: 142.802
-exclusion.robots: 0.841
-exclusion.robots.policy: 0.829
-RedisCDXSource: 20.433
-esindex: 0.007
-LoadShardBlock: 89.93 (3)
-PetaboxLoader3.datanode: 83.157 (4)
-CDXLines.iter: 25.197 (3)
-load_resource: 85.174
-PetaboxLoader3.resolve: 38.719
--->
+</html>
