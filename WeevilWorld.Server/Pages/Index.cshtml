@@ -17,10 +17,6 @@
     <link rel="stylesheet" type="text/css" href="/css/blog.trim.css?v=14">
     <link rel="stylesheet" href="/WeevilWorld/TemplateData/style.css">
     
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
-    
-    
     <script src="/WeevilWorld/TemplateData/UnityProgress.js"></script>
     <script src="/WeevilWorld/v268/Build/UnityLoader.js"></script>
     
@@ -64,22 +60,26 @@
         
         function recomputeHeight() {
             //set pages min height
-            var height = $(window).height() - $("#container-header").height() - $(".footer-v1").height();
-            $(".white-content").css("min-height", height);
+            
+            let containerHeader = document.querySelector("#container-header");
+            let footer = document.querySelector(".footer-v1");
+            let whiteContent = document.querySelector(".white-content");
+            
+            let height = window.innerHeight - containerHeader.clientHeight - footer.clientHeight;
+            whiteContent.style.minHeight = `${height}px`;
         }
-    
-        jQuery(window).resize(recomputeHeight);
+        window.addEventListener('resize', recomputeHeight);
         
-        jQuery(document).ready(function () {            
+        document.addEventListener("DOMContentLoaded", function() {       
             recomputeHeight();
     
             try {
                 loadNonce();
                 //detect if we are on mobile
                 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    jQuery("div.webgl-content").hide();
-                    jQuery("#gameContainer2").show();
-                    jQuery("#container-content-home").css("min-height", "");
+                    document.querySelector("div.webgl-content").style.display = 'none';
+                    document.querySelector("#gameContainer2").style.display = 'block';
+                    //document.querySelector("#container-content-home").style.minHeight = "0px"; // ?
                 } else {
                     gameInstance = UnityLoader.instantiate("gameContainer", "/WeevilWorld/v268/Build/04.json", {onProgress: UnityProgress});
                 }
@@ -87,15 +87,17 @@
                 console.log(err)
             }
             
-            //mini-menu rollover
-            jQuery("img.img-hover").hover(
-                function() {
-                    $(this).data("img-original", $(this).attr("src"));
-                    $(this).attr("src", $(this).data("img-over"));
-                }, function() {
-                    $(this).attr("src", $(this).data("img-original"));
-                }
-            );    
+            document.querySelectorAll(".img-hover").forEach(function(hoverButton) {
+                hoverButton.addEventListener("mouseover", function()
+                {
+                    hoverButton.dataset["imgOriginal"] = hoverButton.src;
+                    hoverButton.src = hoverButton.dataset["imgOver"];
+                });
+                hoverButton.addEventListener("mouseleave", function()
+                {
+                    hoverButton.src = hoverButton.dataset["imgOriginal"];
+                });
+            });
         });
     </script>
 </head>
@@ -164,7 +166,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div id="gameContainer2" style=" margin: 10px auto;position: relative;display: none">
-                        <img src="/assets/ww/SplashNobtns.png" alt="" class="img-responsive">
+                        <img src="/assets/ww/SplashNobtns.png" alt="" class="img-responsive" style="margin: auto">
                         <div style="position: absolute; top:50%; text-align: center; right:0; left:0">
                             <a href="https://apple.co/2sDgVvN">
                                 <img src="/assets/ww/appleAppBtn.png" alt="">
