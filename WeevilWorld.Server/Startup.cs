@@ -1,9 +1,9 @@
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using ArcticFox.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -43,7 +43,6 @@ namespace WeevilWorld.Server
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -52,8 +51,18 @@ namespace WeevilWorld.Server
                 endpoints.MapRazorPages();
             });
             
-            var cdn = CreateFS(@"D:\re\ww\serv_filesystem", "");
-            app.UseStaticFiles(cdn);
+            var provider = new FileExtensionContentTypeProvider
+            {
+                Mappings =
+                {
+                    {".unityweb", "application/octet-stream"}
+                }
+            };
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+            app.UseStaticFiles(CreateFS(@"D:\re\ww\serv_filesystem", "", provider));
 
             app.UseWebSockets();
             app.Use(async (context, next) =>
@@ -85,31 +94,15 @@ namespace WeevilWorld.Server
             });
         }
         
-        private static StaticFileOptions CreateFS(string dir, string requestPath)
+        private static StaticFileOptions CreateFS(string dir, string requestPath, FileExtensionContentTypeProvider contentTypeProvider)
         {
             var fileProvider = new PhysicalFileProvider(dir);
-            
-            var options = new StaticFileOptions();
-            options.ServeUnknownFileTypes = true;
-            options.FileProvider = fileProvider;
-            options.RequestPath = requestPath;
-            options.OnPrepareResponse = context =>
+            var options = new StaticFileOptions
             {
-                var contentType = "application/octet-stream";
-                
-                var path = context.File.Name;
-                var ext = Path.GetExtension(path);
-                if (ext == ".swf")
-                {
-                    contentType = "application/x-shockwave-flash";
-                } else if (ext == ".xml")
-                {
-                    contentType = "application/xml";
-                } else if (ext == ".css")
-                {
-                    contentType = "text/css";
-                }
-                context.Context.Response.ContentType = contentType;
+                ServeUnknownFileTypes = true,
+                FileProvider = fileProvider,
+                RequestPath = requestPath,
+                ContentTypeProvider = contentTypeProvider
             };
             return options;
         }
