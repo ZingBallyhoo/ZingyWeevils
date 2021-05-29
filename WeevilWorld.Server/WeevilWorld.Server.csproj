@@ -9,4 +9,10 @@
     <ProjectReference Include="..\ArcticFox\ArcticFox.Net\ArcticFox.Net.csproj" />
     <ProjectReference Include="..\WeevilWorld.Protocol\WeevilWorld.Protocol.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\PlayPageModel.cs">
+      <DependentUpon>PlayPage.cshtml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -6,8 +6,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using Brotli;
 using LZ4;
 using uTinyRipper;
+using uTinyRipper.ArchiveFiles;
 using uTinyRipper.BundleFiles;
 using uTinyRipper.Lz4;
 
@@ -59,11 +61,32 @@ namespace WeevilWorld.Patcher
                 var inputFileName = Path.GetFileName(inputFile);
 
                 byte[] decompressedWebFile;
+
                 using (var inputStream = File.OpenRead(inputFile))
-                using (var gzipStream = new GZipStream(inputStream, CompressionMode.Decompress)) 
+                using (var reader = new EndianReader(inputStream, EndianType.BigEndian))
                 using (var decompressOutputStream = new MemoryStream())
                 {
-                    gzipStream.CopyTo(decompressOutputStream);
+                    var header = new ArchiveHeader();
+                    header.Read(reader);
+
+                    if (header.Type == ArchiveType.GZip)
+                    {
+                        using var gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress);
+                        gzipStream.CopyTo(decompressOutputStream);
+                    } else if (header.Type == ArchiveType.Brotli)
+                    {
+                        using var brotliStream = new BrotliInputStream(reader.BaseStream);
+                        int count;
+                        var buffer = new byte[81920];
+                        while ((count = brotliStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            decompressOutputStream.Write(buffer, 0, count);
+                        }
+                    } else
+                    {
+                        throw new InvalidDataException(header.Type.ToString());
+                    }
+                    
                     decompressedWebFile = decompressOutputStream.ToArray();
                 }
 
@@ -312,6 +335,8 @@ namespace WeevilWorld.Patcher
         private static void CompressUnityWebFile(string inputPath, string outputPath)
         {
             if (File.Exists(outputPath)) File.Delete(outputPath);
+            var outputDir = Path.GetDirectoryName(outputPath);
+            if (!Directory.Exists(outputDir)) Directory.CreateDirectory(outputDir);
             
             Console.Out.WriteLine($"Compressing {Path.GetFileName(outputPath)}");
             
