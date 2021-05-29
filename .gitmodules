@@ -1,3 +1,6 @@
 [submodule "ArcticFox"]
 	path = ArcticFox
 	url = https://github.com/ZingBallyhoo/ArcticFox
+[submodule "UtinyRipper"]
+	path = UtinyRipper
+	url = https://github.com/mafaca/UtinyRipper
