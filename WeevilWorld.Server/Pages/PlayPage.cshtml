@@ -1,4 +1,4 @@
-﻿@page
+﻿@model WeevilWorld.Server.Pages.PlayPageModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/WeevilWorld/TemplateData/style.css">
     
     <script src="/WeevilWorld/TemplateData/UnityProgress.js"></script>
-    <script src="/WeevilWorld/v268/Build/UnityLoader.js"></script>
+    <script src=@Model.UnityLoaderPath></script>
     
     <script type="text/javascript">
         var nonce = "";
@@ -81,7 +81,7 @@
                     document.querySelector("#gameContainer2").style.display = 'block';
                     //document.querySelector("#container-content-home").style.minHeight = "0px"; // ?
                 } else {
-                    gameInstance = UnityLoader.instantiate("gameContainer", "/WeevilWorld/v268/Build/04.json", {onProgress: UnityProgress});
+                    gameInstance = UnityLoader.instantiate("gameContainer", "@Model.UnityJsonPath", {onProgress: UnityProgress});
                 }
             } catch (err) {
                 console.log(err)
