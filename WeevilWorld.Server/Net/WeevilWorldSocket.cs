@@ -248,6 +248,9 @@ namespace WeevilWorld.Server.Net
                         var newRoom = await user.m_zone.GetRoom(request.Roomtype.ToString());
                         if (newRoom == null) throw new NullReferenceException($"room {request.Roomtype} doesn't exist");
 
+                        var weevil = user.GetUserData<Weevil>();
+                        weevil.MoveAction = null; // don't replay a move from the previous room
+
                         var existingWeevils = await newRoom.GetAllUserData<Weevil>();
 
                         var currentRoom = await user.GetPrimaryRoomOrNull();
