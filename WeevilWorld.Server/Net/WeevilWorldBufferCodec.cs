@@ -16,7 +16,7 @@ namespace WeevilWorld.Server.Net
             {
                 if (m_header.ConsumeAndGet(ref input, out var header))
                 {
-                    var size = BinaryPrimitives.ReadInt16BigEndian(header) + 2; // +sizeof(messageType)
+                    var size = BinaryPrimitives.ReadUInt16BigEndian(header) + 2; // +sizeof(messageType)
                     m_body.SetSize(size);
                 }
 
