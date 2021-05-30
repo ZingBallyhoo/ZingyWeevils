@@ -376,6 +376,25 @@ namespace WeevilWorld.Server.Net
                     });
                     break;
                 }
+                case PacketIDs.SAY_REQUEST:
+                {
+                    var request = SayRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var weevil = user.GetUserData<Weevil>();
+
+                        var room = await user.GetPrimaryRoom();
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.Broadcast(PacketIDs.CHATMESSAGE_NOTIFICATION, new ChatMessage
+                        {
+                            Msg = request.Text,
+                            OwnerIdx = weevil.Idx
+                        });
+                    });
+                    break;
+                }
             }
         }
 
