@@ -250,6 +250,7 @@ namespace WeevilWorld.Server.Net
 
                         var weevil = user.GetUserData<Weevil>();
                         weevil.MoveAction = null; // don't replay a move from the previous room
+                        weevil.RoomPosition = null;
 
                         var existingWeevils = await newRoom.GetAllUserData<Weevil>();
 
@@ -338,6 +339,29 @@ namespace WeevilWorld.Server.Net
                         await broadcaster.Broadcast(PacketIDs.CHARACTERMOVE_NOTIFICATION, new CharacterMove
                         {
                             Action = moveAction
+                        });
+                    });
+                    
+                    break;
+                }
+                case PacketIDs.MOVE_REQUEST: // old client
+                {
+                    var move = MoveRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var roomPos = move.RoomPosition;
+                    if (roomPos == null) throw new NullReferenceException();
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var room = await user.GetPrimaryRoom();
+
+                        var weevil = user.GetUserData<Weevil>();
+                        weevil.RoomPosition = roomPos;
+
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.Broadcast(PacketIDs.ROOMMOVE_NOTIFICATION, new RoomMove
+                        {
+                            Position = roomPos
                         });
                     });
                     
