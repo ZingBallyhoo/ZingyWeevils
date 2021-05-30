@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
-using WeevilWorldProtobuf.Objects;
 
 namespace WeevilWorld.Server.Net
 {
@@ -12,7 +11,7 @@ namespace WeevilWorld.Server.Net
             var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
             return broadcaster.Broadcast(PacketIDs.ROOMJOINED_NOTIFICATION, new WeevilWorldProtobuf.Notifications.RoomJoined
             {
-                Weevil = user.GetUserData<Weevil>()
+                Weevil = user.GetWeevil()
             });
         }
         
@@ -21,7 +20,7 @@ namespace WeevilWorld.Server.Net
             var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
             return broadcaster.Broadcast(PacketIDs.ROOMLEFT_NOTIFICATION, new WeevilWorldProtobuf.Notifications.RoomLeft
             {
-                Weevil = user.GetUserData<Weevil>()
+                Weevil = user.GetWeevil()
             });
         }
     }

@@ -6,6 +6,7 @@ using ArcticFox.SmartFoxServer;
 using Microsoft.Extensions.DependencyInjection;
 using Stl.DependencyInjection;
 using WeevilWorldProtobuf.Enums;
+using WeevilWorldProtobuf.Objects;
 
 namespace WeevilWorld.Server.Net
 {
@@ -33,6 +34,11 @@ namespace WeevilWorld.Server.Net
         public override HighLevelSocket CreateHighLevelSocket(SocketInterface socket)
         {
             return new WeevilWorldSocket(socket, m_smartFoxManager);
+        }
+
+        public static string GetNestRoomName(Weevil weevil, long slot)
+        {
+            return $"NestRoom_Slot{slot}_{weevil.Name}";
         }
 
         public async ValueTask StartZone()

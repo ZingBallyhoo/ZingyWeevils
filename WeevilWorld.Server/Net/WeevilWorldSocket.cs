@@ -1,5 +1,7 @@
 using System;
 using System.Buffers.Binary;
+using System.Linq;
+using System.Threading.Tasks;
 using ArcticFox.Codec;
 using ArcticFox.Net.Event;
 using ArcticFox.Net.Sockets;
@@ -64,7 +66,7 @@ namespace WeevilWorld.Server.Net
                             MoveAction = null,
                             Clothes =
                             {
-                                738
+                                //738
                             },
                             LastLogin = 0,
                             OptionBuddyRequests = true,
@@ -74,7 +76,10 @@ namespace WeevilWorld.Server.Net
                             NestCoolness = 1000,
                             Xp = 0,
                         };
-                        user.SetUserData(createdWeevil);
+                        var weevilData = new WeevilData(user, createdWeevil);
+                        user.SetUserData(weevilData);
+
+                        await weevilData.GetNestRoom(1).SetOwned();
 
                         var response = new LoginResponse
                         {
@@ -245,21 +250,8 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var newRoom = await user.m_zone.GetRoom(request.Roomtype.ToString());
-                        if (newRoom == null) throw new NullReferenceException($"room {request.Roomtype} doesn't exist");
-
-                        var weevil = user.GetUserData<Weevil>();
-                        weevil.MoveAction = null; // don't replay a move from the previous room
-                        weevil.RoomPosition = null;
-
-                        var existingWeevils = await newRoom.GetAllUserData<Weevil>();
-
-                        var currentRoom = await user.GetPrimaryRoomOrNull();
-                        if (currentRoom != null)
-                        {
-                            await currentRoom.RemoveUser(user);
-                        }
-                        await newRoom.AddUser(user);
+                        
+                        var existingWeevils = await JoinRoomCore(user, request.Roomtype.ToString());
 
                         var roomJoinResponse = new WeevilWorldProtobuf.Responses.RoomJoin
                         {
@@ -332,7 +324,7 @@ namespace WeevilWorld.Server.Net
                         var user = GetUser();
                         var room = await user.GetPrimaryRoom();
 
-                        var weevil = user.GetUserData<Weevil>();
+                        var weevil = user.GetWeevil();
                         weevil.MoveAction = moveAction;
 
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
@@ -355,7 +347,7 @@ namespace WeevilWorld.Server.Net
                         var user = GetUser();
                         var room = await user.GetPrimaryRoom();
 
-                        var weevil = user.GetUserData<Weevil>();
+                        var weevil = user.GetWeevil();
                         weevil.RoomPosition = roomPos;
 
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
@@ -374,7 +366,7 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var weevil = user.GetUserData<Weevil>();
+                        var weevil = user.GetWeevil();
 
                         weevil.Def = request.Def;
                         
@@ -407,7 +399,7 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var weevil = user.GetUserData<Weevil>();
+                        var weevil = user.GetWeevil();
 
                         var room = await user.GetPrimaryRoom();
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
@@ -419,7 +411,134 @@ namespace WeevilWorld.Server.Net
                     });
                     break;
                 }
+                case PacketIDs.NESTROOMJOIN_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.NestRoomJoin.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var owningUser = await user.m_zone.GetUser((ulong)request.Idx);
+
+                        if (owningUser == null)
+                        {
+                            // todo: new client doesn't handle errors codes here
+                            throw new Exception();
+                        }
+
+                        var owningWeevilData = owningUser.GetWeevilData();
+                        var owningWeevil = owningWeevilData.m_object;
+                        if (owningWeevil.NestStatus == NestStatus.Closed) throw new Exception();
+                        // todo: no friendslist, can't handle FriendsOnly
+
+                        var roomData = owningWeevilData.GetNestRoom(request.Slot);
+
+                        var existingWeevils = await JoinRoomCore(user, roomData.Room());
+
+                        var nestRoomJoinResponse = new WeevilWorldProtobuf.Responses.NestRoomJoin
+                        {
+                            Result = ResultType.Ok,
+                            Owner = owningWeevil,
+                            LightOn = roomData.m_lightOn
+                        };
+                        nestRoomJoinResponse.Weevils.AddRange(existingWeevils);
+                        await this.Broadcast(PacketIDs.NESTROOMJOIN_RESPONSE, nestRoomJoinResponse);
+                    });
+                    break;
+                }
+                case PacketIDs.NESTINFO_REQUEST:
+                {
+                    var request = StdIdRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var owningUser = await user.m_zone.GetUser((ulong) request.Id);
+                        if (owningUser == null) throw new NullReferenceException();
+                        var owningWeevilData = owningUser.GetWeevilData();
+
+                        var response = new WeevilWorldProtobuf.Responses.NestInfo
+                        {
+                            Result = ResultType.Ok,
+                            Owner = owningWeevilData.m_object
+                        };
+                        foreach (var room in owningWeevilData.GetRooms())
+                        {
+                            if (!room.m_purchased) continue;
+                            response.RoomInfo.Add(new RoomInfo
+                            {
+                                Slot = room.m_slot,
+                                LightOn = room.m_lightOn
+                            });
+                        }
+                        await this.Broadcast(PacketIDs.NESTINFO_REPONSE, response);
+                    });
+                    break;
+                    
+                }
+                case PacketIDs.BUYROOM_REQUEST:
+                {
+                    var request = RoomSlot.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+
+                        var weevilData = user.GetWeevilData();
+                        var nestRoomData = weevilData.GetNestRoom(request.Slot);
+
+                        await nestRoomData.SetOwned();
+
+                        await this.Broadcast(PacketIDs.BUYROOM_RESPONSE, new RoomSlotData
+                        {
+                            Slot = request.Slot,
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok
+                            }
+                        });
+                    });
+                    break;
+                }
+                case PacketIDs.TOGGLELIGHT_REQUEST:
+                {
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var currentRoom = await user.GetPrimaryRoom();
+
+                        var nestRoomData = currentRoom.GetData<NestRoomData>();
+
+                        await nestRoomData.ToggleLights(user);
+                    });
+                    break;
+                }
             }
+        }
+
+        private static async ValueTask<Weevil[]> JoinRoomCore(User user, string roomName)
+        {
+            var newRoom = await user.m_zone.GetRoom(roomName);
+            if (newRoom == null) throw new NullReferenceException($"room {roomName} doesn't exist");
+            return await JoinRoomCore(user, newRoom);
+        }
+        
+        private static async ValueTask<Weevil[]> JoinRoomCore(User user, Room newRoom)
+        {
+            var weevil = user.GetWeevil();
+            weevil.MoveAction = null; // don't replay a move from the previous room
+            weevil.RoomPosition = null;
+
+            var existingWeevils = await newRoom.GetAllUserData<WeevilData>();
+
+            var currentRoom = await user.GetPrimaryRoomOrNull();
+            if (currentRoom != null)
+            {
+                await currentRoom.RemoveUser(user);
+            }
+            await newRoom.AddUser(user);
+
+            return existingWeevils.Select(x => x.m_object).ToArray();
         }
 
         public void Abort()
