@@ -343,6 +343,39 @@ namespace WeevilWorld.Server.Net
                     
                     break;
                 }
+                case PacketIDs.WEEVIL_CHANGE_DEF_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.WeevilChangeDef.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var weevil = user.GetUserData<Weevil>();
+
+                        weevil.Def = request.Def;
+                        
+                        await this.Broadcast(PacketIDs.WEEVIL_CHANGE_DEF_RESPONSE, new WeevilWorldProtobuf.Responses.WeevilChangeDef
+                        {
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok
+                            },
+                            Def = weevil.Def
+                        });
+                        
+                        var room = await user.GetPrimaryRoomOrNull();
+                        if (room != null)
+                        {
+                            var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                            await broadcaster.Broadcast(PacketIDs.WEEVIL_CHANGE_DEF_NOTIFICATION, new WeevilDefChanged
+                            {
+                                Def = weevil.Def,
+                                OwnerIdx = weevil.Idx
+                            });
+                        }
+                    });
+                    break;
+                }
             }
         }
 
