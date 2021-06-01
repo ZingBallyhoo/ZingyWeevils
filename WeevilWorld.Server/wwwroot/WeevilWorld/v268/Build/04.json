@@ -1,0 +1,17 @@
+{
+"companyName": "55 Pixels",
+"productName": "Weevil World",
+"productVersion": "3.0.1",
+"dataUrl": "04.data.unityweb",
+"wasmCodeUrl": "04.wasm.code.unityweb",
+"wasmFrameworkUrl": "04.wasm.framework.unityweb",
+"graphicsAPI": ["WebGL 2.0","WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"backgroundUrl": "04.jpg",
+"splashScreenStyle": "Dark",
+"backgroundColor": "#FFFFFF",
+"cacheControl": {"default": "must-revalidate"},
+"developmentBuild": false,
+"multithreading": false,
+"unityVersion": "2019.1.0f2"
+}

@@ -62,7 +62,6 @@ namespace WeevilWorld.Server
             {
                 ContentTypeProvider = provider
             });
-            app.UseStaticFiles(CreateFS(@"D:\re\ww\serv_filesystem", "", provider));
 
             app.UseWebSockets();
             app.Use(async (context, next) =>
