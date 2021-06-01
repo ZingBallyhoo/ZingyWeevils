@@ -322,7 +322,7 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var room = await user.GetPrimaryRoom();
+                        var room = await user.GetRoom();
 
                         var weevil = user.GetWeevil();
                         weevil.MoveAction = moveAction;
@@ -345,7 +345,7 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var room = await user.GetPrimaryRoom();
+                        var room = await user.GetRoom();
 
                         var weevil = user.GetWeevil();
                         weevil.RoomPosition = roomPos;
@@ -379,7 +379,7 @@ namespace WeevilWorld.Server.Net
                             Def = weevil.Def
                         });
                         
-                        var room = await user.GetPrimaryRoomOrNull();
+                        var room = await user.GetRoomOrNull();
                         if (room != null)
                         {
                             var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
@@ -401,7 +401,7 @@ namespace WeevilWorld.Server.Net
                         var user = GetUser();
                         var weevil = user.GetWeevil();
 
-                        var room = await user.GetPrimaryRoom();
+                        var room = await user.GetRoom();
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
                         await broadcaster.Broadcast(PacketIDs.CHATMESSAGE_NOTIFICATION, new ChatMessage
                         {
@@ -505,7 +505,7 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var currentRoom = await user.GetPrimaryRoom();
+                        var currentRoom = await user.GetRoom();
 
                         var nestRoomData = currentRoom.GetData<NestRoomData>();
 
@@ -531,12 +531,7 @@ namespace WeevilWorld.Server.Net
 
             var existingWeevils = await newRoom.GetAllUserData<WeevilData>();
 
-            var currentRoom = await user.GetPrimaryRoomOrNull();
-            if (currentRoom != null)
-            {
-                await currentRoom.RemoveUser(user);
-            }
-            await newRoom.AddUser(user);
+            await user.MoveTo(newRoom);
 
             return existingWeevils.Select(x => x.m_object).ToArray();
         }
