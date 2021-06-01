@@ -4,7 +4,7 @@ using ArcticFox.SmartFoxServer;
 
 namespace WeevilWorld.Server.Net
 {
-    public class WeevilWorldSystemHandler : ISystemHandler
+    public class RoomData : IRoomEventHandler
     {
         public ValueTask UserJoinedRoom(Room room, User user)
         {
@@ -14,7 +14,7 @@ namespace WeevilWorld.Server.Net
                 Weevil = user.GetWeevil()
             });
         }
-        
+
         public ValueTask UserLeftRoom(Room room, User user)
         {
             var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);

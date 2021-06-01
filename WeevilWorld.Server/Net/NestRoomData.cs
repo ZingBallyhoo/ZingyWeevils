@@ -9,7 +9,7 @@ using WeevilWorldProtobuf.Responses;
 
 namespace WeevilWorld.Server.Net
 {
-    public class NestRoomData
+    public class NestRoomData : RoomData
     {
         public readonly WeevilData m_owner;
         public readonly long m_slot;
@@ -33,9 +33,9 @@ namespace WeevilWorld.Server.Net
                 m_creator = owningUser,
                 m_maxUsers = 20,
                 m_isTemporary = true,
-                m_name = WeevilWorldSocketHost.GetNestRoomName(m_owner.m_object, m_slot)
+                m_name = WeevilWorldSocketHost.GetNestRoomName(m_owner.m_object, m_slot),
+                m_data = this
             });
-            m_room.SetData(this);
             m_purchased = true;
         }
 

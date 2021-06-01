@@ -24,7 +24,7 @@ namespace WeevilWorld.Server.Net
         {
             var services = new ServiceCollection();
             services.UseRegisterAttributeScanner().RegisterFrom(typeof(Zone).Assembly);
-            services.AddSingleton<ISystemHandler, WeevilWorldSystemHandler>();
+            services.AddSingleton<ISystemHandler, NullSystemHandler>();
 
             var provider = services.BuildServiceProvider();
             var mgr = provider.GetRequiredService<SmartFoxManager>();
@@ -50,7 +50,8 @@ namespace WeevilWorld.Server.Net
                 await zone.CreateRoom(new RoomDescription
                 {
                     m_name = type.ToString(),
-                    m_maxUsers = -1
+                    m_maxUsers = 200,
+                    m_data = new RoomData()
                 });
             }
         }
