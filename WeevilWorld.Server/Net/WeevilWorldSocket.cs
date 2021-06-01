@@ -250,6 +250,12 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
+
+                        if (request.Roomtype == RoomType.Lobby)
+                        {
+                            await user.RemoveFromRoom(RoomTypeIDs.DEFAULT);
+                            return;
+                        }
                         
                         var existingWeevils = await JoinRoomCore(user, request.Roomtype.ToString());
 
