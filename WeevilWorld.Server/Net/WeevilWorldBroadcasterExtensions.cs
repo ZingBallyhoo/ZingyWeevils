@@ -15,6 +15,12 @@ namespace WeevilWorld.Server.Net
 
             var buffer = new byte[size + 4];
             var bufferSpan = new Span<byte>(buffer);
+
+            if (size > ushort.MaxValue)
+            {
+                throw new Exception($"packet too big. ({size} > {ushort.MaxValue})");
+            }
+            
             BinaryPrimitives.WriteUInt16BigEndian(bufferSpan, (ushort)size);
             BinaryPrimitives.WriteUInt16BigEndian(bufferSpan.Slice(2), (ushort)type);
 
