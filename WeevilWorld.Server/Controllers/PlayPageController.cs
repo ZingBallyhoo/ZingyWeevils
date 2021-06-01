@@ -15,7 +15,7 @@ namespace WeevilWorld.Server.Controllers
             });
         }
         
-        [HttpGet("index2")]
+        [HttpGet("/index2")]
         public IActionResult IndexWonderPark()
         {
             return View("~/Pages/PlayPage.cshtml", new PlayPageModel

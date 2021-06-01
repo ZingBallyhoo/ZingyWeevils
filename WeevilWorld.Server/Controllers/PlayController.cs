@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WeevilWorld.Server.Controllers
@@ -6,11 +7,18 @@ namespace WeevilWorld.Server.Controllers
     [Route("play__")]
     public class PlayController : Controller
     {
-        // GET
+        public record VersionData
+        {
+            [JsonPropertyName("server")] public string m_websocketUrl { get; init; }
+        }
+        
         [HttpGet("get-version")]
         public ActionResult GetVersion()
         {
-            return Ok("{\"server\":\"127.0.0.1/ws\"}");
+            return Ok(new VersionData
+            {
+                m_websocketUrl = "ww.zingy.dev/ws"
+            });
         }
     }
 }
