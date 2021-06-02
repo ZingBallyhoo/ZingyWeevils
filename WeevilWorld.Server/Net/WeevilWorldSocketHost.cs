@@ -15,6 +15,8 @@ namespace WeevilWorld.Server.Net
         public readonly SmartFoxManager m_smartFoxManager;
         public const string ZONE = "WeevilWorld";
 
+        public static readonly int TURN_BASED_GAME_ROOM_TYPE = RoomTypeIDs.Next("TurnBasedGame");
+
         public WeevilWorldSocketHost()
         {
             m_smartFoxManager = CreateMgr();

@@ -15,7 +15,7 @@ using WeevilWorldProtobuf.Responses;
 
 namespace WeevilWorld.Server.Net
 {
-    public class WeevilWorldSocket : SmartFoxSocketBase, ISpanConsumer<byte>
+    public partial class WeevilWorldSocket : SmartFoxSocketBase, ISpanConsumer<byte>
     {
         public WeevilWorldSocket(SocketInterface socket, SmartFoxManager manager) : base(socket, manager)
         {
@@ -519,6 +519,52 @@ namespace WeevilWorld.Server.Net
                     });
                     break;
                 }
+                case PacketIDs.TURN_BASED_GAME_INVITE_REQUEST:
+                {
+                    var invite = TurnbasedInvite.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    m_taskQueue.Enqueue(() => HandleGameInviteRequest(invite));
+                    break;
+                }
+                case PacketIDs.TURN_BASED_GAME_INVITE_ACCEPT_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.TurnbasedAcceptInvitation.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    m_taskQueue.Enqueue(() => HandleGameInviteAcceptRequest(request));
+                    break;
+                }
+                case PacketIDs.TURN_BASED_GAME_UPDATE_STATE_REQUEST:
+                {
+                    var request = TurnbasedUpdateState.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    m_taskQueue.Enqueue(() => HandleGameUpdateStateRequest(request));
+                    break;
+                }
+                case PacketIDs.TURN_BASED_GAME_END_TURN_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.TurnbasedEndTurn.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    m_taskQueue.Enqueue(() => HandleGameEndTurnRequest(request));
+                    break;
+                }
+                case PacketIDs.TURN_BASED_GAME_LEAVE_REQUEST:
+                {
+                    var request = TurnbasedLeave.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    m_taskQueue.Enqueue(() => HandleGameLeaveRequest(request));
+                    break;
+                }
+                case PacketIDs.TURN_BASED_GAME_INVITE_CANCEL_REQUEST:
+                {
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var weevilData = GetUser().GetWeevilData();
+                        await CancelPendingGameInvite(weevilData);
+                    });
+                    
+                    break;
+                }
+                case PacketIDs.TURN_BASED_GAME_INVITE_DECLINE_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.TurnbasedDeclineInvitation.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    m_taskQueue.Enqueue(() => HandleGameInviteDeclineRequest(request));
+                    break;
+                }
             }
         }
 
@@ -531,7 +577,10 @@ namespace WeevilWorld.Server.Net
         
         private static async ValueTask<Weevil[]> JoinRoomCore(User user, Room newRoom)
         {
-            var weevil = user.GetWeevil();
+            var weevilData = user.GetWeevilData();
+            if (weevilData.IsRoomInvited()) weevilData.RemoveInvite();
+            
+            var weevil = weevilData.m_object;
             weevil.MoveAction = null; // don't replay a move from the previous room
             weevil.RoomPosition = null;
 
