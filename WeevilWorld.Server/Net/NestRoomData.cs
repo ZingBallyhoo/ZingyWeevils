@@ -28,14 +28,14 @@ namespace WeevilWorld.Server.Net
         {
             if (m_purchased) throw new InvalidDataException("already owned");
             var owningUser = m_owner.m_user;
-            m_room = await owningUser.m_zone.CreateRoom(new RoomDescription
-            {
-                m_creator = owningUser,
-                m_maxUsers = 20,
-                m_isTemporary = true,
-                m_name = WeevilWorldSocketHost.GetNestRoomName(m_owner.m_object, m_slot),
-                m_data = this
-            });
+            m_room = await owningUser.m_zone.CreateRoom(
+                new RoomDescription(WeevilWorldSocketHost.GetNestRoomName(m_owner.m_object, m_slot))
+                {
+                    m_creator = owningUser,
+                    m_maxUsers = 20,
+                    m_isTemporary = true,
+                    m_data = this
+                });
             m_purchased = true;
         }
 

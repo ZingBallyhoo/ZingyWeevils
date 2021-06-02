@@ -49,9 +49,8 @@ namespace WeevilWorld.Server.Net
 
             foreach (var type in Enum.GetValues<RoomType>())
             {
-                await zone.CreateRoom(new RoomDescription
+                await zone.CreateRoom(new RoomDescription(type.ToString())
                 {
-                    m_name = type.ToString(),
                     m_maxUsers = 200,
                     m_data = new RoomData()
                 });

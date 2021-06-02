@@ -65,13 +65,13 @@ namespace WeevilWorld.Server.Net
 
             await CancelPendingGameInvite(invitingWeevilData, false);
 
-            var gameRoom = await user.m_zone.CreateRoom(new RoomDescription
-            {
-                m_isTemporary = true,
-                m_name = RoomTypeIDs.GenerateRoomName(WeevilWorldSocketHost.TURN_BASED_GAME_ROOM_TYPE),
-                m_type = WeevilWorldSocketHost.TURN_BASED_GAME_ROOM_TYPE,
-                m_maxUsers = 2
-            });
+            var gameRoom = await user.m_zone.CreateRoom(
+                new RoomDescription(RoomTypeIDs.GenerateRoomName(WeevilWorldSocketHost.TURN_BASED_GAME_ROOM_TYPE))
+                {
+                    m_isTemporary = true,
+                    m_type = WeevilWorldSocketHost.TURN_BASED_GAME_ROOM_TYPE,
+                    m_maxUsers = 2
+                });
             var gameRoomData = new GameData(gameRoom);
             gameRoom.SetData(gameRoomData);
 
