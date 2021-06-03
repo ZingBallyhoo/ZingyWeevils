@@ -51,16 +51,10 @@ namespace WeevilWorld.Server
                 endpoints.MapControllers();
             });
             
-            var provider = new FileExtensionContentTypeProvider
-            {
-                Mappings =
-                {
-                    {".unityweb", "application/octet-stream"}
-                }
-            };
+            // todo: pls let me serve files with no extension without this?
             app.UseStaticFiles(new StaticFileOptions
             {
-                ContentTypeProvider = provider
+                ServeUnknownFileTypes = true
             });
 
             app.UseWebSockets();
