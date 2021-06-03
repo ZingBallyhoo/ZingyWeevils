@@ -14,12 +14,22 @@ namespace WeevilWorld.Server.Controllers
         }
         
         [HttpGet]
-        public ActionResult GetAd()
+        public ActionResult GetAd(int area)
         {
+            var adPath = area switch
+            {
+                1 => "WWBilboardADGeneric_658x275.png", // old street billboards
+                2 => "WWBilboardADGeneric_658x275.png", // old street billboards
+                _ => null
+            };
+            if (adPath == null)
+            {
+                return Ok(new {});
+            }
             return Ok(new AdData
             {
-                m_trackingID = "angusIsTheBest",
-                m_path = "angus.png"
+                m_trackingID = "thisIsntARealTrackingID",
+                m_path = adPath
             });
         }
     }

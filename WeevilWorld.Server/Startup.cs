@@ -3,23 +3,21 @@ using System.Threading.Tasks;
 using ArcticFox.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace WeevilWorld.Server
 {
     public class Startup
     {
+        public readonly IConfiguration m_configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            m_configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -85,19 +83,6 @@ namespace WeevilWorld.Server
                 socket.m_cancellationTokenSource.Token.Register(() => tcs.SetResult());
                 await tcs.Task;
             });
-        }
-        
-        private static StaticFileOptions CreateFS(string dir, string requestPath, FileExtensionContentTypeProvider contentTypeProvider)
-        {
-            var fileProvider = new PhysicalFileProvider(dir);
-            var options = new StaticFileOptions
-            {
-                ServeUnknownFileTypes = true,
-                FileProvider = fileProvider,
-                RequestPath = requestPath,
-                ContentTypeProvider = contentTypeProvider
-            };
-            return options;
         }
     }
 }

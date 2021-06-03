@@ -235,20 +235,55 @@ namespace WeevilWorld.Server.Net
                 case PacketIDs.ADVERTGET_REQUEST:
                 {
                     var advertGetRequest = Advertising_Get.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
-
-                    var response = new AdvertisingGet // todo: please naming. whose idea was this
+                    
+                    var adPath = advertGetRequest.Location switch
                     {
-                        Location = advertGetRequest.Location,
-                        Std = new StdResponse
-                        {
-                            Result = ResultType.Ok
-                        },
-                        Ad = new Ad
-                        {
-                            Path = "angus.png"
-                        }
+                        "101" => "SquareBanner.png", // left square
+                        "102" => "SquareBanner.png", // right square
+                        
+                        "103" => "leftSkyScraper.png", // left scraper
+                        "104" => "rightSkyScraper.png", // right scraper
+                        "105" => "horizScraper.png", // horiz scraper
+                        
+                        //"106" => "SquareBanner.png", // left immersive
+                        //"107" => "SquareBanner.png", // right immersive
+                        _ => null
                     };
-                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.ADVERTGET_RESPONSE, response));
+
+                    if (adPath == null)
+                    {
+                        Console.Out.WriteLine($"missing ad location {advertGetRequest.Location}");
+                        m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.ADVERTGET_RESPONSE,
+                            new AdvertisingGet
+                            {
+                                Location = advertGetRequest.Location,
+                                Std = new StdResponse
+                                {
+                                    Result = ResultType.Ko
+                                }
+                            }));
+                        return;
+                    }
+
+                    var dir = "Default";
+                    if (Random.Shared.Next(0, 2) == 0)
+                    {
+                        dir = "Zingy";
+                    }
+                    
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.ADVERTGET_RESPONSE,
+                        new AdvertisingGet
+                        {
+                            Location = advertGetRequest.Location,
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok
+                            },
+                            Ad = new Ad
+                            {
+                                Path = $"{dir}/{adPath}"
+                            }
+                        }));
                     break;
                 }
                 case PacketIDs.ITEMTYPELIST_REQUEST:
@@ -325,15 +360,15 @@ namespace WeevilWorld.Server.Net
                         {
                             Messages =
                             {
-                                new LoginMessage
-                                {
-                                    ActionType = LoginMessageActionType.JoinRoom,
-                                    JoinRoom = RoomType.CrazyPool,
-                                    IsRead = false,
-                                    MessageID = 1,
-                                    AssetUrl = "https://ww.zingy.dev/WeevilWorld/Immersives/angus.png",
-                                    ExternalWebsite = "https://binweevils.net"
-                                }
+                                // new LoginMessage
+                                // {
+                                //     ActionType = LoginMessageActionType.JoinRoom,
+                                //     JoinRoom = RoomType.CrazyPool,
+                                //     IsRead = false,
+                                //     MessageID = 1,
+                                //     AssetUrl = "https://ww.zingy.dev/WeevilWorld/Immersives/angus.png",
+                                //     ExternalWebsite = "https://binweevils.net"
+                                // }
                             }
                         }));
                     break;
