@@ -17,6 +17,8 @@ namespace WeevilWorld.Server.Net
 {
     public partial class WeevilWorldSocket : SmartFoxSocketBase, ISpanConsumer<byte>
     {
+        private bool m_is3xxClient;
+        
         public WeevilWorldSocket(SocketInterface socket, SmartFoxManager manager) : base(socket, manager)
         {
             m_netInputCodec = new CodecChain().AddCodec(new WeevilWorldBufferCodec()).AddCodec(this);
@@ -35,17 +37,22 @@ namespace WeevilWorld.Server.Net
                 {
                     var clientDescription = WeevilWorldProtobuf.Requests.ClientDescription.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
                     Console.Out.WriteLine($"desc: {clientDescription.Platform} {clientDescription.Version}");
-                    var response = new WeevilWorldProtobuf.Responses.ClientDescription
+
+                    if (clientDescription.Version.StartsWith("3."))
                     {
-                        MustUpdate = false,
-                        MinimumVersion = "",
-                        Std = new StdResponse
-                        {
-                            Result = ResultType.Ok
-                        }
-                    };
+                        m_is3xxClient = true;
+                    }
+                    
                     m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.CLIENTDESCRIPTION_RESPONSE,
-                        response));
+                        new WeevilWorldProtobuf.Responses.ClientDescription
+                        {
+                            MustUpdate = false,
+                            MinimumVersion = "",
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok
+                            }
+                        }));
                     break;
                 }
                 case PacketIDs.LOGIN_REQUEST:
@@ -67,13 +74,16 @@ namespace WeevilWorld.Server.Net
                             });
                             return;
                         }
+
+                        var def = WeevilDef.DEFAULT;
+                        FixWeevilDef(ref def);
                         
                         var createdWeevil = new Weevil
                         {
                             Name = loginRequest.Username,
                             Idx = (long) user.m_id,
                             Tycoon = true,
-                            Def = "101101406100171700",
+                            Def = def,
                             NestStatus = NestStatus.Open,
                             RoomPosition = null,
                             MoveAction = null,
@@ -416,7 +426,9 @@ namespace WeevilWorld.Server.Net
                         var user = GetUser();
                         var weevil = user.GetWeevil();
 
-                        weevil.Def = request.Def;
+                        var def = request.Def;
+                        FixWeevilDef(ref def);
+                        weevil.Def = def;
                         
                         await this.Broadcast(PacketIDs.WEEVIL_CHANGE_DEF_RESPONSE, new WeevilWorldProtobuf.Responses.WeevilChangeDef
                         {
@@ -608,6 +620,28 @@ namespace WeevilWorld.Server.Net
                     break;
                 }
             }
+        }
+
+        private void FixWeevilDef(ref string defString)
+        {
+            // see #2
+            
+            var parsedDef = new WeevilDef(defString);
+            if (!parsedDef.Validate())
+            {
+                parsedDef = new WeevilDef(WeevilDef.DEFAULT); // become pea
+            }
+
+            if (parsedDef.m_bodyType == WeevilDef.BodyType.Cuboid && m_is3xxClient)
+            {
+                parsedDef.m_bodyType = WeevilDef.BodyType.ConeNarrowInv;
+            }
+            if (parsedDef.HasSuperAntenna())
+            {
+                parsedDef.m_antennaType = WeevilDef.AntennaType.TripleLarge;
+            }
+            
+            defString = parsedDef.AsString();
         }
 
         private static async ValueTask<Weevil[]> JoinRoomCore(User user, string roomName)
