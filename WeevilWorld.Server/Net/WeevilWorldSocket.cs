@@ -44,7 +44,8 @@ namespace WeevilWorld.Server.Net
                             Result = ResultType.Ok
                         }
                     };
-                    this.Broadcast(PacketIDs.CLIENTDESCRIPTION_RESPONSE, response);
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.CLIENTDESCRIPTION_RESPONSE,
+                        response));
                     break;
                 }
                 case PacketIDs.LOGIN_REQUEST:
@@ -132,22 +133,24 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.RANDOMNAME_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.RANDOMNAME_RESPONSE, new GeneratedRandomUsername
-                    {
-                        Std = new StdResponse
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.RANDOMNAME_RESPONSE,
+                        new GeneratedRandomUsername
                         {
-                            Result = ResultType.Ok
-                        },
-                        Username = $"fairriver{Random.Shared.Next(1, 100)}"
-                    });
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok
+                            },
+                            Username = $"fairriver{Random.Shared.Next(1, 100)}"
+                        }));
                     break;
                 }
                 case PacketIDs.CREATEACCOUNT_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.CREATEACCOUNT_RESPONSE, new WeevilWorldProtobuf.Responses.Registration
-                    {
-                        Result = ResultType.Ok
-                    });
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.CREATEACCOUNT_RESPONSE,
+                        new WeevilWorldProtobuf.Responses.Registration
+                        {
+                            Result = ResultType.Ok
+                        }));
                     break;
                 }
                 case PacketIDs.GETKEYVALUE_REQUEST:
@@ -155,55 +158,60 @@ namespace WeevilWorld.Server.Net
                     var getKeyValueReq = GetValuesForKeys.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
                     Console.Out.WriteLine($"requested keys: {string.Join(", ", getKeyValueReq.Keys)}");
 
-                    this.Broadcast(PacketIDs.GETKEYVALUE_RESPONSE, new ValuesForKeys
-                    {
-                        Std = new StdResponse
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.GETKEYVALUE_RESPONSE,
+                        new ValuesForKeys
                         {
-                            Result = ResultType.Error,
-                            Error = "go away pls",
-                            ErrorCode = 1
-                        }
-                    });
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Error,
+                                Error = "go away pls",
+                                ErrorCode = 1
+                            }
+                        }));
                     break;
                 }
                 case PacketIDs.ITEMLIST_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.ITEMLIST_RESPONSE, new WeevilWorldProtobuf.Responses.ItemList());
+                    m_taskQueue.Enqueue(() =>
+                        this.Broadcast(PacketIDs.ITEMLIST_RESPONSE, new WeevilWorldProtobuf.Responses.ItemList()));
                     break;
                 }
                 case PacketIDs.CLOTHESITEMLIST_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.CLOTHESITEMLIST_RESPONSE, new ClothingItemList()
-                    {
-                        Items = { }
-                    });
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.CLOTHESITEMLIST_RESPONSE,
+                        new ClothingItemList()
+                        {
+                            Items = { }
+                        }));
                     break;
                 }
                 case PacketIDs.FRIENDLIST_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.FRIENDLIST_RESPONSE, new FriendList
-                    {
-                        Result = ResultType.Ok,
-                        Friends = { },
-                        Error = ""
-                    });
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.FRIENDLIST_RESPONSE,
+                        new FriendList
+                        {
+                            Result = ResultType.Ok,
+                            Friends = { },
+                            Error = ""
+                        }));
                     break;
                 }
                 case PacketIDs.GETUNIXTIMESTAMP_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.GETUNIXTIMESTAMP_RESPONSE, new UnixTimestamp
-                    {
-                        Std = new StdResponse
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.GETUNIXTIMESTAMP_RESPONSE,
+                        new UnixTimestamp
                         {
-                            Result = ResultType.Ok
-                        },
-                        Value = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-                    });
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok
+                            },
+                            Value = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                        }));
                     break;
                 }
                 case PacketIDs.QUESTTASKLISTCOMPLETE_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.QUESTTASKLISTCOMPLETE_RESPONSE,
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.QUESTTASKLISTCOMPLETE_RESPONSE,
                         new QuestListCompletedTasks
                         {
                             Std = new StdResponse
@@ -211,7 +219,7 @@ namespace WeevilWorld.Server.Net
                                 Result = ResultType.Ok
                             },
                             Info = { }
-                        });
+                        }));
                     break;
                 }
                 case PacketIDs.ADVERTGET_REQUEST:
@@ -230,7 +238,7 @@ namespace WeevilWorld.Server.Net
                             Path = "angus.png"
                         }
                     };
-                    this.Broadcast(PacketIDs.ADVERTGET_RESPONSE, response);
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.ADVERTGET_RESPONSE, response));
                     break;
                 }
                 case PacketIDs.ITEMTYPELIST_REQUEST:
@@ -272,7 +280,7 @@ namespace WeevilWorld.Server.Net
                         });
                     }
 	            
-                    this.Broadcast(PacketIDs.ITEMTYPELIST_RESPONSE, itemList);
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.ITEMTYPELIST_RESPONSE, itemList));
                     break;
                 }
                 case PacketIDs.ROOMJOIN_REQUEST:
@@ -302,53 +310,55 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.LOGIN_MESSAGE_LIST_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.LOGIN_MESSAGE_LIST_RESPONSE, new WeevilWorldProtobuf.Responses.LoginMessageList
-                    {
-                        Messages =
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.LOGIN_MESSAGE_LIST_RESPONSE,
+                        new WeevilWorldProtobuf.Responses.LoginMessageList
                         {
-                            new LoginMessage
+                            Messages =
                             {
-                                ActionType = LoginMessageActionType.JoinRoom,
-                                JoinRoom = RoomType.CrazyPool,
-                                IsRead = false,
-                                MessageID = 1,
-                                AssetUrl = "https://ww.zingy.dev/WeevilWorld/Immersives/angus.png",
-                                ExternalWebsite = "https://binweevils.net"
+                                new LoginMessage
+                                {
+                                    ActionType = LoginMessageActionType.JoinRoom,
+                                    JoinRoom = RoomType.CrazyPool,
+                                    IsRead = false,
+                                    MessageID = 1,
+                                    AssetUrl = "https://ww.zingy.dev/WeevilWorld/Immersives/angus.png",
+                                    ExternalWebsite = "https://binweevils.net"
+                                }
                             }
-                        }
-                    });
+                        }));
                     break;
                 }
                 case PacketIDs.WOTW_LIST_REQUEST:
                 {
-                    this.Broadcast(PacketIDs.WOTW_LIST_RESPONSE, new WeevilOfTheWeekList
-                    {
-                        Std = new StdResponse
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.WOTW_LIST_RESPONSE,
+                        new WeevilOfTheWeekList
                         {
-                            Result = ResultType.Ok
-                        },
-                        Winner = new Weevil
-                        {
-                            Name = "Mr Toy",
-                            Idx = 1,
-                            Tycoon = true,
-                            Def = "101101406100171700",
-                            NestStatus = NestStatus.Open,
-                            RoomPosition = null,
-                            MoveAction = null,
-                            Clothes =
+                            Std = new StdResponse
                             {
-                                738
+                                Result = ResultType.Ok
                             },
-                            LastLogin = 0,
-                            OptionBuddyRequests = true,
-                            OptionGameInvites = WeevilOptionGameInvitesState.Allow,
-                            CoolnessCategory = NestCoolnessCategory.Alist,
-                            UserLevel = 100,
-                            NestCoolness = 1000,
-                            Xp = 0,
-                        }
-                    });
+                            Winner = new Weevil
+                            {
+                                Name = "Mr Toy",
+                                Idx = 1,
+                                Tycoon = true,
+                                Def = "101101406100171700",
+                                NestStatus = NestStatus.Open,
+                                RoomPosition = null,
+                                MoveAction = null,
+                                Clothes =
+                                {
+                                    738
+                                },
+                                LastLogin = 0,
+                                OptionBuddyRequests = true,
+                                OptionGameInvites = WeevilOptionGameInvitesState.Allow,
+                                CoolnessCategory = NestCoolnessCategory.Alist,
+                                UserLevel = 100,
+                                NestCoolness = 1000,
+                                Xp = 0,
+                            }
+                        }));
                     break;
                 }
                 case PacketIDs.ROOMMOVE_REQUEST:
