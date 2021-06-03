@@ -53,7 +53,19 @@ namespace WeevilWorld.Server.Net
 
                     m_taskQueue.Enqueue(async () =>
                     {
-                        var user = await CreateUser(WeevilWorldSocketHost.ZONE, loginRequest.Username);
+                        User user;
+                        try
+                        {
+                            user = await CreateUser(WeevilWorldSocketHost.ZONE, loginRequest.Username);
+                        } catch (UserExistsException)
+                        {
+                            await this.Broadcast(PacketIDs.LOGIN_RESPONSE, new LoginResponse
+                            {
+                                Result = ResultType.Error,
+                                ErrorCode = 1
+                            });
+                            return;
+                        }
                         
                         var createdWeevil = new Weevil
                         {
@@ -115,6 +127,26 @@ namespace WeevilWorld.Server.Net
                         response.ActiveClothes.AddRange(createdWeevil.Clothes);
                         
                         await this.Broadcast(PacketIDs.LOGIN_RESPONSE, response);
+                    });
+                    break;
+                }
+                case PacketIDs.RANDOMNAME_REQUEST:
+                {
+                    this.Broadcast(PacketIDs.RANDOMNAME_RESPONSE, new GeneratedRandomUsername
+                    {
+                        Std = new StdResponse
+                        {
+                            Result = ResultType.Ok
+                        },
+                        Username = $"fairriver{Random.Shared.Next(1, 100)}"
+                    });
+                    break;
+                }
+                case PacketIDs.CREATEACCOUNT_REQUEST:
+                {
+                    this.Broadcast(PacketIDs.CREATEACCOUNT_RESPONSE, new WeevilWorldProtobuf.Responses.Registration
+                    {
+                        Result = ResultType.Ok
                     });
                     break;
                 }
@@ -277,10 +309,10 @@ namespace WeevilWorld.Server.Net
                             new LoginMessage
                             {
                                 ActionType = LoginMessageActionType.JoinRoom,
-                                JoinRoom = RoomType.QuizRoom,
+                                JoinRoom = RoomType.CrazyPool,
                                 IsRead = false,
                                 MessageID = 1,
-                                AssetUrl = "https://cdn.binw.net/WeevilWorld/Immersives/angus.png",
+                                AssetUrl = "https://ww.zingy.dev/WeevilWorld/Immersives/angus.png",
                                 ExternalWebsite = "https://binweevils.net"
                             }
                         }
