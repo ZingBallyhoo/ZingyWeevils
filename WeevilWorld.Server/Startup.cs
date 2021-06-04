@@ -1,17 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using ArcticFox.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 
 namespace WeevilWorld.Server
 {
     public class Startup
     {
+        public const string c_domain = "ww.zingy.dev";
+        
         public readonly IConfiguration m_configuration;
 
         public Startup(IConfiguration configuration)
@@ -26,6 +32,12 @@ namespace WeevilWorld.Server
             
             services.AddSingleton<SocketHostService>();
             services.AddSingleton<IHostedService>(p => p.GetRequiredService<SocketHostService>());
+            
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.AllowedHosts = new List<string> { c_domain };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +49,8 @@ namespace WeevilWorld.Server
             }
             else
             {
+                app.UseForwardedHeaders();
+                
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -53,13 +67,25 @@ namespace WeevilWorld.Server
             // todo: pls let me serve files with no extension without this?
             app.UseStaticFiles(new StaticFileOptions
             {
-                ServeUnknownFileTypes = true
+                ServeUnknownFileTypes = true,
+                OnPrepareResponse = ctx =>
+                {
+                    var typedHeaders = ctx.Context.Response.GetTypedHeaders();
+                    typedHeaders.CacheControl = new CacheControlHeaderValue
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromDays(365)
+                    };
+                    typedHeaders.Expires = new DateTimeOffset(DateTime.UtcNow).AddDays(365);
+                }
             });
 
-            app.UseWebSockets(new WebSocketOptions
+            var webSocketOptions = new WebSocketOptions
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(15)
-            });
+                KeepAliveInterval = TimeSpan.FromSeconds(15),
+            };
+            if (env.IsProduction()) webSocketOptions.AllowedOrigins.Add($"https://{c_domain}");
+            app.UseWebSockets(webSocketOptions);
             app.Use(async (context, next) =>
             {
                 if (context.Request.Path != "/ws")

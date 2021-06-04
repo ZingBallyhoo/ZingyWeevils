@@ -1,4 +1,6 @@
-﻿@model WeevilWorld.Server.Pages.PlayPageModel
+﻿@using WeevilWorld.Server
+@model WeevilWorld.Server.Pages.PlayPageModel
+@attribute [ResponseCache(Duration = 60*60*60)]
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,14 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" asp-append-version="true">
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="/css/blog.trim.css?v=14">
-    <link rel="stylesheet" href="/WeevilWorld/TemplateData/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/blog.trim.css?v=14" asp-append-version="true">
+    <link rel="stylesheet" href="/WeevilWorld/TemplateData/style.css" asp-append-version="true">
     
-    <script src="/WeevilWorld/TemplateData/UnityProgress.js"></script>
-    <script src=@Model.UnityLoaderPath></script>
+    <script src="/WeevilWorld/TemplateData/UnityProgress.js" asp-append-version="true"></script>
+    <script src="@Model.UnityLoaderPath" asp-append-version="true"></script>
     
     <script type="text/javascript">
         var nonce = "";
@@ -81,7 +83,7 @@
                     document.querySelector("#gameContainer2").style.display = 'block';
                     //document.querySelector("#container-content-home").style.minHeight = "0px"; // ?
                 } else {
-                    gameInstance = UnityLoader.instantiate("gameContainer", "@Model.UnityJsonPath", {onProgress: UnityProgress});
+                    gameInstance = UnityLoader.instantiate("gameContainer", "@Context.AddFileVersionToPath(Model.UnityJsonPath)", {onProgress: UnityProgress});
                 }
             } catch (err) {
                 console.log(err)
@@ -108,24 +110,24 @@
         <div class="header">
             <div class="row nav-bar">
                 <div class="col-md-2 col-sm-2 col-xs-2">
-                    <a class="logo logo-home" href="https://web.archive.org/web/20201202160834/https://www.weevilworld.com/">
-                        <img src="/assets/ww/logo_beta.png" alt=""/>
+                    <a class="logo logo-home" href="/">
+                        <img src="/assets/ww/logo_beta.png" alt="Weevil World Logo" asp-append-version="true"/>
                     </a>
                 </div>
                 <div class="col-lg-7 hidden-md hidden-sm hidden-xs nav-center">
                     <img class="nav-green-bg" src="/assets/img/blog/navbar/nav.png" alt=""/>
                     <div class="nav-icons">
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/membership/payment/package">
-                            <img class="img-hover" src="/assets/img/blog/navbar/nav-membership1.png" data-img-over="/assets/img/blog/navbar/nav-membership2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/nav-membership1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/nav-membership2.png")' alt="" asp-append-version="true"/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/http://news.binweevils.com/">
-                            <img class="img-hover" src="assets/img/blog/navbar/nav-blog1.png" data-img-over="/assets/img/blog/navbar/nav-blog2.png" alt=""/>
+                            <img class="img-hover" src="assets/img/blog/navbar/nav-blog1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/nav-blog2.png")' alt="" asp-append-version="true"/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/parents_overview">
-                            <img class="img-hover" src="/assets/img/blog/navbar/nav-parents1.png" data-img-over="/assets/img/blog/navbar/nav-parents2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/nav-parents1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/nav-parents2.png")' alt="" asp-append-version="true"/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://support55pixels.helpshift.com/a/bin-weevils/" target="_blank">
-                            <img class="img-hover" src="/assets/img/blog/navbar/nav-help1.png" data-img-over="/assets/img/blog/navbar/nav-help2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/nav-help1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/nav-help2.png")' alt="" asp-append-version="true"/>
                         </a>
                     </div>
                 </div>
@@ -133,23 +135,23 @@
                     <img class="nav-green-bg-medium" src="/assets/img/blog/navbar/medium/nav.png" alt=""/>
                     <div class="nav-icons-medium">
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/membership/payment/package">
-                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-membership1.png" data-img-over="/assets/img/blog/navbar/medium/nav-membership2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-membership1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/medium/nav-membership2.png")' alt="" asp-append-version="true"/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/http://news.binweevils.com/">
-                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-blog1.png" data-img-over="/assets/img/blog/navbar/medium/nav-blog2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-blog1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/medium/nav-blog2.png")' alt="" asp-append-version="true"/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://www.binweevils.com/parents_overview">
-                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-parents1.png" data-img-over="/assets/img/blog/navbar/medium/nav-parents2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-parents1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/medium/nav-parents2.png")' alt="" asp-append-version="true"/>
                         </a>
                         <a href="https://web.archive.org/web/20201202160834/https://support55pixels.helpshift.com/a/bin-weevils/" target="_blank">
-                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-help1.png" data-img-over="/assets/img/blog/navbar/medium/nav-help2.png" alt=""/>
+                            <img class="img-hover" src="/assets/img/blog/navbar/medium/nav-help1.png" data-img-over='@Context.AddFileVersionToPath("/assets/img/blog/navbar/medium/nav-help2.png")' alt="" asp-append-version="true"/>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3 hidden-sm hidden-xs nav-right-login-www" style="">
                     <div>
                         <a href="https://web.archive.org/web/20201202160834/http://play.binweevils.com/">
-                            <img class="" src="/assets/ww/go_to_button_002.png">
+                            <img class="" src="/assets/ww/go_to_button_002.png" asp-append-version="true">
                         </a>
                     </div>
                 </div>
@@ -166,13 +168,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div id="gameContainer2" style=" margin: 10px auto;position: relative;display: none">
-                        <img src="/assets/ww/SplashNobtns.png" alt="" class="img-responsive" style="margin: auto">
+                        <img src="/assets/ww/SplashNobtns.png" alt="" class="img-responsive" style="margin: auto" asp-append-version="true">
                         <div style="position: absolute; top:50%; text-align: center; right:0; left:0">
                             <a href="https://apple.co/2sDgVvN">
-                                <img src="/assets/ww/appleAppBtn.png" alt="">
+                                <img src="/assets/ww/appleAppBtn.png" alt="" asp-append-version="true">
                             </a>
                             <a href="https://bit.ly/2rLYLIb">
-                                <img src="/assets/ww/googleplayBtn.png" alt="">
+                                <img src="/assets/ww/googleplayBtn.png" alt="" asp-append-version="true">
                             </a>
                         </div>
                     </div>
@@ -234,12 +236,12 @@
                 </div>
                 <div class="col-sm-4">
                     <div>
-                        <img src="/assets/ww/ContinuePlayingOn.png" alt="">
+                        <img src="/assets/ww/ContinuePlayingOn.png" alt="" asp-append-version="true">
                         <a href="https://bit.ly/2rLYLIb">
-                            <img src="/assets/ww/googleplayBtn.png" alt="">
+                            <img src="/assets/ww/googleplayBtn.png" alt="" asp-append-version="true">
                         </a>
                         <a href="https://apple.co/2sDgVvN">
-                            <img src="/assets/ww/appleAppBtn.png" alt="">
+                            <img src="/assets/ww/appleAppBtn.png" alt="" asp-append-version="true">
                         </a>
                     </div>
                 </div>
