@@ -122,12 +122,30 @@ namespace WeevilWorld.Server.Net
             using (var players = await m_gamePlayers.Get())
             {
                 var player = FindPlayer(user, players);
-            
+
+                var awardedMulch = 0;
+                var awardedDosh = 0;
+                if (request.Finished)
+                {
+                    var endCondition = (GameEndCondition)request.Value;
+                    if (endCondition == GameEndCondition.Win)
+                    {
+                        awardedMulch = 100;
+                        awardedDosh = 5;
+                    } 
+                    // todo: i would like to do this but the client doesn't handle this
+                    /*else if (endCondition == GameEndCondition.Draw)
+                    {
+                        awardedMulch = 25;
+                        awardedDosh = 2;
+                    }*/
+                }
+                
                 await user.Broadcast(PacketIDs.TURN_BASED_GAME_END_TURN_RESPONSE, new WeevilWorldProtobuf.Responses.TurnbasedEndTurn
                 {
                     SessionID = m_sessionID,
-                    AwardedDosh = 0,
-                    AwardedMulch = 0,
+                    AwardedMulch = awardedMulch,
+                    AwardedDosh = awardedDosh,
                     Std = new StdResponse
                     {
                         Result = ResultType.Ok
@@ -170,6 +188,13 @@ namespace WeevilWorld.Server.Net
                 });
             
             await m_room.Broadcast(PacketIDs.TURN_BASED_GAME_PLAYER_LEFT_NOTIFICATION, new DummyRequest());
+        }
+        
+        private enum GameEndCondition
+        {
+            Lose = 0,
+            Draw = 1,
+            Win = 2
         }
     }
 }
