@@ -16,7 +16,7 @@ WORKDIR "/src/WeevilWorld.Server"
 RUN dotnet build "WeevilWorld.Server.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish "WeevilWorld.Server.csproj" -c Release -o /app/publish --no-restore --no-build
+RUN dotnet publish "WeevilWorld.Server.csproj" -c Release -o /app/publish --no-restore
 
 FROM base AS final
 WORKDIR /app
