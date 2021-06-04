@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using ArcticFox.Net.Sockets;
@@ -55,7 +56,10 @@ namespace WeevilWorld.Server
                 ServeUnknownFileTypes = true
             });
 
-            app.UseWebSockets();
+            app.UseWebSockets(new WebSocketOptions
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(15)
+            });
             app.Use(async (context, next) =>
             {
                 if (context.Request.Path != "/ws")
