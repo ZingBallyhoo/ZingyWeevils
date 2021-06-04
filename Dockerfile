@@ -13,10 +13,10 @@ COPY ["WeevilWorld.Server/WeevilWorld.Server.csproj", "WeevilWorld.Server/"]
 RUN dotnet restore "WeevilWorld.Server/WeevilWorld.Server.csproj"
 COPY . .
 WORKDIR "/src/WeevilWorld.Server"
-RUN dotnet build "WeevilWorld.Server.csproj" -c Release -o /app/build
+RUN dotnet build "WeevilWorld.Server.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish "WeevilWorld.Server.csproj" -c Release -o /app/publish
+RUN dotnet publish "WeevilWorld.Server.csproj" -c Release -o /app/publish --no-restore --no-build
 
 FROM base AS final
 WORKDIR /app
