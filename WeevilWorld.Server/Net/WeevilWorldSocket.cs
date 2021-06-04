@@ -7,6 +7,7 @@ using ArcticFox.Net.Event;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
 using Google.Protobuf;
+using Google.Protobuf.Collections;
 using WeevilWorldProtobuf.Enums;
 using WeevilWorldProtobuf.Notifications;
 using WeevilWorldProtobuf.Objects;
@@ -168,6 +169,24 @@ namespace WeevilWorld.Server.Net
                     var getKeyValueReq = GetValuesForKeys.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
                     Console.Out.WriteLine($"requested keys: {string.Join(", ", getKeyValueReq.Keys)}");
 
+                    if (getKeyValueReq.Keys.Count > 0 && getKeyValueReq.Keys[0].StartsWith("AdUnit"))
+                    {
+                        // client is dum. will wait for this forever and crash store loader
+                        var response = new ValuesForKeys
+                        {
+                            Std = new StdResponse
+                            {
+                                Result = ResultType.Ok,
+                            },
+                        };
+                        response.Result.AddRange(getKeyValueReq.Keys.Select(x => new KeyValue
+                        {
+                            Key = x,
+                            Value = string.Empty
+                        }).ToArray());
+                        m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.GETKEYVALUE_RESPONSE, response));
+                        break;
+                    }
                     m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.GETKEYVALUE_RESPONSE,
                         new ValuesForKeys
                         {
@@ -303,7 +322,7 @@ namespace WeevilWorld.Server.Net
                             AnimationType = 0,
                             AvailableFrom = 0,
                             AvailableTo = 0,
-                            CacheVersion = "",
+                            CacheVersion = "0",
                             Currency = 0,
                             Description = "",
                             Enabled = true,
@@ -715,6 +734,67 @@ namespace WeevilWorld.Server.Net
                             });
                     });
                     
+                    break;
+                }
+                case PacketIDs.GETSHOPFILENAME_REQUEST:
+                {
+                    RepeatedField<ShopFiles.Types.SpecificShopFile> files;
+                    if (m_is3xxClient)
+                    {
+                        files = new RepeatedField<ShopFiles.Types.SpecificShopFile>()
+                        {
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "bathroommay2019j1.xml",
+                                Shop = "KitchenBath"
+                            },
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "bedroommay2019j1.xml",
+                                Shop = "Bedroom"
+                            },
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "livingmay2019j1.xml",
+                                Shop = "Living"
+                            }
+                        };
+                    } else
+                    {
+                        files = new RepeatedField<ShopFiles.Types.SpecificShopFile>()
+                        {
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "WWClothesDecember.xml",
+                                Shop = "Clothes"
+                            },
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "WWBathroomDecember.xml",
+                                Shop = "KitchenBath"
+                            },
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "WWBedroomDecember.xml",
+                                Shop = "Bedroom"
+                            },
+                            new ShopFiles.Types.SpecificShopFile
+                            {
+                                Path = "WWLivingDecember.xml",
+                                Shop = "Living"
+                            }
+                        };
+                        ;
+                    }
+                    var response = new ShopFiles
+                    {
+                        Std = new StdResponse
+                        {
+                            Result = ResultType.Ok
+                        }
+                    };
+                    response.ShopFiles_.AddRange(files);
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.GETSHOPFILENAME_RESPONSE, response));
                     break;
                 }
             }
