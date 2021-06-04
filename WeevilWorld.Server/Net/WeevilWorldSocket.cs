@@ -654,6 +654,69 @@ namespace WeevilWorld.Server.Net
                     m_taskQueue.Enqueue(() => HandleGameInviteDeclineRequest(request));
                     break;
                 }
+                case PacketIDs.ITEMBUY_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.ItemBuy.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    if (request.HasGiftToIdx) throw new NotImplementedException("gifting items");
+
+                    // todo: doesn't handle most things. e.g quantity
+                    
+                    m_taskQueue.Enqueue(() => this.Broadcast(PacketIDs.ITEMBUY_RESPONSE, 
+                        new WeevilWorldProtobuf.Responses.ItemBuy
+                        {
+                            AddedXp = 0,
+                            AvailableQuantity = 999,
+                            Cost = 0,
+                            Result = ResultType.Ok,
+                            Items =
+                            {
+                                new Item
+                                {
+                                    Id = request.ItemType, // ??
+                                    TypeId = request.ItemType
+                                }
+                            }
+                        }
+                    ));
+                    break;
+                }
+                case PacketIDs.WEARCLOTHES_REQUEST:
+                {
+                    var request = WeevilWorldProtobuf.Requests.WearClothes.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var weevil = user.GetWeevil();
+
+                        weevil.Clothes.Clear();
+                        weevil.Clothes.AddRange(request.ClothingItems);
+
+                        var room = await user.GetRoomOrNull();
+                        if (room != null)
+                        {
+                            var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+
+                            var notification = new ClothingChanged
+                            {
+                                OwnerIdx = weevil.Idx
+                            };
+                            notification.ActiveClothes.AddRange(weevil.Clothes);
+                            await broadcaster.Broadcast(PacketIDs.CLOTHESCHANGED_NOTIFICATION, notification);
+                        }
+
+                        await user.Broadcast(PacketIDs.WEARCLOTHES_RESPONSE, 
+                            new WeevilWorldProtobuf.Responses.WearClothes
+                            {
+                                Result = new StdResponse
+                                {
+                                    Result = ResultType.Ok
+                                }
+                            });
+                    });
+                    
+                    break;
+                }
             }
         }
 
