@@ -5,6 +5,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+COPY ["ArcticFox/ArcticFox.Net/ArcticFox.Codec.csproj", "ArcticFox/ArcticFox.Codec/"]
+COPY ["ArcticFox/ArcticFox.Net/ArcticFox.Net.csproj", "ArcticFox/ArcticFox.Net/"]
+COPY ["ArcticFox/ArcticFox.SmartFoxServer/ArcticFox.SmartFoxServer.csproj", "ArcticFox/ArcticFox.SmartFoxServer/"]
+COPY ["WeevilWorld.Protocol/WeevilWorld.Protocol.csproj", "WeevilWorld.Protocol/"]
 COPY ["WeevilWorld.Server/WeevilWorld.Server.csproj", "WeevilWorld.Server/"]
 RUN dotnet restore "WeevilWorld.Server/WeevilWorld.Server.csproj"
 COPY . .
