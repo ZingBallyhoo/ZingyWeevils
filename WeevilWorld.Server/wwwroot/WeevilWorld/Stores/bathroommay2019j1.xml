@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<editor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" width="19">
+  <Layer2 />
+  <Layer3>
+    <Layer3 id="25" type="NestItem" x="-2.974243" y="2.248903" sortingIndex="2516" sticky="true">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2517" />
+      </Children>
+    </Layer3>
+    <Layer3 id="26" type="NestItem" x="0.8869588" y="0.8937498" sortingIndex="2518">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2519" />
+      </Children>
+    </Layer3>
+    <Layer3 id="33" type="NestItem" x="5.024984" y="0.7374998" sortingIndex="2520">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04041138" y="-0.4947948" sortingIndex="2521" />
+      </Children>
+    </Layer3>
+    <Layer3 id="36" type="NestItem" x="9.192035" y="0.5999998" sortingIndex="2522">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2523" />
+      </Children>
+    </Layer3>
+    <Layer3 id="90" type="NestItem" x="15.44319" y="1.1125" sortingIndex="2534">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.02324829" y="-0.7813303" sortingIndex="2535" />
+      </Children>
+    </Layer3>
+    <Layer3 id="87" type="NestItem" x="20.19" y="0.4937499" sortingIndex="2542">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.0269104" y="-0.4479108" sortingIndex="2543" />
+      </Children>
+    </Layer3>
+    <Layer3 id="89" type="NestItem" x="20.30364" y="5.91875" sortingIndex="2544">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="-1" sortingIndex="2545" />
+      </Children>
+    </Layer3>
+  </Layer3>
+  <Layer4>
+    <Layer4 id="41" type="NestItem" x="9.31" y="3.757087" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.05" y="0" sortingIndex="2554" />
+      </Children>
+    </Layer4>
+    <Layer4 id="43" type="NestItem" x="4.942939" y="4.226497" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2555" />
+      </Children>
+    </Layer4>
+    <Layer4 id="44" type="NestItem" x="4.892428" y="6.010619" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2556" />
+      </Children>
+    </Layer4>
+    <Layer4 id="125" type="NestItem" x="13.91" y="5.76" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2575" />
+      </Children>
+    </Layer4>
+    <Layer4 id="124" type="NestItem" x="16.43" y="5.72" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2576" />
+      </Children>
+    </Layer4>
+    <Layer4 id="360" type="NestItem" x="0.8800001" y="5.13" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2589" />
+      </Children>
+    </Layer4>
+    <Layer4 id="32" type="NestItem" x="6.63" y="1.67" sortingIndex="-1">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04511719" y="0.3770224" sortingIndex="2591" />
+      </Children>
+    </Layer4>
+    <Layer4 id="24" type="NestItem" x="0.7186443" y="-0.5125005" sortingIndex="2593">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2594" />
+      </Children>
+    </Layer4>
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="11.69257" y="1.191038" sortingIndex="2597" />
+    <Layer4 id="8" type="NestItem" x="15.30853" y="-0.5437508" sortingIndex="2616">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="2617" />
+      </Children>
+    </Layer4>
+  </Layer4>
+</editor>

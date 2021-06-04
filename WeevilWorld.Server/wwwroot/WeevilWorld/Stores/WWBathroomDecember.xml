@@ -1,0 +1,996 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<editor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" width="120">
+  <Layer2 />
+  <Layer3>
+    <Layer3 id="36" type="NestItem" x="56.75762" y="0.6000062">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14425" />
+      </Children>
+    </Layer3>
+    <Layer3 id="34" type="NestItem" x="64.09537" y="0.6500053">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14427" />
+      </Children>
+    </Layer3>
+    <Layer3 id="81" type="NestItem" x="71.33005" y="1.64375">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14429" />
+        <XMLEditorItem id="102" type="NestItem" x="0.02111206" y="2.477496" sortingIndex="14429">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.02804871" y="-0.2070377" sortingIndex="14820" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="102" type="NestItem" x="0.02111206" y="2.477544" sortingIndex="14429">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.02804871" y="-0.2070377" sortingIndex="14850" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="90" type="NestItem" x="78.05345" y="1.1125">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14431" />
+        <XMLEditorItem id="116" type="NestItem" x="-1.731512" y="0.8843786" sortingIndex="14431">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06546021" y="-0.08034933" sortingIndex="14837" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="107" type="NestItem" x="1.816699" y="0.7852892" sortingIndex="14431">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14863" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="36" type="NestItem" x="56.75762" y="0.6000062">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14433" />
+      </Children>
+    </Layer3>
+    <Layer3 id="34" type="NestItem" x="64.09537" y="0.6500053">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14435" />
+      </Children>
+    </Layer3>
+    <Layer3 id="91" type="NestItem" x="82.64287" y="0.5875055">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14437" />
+      </Children>
+    </Layer3>
+    <Layer3 id="89" type="NestItem" x="85.41302" y="5.918534">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="-1" sortingIndex="14439" />
+      </Children>
+    </Layer3>
+    <Layer3 id="87" type="NestItem" x="85.4929" y="0.4937553">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01870422" y="-0.4841891" sortingIndex="14441" />
+        <XMLEditorItem id="85" type="NestItem" x="0.2417053" y="1.30703" sortingIndex="14441">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2150727" y="-0.2859489" sortingIndex="14835" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="85" type="NestItem" x="0.2417053" y="1.30706" sortingIndex="14441">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2150727" y="-0.2859489" sortingIndex="14844" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="84" type="NestItem" x="90.4189" y="0.7125914">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14443" />
+        <XMLEditorItem id="109" type="NestItem" x="-0.0645752" y="1.444407" sortingIndex="14443">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06546021" y="-0.3212973" sortingIndex="14819" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="109" type="NestItem" x="-0.0645752" y="1.443488" sortingIndex="14443">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06546021" y="-0.3212973" sortingIndex="14839" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="86" type="NestItem" x="87.81331" y="1.081256">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14447" />
+      </Children>
+    </Layer3>
+    <Layer3 id="86" type="NestItem" x="92.68746" y="1.081256">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14449" />
+      </Children>
+    </Layer3>
+    <Layer3 id="193" type="NestItem" x="36.84174" y="0.4312563">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.01886749" y="-0.7334172" sortingIndex="14451" />
+        <XMLEditorItem id="109" type="NestItem" x="-0.005279541" y="1.154111" sortingIndex="14451">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07480622" y="-0.4101148" sortingIndex="14827" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="36" type="NestItem" x="56.75762" y="0.6000062">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14455" />
+      </Children>
+    </Layer3>
+    <Layer3 id="34" type="NestItem" x="64.09537" y="0.6500053">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14457" />
+      </Children>
+    </Layer3>
+    <Layer3 id="81" type="NestItem" x="71.33005" y="1.64375">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14459" />
+      </Children>
+    </Layer3>
+    <Layer3 id="90" type="NestItem" x="78.05345" y="1.1125">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14461" />
+        <XMLEditorItem id="116" type="NestItem" x="-1.731512" y="0.8843584" sortingIndex="14461">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06546021" y="-0.08034933" sortingIndex="14830" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="116" type="NestItem" x="-1.731512" y="0.8841551" sortingIndex="14461">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06546021" y="-0.08034933" sortingIndex="14832" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="107" type="NestItem" x="1.816699" y="0.7852974" sortingIndex="14461">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14840" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="36" type="NestItem" x="56.75762" y="0.6000062">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14467" />
+      </Children>
+    </Layer3>
+    <Layer3 id="34" type="NestItem" x="64.09537" y="0.6500053">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14469" />
+      </Children>
+    </Layer3>
+    <Layer3 id="91" type="NestItem" x="82.64287" y="0.5875055">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14471" />
+      </Children>
+    </Layer3>
+    <Layer3 id="89" type="NestItem" x="85.41302" y="5.918534">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="-1" sortingIndex="14473" />
+      </Children>
+    </Layer3>
+    <Layer3 id="87" type="NestItem" x="85.4929" y="0.4937553">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01870422" y="-0.4841891" sortingIndex="14475" />
+        <XMLEditorItem id="85" type="NestItem" x="0.2417053" y="1.307067" sortingIndex="14475">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2150727" y="-0.2859489" sortingIndex="14841" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="84" type="NestItem" x="90.4189" y="0.7132916">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14479" />
+      </Children>
+    </Layer3>
+    <Layer3 id="86" type="NestItem" x="87.81331" y="1.081256">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14483" />
+      </Children>
+    </Layer3>
+    <Layer3 id="86" type="NestItem" x="92.68746" y="1.081256">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14485" />
+      </Children>
+    </Layer3>
+    <Layer3 id="193" type="NestItem" x="36.84174" y="0.4312563">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.01886749" y="-0.7334172" sortingIndex="14487" />
+      </Children>
+    </Layer3>
+    <Layer3 id="36" type="NestItem" x="56.75762" y="0.6000062">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14489" />
+      </Children>
+    </Layer3>
+    <Layer3 id="34" type="NestItem" x="64.09537" y="0.6500053">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14491" />
+      </Children>
+    </Layer3>
+    <Layer3 id="81" type="NestItem" x="71.33005" y="1.64375">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14493" />
+        <XMLEditorItem id="102" type="NestItem" x="0.02111206" y="2.477529" sortingIndex="14493">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.02804871" y="-0.2070377" sortingIndex="14846" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="90" type="NestItem" x="78.05345" y="1.1125">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14501" />
+        <XMLEditorItem id="107" type="NestItem" x="1.816699" y="0.785293" sortingIndex="14501">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14843" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="36" type="NestItem" x="56.75762" y="0.6000062">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14511" />
+      </Children>
+    </Layer3>
+    <Layer3 id="34" type="NestItem" x="64.09537" y="0.6500053">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14513" />
+      </Children>
+    </Layer3>
+    <Layer3 id="91" type="NestItem" x="82.64287" y="0.5875055">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14515" />
+      </Children>
+    </Layer3>
+    <Layer3 id="89" type="NestItem" x="85.41302" y="5.918534">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="-1" sortingIndex="14517" />
+      </Children>
+    </Layer3>
+    <Layer3 id="87" type="NestItem" x="85.4929" y="0.4937553">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01870422" y="-0.4841891" sortingIndex="14519" />
+      </Children>
+    </Layer3>
+    <Layer3 id="84" type="NestItem" x="90.4189" y="0.7144018">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14525" />
+      </Children>
+    </Layer3>
+    <Layer3 id="86" type="NestItem" x="87.81331" y="1.081256">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14527" />
+      </Children>
+    </Layer3>
+    <Layer3 id="86" type="NestItem" x="92.68746" y="1.081256">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14529" />
+      </Children>
+    </Layer3>
+    <Layer3 id="89" type="NestItem" x="33.04085" y="5.918589">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="-1" sortingIndex="14531" />
+      </Children>
+    </Layer3>
+    <Layer3 id="194" type="NestItem" x="28.63575" y="1.112556">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14533" />
+      </Children>
+    </Layer3>
+    <Layer3 id="192" type="NestItem" x="33.07631" y="0.5500051">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14535" />
+      </Children>
+    </Layer3>
+    <Layer3 id="25" type="NestItem" x="45.88253" y="2.340627">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14537" />
+      </Children>
+    </Layer3>
+    <Layer3 id="26" type="NestItem" x="49.93067" y="0.8937621">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14539" />
+      </Children>
+    </Layer3>
+    <Layer3 id="33" type="NestItem" x="60.34009" y="0.7375054">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03790283" y="-0.6477672" sortingIndex="14541" />
+      </Children>
+    </Layer3>
+    <Layer3 id="549" type="NestItem" x="54.55902" y="0.5750052">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07569581" y="-0.6596708" sortingIndex="14543" />
+      </Children>
+    </Layer3>
+    <Layer3 id="29" type="NestItem" x="66.69248" y="0.7128286">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04730225" y="-0.7983144" sortingIndex="14545" />
+      </Children>
+    </Layer3>
+    <Layer3 id="3" type="NestItem" x="-5.583137" y="0.2500002">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.8487854" y="0.1111824" sortingIndex="14547" />
+        <XMLEditorItem id="629" type="NestItem" x="-0.6194245" y="0.9619476" sortingIndex="14547">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.009462357" y="-0.4638337" sortingIndex="14845" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="586" type="NestItem" x="0.4673153" y="0.9194371" sortingIndex="14547">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.009457783" y="-0.4427982" sortingIndex="14851" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="5" type="NestItem" x="-8.178905" y="0.6222292">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.02178269" y="-0.8579842" sortingIndex="14553" />
+      </Children>
+    </Layer3>
+    <Layer3 id="5" type="NestItem" x="-2.326471" y="0.6187503">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.01999435" y="-0.8578024" sortingIndex="14555" />
+      </Children>
+    </Layer3>
+    <Layer3 id="574" type="NestItem" x="-9.047953" y="6.212492">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.02837906" y="-0.5152321" sortingIndex="14557" />
+      </Children>
+    </Layer3>
+    <Layer3 id="575" type="NestItem" x="-6.328135" y="6.862494">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="-1" sortingIndex="14559" />
+      </Children>
+    </Layer3>
+    <Layer3 id="576" type="NestItem" x="-2.61445" y="6.44375">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.009004593" y="-0.3123608" sortingIndex="14561" />
+      </Children>
+    </Layer3>
+    <Layer3 id="624" type="NestItem" x="0.1145464" y="-0.1499997">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.3689495" y="-0.2121145" sortingIndex="14563" />
+        <XMLEditorItem id="585" type="NestItem" x="0.624376" y="0.499731" sortingIndex="14563">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04730184" y="0.3621394" sortingIndex="14858" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="587" type="NestItem" x="-0.4919306" y="0.4637012" sortingIndex="14563">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01892004" y="0.3552441" sortingIndex="14865" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer3>
+    <Layer3 id="599" type="NestItem" x="5.899503" y="0.1213135">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.07568245" y="-0.2780289" sortingIndex="14876" />
+      </Children>
+    </Layer3>
+    <Layer3 id="606" type="NestItem" x="2.422863" y="0.1107682">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.009461976" y="-0.2955177" sortingIndex="14877" />
+      </Children>
+    </Layer3>
+    <Layer3 id="600" type="NestItem" x="4.161183" y="0.2605196">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.08514557" y="-0.3885047" sortingIndex="14880" />
+      </Children>
+    </Layer3>
+  </Layer3>
+  <Layer4>
+    <Layer4 id="27" type="NestItem" x="56.88205" y="-0.7062449">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14569" />
+      </Children>
+    </Layer4>
+    <Layer4 id="27" type="NestItem" x="56.88205" y="-0.7062449">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14571" />
+      </Children>
+    </Layer4>
+    <Layer4 id="92" type="NestItem" x="78.1133" y="4.993756">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14573" />
+        <XMLEditorItem id="117" type="NestItem" x="-1.128687" y="1.405718" sortingIndex="14573">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14822" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="93" type="NestItem" x="73.60151" y="1.370338">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07480469" y="-0.4207845" sortingIndex="14579" />
+      </Children>
+    </Layer4>
+    <Layer4 id="94" type="NestItem" x="73.57814" y="2.808017">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04675293" y="-0.5049412" sortingIndex="14581" />
+      </Children>
+    </Layer4>
+    <Layer4 id="95" type="NestItem" x="73.54308" y="4.128811">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.0374054" y="-0.3927319" sortingIndex="14583" />
+      </Children>
+    </Layer4>
+    <Layer4 id="96" type="NestItem" x="73.47237" y="5.461295">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.112207" y="-0.3833809" sortingIndex="14585" />
+      </Children>
+    </Layer4>
+    <Layer4 id="82" type="NestItem" x="82.6326" y="3.474258">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14587" />
+      </Children>
+    </Layer4>
+    <Layer4 id="88" type="NestItem" x="90.4088" y="4.66648">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.09350586" y="0.5610458" sortingIndex="14589" />
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="95.9522" y="1.382026">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.9911804" y="-0.2431196" sortingIndex="14591" />
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="95.9141" y="3.883354">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.103387" y="-0.3272768" sortingIndex="14595" />
+        <XMLEditorItem id="111" type="NestItem" x="-1.054919" y="0.7415614" sortingIndex="14595">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03742075" y="0.6463956" sortingIndex="14823" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="114" type="NestItem" x="0.79646" y="0.7828135" sortingIndex="14595">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07479859" y="0.6759042" sortingIndex="14842" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="111" type="NestItem" x="-1.05495" y="0.7415614" sortingIndex="14595">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03742075" y="0.6463956" sortingIndex="14857" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="114" type="NestItem" x="0.79646" y="0.7828135" sortingIndex="14595">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07479859" y="0.6759042" sortingIndex="14870" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="100.6941" y="1.370338">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.034747" y="-0.2992243" sortingIndex="14607" />
+        <XMLEditorItem id="120" type="NestItem" x="0.5969421" y="0.505411" sortingIndex="14607">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.735846" y="0.130998" sortingIndex="14817" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="120" type="NestItem" x="0.5969421" y="0.505411" sortingIndex="14607">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.735846" y="0.130998" sortingIndex="14855" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="97" type="NestItem" x="100.1331" y="4.59635">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03740845" y="-0.5049412" sortingIndex="14613" />
+      </Children>
+    </Layer4>
+    <Layer4 id="98" type="NestItem" x="102.0851" y="4.572973">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1589661" y="-0.4675384" sortingIndex="14615" />
+      </Children>
+    </Layer4>
+    <Layer4 id="StoreShelfWood2Medium" type="StoreShelf" x="100.8695" y="3.731404">
+      <Children />
+    </Layer4>
+    <Layer4 id="27" type="NestItem" x="56.88205" y="-0.7062449">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14618" />
+      </Children>
+    </Layer4>
+    <Layer4 id="27" type="NestItem" x="56.88205" y="-0.7062449">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14620" />
+      </Children>
+    </Layer4>
+    <Layer4 id="92" type="NestItem" x="78.1133" y="4.993756">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14622" />
+        <XMLEditorItem id="110" type="NestItem" x="1.20899" y="1.509667" sortingIndex="14622">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2337647" y="0.2992459" sortingIndex="14826" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="117" type="NestItem" x="-1.128687" y="1.405718" sortingIndex="14622">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14871" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="93" type="NestItem" x="73.60151" y="1.370338">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07480469" y="-0.4207845" sortingIndex="14632" />
+      </Children>
+    </Layer4>
+    <Layer4 id="94" type="NestItem" x="73.57814" y="2.808017">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04675293" y="-0.5049412" sortingIndex="14634" />
+      </Children>
+    </Layer4>
+    <Layer4 id="95" type="NestItem" x="73.54308" y="4.128811">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.0374054" y="-0.3927319" sortingIndex="14636" />
+      </Children>
+    </Layer4>
+    <Layer4 id="96" type="NestItem" x="73.47237" y="5.461295">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.112207" y="-0.3833809" sortingIndex="14638" />
+      </Children>
+    </Layer4>
+    <Layer4 id="88" type="NestItem" x="90.4088" y="4.66648">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.09350586" y="0.5610458" sortingIndex="14640" />
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="95.9522" y="1.382026">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.9911804" y="-0.2431196" sortingIndex="14642" />
+        <XMLEditorItem id="83" type="NestItem" x="0.05610962" y="0.5841936" sortingIndex="14642">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.02804566" y="-0.04684103" sortingIndex="14825" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="83" type="NestItem" x="0.05610962" y="0.5841936" sortingIndex="14642">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.02804566" y="-0.04684103" sortingIndex="14856" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="83" type="NestItem" x="0.05610962" y="0.5841936" sortingIndex="14642">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.02804566" y="-0.04684103" sortingIndex="14859" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="95.9141" y="3.883354">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.103387" y="-0.3272768" sortingIndex="14646" />
+        <XMLEditorItem id="112" type="NestItem" x="-0.08247681" y="0.5664477" sortingIndex="14646">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03740235" y="-0.01073569" sortingIndex="14824" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="100.6941" y="1.370338">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.034747" y="-0.2992243" sortingIndex="14654" />
+        <XMLEditorItem id="118" type="NestItem" x="-0.7307861" y="0.4690153" sortingIndex="14654">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01225585" y="-0.5341244" sortingIndex="14833" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="120" type="NestItem" x="0.5969421" y="0.505411" sortingIndex="14654">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.735846" y="0.130998" sortingIndex="14854" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="97" type="NestItem" x="100.1331" y="4.59635">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03740845" y="-0.5049412" sortingIndex="14660" />
+      </Children>
+    </Layer4>
+    <Layer4 id="98" type="NestItem" x="102.0851" y="4.572973">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1589661" y="-0.4675384" sortingIndex="14662" />
+      </Children>
+    </Layer4>
+    <Layer4 id="StoreShelfWood2Medium" type="StoreShelf" x="100.8695" y="3.731404">
+      <Children />
+    </Layer4>
+    <Layer4 id="27" type="NestItem" x="56.88205" y="-0.7062449">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14665" />
+      </Children>
+    </Layer4>
+    <Layer4 id="27" type="NestItem" x="56.88205" y="-0.7062449">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14667" />
+      </Children>
+    </Layer4>
+    <Layer4 id="92" type="NestItem" x="78.1133" y="4.993756">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14669" />
+        <XMLEditorItem id="111" type="NestItem" x="0.1710571" y="1.651121" sortingIndex="14669">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1028595" y="-0.3914126" sortingIndex="14815" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="117" type="NestItem" x="-1.128687" y="1.405718" sortingIndex="14669">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14834" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="110" type="NestItem" x="1.20899" y="1.509667" sortingIndex="14669">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2337647" y="0.2992459" sortingIndex="14836" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="111" type="NestItem" x="0.1710571" y="1.651121" sortingIndex="14669">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1028595" y="-0.3914126" sortingIndex="14838" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="111" type="NestItem" x="0.1710571" y="1.651121" sortingIndex="14669">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1028595" y="-0.3914126" sortingIndex="14853" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="110" type="NestItem" x="1.20899" y="1.509667" sortingIndex="14669">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2337647" y="0.2992459" sortingIndex="14873" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="93" type="NestItem" x="73.60151" y="1.370338">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07480469" y="-0.4207845" sortingIndex="14677" />
+      </Children>
+    </Layer4>
+    <Layer4 id="94" type="NestItem" x="73.57814" y="2.808017">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04675293" y="-0.5049412" sortingIndex="14679" />
+      </Children>
+    </Layer4>
+    <Layer4 id="95" type="NestItem" x="73.54308" y="4.128811">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.0374054" y="-0.3927319" sortingIndex="14681" />
+      </Children>
+    </Layer4>
+    <Layer4 id="96" type="NestItem" x="73.47237" y="5.461295">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.112207" y="-0.3833809" sortingIndex="14683" />
+      </Children>
+    </Layer4>
+    <Layer4 id="82" type="NestItem" x="82.6326" y="3.474258">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14685" />
+      </Children>
+    </Layer4>
+    <Layer4 id="88" type="NestItem" x="90.4088" y="4.66648">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.09350586" y="0.5610458" sortingIndex="14687" />
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="95.9522" y="1.382026">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.9911804" y="-0.2431196" sortingIndex="14689" />
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="95.9141" y="3.883354">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.103387" y="-0.3272768" sortingIndex="14693" />
+        <XMLEditorItem id="114" type="NestItem" x="0.7964295" y="0.7828135" sortingIndex="14693">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07479859" y="0.6759042" sortingIndex="14831" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="112" type="NestItem" x="-0.08250733" y="0.5664477" sortingIndex="14693">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03740235" y="-0.01073569" sortingIndex="14847" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="112" type="NestItem" x="-0.08250733" y="0.5664477" sortingIndex="14693">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03740235" y="-0.01073569" sortingIndex="14852" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="111" type="NestItem" x="-1.05495" y="0.7415614" sortingIndex="14693">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03742075" y="0.6463956" sortingIndex="14862" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="100.6941" y="1.370338">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.034747" y="-0.2992243" sortingIndex="14697" />
+        <XMLEditorItem id="118" type="NestItem" x="-0.7307861" y="0.4690153" sortingIndex="14697">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01225585" y="-0.5341244" sortingIndex="14821" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="118" type="NestItem" x="-0.7307861" y="0.4690153" sortingIndex="14697">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.01225585" y="-0.5341244" sortingIndex="14848" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="97" type="NestItem" x="100.1331" y="4.59635">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03740845" y="-0.5049412" sortingIndex="14703" />
+      </Children>
+    </Layer4>
+    <Layer4 id="98" type="NestItem" x="102.0851" y="4.572973">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1589661" y="-0.4675384" sortingIndex="14705" />
+      </Children>
+    </Layer4>
+    <Layer4 id="StoreShelfWood2Medium" type="StoreShelf" x="100.8695" y="3.731404">
+      <Children />
+    </Layer4>
+    <Layer4 id="StoreShelfBlackSmall" type="StoreShelf" x="19.82704" y="-3.235372">
+      <Children />
+    </Layer4>
+    <Layer4 id="82" type="NestItem" x="33.13561" y="3.194911">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.9437668" y="0.02805233" sortingIndex="14709" />
+      </Children>
+    </Layer4>
+    <Layer4 id="StoreShelfBlackMedium" type="StoreShelf" x="0.3066006" y="-3.572">
+      <Children />
+    </Layer4>
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="24.47912" y="1.149135" />
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="40.11532" y="1.019056" />
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="69.05865" y="1.123947" />
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="104.4403" y="1.140778" />
+    <Layer4 id="StoreShelfWood1Large" type="StoreShelf" x="11.39112" y="2.14246">
+      <Children>
+        <XMLEditorItem id="467" type="NestItem" x="-1.352996" y="0.6091805" sortingIndex="14716">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06732598" y="-0.5365396" sortingIndex="14868" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="462" type="NestItem" x="1.632395" y="0.432492" sortingIndex="14716">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.6732541" y="-0.3345809" sortingIndex="14881" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="StoreShelfWood1Large" type="StoreShelf" x="11.4079" y="4.401093">
+      <Children>
+        <XMLEditorItem id="470" type="NestItem" x="-0.7243624" y="0.6074824" sortingIndex="14721">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.05386066" y="-0.5678925" sortingIndex="14814" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="469" type="NestItem" x="2.810142" y="0.4239812" sortingIndex="14721">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.09425469" y="-0.3877785" sortingIndex="14818" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="468" type="NestItem" x="-2.744091" y="0.4211154" sortingIndex="14721">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.02693024" y="-0.4380162" sortingIndex="14828" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="471" type="NestItem" x="1.11021" y="0.5195441" sortingIndex="14721">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.08079052" y="-0.5054013" sortingIndex="14879" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="7.486829" y="1.160959" />
+    <Layer4 id="StoreShelfWood1Medium" type="StoreShelf" x="36.87294" y="3.699143">
+      <Children>
+        <XMLEditorItem id="522" type="NestItem" x="-1.229012" y="0.45714" sortingIndex="14731">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.01351624" y="0.3433941" sortingIndex="14849" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="520" type="NestItem" x="0.08388901" y="0.4499021" sortingIndex="14731">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.05385743" y="-0.4200535" sortingIndex="14864" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="521" type="NestItem" x="1.463993" y="0.3914113" sortingIndex="14731">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0.341605" sortingIndex="14869" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="191" type="NestItem" x="28.69257" y="5.06331">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14738" />
+      </Children>
+    </Layer4>
+    <Layer4 id="535" type="NestItem" x="42.55988" y="1.953255">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.5202942" y="-0.1608239" sortingIndex="14740" />
+      </Children>
+    </Layer4>
+    <Layer4 id="43" type="NestItem" x="42.57169" y="2.757376">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.04729614" y="0.3784096" sortingIndex="14742" />
+      </Children>
+    </Layer4>
+    <Layer4 id="535" type="NestItem" x="42.60719" y="4.542996">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.5297486" y="-0.1229836" sortingIndex="14744" />
+      </Children>
+    </Layer4>
+    <Layer4 id="44" type="NestItem" x="42.5835" y="5.370768">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04729614" y="0.3878697" sortingIndex="14746" />
+      </Children>
+    </Layer4>
+    <Layer4 id="24" type="NestItem" x="50.23815" y="-0.510489">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14748" />
+      </Children>
+    </Layer4>
+    <Layer4 id="28" type="NestItem" x="52.9747" y="2.74555">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14750" />
+      </Children>
+    </Layer4>
+    <Layer4 id="30" type="NestItem" x="58.57838" y="1.846827">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.02839966" y="-0.5770748" sortingIndex="14752" />
+      </Children>
+    </Layer4>
+    <Layer4 id="32" type="NestItem" x="61.71207" y="1.421116">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07569581" y="0.3500291" sortingIndex="14754" />
+      </Children>
+    </Layer4>
+    <Layer4 id="537" type="NestItem" x="62.38842" y="5.48902">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="2.33667" y="-0.1135227" sortingIndex="14756" />
+        <XMLEditorItem id="523" type="NestItem" x="0.7092194" y="0.4361164" sortingIndex="14756">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.009393335" y="0.3585438" sortingIndex="14816" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="525" type="NestItem" x="1.941303" y="0.4126198" sortingIndex="14756">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03216553" y="0.3766961" sortingIndex="14829" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="521" type="NestItem" x="-0.8662812" y="0.3569363" sortingIndex="14756">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.04683227" y="0.2958092" sortingIndex="14866" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="520" type="NestItem" x="-2.236994" y="0.4109032" sortingIndex="14756">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.07419444" y="0.3175229" sortingIndex="14867" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="536" type="NestItem" x="61.92237" y="3.880779">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.113062" y="-0.1324434" sortingIndex="14766" />
+        <XMLEditorItem id="519" type="NestItem" x="-0.6774628" y="0.3975023" sortingIndex="14766">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.06047369" y="0.295929" sortingIndex="14861" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="524" type="NestItem" x="0.7321137" y="0.4296984" sortingIndex="14766">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.09458615" y="0.3933431" sortingIndex="14875" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="189" type="NestItem" x="49.81486" y="3.987207">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="-0.4824524" y="0.3311083" sortingIndex="14772" />
+      </Children>
+    </Layer4>
+    <Layer4 id="41" type="NestItem" x="56.66409" y="3.774352">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.5392395" y="0.6716772" sortingIndex="14774" />
+        <XMLEditorItem id="562" type="NestItem" x="-0.7475342" y="-0.2659229" sortingIndex="14774">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03790898" y="-0.2165499" sortingIndex="14874" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="FancyRopeDividerRight-Banner" type="Banner" x="-11.10393" y="1.255562" />
+    <Layer4 id="573" type="NestItem" x="-5.492835" y="4.661249">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.454806" y="0.1229836" sortingIndex="14779" />
+        <XMLEditorItem id="104" type="NestItem" x="-0.8854866" y="-0.7457283" sortingIndex="14779">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.00945437" y="-0.3820916" sortingIndex="14860" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="626" type="NestItem" x="-5.24941" y="-0.6809916">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14783" />
+      </Children>
+    </Layer4>
+    <Layer4 id="635" type="NestItem" x="-0.06283259" y="6.139413">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14785" />
+      </Children>
+    </Layer4>
+    <Layer4 id="591" type="NestItem" x="-5.570085" y="2.74555">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.40958" y="0.009460449" sortingIndex="14787" />
+      </Children>
+    </Layer4>
+    <Layer4 id="596" type="NestItem" x="4.371239" y="2.970231">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.504176" y="0.1702839" sortingIndex="14789" />
+      </Children>
+    </Layer4>
+    <Layer4 id="609" type="NestItem" x="-9.01086" y="3.620623">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.03783951" y="-0.6149158" sortingIndex="14791" />
+      </Children>
+    </Layer4>
+    <Layer4 id="634" type="NestItem" x="-0.05100775" y="2.94658">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.2365063" y="-0.1135227" sortingIndex="14793" />
+      </Children>
+    </Layer4>
+    <Layer4 id="6" type="NestItem" x="-0.1101346" y="4.401093">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.000656" y="-0.2932678" sortingIndex="14795" />
+        <XMLEditorItem id="628" type="NestItem" x="0.4351711" y="0.3999394" sortingIndex="14795">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1702846" y="0.413641" sortingIndex="14872" />
+          </Children>
+        </XMLEditorItem>
+        <XMLEditorItem id="627" type="NestItem" x="-0.586534" y="0.397115" sortingIndex="14795">
+          <Children>
+            <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.1135215" y="0.4403161" sortingIndex="14878" />
+          </Children>
+        </XMLEditorItem>
+      </Children>
+    </Layer4>
+    <Layer4 id="593" type="NestItem" x="4.502912" y="5.938381">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.12577" y="0.06622238" sortingIndex="14801" />
+      </Children>
+    </Layer4>
+    <Layer4 id="594" type="NestItem" x="4.475222" y="2.047857">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="1.305515" y="0.02838059" sortingIndex="14803" />
+      </Children>
+    </Layer4>
+    <Layer4 id="StoreShelfWood2Medium" type="StoreShelf" x="4.495027" y="3.963556">
+      <Children />
+    </Layer4>
+    <Layer4 id="626" type="NestItem" x="4.530705" y="-0.6809916">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14806" />
+      </Children>
+    </Layer4>
+    <Layer4 id="635" type="NestItem" x="-15.04943" y="3.499908">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0" y="0" sortingIndex="14808" />
+      </Children>
+    </Layer4>
+    <Layer4 id="622" type="NestItem" x="3.297933" y="4.814978">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.05676346" y="-0.539234" sortingIndex="14810" />
+      </Children>
+    </Layer4>
+    <Layer4 id="623" type="NestItem" x="5.426488" y="4.779503">
+      <Children>
+        <XMLEditorItem id="PriceTag(Clone)" type="PriceTag" x="0.3216492" y="-0.5865356" sortingIndex="14812" />
+      </Children>
+    </Layer4>
+    <Layer4 id="BritishPoster" type="Custom" x="19.54218" y="3.561496" sortingIndex="14882" onClick="" ver="82" />
+    <Layer4 id="festive_fun_star_big" type="Custom" x="-11.18462" y="4.874104" sortingIndex="14883" onClick="" ver="0" />
+  </Layer4>
+</editor>
