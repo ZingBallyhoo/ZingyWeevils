@@ -80,7 +80,7 @@ namespace WeevilWorld.Server.Net
                         
                         var createdWeevil = new Weevil
                         {
-                            Name = loginRequest.Username,
+                            Name = user.m_name,
                             Idx = (long) user.m_id,
                             Tycoon = true,
                             Def = def,
