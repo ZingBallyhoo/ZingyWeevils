@@ -5,7 +5,7 @@ namespace WeevilWorld.Server.Controllers
 {
     public class PlayPageController : Controller
     {
-        [HttpGet("/")]
+        [HttpGet("/new")]
         public IActionResult Index()
         {
             return View("~/Pages/PlayPage.cshtml", new PlayPageModel
@@ -15,7 +15,7 @@ namespace WeevilWorld.Server.Controllers
             });
         }
         
-        [HttpGet("/index2")]
+        [HttpGet("/old")]
         public IActionResult IndexWonderPark()
         {
             return View("~/Pages/PlayPage.cshtml", new PlayPageModel
