@@ -70,19 +70,20 @@ namespace WeevilWorld.Server
                 ServeUnknownFileTypes = true,
                 OnPrepareResponse = ctx =>
                 {
+                    var cacheDuration = TimeSpan.FromDays(365);
                     var typedHeaders = ctx.Context.Response.GetTypedHeaders();
                     typedHeaders.CacheControl = new CacheControlHeaderValue
                     {
                         Public = true,
-                        MaxAge = TimeSpan.FromDays(365)
+                        MaxAge = cacheDuration
                     };
-                    typedHeaders.Expires = new DateTimeOffset(DateTime.UtcNow).AddDays(365);
+                    typedHeaders.Expires = new DateTimeOffset(DateTime.UtcNow).Add(cacheDuration);
                 }
             });
 
             var webSocketOptions = new WebSocketOptions
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(15),
+                KeepAliveInterval = TimeSpan.FromSeconds(15)
             };
             if (env.IsProduction()) webSocketOptions.AllowedOrigins.Add($"https://{c_domain}");
             app.UseWebSockets(webSocketOptions);
@@ -90,7 +91,7 @@ namespace WeevilWorld.Server
             {
                 if (context.Request.Path != "/ws")
                 {
-                    await next();
+                    await next(context);
                     return;
                 }
 
