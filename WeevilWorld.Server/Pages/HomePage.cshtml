@@ -4,8 +4,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Weevil World</title>
+	<title>Weevil World by Zingy</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="/assets/img/favicon.ico" asp-append-version="true">
 	<meta property="og:title" content="Weevil World" />
 	<meta property="og:type" content="website" />
 	<meta property="og:image" content="/assets/ww/logo_beta.png" />
@@ -70,11 +71,13 @@
           color: inherit;
           text-decoration: inherit;
         }
-        
+        .disclaimer-text {
+        }        
         @@media (max-width: 616px) {  
           .hero-sub-text { font-size:1rem; }
           .hero-container { min-width: 310px; }
-        }        
+          .disclaimer-text { font-size: 0.5rem }
+        }
 	</style>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/darkly/bootstrap.min.css" integrity="sha512-A/WvCV75maYUI3F3yjeSqYg0dUIepPRx14Qw8EZjJ/udG5/s3uDWLHnm1FSbYzrJg4RLdAdEm/f6+1V6AxCBJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -95,7 +98,7 @@
 	<div class="row poggers-row justify-content-center">
 		<div class="col text-right hero-container">
 			<a href="/old" class="link-unstyled">
-				<img class="hero-image" src="homepage_2018.png" width="960" height="600" alt="2018 Weevil World" asp-append-version="true">
+				<img class="hero-image" src="homepage_2018.webp" width="960" height="600" alt="2018 Weevil World" asp-append-version="true">
 				<div class="align-items-center d-flex flex-column hero-image-overlay justify-content-center">
 					<span class="hero-text">2018</span>
 					<p class="hero-sub-text text-center">Play games against others to win mulch</p>
@@ -104,7 +107,7 @@
 		</div>
 		<div class="col text-left hero-container">
 			<a href="/new" class="link-unstyled">
-            	<img class="hero-image" src="homepage_2019.png" width="960" height="600" alt="2019 Weevil World" asp-append-version="true">
+            	<img class="hero-image" src="homepage_2019.webp" width="960" height="600" alt="2019 Weevil World" asp-append-version="true">
             	<div class="align-items-center d-flex flex-column hero-image-overlay justify-content-center">
                 	<span class="hero-text">2019</span>
                     <p class="hero-sub-text text-center">Parkour and collect bubbles for coins</p>
@@ -113,6 +116,10 @@
 		</div>
 	</div>
 </div>
-<div class="footer"></div>
+<div class="footer">
+	<div class="row poggers-row justify-content-center">
+    	<div class="text-center disclaimer-text">This site is a fan-run revival and is not associated with 55 Pixels Ltd or Lost Penguin Ltd</div>
+     </div>
+</div>
 </body>
 </html>
