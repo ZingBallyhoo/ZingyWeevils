@@ -1,0 +1,14 @@
+{
+"companyName": "55 Pixels",
+"productName": "Weevil World",
+"dataUrl": "WonderPark_final.data.unityweb",
+"asmCodeUrl": "WonderPark_final.asm.code.unityweb",
+"asmMemoryUrl": "WonderPark_final.asm.memory.unityweb",
+"asmFrameworkUrl": "WonderPark_final.asm.framework.unityweb",
+"TOTAL_MEMORY": 536870912,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"backgroundUrl": "WonderPark_final.jpg",
+"splashScreenStyle": "Light",
+"backgroundColor": "#FFFFFF"
+}
