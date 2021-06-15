@@ -6,7 +6,6 @@ using ArcticFox.Codec;
 using ArcticFox.Net.Event;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
-using Google.Protobuf;
 using Google.Protobuf.Collections;
 using WeevilWorldProtobuf.Enums;
 using WeevilWorldProtobuf.Notifications;
@@ -36,7 +35,7 @@ namespace WeevilWorld.Server.Net
             {
                 case PacketIDs.CLIENTDESCRIPTION_REQUEST:
                 {
-                    var clientDescription = WeevilWorldProtobuf.Requests.ClientDescription.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var clientDescription = WeevilWorldProtobuf.Requests.ClientDescription.Parser.ParseFrom(input);
                     Console.Out.WriteLine($"desc: {clientDescription.Platform} {clientDescription.Version}");
 
                     if (clientDescription.Version.StartsWith("3."))
@@ -58,7 +57,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.LOGIN_REQUEST:
                 {
-                    var loginRequest = LoginRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var loginRequest = LoginRequest.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -166,7 +165,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.GETKEYVALUE_REQUEST:
                 {
-                    var getKeyValueReq = GetValuesForKeys.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var getKeyValueReq = GetValuesForKeys.Parser.ParseFrom(input);
                     Console.Out.WriteLine($"requested keys: {string.Join(", ", getKeyValueReq.Keys)}");
 
                     if (getKeyValueReq.Keys.Count > 0 && getKeyValueReq.Keys[0].StartsWith("AdUnit"))
@@ -253,7 +252,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.ADVERTGET_REQUEST:
                 {
-                    var advertGetRequest = Advertising_Get.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var advertGetRequest = Advertising_Get.Parser.ParseFrom(input);
                     
                     var adPath = advertGetRequest.Location switch
                     {
@@ -307,7 +306,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.ITEMTYPELIST_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.ItemTypeList.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.ItemTypeList.Parser.ParseFrom(input);
                     var itemList = new WeevilWorldProtobuf.Responses.ItemTypeList
                     {
                         Result = ResultType.Ok,
@@ -349,7 +348,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.ROOMJOIN_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.RoomJoin.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.RoomJoin.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -427,7 +426,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.ROOMMOVE_REQUEST:
                 {
-                    var roomMove = RoomMoveRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var roomMove = RoomMoveRequest.Parser.ParseFrom(input);
                     var moveAction = roomMove.MoveAction;
                     if (moveAction == null) throw new NullReferenceException();
 
@@ -450,7 +449,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.MOVE_REQUEST: // old client
                 {
-                    var move = MoveRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var move = MoveRequest.Parser.ParseFrom(input);
                     var roomPos = move.RoomPosition;
                     if (roomPos == null) throw new NullReferenceException();
 
@@ -473,7 +472,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.WEEVIL_CHANGE_DEF_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.WeevilChangeDef.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.WeevilChangeDef.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -508,7 +507,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.SAY_REQUEST:
                 {
-                    var request = SayRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = SayRequest.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -527,7 +526,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.NESTROOMJOIN_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.NestRoomJoin.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.NestRoomJoin.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -562,7 +561,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.NESTINFO_REQUEST:
                 {
-                    var request = StdIdRequest.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = StdIdRequest.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -592,7 +591,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.BUYROOM_REQUEST:
                 {
-                    var request = RoomSlot.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = RoomSlot.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -629,31 +628,31 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.TURN_BASED_GAME_INVITE_REQUEST:
                 {
-                    var invite = TurnbasedInvite.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var invite = TurnbasedInvite.Parser.ParseFrom(input);
                     m_taskQueue.Enqueue(() => HandleGameInviteRequest(invite));
                     break;
                 }
                 case PacketIDs.TURN_BASED_GAME_INVITE_ACCEPT_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.TurnbasedAcceptInvitation.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.TurnbasedAcceptInvitation.Parser.ParseFrom(input);
                     m_taskQueue.Enqueue(() => HandleGameInviteAcceptRequest(request));
                     break;
                 }
                 case PacketIDs.TURN_BASED_GAME_UPDATE_STATE_REQUEST:
                 {
-                    var request = TurnbasedUpdateState.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = TurnbasedUpdateState.Parser.ParseFrom(input);
                     m_taskQueue.Enqueue(() => HandleGameUpdateStateRequest(request));
                     break;
                 }
                 case PacketIDs.TURN_BASED_GAME_END_TURN_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.TurnbasedEndTurn.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.TurnbasedEndTurn.Parser.ParseFrom(input);
                     m_taskQueue.Enqueue(() => HandleGameEndTurnRequest(request));
                     break;
                 }
                 case PacketIDs.TURN_BASED_GAME_LEAVE_REQUEST:
                 {
-                    var request = TurnbasedLeave.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = TurnbasedLeave.Parser.ParseFrom(input);
                     m_taskQueue.Enqueue(() => HandleGameLeaveRequest(request));
                     break;
                 }
@@ -669,13 +668,13 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.TURN_BASED_GAME_INVITE_DECLINE_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.TurnbasedDeclineInvitation.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.TurnbasedDeclineInvitation.Parser.ParseFrom(input);
                     m_taskQueue.Enqueue(() => HandleGameInviteDeclineRequest(request));
                     break;
                 }
                 case PacketIDs.ITEMBUY_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.ItemBuy.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.ItemBuy.Parser.ParseFrom(input);
                     if (request.HasGiftToIdx) throw new NotImplementedException("gifting items");
 
                     // todo: doesn't handle most things. e.g quantity
@@ -701,7 +700,7 @@ namespace WeevilWorld.Server.Net
                 }
                 case PacketIDs.WEARCLOTHES_REQUEST:
                 {
-                    var request = WeevilWorldProtobuf.Requests.WearClothes.Parser.ParseFrom(ByteString.CopyFrom(input)); // todo: span
+                    var request = WeevilWorldProtobuf.Requests.WearClothes.Parser.ParseFrom(input);
 
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -784,7 +783,6 @@ namespace WeevilWorld.Server.Net
                                 Shop = "Living"
                             }
                         };
-                        ;
                     }
                     var response = new ShopFiles
                     {
