@@ -29,7 +29,7 @@ namespace WeevilWorld.Server.Net
             m_gamePlayers = new AsyncLockedAccess<Dictionary<int, GamePlayer>>(new Dictionary<int, GamePlayer>());
         }
 
-        private GamePlayer? FindPlayer(User user, AsyncLockToken<Dictionary<int, GamePlayer>> players)
+        private GamePlayer? FindPlayer(User user, AsyncLockedAccess<Dictionary<int, GamePlayer>>.Token players)
         {
             foreach (var player in players.m_value)
             {
@@ -69,7 +69,7 @@ namespace WeevilWorld.Server.Net
             await StartTurn(firstTurn, players);
         }
 
-        private ValueTask StartTurn(int playerIdx, AsyncLockToken<Dictionary<int, GamePlayer>> players)
+        private ValueTask StartTurn(int playerIdx, AsyncLockedAccess<Dictionary<int, GamePlayer>>.Token players)
         {
             return m_room.Broadcast(PacketIDs.TURN_BASED_GAME_PLAYER_TURN_NOTIFICATION,
                 new TurnbasedPlayerTurn

@@ -7,8 +7,8 @@ namespace WeevilWorld.Server.Net
 {
     public class WeevilWorldBufferCodec : SpanCodec<byte, byte>
     {
-        private readonly FixedSizeHeader m_header = new FixedSizeHeader(2);
-        private readonly SizeBufferer m_body = new SizeBufferer();
+        private readonly FixedSizeHeader<byte> m_header = new FixedSizeHeader<byte>(2);
+        private readonly SizeBufferer<byte> m_body = new SizeBufferer<byte>();
 
         public override void Input(ReadOnlySpan<byte> input, ref object? state)
         {
