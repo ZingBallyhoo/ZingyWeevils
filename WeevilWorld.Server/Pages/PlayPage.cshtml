@@ -78,20 +78,8 @@
         
         document.addEventListener("DOMContentLoaded", function() {       
             recomputeHeight();
-    
-            try {
-                loadNonce();
-                //detect if we are on mobile
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    document.querySelector("div.webgl-content").style.display = 'none';
-                    document.querySelector("#gameContainer2").style.display = 'block';
-                    //document.querySelector("#container-content-home").style.minHeight = "0px"; // ?
-                } else {
-                    gameInstance = UnityLoader.instantiate("gameContainer", "@Context.AddFileVersionToPath(Model.UnityJsonPath)", {onProgress: UnityProgress});
-                }
-            } catch (err) {
-                console.log(err)
-            }
+
+            gameInstance = UnityLoader.instantiate("gameContainer", "@Context.AddFileVersionToPath(Model.UnityJsonPath)", {onProgress: UnityProgress});
             
             document.querySelectorAll(".img-hover").forEach(function(hoverButton) {
                 hoverButton.addEventListener("mouseover", function()
