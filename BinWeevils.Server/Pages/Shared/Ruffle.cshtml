@@ -1,0 +1,19 @@
+@{
+    <script src="https://unpkg.com/@@ruffle-rs/ruffle"></script>
+    <script type="text/javascript">
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+        autoplay: "on",
+        unmuteOverlay: "hidden", // dont bother to show, interaction is required anyway
+        favorFlash: true, // allow real flash player if enabled
+        upgradeToHttps: true,
+        socketProxy: [
+            {
+                host: "notaserver",
+                port: 9339,
+                proxyUrl: "wss://" + location.host + "/ws"
+            }
+        ]
+    }
+    </script>
+}    

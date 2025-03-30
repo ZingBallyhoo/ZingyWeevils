@@ -1,0 +1,74 @@
+/* CSS Document */
+
+body{
+    background-color:#a4d99d;
+    margin:0px;
+    padding:0px;
+    background-image:url(../images/bgTile.jpg);
+    background-repeat:repeat-x;
+    position:relative;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:12px;
+    color:#008A00;
+}
+
+a{
+    color:#008A00;
+}
+
+#container{
+    position:relative;
+    margin-left:auto;
+    margin-right:auto;
+    width:960px;
+    /*border:1px solid #000000;*/
+}
+
+#logo{
+    position:absolute;
+    left:2px;
+    top:0px;
+    z-index:0;
+    height:66px;
+    overflow:hidden;
+}
+
+#frameLeft{
+    position:relative;
+    z-index:1;
+}
+
+#nav{
+    position:absolute;
+    left:140px;
+    top:0px;
+    height:66px;
+    width:820px;
+    /*background-color:#FFFFCC;*/
+    text-align:center; /* just centered for the comment to look better ! */
+    z-index:5;
+}
+
+#flash{
+    position:absolute;
+    top:66px;
+    left:20px;
+    height:560px;
+    width:940px;
+    /*border:1px solid #FF0000;*/
+    z-index:999;
+}
+
+#footer{
+    margin-left:120px;
+    text-align:center;
+    padding-top:20px;
+}
+
+#affiliateheader{
+    padding-bottom:10px;
+}
+
+#affiliatefooter{
+    margin-top:10px;
+}
