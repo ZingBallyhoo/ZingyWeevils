@@ -1,4 +1,4 @@
-namespace WeevilWorld.Server.Net
+namespace WeevilWorld.Protocol
 {
     public enum PacketIDs
     {

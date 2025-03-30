@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
+using WeevilWorld.Protocol;
 
 namespace WeevilWorld.Server.Net
 {

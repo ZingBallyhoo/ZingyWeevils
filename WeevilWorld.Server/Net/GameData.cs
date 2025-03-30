@@ -5,6 +5,7 @@ using ArcticFox.Net.Event;
 using ArcticFox.Net.Util;
 using ArcticFox.SmartFoxServer;
 using Google.Protobuf;
+using WeevilWorld.Protocol;
 using WeevilWorldProtobuf.Enums;
 using WeevilWorldProtobuf.Notifications;
 using WeevilWorldProtobuf.Objects;

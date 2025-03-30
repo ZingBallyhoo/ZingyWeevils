@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ArcticFox.Net;
 using ArcticFox.Net.Event;
 using Google.Protobuf;
+using WeevilWorld.Protocol;
 
 namespace WeevilWorld.Server.Net
 {

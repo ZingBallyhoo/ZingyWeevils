@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
+using WeevilWorld.Protocol;
 using WeevilWorldProtobuf.Enums;
 using WeevilWorldProtobuf.Notifications;
 using WeevilWorldProtobuf.Objects;
