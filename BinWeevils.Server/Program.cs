@@ -1,3 +1,4 @@
+using BinWeevils.Server;
 using Microsoft.Extensions.FileProviders;
 
 internal static class Program
@@ -6,12 +7,18 @@ internal static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddRazorPages();
-
+        builder.Services.AddControllers(options =>
+        {
+            options.InputFormatters.Insert(0, new FormInputFormatter());
+            options.OutputFormatters.Insert(0, new FormOutputFormatter());
+        });
+        
         var app = builder.Build();
 
         app.UseRouting();
 
         app.MapStaticAssets();
+        app.MapControllers();
         app.MapRazorPages().WithStaticAssets();
         
         var archivePath = app.Configuration["ArchivePath"]!;
