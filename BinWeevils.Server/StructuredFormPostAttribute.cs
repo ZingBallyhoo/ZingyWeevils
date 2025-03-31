@@ -1,13 +1,21 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace BinWeevils.Server
 {
-    public class StructuredFormEndpointAttribute : TypeFilterAttribute
+    public class StructuredFormPostAttribute : TypeFilterAttribute, IRouteTemplateProvider, IActionHttpMethodProvider
     {
-        public StructuredFormEndpointAttribute() : base(typeof(DisableFormEndpointFilter))
+        public string? Template { get; }
+        int? IRouteTemplateProvider.Order => 0;
+        string? IRouteTemplateProvider.Name => null;
+        IEnumerable<string> IActionHttpMethodProvider.HttpMethods => ["POST"];
+        
+        public StructuredFormPostAttribute([StringSyntax("Route")] string template) : base(typeof(DisableFormEndpointFilter))
         {
+            Template = template;
         }
         
         private class DisableFormEndpointFilter : IAuthorizationFilter

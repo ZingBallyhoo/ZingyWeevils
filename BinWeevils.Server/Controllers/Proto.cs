@@ -9,8 +9,7 @@ namespace BinWeevils.Server.Controllers
     [Route("")]
     public class Proto : Controller
     {
-        [StructuredFormEndpoint]
-        [HttpPost("binConfig/{cluster}/checkVersion.php")]
+        [StructuredFormPost("binConfig/{cluster}/checkVersion.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public CheckVersionResponse CheckVersion([FromBody] CheckVersionRequest r)
         {
@@ -29,8 +28,7 @@ namespace BinWeevils.Server.Controllers
             return new CheckVersionResponse();
         }
         
-        [StructuredFormEndpoint]
-        [HttpPost("binConfig/uk/getAdPaths.php")]
+        [StructuredFormPost("binConfig/uk/getAdPaths.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public AdPathsResponse GetAdPaths([FromBody] AdPathsRequest request)
         {

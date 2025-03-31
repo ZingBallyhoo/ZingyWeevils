@@ -4,3 +4,6 @@
 [submodule "UtinyRipper"]
 	path = UtinyRipper
 	url = https://github.com/mafaca/UtinyRipper
+[submodule "StackXML"]
+	path = StackXML
+	url = https://github.com/ZingBallyhoo/StackXML
