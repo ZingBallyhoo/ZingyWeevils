@@ -9,8 +9,9 @@ internal static class Program
         builder.Services.AddRazorPages();
         builder.Services.AddControllers(options =>
         {
-            options.InputFormatters.Insert(0, new FormInputFormatter());
-            options.OutputFormatters.Insert(0, new FormOutputFormatter());
+            options.InputFormatters.Add(new FormInputFormatter());
+            options.OutputFormatters.Add(new FormOutputFormatter());
+            options.OutputFormatters.Add(new StackXMLOutputFormatter());
         });
         
         var app = builder.Build();
@@ -22,8 +23,14 @@ internal static class Program
         app.MapRazorPages().WithStaticAssets();
         
         var archivePath = app.Configuration["ArchivePath"]!;
+        
         var playFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "");
         app.UseStaticFiles(playFs);
+        
+        var cdnFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "/cdn");
+        app.UseStaticFiles(cdnFs);
+        var cdnFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "/cdn");
+        app.UseStaticFiles(cdnFallbackFs);
 
         app.Run();
     }

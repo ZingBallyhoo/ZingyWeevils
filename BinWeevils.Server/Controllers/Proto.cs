@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Protocol.Form;
+using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BinWeevils.Server.Controllers
@@ -41,6 +42,27 @@ namespace BinWeevils.Server.Controllers
             //    };
             //}
             return new AdPathsResponse();
+        }
+        
+        [HttpGet("binConfig/config.xml")]
+        [Produces(MediaTypeNames.Application.Xml)]
+        public SiteConfig GetConfig()
+        {
+            const string baseUrl = "http://localhost:80/";
+            return new SiteConfig
+            {
+                m_domain = $"{baseUrl}",
+                m_allowMultipleLogins = "true",
+                m_servicesLocation = $"{baseUrl}",
+                m_restrictFlashPlayers = "true",
+                m_basePathSmall = $"{baseUrl}cdn/",
+                m_basePathLarge = $"{baseUrl}cdn/",
+                m_pathItemConfigs = $"{baseUrl}cdn/users/",
+                m_pathAssetsNest = $"{baseUrl}cdn/users/",
+                m_pathAssetsTycoon = $"{baseUrl}cdn/users/",
+                m_pathAssetsGarden = $"{baseUrl}cdn/assetsGarden/",
+                m_pathAssets3D = $"{baseUrl}cdn/assets3D/"
+            };
         }
     }
 }
