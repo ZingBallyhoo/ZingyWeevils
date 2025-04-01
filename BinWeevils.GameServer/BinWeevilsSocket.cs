@@ -2,6 +2,7 @@ using System.Text;
 using ArcticFox.Codec;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML;
 
@@ -81,7 +82,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    Console.Out.WriteAsync($"unknown action: {preReadBody.m_action}");
+                    Console.Out.WriteLine($"unknown action: {preReadBody.m_action}");
                     break;
                 }
             }
@@ -208,8 +209,36 @@ namespace BinWeevils.GameServer
         
         private void InputStr(ReadOnlySpan<char> input)
         {
-            // todo:
-            Close();
+            var reader = SmartFoxStrMessage.MakeReader(input);
+            var handler = reader.GetString();
+            
+            if (handler is not "xt")
+            {
+                Close();
+                return;
+            }
+
+            var message = new XtClientMessage();
+            message.Deserialize(ref reader);
+            
+            if (message.m_extension is not "login")
+            {
+                Close();
+                return;
+            }
+
+            switch (message.m_command)
+            {
+                case "1#2":
+                {
+                    break;
+                }
+                default:
+                {
+                    Console.Out.WriteLine($"unknown command: {message.m_command}");
+                    break;
+                }
+            }
         }
 
         public void Abort()
