@@ -69,7 +69,7 @@ namespace BinWeevils.Server.Controllers
             return new ActiveZonesResponse
             {
                 m_names = ["Grime"],
-                m_ips = ["notaserver"],
+                m_ips = ["127.0.0.1"],
                 m_outOf5 = [5],
                 m_responseCode = true
             };

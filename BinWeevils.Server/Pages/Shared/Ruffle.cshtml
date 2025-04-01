@@ -9,9 +9,9 @@
         upgradeToHttps: true,
         socketProxy: [
             {
-                host: "notaserver",
+                host: "127.0.0.1",
                 port: 9339,
-                proxyUrl: "wss://" + location.host + "/ws"
+                proxyUrl: "ws://" + location.host + "/ws"
             }
         ]
     }

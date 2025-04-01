@@ -45,6 +45,20 @@ namespace BinWeevils.Server.Controllers
                         }
                     }
                 };
+            } else if (message.m_targetUri == "weevilservices.cWeevilLoginService.getUserBuddyCount")
+            {
+                response = new AmfPacket
+                {
+                    m_messages = new List<AmfMessage>
+                    {
+                        new AmfMessage
+                        {
+                            m_targetUri = $"{message.m_responseUri}/onResult",
+                            m_responseUri = "null",
+                            m_data = "-1"
+                        }
+                    }
+                };
             } else
             {
                 throw new Exception($"unknown target: {message.m_targetUri}");

@@ -33,6 +33,10 @@ namespace ArcticFox.PolyType.Amf.Converters
                 {
                     return ReadStrictArray(ref decoder);
                 }
+                case Amf0TypeMarker.String:
+                {
+                    return decoder.ReadUtf8();
+                }
                 case Amf0TypeMarker.TypedObject:
                 {
                     var typeName = decoder.ReadUtf8();
