@@ -1,7 +1,9 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer;
+using BinWeevils.Protocol.Xml;
 using BinWeevils.Server;
 using Microsoft.Extensions.FileProviders;
+using StackXML;
 using Stl.DependencyInjection;
 
 internal static class Program
@@ -21,6 +23,9 @@ internal static class Program
         builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());
         builder.Services.UseRegisterAttributeScanner().RegisterFrom(typeof(Zone).Assembly);
         builder.Services.AddSingleton<ISystemHandler, NullSystemHandler>();
+        
+        builder.Services.AddSingleton<LocationDefinitions>(p => 
+            XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));
         
         var app = builder.Build();
 
