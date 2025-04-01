@@ -13,7 +13,6 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public CheckVersionResponse CheckVersion([FromBody] CheckVersionRequest r)
         {
-            Console.Out.WriteLine(r.m_siteVersion);
             return new CheckVersionResponse
             {
                 m_ok = 1,

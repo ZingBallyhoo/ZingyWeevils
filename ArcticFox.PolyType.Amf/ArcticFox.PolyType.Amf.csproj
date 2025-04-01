@@ -7,12 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\StackXML\StackXML\StackXML.csproj" />
-      <ProjectReference Include="..\StackXML\StackXML.Generator\StackXML.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+      <ProjectReference Include="..\ArcticFox\ArcticFox.Codec\ArcticFox.Codec.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="ByteDev.FormUrlEncoded" Version="1.1.0" />
       <PackageReference Include="PolyType" Version="0.33.1" />
     </ItemGroup>
 
