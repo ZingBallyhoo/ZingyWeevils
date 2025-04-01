@@ -36,6 +36,11 @@ namespace BinWeevils.GameServer
                 m_maxUsers = 200,
                 m_limbo = true
             });
+            await zone.CreateRoom(new WeevilRoomDescription("WeevilWheels")
+            {
+                m_maxUsers = 200,
+                m_limbo = true
+            });
             foreach (var location in m_locationDefinitions.m_locations)
             {
                 await zone.CreateRoom(new WeevilRoomDescription(location.m_name)

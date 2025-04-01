@@ -32,4 +32,15 @@ namespace BinWeevils.Protocol.XmlMessages
             return new Var(name, TYPE_STRING, value);
         }
     }
+    
+    [XmlCls("vars")]
+    public partial class VarList
+    {
+        [XmlBody] public List<Var> m_vars = new List<Var>();
+
+        public void Add(Var var)
+        {
+            m_vars.Add(var);
+        }
+    }
 }

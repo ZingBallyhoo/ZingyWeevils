@@ -114,7 +114,15 @@ namespace BinWeevils.GameServer
                     
             m_taskQueue.Enqueue(async () =>
             {
-                await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
+                var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
+                
+                await user.m_zone.CreateRoom(
+                    new WeevilRoomDescription($"nest_{login.m_data.m_nickname}")
+                    {
+                        m_creator = user,
+                        m_maxUsers = 20,
+                        m_isTemporary = true
+                    });
                         
                 await this.Broadcast(BuildXtResMessage(new ActionScriptObject
                 {
@@ -231,6 +239,26 @@ namespace BinWeevils.GameServer
             {
                 case "1#2":
                 {
+                    break;
+                }
+                case "2#4":
+                {
+                    var joinRoomRequest = new JoinRoomRequest();
+                    joinRoomRequest.Deserialize(ref reader);
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var newRoom = await user.m_zone.GetRoom(joinRoomRequest.m_roomName);
+                        
+                        await GetUser().MoveTo(newRoom);
+                        
+                        await this.Broadcast(BuildSysMessage(new JoinRoomResponse
+                        {
+                            m_action = "joinOK",
+                            m_room = checked((int)newRoom.m_id)
+                        }));
+                    });
                     break;
                 }
                 default:
