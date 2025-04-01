@@ -1,9 +1,18 @@
+using ArcticFox.Net.Sockets;
+using BinWeevils.GameServer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BinWeevils.Server.Controllers
 {
     public class WebsocketController : Controller
     {
+        private readonly BinWeevilsSocketHost m_socketHost;
+        
+        public WebsocketController(BinWeevilsSocketHost socketHost)
+        {
+            m_socketHost = socketHost;
+        }
+        
         [Route("/ws")]
         public async Task Get(CancellationToken cancellationToken)
         {
@@ -13,11 +22,15 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
-            using var ws = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            while (!ws.CloseStatus.HasValue)
-            {
-                await ws.ReceiveAsync(new Memory<byte>(new byte[1]), cancellationToken);
-            }
+            using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+            var socket = new WebSocketInterface(webSocket, true);
+            
+            var hl = m_socketHost.CreateHighLevelSocket(socket);
+            await m_socketHost.AddSocket(hl);
+
+            var tcs = new TaskCompletionSource();
+            socket.m_cancellationTokenSource.Token.Register(() => tcs.SetResult());
+            await tcs.Task;
         }
     }
 }

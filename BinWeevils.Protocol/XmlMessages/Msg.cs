@@ -6,7 +6,7 @@ namespace BinWeevils.Protocol.XmlMessages
     [XmlCls("msg")]
     public partial class Msg
     {
-        [XmlField("t")] public string m_messageType;
+        [XmlField("t")] public string m_messageType = "sys";
         [XmlBody] public MsgBody m_body;
     }
 
@@ -14,7 +14,7 @@ namespace BinWeevils.Protocol.XmlMessages
     public partial class MsgBody
     {
         [XmlField("action")] public string m_action;
-        [XmlField("r")] public int m_room;
+        [XmlField("r")] public int m_room = -1;
     }
 
     [XmlCls("pid")]

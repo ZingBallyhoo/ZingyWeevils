@@ -1,5 +1,8 @@
+using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer;
 using BinWeevils.Server;
 using Microsoft.Extensions.FileProviders;
+using Stl.DependencyInjection;
 
 internal static class Program
 {
@@ -13,6 +16,11 @@ internal static class Program
             options.OutputFormatters.Add(new FormOutputFormatter());
             options.OutputFormatters.Add(new StackXMLOutputFormatter());
         });
+        
+        builder.Services.AddSingleton<BinWeevilsSocketHost>();
+        builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());
+        builder.Services.UseRegisterAttributeScanner().RegisterFrom(typeof(Zone).Assembly);
+        builder.Services.AddSingleton<ISystemHandler, NullSystemHandler>();
         
         var app = builder.Build();
 

@@ -1,14 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ArcticFox.PolyType.Amf\ArcticFox.PolyType.Amf.csproj" />
-      <ProjectReference Include="..\BinWeevils.GameServer\BinWeevils.GameServer.csproj" />
+      <ProjectReference Include="..\ArcticFox\ArcticFox.SmartFoxServer\ArcticFox.SmartFoxServer.csproj" />
       <ProjectReference Include="..\BinWeevils.Protocol\BinWeevils.Protocol.csproj" />
     </ItemGroup>
 
