@@ -61,5 +61,18 @@ namespace BinWeevils.Server.Controllers
                 m_pathAssets3D = $"{baseUrl}cdn/assets3D/"
             };
         }
+        
+        [HttpGet("site/zones")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public ActiveZonesResponse GetActiveZones()
+        {
+            return new ActiveZonesResponse
+            {
+                m_names = ["Grime"],
+                m_ips = ["notaserver"],
+                m_outOf5 = [5],
+                m_responseCode = true
+            };
+        }
     }
 }

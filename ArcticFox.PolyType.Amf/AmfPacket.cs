@@ -10,16 +10,14 @@ namespace ArcticFox.PolyType.Amf
         public List<AmfMessage> m_messages = new List<AmfMessage>();
     }
     
-    [GenerateShape]
-    public partial class AmfHeader
+    public class AmfHeader
     {
         public string m_name;
         public bool m_mustUnderstand;
         public object? m_content;
     }
     
-    [GenerateShape]
-    public partial class AmfMessage
+    public class AmfMessage
     {
         public string m_targetUri;
         public string m_responseUri;
