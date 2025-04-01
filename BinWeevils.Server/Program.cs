@@ -21,6 +21,7 @@ internal static class Program
         app.MapStaticAssets();
         app.MapControllers();
         app.MapRazorPages().WithStaticAssets();
+        app.UseWebSockets();
         
         var archivePath = app.Configuration["ArchivePath"]!;
         
