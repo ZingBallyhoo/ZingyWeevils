@@ -4,13 +4,14 @@ using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Sfs;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML;
 
 namespace BinWeevils.GameServer
 {
-    public class BinWeevilsSocket : SmartFoxSocketBase, ISpanConsumer<char>
+    public partial class BinWeevilsSocket : SmartFoxSocketBase, ISpanConsumer<char>
     {
         public BinWeevilsSocket(SocketInterface socket, SmartFoxManager manager) : base(socket, manager)
         {
@@ -219,6 +220,18 @@ namespace BinWeevils.GameServer
             {
                 Close();
                 return;
+            }
+            
+            var module = message.m_command.Slice(0, 1);
+            // todo: find index of #
+            
+            switch (module)
+            {
+                case Modules.INGAME:
+                {
+                    HandleIngameCommand(message, ref reader);
+                    break;
+                }
             }
 
             switch (message.m_command)
