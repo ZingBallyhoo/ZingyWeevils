@@ -27,6 +27,8 @@ namespace BinWeevils.Server.Controllers
             AmfPacket response;
             if (message.m_targetUri == "weevilservices.cWeevilLoginService.getLoginDetails")
             {
+                var random = Random.Shared.Next(0, 9999999);
+                
                 response = new AmfPacket
                 {
                     m_messages = new List<AmfMessage>
@@ -37,8 +39,8 @@ namespace BinWeevils.Server.Controllers
                             m_responseUri = "null",
                             m_data = new GetLoginDetailsResponse
                             {
-                                m_userName = "joe",
-                                m_userIdx = 55,
+                                m_userName = $"joe{random}",
+                                m_userIdx = random,
                                 m_tycoon = 1,
                                 m_loginKey = "secretjoe"
                             }

@@ -243,6 +243,7 @@ namespace BinWeevils.GameServer
                         weevil.m_x.SetValue(joinRoomRequest.m_entryX);
                         weevil.m_y.SetValue(joinRoomRequest.m_entryY);
                         weevil.m_z.SetValue(joinRoomRequest.m_entryZ);
+                        weevil.m_r.SetValue(joinRoomRequest.m_entryDir);
                         weevil.m_locID.SetValue(joinRoomRequest.m_locID);
                         weevil.m_doorID.SetValue(joinRoomRequest.m_entryDoorID);
                         
