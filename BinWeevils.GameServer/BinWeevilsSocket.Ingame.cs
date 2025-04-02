@@ -2,6 +2,7 @@ using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
+using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML.Str;
 
@@ -69,6 +70,67 @@ namespace BinWeevils.GameServer
                             m_uid = checked((int)weevil.m_user.m_id),
                             m_expressionID = weevil.m_expressionID
                         }, checked((int)room.m_id));
+                    });
+                    break;
+                }
+                case Modules.INGAME_ACTION: // 2#3
+                {
+                    var action = new ClientAction();
+                    action.Deserialize(ref reader);
+                    
+                    if (!Enum.IsDefined(typeof(EWeevilAction), action.m_actionID))
+                    {
+                        // todo: log
+                        Close();
+                        return;
+                    }
+                    
+                    if (action.m_endPoseID != -1 && !Enum.IsDefined(typeof(EWeevilAction), action.m_endPoseID))
+                    {
+                        // todo: log
+                        Close();
+                        return;
+                    }
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var room = await user.GetRoom();
+                        if (room.IsLimbo()) return;
+                        
+                        var weevil = user.GetUserData<WeevilData>();
+                        
+                        var extraParamsReader = new StrReader(action.m_extraParams, ',');
+                        switch ((EWeevilAction)action.m_actionID)
+                        {
+                            case EWeevilAction.JUMP_TO:
+                            {
+                                var jumpTo = new JumpToAction();
+                                jumpTo.Deserialize(ref extraParamsReader);
+                                weevil.m_x.SetValue(jumpTo.m_x);
+                                weevil.m_y.SetValue(jumpTo.m_y);
+                                weevil.m_z.SetValue(jumpTo.m_z);
+                                weevil.m_r.SetValue(jumpTo.m_r);
+                                break;
+                            }
+                        }
+                        
+                        if (action.m_endPoseID != -1)
+                        {
+                            weevil.m_poseID.SetValue(action.m_endPoseID);
+                        } else
+                        {
+                            // todo: correct?
+                            weevil.m_poseID.SetValue(0);
+                        }
+                        
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.BroadcastXtStr(Modules.INGAME_ACTION, new ServerAction
+                        {
+                            m_userID = checked((int)weevil.m_user.m_id),
+                            m_actionID = action.m_actionID,
+                            m_extraParams = action.m_extraParams!
+                        });
                     });
                     break;
                 }
