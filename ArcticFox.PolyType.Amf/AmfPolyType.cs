@@ -1,3 +1,4 @@
+using System.Dynamic;
 using ArcticFox.Codec.Binary;
 using ArcticFox.PolyType.Amf.Converters;
 using PolyType;
@@ -66,6 +67,9 @@ namespace ArcticFox.PolyType.Amf
         
             public override object? VisitObject<T>(IObjectTypeShape<T> type, object? state)
             {
+                // todo: the way this works is a little wonky
+                // can we allow core types without them being witnessed?
+                
                 if (type.Type == typeof(AmfPacket))
                 {
                     var dyn = new Amf0DynamicValueConverter(generationContext.ParentCache!);
@@ -78,14 +82,9 @@ namespace ArcticFox.PolyType.Amf
                 {
                     return new Amf0DynamicValueConverter(generationContext.ParentCache!);
                 }
-                if (type.Type == typeof(string))
-                {
-                    return new Amf0StringConverter();
-                }
-                if (type.Type == typeof(int))
-                {
-                    return new Amf0IntConverter();
-                }
+                if (type.Type == typeof(string)) return new Amf0StringConverter();
+                if (type.Type == typeof(int)) return new Amf0IntConverter();
+                if (type.Type == typeof(double)) return new Amf0NumberConverter();
                 
                 if (type.Type.IsPrimitive)
                 {
@@ -102,6 +101,18 @@ namespace ArcticFox.PolyType.Amf
             {
                 var propertyConverter = GetOrAddConverter(propertyShape.PropertyType);
                 return new Amf0PropertyConverter<TDeclaringType, TPropertyType>(propertyShape, propertyConverter);
+            }
+            
+            public override object? VisitEnumerable<TEnumerable, TElement>(IEnumerableTypeShape<TEnumerable, TElement> enumerableShape, object? state)
+            {
+                var elementConverter = GetOrAddConverter(enumerableShape.ElementType);
+                return new Amf0EnumerableConverter<TEnumerable, TElement>(elementConverter, enumerableShape);
+            }
+
+            public override object? VisitDictionary<TDictionary, TKey, TValue>(IDictionaryTypeShape<TDictionary, TKey, TValue> dictionaryShape, object? state = null)
+            {
+                // (ExpandoObject only)
+                return new Amf0AnonymousObjectConverter(new Amf0DynamicValueConverter(generationContext.ParentCache!));
             }
         }
     }

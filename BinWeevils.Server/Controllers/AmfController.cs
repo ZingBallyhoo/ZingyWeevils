@@ -1,3 +1,4 @@
+using System.Dynamic;
 using ArcticFox.PolyType.Amf;
 using BinWeevils.Protocol.Amf;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,7 @@ namespace BinWeevils.Server.Controllers
             var body = new byte[Request.ContentLength.Value];
             await Request.Body.ReadExactlyAsync(body, cancellationToken);
             
-            var packet = AmfPolyType.Deserialize<AmfPacket>(body);
-            
+            var packet = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(body);
             var message = packet.m_messages.Single();
             
             AmfPacket response;
@@ -74,8 +74,10 @@ namespace BinWeevils.Server.Controllers
         }
     }
         
-        
     [GenerateShape<AmfPacket>]
     [GenerateShape<GetLoginDetailsResponse>]
+    [GenerateShape<object[]>]
+    [GenerateShape<double>]
+    [GenerateShape<ExpandoObject>]
     internal partial class GatewayShapeWitness;
 }

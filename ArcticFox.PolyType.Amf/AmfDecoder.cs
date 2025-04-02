@@ -33,12 +33,22 @@ namespace ArcticFox.PolyType.Amf
         {
             return m_reader.ReadUInt32BigEndian();
         }
+
+        public double ReadDouble()
+        {
+            return m_reader.ReadDoubleBigEndian();
+        }
         
         public string ReadUtf8()
         {
             var length = ReadUInt16();
             var span = m_reader.ReadBytes(length);
             return Encoding.UTF8.GetString(span);
+        }
+
+        public int GetRemainingBytes()
+        {
+            return m_reader.m_dataLength - m_reader.m_dataOffset;
         }
     }
 }

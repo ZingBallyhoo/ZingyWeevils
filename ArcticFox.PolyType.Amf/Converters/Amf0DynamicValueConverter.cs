@@ -1,9 +1,23 @@
+using System.Dynamic;
+using PolyType.Abstractions;
 using PolyType.Utilities;
 
 namespace ArcticFox.PolyType.Amf.Converters
 {
     public class Amf0DynamicValueConverter(TypeCache typeCache) : AmfConverter<object>
     {
+        private AmfConverter ResolveConverter(Type type)
+        {
+            var shape = typeCache.Provider!.Resolve(type);
+            var converter = AmfPolyType.GetConverter(shape);
+            if (converter is Amf0DynamicValueConverter or null)
+            {
+                throw new Exception($"unable to resolve converter for type: {shape}");
+            }
+            
+            return converter;
+        }
+        
         public override void Write(ref AmfEncoder encoder, object? value)
         {
             if (value == null)
@@ -12,52 +26,38 @@ namespace ArcticFox.PolyType.Amf.Converters
                 return;
             }
             
-            var shape = typeCache.Provider!.GetShape(value.GetType());
-            var converter = AmfPolyType.GetConverter(shape!);
-            if (converter is Amf0DynamicValueConverter or null)
-            {
-                throw new Exception($"unable to resolve converter for type: {shape}");
-            }
+            var converter = ResolveConverter(value.GetType());
             converter.WriteAsObject(ref encoder, value);
         }
 
         public override object? Read(ref AmfDecoder decoder)
         {
-            var marker = decoder.ReadMarker();
-            
-            // todo: peek the marker instead? and handoff to child converter...
+            var peekDecoder = decoder; // copy
+            var peekedMarker = peekDecoder.ReadMarker();
 
-            switch (marker)
+            switch (peekedMarker)
             {
-                case Amf0TypeMarker.StrictArray:
-                {
-                    return ReadStrictArray(ref decoder);
-                }
                 case Amf0TypeMarker.String:
+                case Amf0TypeMarker.LongString:
                 {
-                    return decoder.ReadUtf8();
+                    return ResolveConverter(typeof(string)).ReadAsObject(ref decoder);
                 }
-                case Amf0TypeMarker.TypedObject:
+                case Amf0TypeMarker.StrictArray:
+                case Amf0TypeMarker.EcmaArray:
                 {
-                    var typeName = decoder.ReadUtf8();
-                    break;
+                    return ResolveConverter(typeof(object[])).ReadAsObject(ref decoder);
+                }
+                case Amf0TypeMarker.Number:
+                {
+                    return ResolveConverter(typeof(double)).ReadAsObject(ref decoder);
+                }
+                case Amf0TypeMarker.Object:
+                {
+                    return ResolveConverter(typeof(ExpandoObject)).ReadAsObject(ref decoder);
                 }
             }
             
-            throw new Exception($"unknown marker: {marker}");
-        }
-        
-        private object? ReadStrictArray(ref AmfDecoder decoder)
-        {
-            var count = decoder.ReadUInt32();
-            if (count > 10) throw new InvalidDataException(); // todo: configurable limit?
-            
-            var array = new object?[count];
-            for (var i = 0; i < count; i++)
-            {
-                array[i] = Read(ref decoder);
-            }
-            return array;
+            throw new Exception($"unknown marker: {peekedMarker}");
         }
     }
 }

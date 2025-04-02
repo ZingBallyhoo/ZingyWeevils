@@ -5,7 +5,7 @@ namespace ArcticFox.PolyType.Amf
     [GenerateShape]
     public partial class AmfPacket
     {
-        public AmfVersion m_version = AmfVersion.Three;
+        public AmfVersion m_version = AmfVersion.Zero;
         public List<AmfHeader> m_headers = new List<AmfHeader>();
         public List<AmfMessage> m_messages = new List<AmfMessage>();
     }

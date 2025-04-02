@@ -18,7 +18,18 @@ namespace ArcticFox.PolyType.Amf.Converters
         public override string? Read(ref AmfDecoder decoder)
         {
             var marker = decoder.ReadMarker();
-            throw new NotImplementedException();
+
+            switch (marker)
+            {
+                case Amf0TypeMarker.String:
+                {
+                    return decoder.ReadUtf8();
+                }
+                default:
+                {
+                    throw new NotImplementedException($"unknown string marker: {marker}");
+                }
+            }
         }
     }
 }
