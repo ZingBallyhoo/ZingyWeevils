@@ -230,7 +230,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME:
                 {
                     HandleIngameCommand(message, ref reader);
-                    break;
+                    return;
                 }
             }
 

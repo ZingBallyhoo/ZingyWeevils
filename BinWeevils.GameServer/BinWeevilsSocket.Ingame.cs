@@ -42,6 +42,36 @@ namespace BinWeevils.GameServer
                     });
                     break;
                 }
+                case Modules.INGAME_EXPRESSION: // 2#2
+                {
+                    var expression = new ClientExpression();
+                    expression.Deserialize(ref reader);
+                    
+                    if (!Enum.IsDefined(typeof(EWeevilExpression), expression.m_expressionID))
+                    {
+                        // todo: log
+                        Close();
+                        return;
+                    }
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var room = await user.GetRoom();
+                        if (room.IsLimbo()) return;
+                        
+                        var weevil = user.GetUserData<WeevilData>();
+                        weevil.m_expressionID.SetValue(expression.m_expressionID);
+                        
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.BroadcastXtStr(Modules.INGAME_EXPRESSION, new ServerExpression
+                        {
+                            m_uid = checked((int)weevil.m_user.m_id),
+                            m_expressionID = weevil.m_expressionID
+                        }, checked((int)room.m_id));
+                    });
+                    break;
+                }
                 case Modules.INGAME_JOIN_ROOM: // 2#4
                 {
                     var joinRoomRequest = new JoinRoomRequest();
@@ -85,6 +115,11 @@ namespace BinWeevils.GameServer
                             }
                         });
                     });
+                    break;
+                }
+                default:
+                {
+                    Console.Out.WriteLine($"unknown command (ingame): {message.m_command}");
                     break;
                 }
             }
