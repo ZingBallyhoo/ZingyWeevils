@@ -10,7 +10,7 @@ namespace BinWeevils.GameServer
 {
     public partial class BinWeevilsSocket
     {
-        private void HandleIngameCommand(in XtClientMessage message, ref StrReader reader)
+        private void HandleInGameCommand(in XtClientMessage message, ref StrReader reader)
         {
             switch (message.m_command)
             {
@@ -75,63 +75,7 @@ namespace BinWeevils.GameServer
                 }
                 case Modules.INGAME_ACTION: // 2#3
                 {
-                    var action = new ClientAction();
-                    action.Deserialize(ref reader);
-                    
-                    if (!Enum.IsDefined(typeof(EWeevilAction), action.m_actionID))
-                    {
-                        // todo: log
-                        Close();
-                        return;
-                    }
-                    
-                    if (action.m_endPoseID != -1 && !Enum.IsDefined(typeof(EWeevilAction), action.m_endPoseID))
-                    {
-                        // todo: log
-                        Close();
-                        return;
-                    }
-                    
-                    m_taskQueue.Enqueue(async () =>
-                    {
-                        var user = GetUser();
-                        var room = await user.GetRoom();
-                        if (room.IsLimbo()) return;
-                        
-                        var weevil = user.GetUserData<WeevilData>();
-                        
-                        var extraParamsReader = new StrReader(action.m_extraParams, ',');
-                        switch ((EWeevilAction)action.m_actionID)
-                        {
-                            case EWeevilAction.JUMP_TO:
-                            {
-                                var jumpTo = new JumpToAction();
-                                jumpTo.Deserialize(ref extraParamsReader);
-                                weevil.m_x.SetValue(jumpTo.m_x);
-                                weevil.m_y.SetValue(jumpTo.m_y);
-                                weevil.m_z.SetValue(jumpTo.m_z);
-                                weevil.m_r.SetValue(jumpTo.m_r);
-                                break;
-                            }
-                        }
-                        
-                        if (action.m_endPoseID != -1)
-                        {
-                            weevil.m_poseID.SetValue(action.m_endPoseID);
-                        } else
-                        {
-                            // todo: correct?
-                            weevil.m_poseID.SetValue(0);
-                        }
-                        
-                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
-                        await broadcaster.BroadcastXtStr(Modules.INGAME_ACTION, new ServerAction
-                        {
-                            m_userID = checked((int)weevil.m_user.m_id),
-                            m_actionID = action.m_actionID,
-                            m_extraParams = action.m_extraParams!
-                        });
-                    });
+                    HandleInGameCommand_Action(ref reader);
                     break;
                 }
                 case Modules.INGAME_JOIN_ROOM: // 2#4
@@ -184,6 +128,90 @@ namespace BinWeevils.GameServer
                     Console.Out.WriteLine($"unknown command (ingame): {message.m_command}");
                     break;
                 }
+            }
+        }
+
+        private void HandleInGameCommand_Action(ref StrReader reader)
+        {
+            var action = new ClientAction();
+            action.Deserialize(ref reader);
+                    
+            if (!Enum.IsDefined(typeof(EWeevilAction), action.m_actionID))
+            {
+                // todo: log
+                Close();
+                return;
+            }
+                    
+            if (action.m_endPoseID != -1 && !Enum.IsDefined(typeof(EWeevilAction), action.m_endPoseID))
+            {
+                // todo: log
+                Close();
+                return;
+            }
+                    
+            m_taskQueue.Enqueue(async () => { await HandleInGameCommand_Action_Async(action); });
+        }
+
+        private async Task HandleInGameCommand_Action_Async(ClientAction action)
+        {
+            var user = GetUser();
+            var room = await user.GetRoom();
+            if (room.IsLimbo()) return;
+                        
+            var weevil = user.GetUserData<WeevilData>();
+                        
+            HandleInGameCommand_Action_UpdateVars(action, weevil);
+
+            var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+            await broadcaster.BroadcastXtStr(Modules.INGAME_ACTION, new ServerAction
+            {
+                m_userID = checked((int)weevil.m_user.m_id),
+                m_actionID = action.m_actionID,
+                m_extraParams = action.m_extraParams!
+            });
+        }
+
+        private static void HandleInGameCommand_Action_UpdateVars(ClientAction action, WeevilData weevil)
+        {
+            var extraParamsReader = new StrReader(action.m_extraParams, ',');
+            switch ((EWeevilAction)action.m_actionID)
+            {
+                case EWeevilAction.JUMP_TO:
+                {
+                    var jumpTo = new JumpToAction();
+                    jumpTo.Deserialize(ref extraParamsReader);
+                    
+                    weevil.m_x.SetValue(jumpTo.m_x);
+                    weevil.m_y.SetValue(jumpTo.m_y);
+                    weevil.m_z.SetValue(jumpTo.m_z);
+                    weevil.m_r.SetValue(jumpTo.m_r);
+                    break;
+                }
+                case EWeevilAction.TELEPORT:
+                {
+                    var teleport = new TeleportAction();
+                    teleport.Deserialize(ref extraParamsReader);
+                
+                    weevil.m_x.SetValue(teleport.m_x);
+                    weevil.m_y.SetValue(teleport.m_y);
+                    weevil.m_z.SetValue(teleport.m_z);
+                    if (teleport.m_rDest != null)
+                    {
+                        weevil.m_r.SetValue(teleport.m_rDest.Value);
+                    }
+                    break;
+                }
+                // todo: which other actions need this
+            }
+                        
+            if (action.m_endPoseID != -1)
+            {
+                weevil.m_poseID.SetValue(action.m_endPoseID);
+            } else
+            {
+                // todo: correct?
+                weevil.m_poseID.SetValue(0);
             }
         }
     }

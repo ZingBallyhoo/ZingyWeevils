@@ -229,7 +229,7 @@ namespace BinWeevils.GameServer
             {
                 case Modules.INGAME:
                 {
-                    HandleIngameCommand(message, ref reader);
+                    HandleInGameCommand(message, ref reader);
                     return;
                 }
             }
