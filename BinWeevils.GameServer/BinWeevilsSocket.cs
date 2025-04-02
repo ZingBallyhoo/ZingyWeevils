@@ -1,5 +1,6 @@
 using System.Text;
 using ArcticFox.Codec;
+using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Sfs;
@@ -36,6 +37,12 @@ namespace BinWeevils.GameServer
         
         private void InputXml(ReadOnlySpan<char> input)
         {
+            if (input is "<policy-file-request/>")
+            {
+                this.BroadcastZeroTerminatedAscii("<cross-domain-policy><allow-access-from domain='*' to-ports='9339' /></cross-domain-policy>");
+                return;
+            }
+            
             var preRead = new MsgPreRead();
             XmlReadBuffer.ReadIntoStatic(input, ref preRead);
             if (preRead.m_bodySpan.Length == 0)

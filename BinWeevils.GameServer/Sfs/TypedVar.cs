@@ -18,7 +18,7 @@ namespace BinWeevils.GameServer.Sfs
                 ForceSetValue((T)(object)"");
             } else
             {
-                ForceSetValue(default);
+                ForceSetValue(default!);
             }
         }
         

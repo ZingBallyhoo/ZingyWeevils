@@ -4,7 +4,7 @@ using StackXML;
 namespace BinWeevils.Protocol.XmlMessages
 {
     [XmlCls("msg")]
-    public partial class Msg
+    public partial struct Msg
     {
         [XmlField("t")] public string m_messageType = "sys";
         [XmlBody] public MsgBody m_body;
@@ -19,7 +19,7 @@ namespace BinWeevils.Protocol.XmlMessages
 
     [XmlCls("pid")]
     [DebuggerDisplay("MsgBodyPID: {m_id}")]
-    public partial class MsgBodyPID
+    public partial struct MsgBodyPID
     {
         [XmlField("id")] public int m_id;
     }

@@ -28,13 +28,7 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [HttpGet("test")]
-        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public CheckVersionResponse CheckVersion2()
-        {
-            return new CheckVersionResponse();
-        }
-        
+        [StructuredFormPost("php/getAdPaths.php")]
         [StructuredFormPost("binConfig/uk/getAdPaths.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public AdPathsResponse GetAdPaths([FromBody] AdPathsRequest request)
