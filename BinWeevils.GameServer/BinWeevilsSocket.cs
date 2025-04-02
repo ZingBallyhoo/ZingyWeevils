@@ -240,51 +240,6 @@ namespace BinWeevils.GameServer
                 {
                     break;
                 }
-                case "2#4":
-                {
-                    var joinRoomRequest = new JoinRoomRequest();
-                    joinRoomRequest.Deserialize(ref reader);
-                    
-                    m_taskQueue.Enqueue(async () =>
-                    {
-                        var user = GetUser();
-                        await user.RemoveFromRoom(RoomTypeIDs.DEFAULT);
-                        
-                        var weevil = user.GetUserData<WeevilData>();
-                        weevil.m_poseID.SetValue(0);
-                        weevil.m_victor.SetValue(0);
-                        weevil.m_x.SetValue(joinRoomRequest.m_entryX);
-                        weevil.m_y.SetValue(joinRoomRequest.m_entryY);
-                        weevil.m_z.SetValue(joinRoomRequest.m_entryZ);
-                        weevil.m_r.SetValue(joinRoomRequest.m_entryDir);
-                        weevil.m_locID.SetValue(joinRoomRequest.m_locID);
-                        weevil.m_doorID.SetValue(joinRoomRequest.m_entryDoorID);
-                        
-                        var newRoom = await user.m_zone.GetRoom(joinRoomRequest.m_roomName);
-                        await user.MoveTo(newRoom);
-                        
-                        var allWeevils = await newRoom.GetAllUserData<WeevilData>();
-                        await this.BroadcastSys(new JoinRoomResponse
-                        {
-                            m_action = "joinOK",
-                            m_room = checked((int)newRoom.m_id),
-                            m_playerList = new RoomPlayerList
-                            {
-                                m_room = checked((int)newRoom.m_id),
-                                m_players = allWeevils.Select(x => new RoomPlayer
-                                {
-                                    m_name = x.m_user.m_name,
-                                    m_uid = checked((int)x.m_user.m_id),
-                                    m_vars = new VarList
-                                    {
-                                        m_vars = x.GetVars()
-                                    }
-                                }).ToList()
-                            }
-                        });
-                    });
-                    break;
-                }
                 default:
                 {
                     Console.Out.WriteLine($"unknown command: {message.m_command}");
