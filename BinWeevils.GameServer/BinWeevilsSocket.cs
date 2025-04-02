@@ -2,6 +2,7 @@ using System.Text;
 using ArcticFox.Codec;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML;
@@ -93,18 +94,18 @@ namespace BinWeevils.GameServer
             var verCheck = XmlReadBuffer.ReadStatic<VerCheckBody>(body);
             if (verCheck.m_ver.m_ver != 154)
             {
-                m_taskQueue.Enqueue(() => this.Broadcast(BuildSysMessage(new MsgBody
+                m_taskQueue.Enqueue(() => this.BroadcastSys(new MsgBody
                 {
                     m_action = "apiKO",
                     m_room = 0
-                })));
+                }));
             } else
             {
-                m_taskQueue.Enqueue(() => this.Broadcast(BuildSysMessage(new MsgBody
+                m_taskQueue.Enqueue(() => this.BroadcastSys(new MsgBody
                 {
                     m_action = "apiOK",
                     m_room = 0
-                })));
+                }));
             }
         }
         
@@ -116,15 +117,19 @@ namespace BinWeevils.GameServer
             {
                 var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
                 
-                await user.m_zone.CreateRoom(
-                    new WeevilRoomDescription($"nest_{login.m_data.m_nickname}")
-                    {
-                        m_creator = user,
-                        m_maxUsers = 20,
-                        m_isTemporary = true
-                    });
-                        
-                await this.Broadcast(BuildXtResMessage(new ActionScriptObject
+                var nestDesc = new WeevilRoomDescription($"nest_{login.m_data.m_nickname}")
+                {
+                    m_creator = user,
+                    m_maxUsers = 20,
+                    m_isTemporary = true
+                };
+                await user.m_zone.CreateRoom(nestDesc);
+                
+                var weevilData = new WeevilData(user);
+                weevilData.m_idx.SetValue(55);
+                user.SetUserData(weevilData);
+                
+                await this.BroadcastXtRes(new ActionScriptObject
                 {
                     m_vars =
                     [
@@ -139,16 +144,16 @@ namespace BinWeevils.GameServer
                             m_type = "a",
                             m_vars =
                             [
-                                Var.String("weevilDef", "101101406100171700"),
+                                Var.String("weevilDef", weevilData.m_weevilDef),
                                 Var.String("ip", "no"),
-                                Var.String("apparel", ""),
-                                Var.String("idx", $"{55}"),
+                                Var.String("apparel", weevilData.m_apparel),
+                                Var.String("idx", $"{weevilData.m_idx.GetValue()}"),
                                 Var.String("locale", "UK"),
-                                Var.String("userID", $"{999}")
+                                Var.String("userID", $"{user.m_id}")
                             ]
                         }
                     ]
-                }));
+                });
             });
         }
         
@@ -161,7 +166,7 @@ namespace BinWeevils.GameServer
                 using var rooms = await GetUser().m_zone.GetRooms();
                 foreach (var room in rooms.m_value.GetRooms())
                 {
-                    var weevilDesc = (WeevilRoomDescription)room.m_description;
+                    var weevilDesc = room.GetWeevilDesc();
                     roomList.Add(new RoomInfo
                     {
                         m_id = checked((int)room.m_id),
@@ -180,39 +185,13 @@ namespace BinWeevils.GameServer
                     });
                 }
                         
-                await this.Broadcast(BuildSysMessage(new RoomListBody
+                await this.BroadcastSys(new RoomListBody
                 {
                     m_action = "rmList",
                     m_room = 0,
                     m_roomList = roomList
-                }));
+                });
             });
-        }
-        
-        private static Msg BuildXtResMessage(ActionScriptObject obj, int room=-1)
-        {
-            var body = XmlWriteBuffer.SerializeStatic(obj, CDataMode.Off);
-
-            var resp = new Msg
-            {
-                m_messageType = "xt",
-                m_body = new XtResBody
-                {
-                    m_action = "xtRes",
-                    m_room = room,
-                    m_xmlBody = body
-                }
-            };
-            return resp;
-        }
-        
-        private static Msg BuildSysMessage(MsgBody body)
-        {
-            return new Msg
-            {
-                m_messageType = "sys",
-                m_body = body,
-            };
         }
         
         private void InputStr(ReadOnlySpan<char> input)
@@ -249,15 +228,39 @@ namespace BinWeevils.GameServer
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
+                        await user.RemoveFromRoom(RoomTypeIDs.DEFAULT);
+                        
+                        var weevil = user.GetUserData<WeevilData>();
+                        weevil.m_poseID.SetValue(0);
+                        weevil.m_victor.SetValue(0);
+                        weevil.m_x.SetValue(joinRoomRequest.m_entryX);
+                        weevil.m_y.SetValue(joinRoomRequest.m_entryY);
+                        weevil.m_z.SetValue(joinRoomRequest.m_entryZ);
+                        weevil.m_locID.SetValue(joinRoomRequest.m_locID);
+                        weevil.m_doorID.SetValue(joinRoomRequest.m_entryDoorID);
+                        
                         var newRoom = await user.m_zone.GetRoom(joinRoomRequest.m_roomName);
+                        await user.MoveTo(newRoom);
                         
-                        await GetUser().MoveTo(newRoom);
-                        
-                        await this.Broadcast(BuildSysMessage(new JoinRoomResponse
+                        var allWeevils = await newRoom.GetAllUserData<WeevilData>();
+                        await this.BroadcastSys(new JoinRoomResponse
                         {
                             m_action = "joinOK",
-                            m_room = checked((int)newRoom.m_id)
-                        }));
+                            m_room = checked((int)newRoom.m_id),
+                            m_playerList = new RoomPlayerList
+                            {
+                                m_room = checked((int)newRoom.m_id),
+                                m_players = allWeevils.Select(x => new RoomPlayer
+                                {
+                                    m_name = x.m_user.m_name,
+                                    m_uid = checked((int)x.m_user.m_id),
+                                    m_vars = new VarList
+                                    {
+                                        m_vars = x.GetVars()
+                                    }
+                                }).ToList()
+                            }
+                        });
                     });
                     break;
                 }

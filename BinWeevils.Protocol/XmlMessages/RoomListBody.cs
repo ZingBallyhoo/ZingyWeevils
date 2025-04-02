@@ -9,7 +9,7 @@ namespace BinWeevils.Protocol.XmlMessages
     }
     
     [XmlCls("rmList")]
-    public partial class RoomList
+    public partial struct RoomList
     {
         [XmlBody] public List<RoomInfo> m_rooms = new List<RoomInfo>();
 

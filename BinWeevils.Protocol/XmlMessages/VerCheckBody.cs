@@ -8,7 +8,7 @@ namespace BinWeevils.Protocol.XmlMessages
         [XmlBody] public Ver m_ver;
         
         [XmlCls("ver")]
-        public partial class Ver
+        public partial struct Ver
         {
             [XmlField("v")] public uint m_ver;
         }

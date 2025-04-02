@@ -12,7 +12,7 @@ namespace BinWeevils.Protocol.XmlMessages
     }
 
     [XmlCls("uLs")]
-    public partial class RoomPlayerList
+    public partial struct RoomPlayerList
     {
         [XmlField("r")] public int m_room;
         [XmlBody] public List<RoomPlayer> m_players = new List<RoomPlayer>();
@@ -20,9 +20,9 @@ namespace BinWeevils.Protocol.XmlMessages
     
     [XmlCls("u")]
     [DebuggerDisplay("RoomPlayer: {m_name}")]
-    public partial class RoomPlayer
+    public partial struct RoomPlayer
     {
-        [XmlField("i")] public int m_idx;
+        [XmlField("i")] public int m_uid;
         [XmlField("m")] public int m_moderator;
         
         [XmlBody("n")] public string m_name;

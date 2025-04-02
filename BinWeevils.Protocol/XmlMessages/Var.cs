@@ -5,7 +5,7 @@ namespace BinWeevils.Protocol.XmlMessages
 {
     [XmlCls("var")]
     [DebuggerDisplay("Var: {m_name}: {m_value} ({m_type})")]
-    public partial class Var
+    public partial struct Var
     {
         [XmlField("n")] public string m_name;
         [XmlField("t")] public string m_type;
@@ -34,13 +34,8 @@ namespace BinWeevils.Protocol.XmlMessages
     }
     
     [XmlCls("vars")]
-    public partial class VarList
+    public partial struct VarList
     {
-        [XmlBody] public List<Var> m_vars = new List<Var>();
-
-        public void Add(Var var)
-        {
-            m_vars.Add(var);
-        }
+        [XmlBody] public List<Var> m_vars;
     }
 }

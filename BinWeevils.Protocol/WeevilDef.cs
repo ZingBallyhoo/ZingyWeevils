@@ -1,6 +1,6 @@
 using System;
 
-namespace WeevilWorld.Server
+namespace BinWeevils.Protocol
 {
     public class WeevilDef
     {
@@ -147,6 +147,7 @@ namespace WeevilWorld.Server
                    m_antennaType == AntennaType.SuperRedWhite ||
                    m_antennaType == AntennaType.SuperPurpleYellowBlue ||
                    m_antennaType == AntennaType.SuperHalloween ||
+                   m_antennaType == AntennaType.SuperFire ||
                    m_antennaType == AntennaType.SuperIce;
         }
     }

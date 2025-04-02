@@ -16,5 +16,8 @@
     <Compile Update="Pages\PlayPageModel.cs">
       <DependentUpon>PlayPage.cshtml</DependentUpon>
     </Compile>
+    <Compile Include="..\BinWeevils.Protocol\WeevilDef.cs">
+      <Link>WeevilDef.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

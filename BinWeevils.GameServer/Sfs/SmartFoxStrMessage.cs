@@ -1,6 +1,6 @@
 using StackXML.Str;
 
-namespace BinWeevils.GameServer
+namespace BinWeevils.GameServer.Sfs
 {
     public class SmartFoxStrMessage
     {

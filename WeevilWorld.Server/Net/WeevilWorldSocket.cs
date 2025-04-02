@@ -6,6 +6,7 @@ using ArcticFox.Codec;
 using ArcticFox.Net.Event;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.Protocol;
 using Google.Protobuf.Collections;
 using WeevilWorld.Protocol;
 using WeevilWorldProtobuf.Enums;
