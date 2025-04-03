@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StackXML", "StackXML", "{56
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Server", "BinWeevils.Server\BinWeevils.Server.csproj", "{3B47F501-A41D-4667-9FF1-4E69B4F9F3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcticFox.PolyType.Amf", "ArcticFox.PolyType.Amf\ArcticFox.PolyType.Amf.csproj", "{DE9384F8-3BFA-402C-9BA9-495523B7758B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcticFox.PolyType.Amf", "ArcticFox\ArcticFox.PolyType.Amf\ArcticFox.PolyType.Amf.csproj", "{DE9384F8-3BFA-402C-9BA9-495523B7758B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackXML.Tests", "StackXML\StackXML.Tests\StackXML.Tests.csproj", "{A86C40A0-552F-4A13-AF20-A17FBAB6B484}"
 EndProject

@@ -1,5 +1,6 @@
 using System.Dynamic;
 using ArcticFox.PolyType.Amf;
+using ArcticFox.PolyType.Amf.Packet;
 using BinWeevils.Protocol.Amf;
 using Microsoft.AspNetCore.Mvc;
 using PolyType;
@@ -21,7 +22,7 @@ namespace BinWeevils.Server.Controllers
             var body = new byte[Request.ContentLength.Value];
             await Request.Body.ReadExactlyAsync(body, cancellationToken);
             
-            var packet = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(body);
+            var packet = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(body, AmfOptions.Default);
             var message = packet.m_messages.Single();
             
             AmfPacket response;
@@ -66,7 +67,7 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception($"unknown target: {message.m_targetUri}");
             }
             
-            var ser = AmfPolyType.Serialize<AmfPacket, GatewayShapeWitness>(response);
+            var ser = AmfPolyType.Serialize<AmfPacket, GatewayShapeWitness>(response, AmfOptions.Default);
             
             //var deSer = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(ser);
             
