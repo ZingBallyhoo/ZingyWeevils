@@ -135,7 +135,7 @@ namespace BinWeevils.GameServer
         {
             var action = new ClientAction();
             action.Deserialize(ref reader);
-                    
+            
             if (!Enum.IsDefined(typeof(EWeevilAction), action.m_actionID))
             {
                 // todo: log
@@ -168,12 +168,14 @@ namespace BinWeevils.GameServer
             {
                 m_userID = checked((int)weevil.m_user.m_id),
                 m_actionID = action.m_actionID,
-                m_extraParams = action.m_extraParams!
+                m_extraParams = action.m_extraParams
             });
         }
 
         private static void HandleInGameCommand_Action_UpdateVars(ClientAction action, WeevilData weevil)
         {
+            Console.Out.WriteLine($"{(EWeevilAction)action.m_actionID} {action.m_extraParams}");
+
             var extraParamsReader = new StrReader(action.m_extraParams, ',');
             switch ((EWeevilAction)action.m_actionID)
             {
@@ -188,8 +190,31 @@ namespace BinWeevils.GameServer
                     weevil.m_r.SetValue(jumpTo.m_r);
                     break;
                 }
+                case EWeevilAction.BOUNCE_TUMBLE:
+                {
+                    // todo: although the game sends setUvars..
+                    // but incorrectly
+                    
+                    var bounceTumble = new BounceTumbleAction();
+                    var lastJump = new BounceTumbleAction_Additional
+                    {
+                        m_x = bounceTumble.m_x2,
+                        m_z = bounceTumble.m_z2
+                    };
+                    while (extraParamsReader.HasRemaining())
+                    {
+                        lastJump.Deserialize(ref extraParamsReader);
+                    }
+                    
+                    weevil.m_x.SetValue(lastJump.m_x);
+                    weevil.m_y.SetValue(bounceTumble.m_y2); // should be 0
+                    weevil.m_z.SetValue(lastJump.m_z);
+                    // todo: r. using r2 field isn't correct
+                    break;
+                }
                 case EWeevilAction.TELEPORT:
                 {
+                    // todo: although the game sends setUvars..
                     var teleport = new TeleportAction();
                     teleport.Deserialize(ref extraParamsReader);
                 
@@ -202,16 +227,132 @@ namespace BinWeevils.GameServer
                     }
                     break;
                 }
+                
+                case EWeevilAction.DROP_IN:
+                {
+                    // todo: although the game sends setUvars..
+                    var dropIn = new DropInAction();
+                    dropIn.Deserialize(ref extraParamsReader);
+                    
+                    weevil.m_x.SetValue(dropIn.m_x1);
+                    weevil.m_y.SetValue(0);
+                    weevil.m_z.SetValue(dropIn.m_z1);
+                    break;
+                }
+                case EWeevilAction.SUPER_SPEED:
+                {
+                    var superSpeed = new SuperSpeedAction();
+                    superSpeed.Deserialize(ref extraParamsReader);
+                    
+                    weevil.m_x.SetValue(superSpeed.m_x);
+                    weevil.m_z.SetValue(superSpeed.m_z);
+                    weevil.m_r.SetValue(superSpeed.m_r);
+                    break;
+                }
+                case EWeevilAction.FLY_UP_TUBE:
+                {
+                    // todo: although the game sends setUvars..
+                    var flyUpTube = new FlyUpTube();
+                    flyUpTube.Deserialize(ref extraParamsReader);
+                    
+                    weevil.m_x.SetValue(flyUpTube.m_xFinal);
+                    weevil.m_y.SetValue(flyUpTube.m_yDest);
+                    weevil.m_z.SetValue(flyUpTube.m_zFinal);
+                    // todo: calc dir (client doesn't send here or in vars...)
+                    break;
+                }
+                // todo: SKATE?
                 // todo: which other actions need this
+                
+                
+                // =========================================
+                // =========================================
+                // VALIDATE ONLY
+                // =========================================
+                // =========================================
+                
+                case EWeevilAction.WALK:
+                {
+                    // todo: invalid to send
+                    break;
+                }
+                case EWeevilAction.JUMP:
+                {
+                    // (validate only)
+                    var jump = new SpinAction();
+                    jump.Deserialize(ref extraParamsReader);
+                    // todo: validate
+
+                    break;
+                }
+                // todo: SIT_IN_CAR (validate only)
+                // todo: EXIT_CAR (validate only)
+                // todo: THROW (validate only)
+                case EWeevilAction.SPIN1:
+                case EWeevilAction.SPIN2:
+                {
+                    var spin = new SpinAction();
+                    spin.Deserialize(ref extraParamsReader);
+                    // todo: validate
+                    
+                    break;
+                }
+                case EWeevilAction.JIGGLE:
+                {
+                    var jiggle = new JiggleAction();
+                    jiggle.Deserialize(ref extraParamsReader);
+                    // todo: validate
+                    
+                    break;
+                }
+                // todo: HOLD_TRAY (validate only)
+                // todo: HOLD_ITEM (validate only)
+                // todo: ADD_ITEM_TO_TRAY (validate only)
+                case EWeevilAction.TELEPORT_OUT:
+                {
+                    var teleportOut = new TeleportOutAction();
+                    teleportOut.Deserialize(ref extraParamsReader);
+                    
+                    break;
+                }
+                // todo: GET_SPUN (validate only)
+                case EWeevilAction.FLY_OUT:
+                {
+                    var flyOut = new FlyOutAction();
+                    flyOut.Deserialize(ref extraParamsReader);
+                    
+                    break;
+                }
+                // todo: SLIDE_OUT
+                case EWeevilAction.DROP_OUT:
+                {
+                    var dropOut = new DropOutAction();
+                    dropOut.Deserialize(ref extraParamsReader);
+                    break;
+                }
+                default:
+                {
+                    if (action.m_extraParams is "-1")
+                    {
+                        // no params = send "-1"
+                        extraParamsReader.GetString();
+                    }
+                    break;
+                }
             }
-                        
+            
+            if (extraParamsReader.HasRemaining())
+            {
+                throw new Exception($"didn't fully parse action: {(EWeevilAction)action.m_actionID}");
+            }
+            
             if (action.m_endPoseID != -1)
             {
                 weevil.m_poseID.SetValue(action.m_endPoseID);
             } else
             {
-                // todo: correct?
-                weevil.m_poseID.SetValue(0);
+                // don't override the current pose
+                // for example, waving while standing tall
             }
         }
     }

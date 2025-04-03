@@ -4,8 +4,8 @@ namespace BinWeevils.Protocol
     {
         WALK = 0,
         JUMP = 1,
-        WAVE1 = 2,
-        WAVE2 = 3,
+        WAVE_RIGHT = 2,
+        WAVE_LEFT = 3,
         SHAKE_HEAD = 4,
         NOD = 5,
         SQUAT = 6,

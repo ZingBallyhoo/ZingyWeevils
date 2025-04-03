@@ -86,6 +86,7 @@ namespace BinWeevils.Protocol
 
         public const string DEFAULT = "101101406100171700"; // pea/cabbage
         public const string ZINGY = "102311611105070700";
+        public const string DEFINITELY_SCRIBBLES = "201421625110171700";
 
         public WeevilDef(string str) : this(str.AsSpan())
         { }
