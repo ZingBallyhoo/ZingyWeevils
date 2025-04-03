@@ -1,7 +1,11 @@
+using ArcticFox.PolyType.Amf;
+using ArcticFox.RPC.AmfGateway;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer;
+using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
 using BinWeevils.Server;
+using BinWeevils.Server.Controllers;
 using Microsoft.Extensions.FileProviders;
 using StackXML;
 using Stl.DependencyInjection;
@@ -18,6 +22,7 @@ internal static class Program
             options.OutputFormatters.Add(new FormOutputFormatter());
             options.OutputFormatters.Add(new StackXMLOutputFormatter());
         });
+        builder.Services.AddSingleton<IAmfGatewayRouter, WeevilGatewayRouter>();
         
         builder.Services.AddSingleton<BinWeevilsSocketHost>();
         builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());
@@ -35,6 +40,15 @@ internal static class Program
         app.MapControllers();
         app.MapRazorPages().WithStaticAssets();
         app.UseWebSockets();
+        
+        var amfOptions = new AmfOptions();
+        amfOptions.AddTypedObject<GetLoginDetailsResponse>();
+        app.MapAmfGateway("php/amfphp/gateway.php", new AmfGatewaySettings
+        {
+            m_options = amfOptions,
+            m_shapeProvider = GatewayShapeWitness.ShapeProvider,
+            m_swallowExceptions = false,
+        });
         
         var archivePath = app.Configuration["ArchivePath"]!;
         
