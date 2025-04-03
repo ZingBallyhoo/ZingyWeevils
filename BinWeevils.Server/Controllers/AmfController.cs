@@ -1,4 +1,3 @@
-using System.Dynamic;
 using ArcticFox.PolyType.Amf;
 using ArcticFox.PolyType.Amf.Packet;
 using BinWeevils.Protocol.Amf;
@@ -11,6 +10,14 @@ namespace BinWeevils.Server.Controllers
     [Route("php/amfphp")]
     public class AmfController : Controller
     {
+        private static readonly AmfOptions s_options;
+        
+        static AmfController()
+        {
+            s_options = new AmfOptions();
+            s_options.AddTypedObject<GetLoginDetailsResponse>();
+        }
+        
         [HttpPost("gateway.php")]
         [Consumes("application/x-amf")]
         [Produces("application/x-amf")]
@@ -22,7 +29,7 @@ namespace BinWeevils.Server.Controllers
             var body = new byte[Request.ContentLength.Value];
             await Request.Body.ReadExactlyAsync(body, cancellationToken);
             
-            var packet = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(body, AmfOptions.Default);
+            var packet = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(body, s_options);
             var message = packet.m_messages.Single();
             
             AmfPacket response;
@@ -67,18 +74,15 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception($"unknown target: {message.m_targetUri}");
             }
             
-            var ser = AmfPolyType.Serialize<AmfPacket, GatewayShapeWitness>(response, AmfOptions.Default);
-            
-            //var deSer = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(ser);
+            var ser = AmfPolyType.Serialize<AmfPacket, GatewayShapeWitness>(response, s_options);
+            var deSer = AmfPolyType.Deserialize<AmfPacket, GatewayShapeWitness>(ser, s_options);
             
             return Results.Bytes(ser);
         }
     }
-        
+    
     [GenerateShape<AmfPacket>]
     [GenerateShape<GetLoginDetailsResponse>]
     [GenerateShape<object[]>]
-    [GenerateShape<double>]
-    [GenerateShape<ExpandoObject>]
     internal partial class GatewayShapeWitness;
 }
