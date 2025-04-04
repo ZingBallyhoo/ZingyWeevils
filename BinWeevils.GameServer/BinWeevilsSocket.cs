@@ -89,6 +89,11 @@ namespace BinWeevils.GameServer
                     HandleSfsGetRoomList(preRead.m_bodySpan);
                     break;
                 }
+                case "pubMsg":
+                {
+                    HandleSfsPubMsg(preRead.m_bodySpan);
+                    break;
+                }
                 default:
                 {
                     Console.Out.WriteLine($"unknown action: {preReadBody.m_action}");
@@ -182,7 +187,7 @@ namespace BinWeevils.GameServer
                                 
                         m_private = false,
                         m_temp = weevilDesc.m_isTemporary,
-                        m_game = weevilDesc.m_isGame,
+                        m_game = false,
                         m_limbo = weevilDesc.m_limbo,
                         
                         m_userCount = await room.GetUserCount(),
@@ -227,6 +232,11 @@ namespace BinWeevils.GameServer
             
             switch (module)
             {
+                case Modules.CHAT:
+                {
+                    HandleChatCommand(message, ref reader);
+                    return;
+                }
                 case Modules.INGAME:
                 {
                     HandleInGameCommand(message, ref reader);
@@ -234,18 +244,7 @@ namespace BinWeevils.GameServer
                 }
             }
 
-            switch (message.m_command)
-            {
-                case "1#2":
-                {
-                    break;
-                }
-                default:
-                {
-                    Console.Out.WriteLine($"unknown command: {message.m_command}");
-                    break;
-                }
-            }
+            Console.Out.WriteLine($"unknown command: {message.m_command}");
         }
 
         public void Abort()

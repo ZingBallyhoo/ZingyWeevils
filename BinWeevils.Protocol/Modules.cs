@@ -5,6 +5,10 @@ namespace BinWeevils.Protocol
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class Modules
     {
+        public const string CHAT = "1";
+        public const string CHAT_YOURSELF = $"{CHAT}#1";
+        public const string CHAT_CHANGE_STATE = $"{CHAT}#2";
+        
         public const string INGAME = "2";
         public const string INGAME_MOVE = $"{INGAME}#1";
         public const string INGAME_EXPRESSION = $"{INGAME}#2";
