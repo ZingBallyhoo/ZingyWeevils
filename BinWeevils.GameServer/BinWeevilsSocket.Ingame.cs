@@ -123,6 +123,27 @@ namespace BinWeevils.GameServer
                     });
                     break;
                 }
+                case Modules.INGAME_ROOM_EVENT:
+                {
+                    var clientEvent = new ClientRoomEvent();
+                    clientEvent.Deserialize(ref reader);
+                    
+                    // todo: actually store the state.. (b?)
+                    // and we should probably validate what is being sent :)
+                    
+                    //Console.Out.WriteLine($"client sent room event: {clientEvent.m_a} {clientEvent.m_b}");
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var room = await user.GetRoom();
+                        
+                        await room.BroadcastXtStr(Modules.INGAME_ROOM_EVENT, new ServerRoomEvent
+                        {
+                            m_a = clientEvent.m_a!
+                        });
+                    });
+                    break;
+                }
                 default:
                 {
                     Console.Out.WriteLine($"unknown command (ingame): {message.m_command}");
