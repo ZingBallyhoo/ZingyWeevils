@@ -1,6 +1,8 @@
 using ArcticFox.Net;
 using ArcticFox.Net.Event;
+using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Sfs;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML;
 using StackXML.Str;
@@ -49,6 +51,28 @@ namespace BinWeevils.GameServer
             } finally
             {
                 writer.Dispose();
+            }
+        }
+        
+        public static ValueTask BroadcastRoomEvent<T>(this Room bc, int eventId, T obj) where T : IStrClass
+        {
+            var writer = SmartFoxStrMessage.MakeWriter();
+            var eventWriter = new StrWriter(';');
+            try
+            {
+                writer.PutString("xt");
+                writer.PutString(Modules.INGAME_ROOM_EVENT);
+                writer.Put(bc.m_id);
+                
+                eventWriter.Put(eventId);
+                obj.Serialize(ref eventWriter);
+                writer.Put(eventWriter.AsSpan());
+                
+                return bc.BroadcastZeroTerminatedAscii(writer.AsSpan());
+            } finally
+            {
+                writer.Dispose();
+                eventWriter.Dispose();
             }
         }
         

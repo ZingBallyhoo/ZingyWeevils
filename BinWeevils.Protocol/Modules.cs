@@ -18,5 +18,11 @@ namespace BinWeevils.Protocol
         public const string INGAME_GET_ZONE_TIME = $"{INGAME}#6";
         public const string INGAME_ADD_APPAREL = $"{INGAME}#7";
         public const string INGAME_REMOVE_APPAREL = $"{INGAME}#8";
+        
+        public const string DINER = "9";
+        public const string DINER_GRAB_TRAY = $"{DINER}#1";
+        public const string DINER_DROP_TRAY = $"{DINER}#2";
+        public const string DINER_CHEF_START = $"{DINER}#3";
+        public const string DINER_CHEF_QUIT = $"{DINER}#4";
     }
 }

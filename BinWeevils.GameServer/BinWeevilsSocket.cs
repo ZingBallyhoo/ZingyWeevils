@@ -242,6 +242,11 @@ namespace BinWeevils.GameServer
                     HandleInGameCommand(message, ref reader);
                     return;
                 }
+                case Modules.DINER:
+                {
+                    HandleDinerCommand(message, ref reader);
+                    return;
+                }
             }
 
             Console.Out.WriteLine($"unknown command: {message.m_command}");

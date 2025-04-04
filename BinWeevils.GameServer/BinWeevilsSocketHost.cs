@@ -2,6 +2,8 @@ using System.Net;
 using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Rooms;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol.Xml;
 using Microsoft.Extensions.Hosting;
 
@@ -43,11 +45,48 @@ namespace BinWeevils.GameServer
             });
             foreach (var location in m_locationDefinitions.m_locations)
             {
-                await zone.CreateRoom(new WeevilRoomDescription(location.m_name)
+                object? roomData = null;
+                
+                if (location.m_name == "Diner" || location.m_name == "FiggsCafeTerrace" || location.m_name == "TycoonIslandSmoothieBar")
+                {
+                    int trayCount;
+                    int plateCount;
+
+                    switch (location.m_name)
+                    {
+                        case "Diner":
+                        case "FiggsCafeTerrace":
+                        {
+                            trayCount = 3;
+                            plateCount = 12;
+                            break;
+                        }
+                        case "TycoonIslandSmoothieBar":
+                        {
+                            trayCount = 0;
+                            plateCount = 4;
+                            break;
+                        }
+                        default: throw new Exception($"unknown diner loc {location.m_name}");
+                    }
+
+                    roomData = new DinerRoom(plateCount, trayCount);
+                } else if (location.m_roomEvents)
+                {
+                    roomData = new StatefulRoom<VarBag>(new VarBag());
+                }
+                
+                roomData ??= new StatelessRoom();
+                var room = await zone.CreateRoom(new WeevilRoomDescription(location.m_name)
                 {
                     m_maxUsers = 200,
-                    m_limbo = false
+                    m_limbo = false,
+                    m_data = roomData
                 });
+                if (roomData is BaseRoom baseRoom)
+                {
+                    baseRoom.m_room = room;
+                }
             }
         }
 

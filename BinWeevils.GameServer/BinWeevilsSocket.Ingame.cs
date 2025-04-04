@@ -1,5 +1,6 @@
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Actions;
@@ -101,11 +102,19 @@ namespace BinWeevils.GameServer
                         var newRoom = await user.m_zone.GetRoom(joinRoomRequest.m_roomName);
                         await user.MoveTo(newRoom);
                         
+                        // todo: should we have a callback from inside the join lock?
                         var allWeevils = await newRoom.GetAllUserData<WeevilData>();
+                        var roomVars = new VarList();
+                        if (newRoom.GetDataAs<IStatefulRoom>() is {} statefulRoom)
+                        {
+                            var roomVarBag = await statefulRoom.GetVars();
+                            roomVars.m_vars = roomVarBag.GetVars();
+                        }
                         await this.BroadcastSys(new JoinRoomResponse
                         {
                             m_action = "joinOK",
                             m_room = checked((int)newRoom.m_id),
+                            m_vars = roomVars,
                             m_playerList = new RoomPlayerList
                             {
                                 m_room = checked((int)newRoom.m_id),
@@ -128,19 +137,15 @@ namespace BinWeevils.GameServer
                     var clientEvent = new ClientRoomEvent();
                     clientEvent.Deserialize(ref reader);
                     
-                    // todo: actually store the state.. (b?)
-                    // and we should probably validate what is being sent :)
-                    
                     //Console.Out.WriteLine($"client sent room event: {clientEvent.m_a} {clientEvent.m_b}");
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
                         var room = await user.GetRoom();
                         
-                        await room.BroadcastXtStr(Modules.INGAME_ROOM_EVENT, new ServerRoomEvent
-                        {
-                            m_a = clientEvent.m_a!
-                        });
+                        var roomData = room.GetDataAs<IWeevilRoomEventHandler>();
+                        if (roomData == null) return;
+                        await roomData.ClientSentRoomEvent(user, clientEvent);
                     });
                     break;
                 }
@@ -328,7 +333,14 @@ namespace BinWeevils.GameServer
                 }
                 // todo: HOLD_TRAY (validate only)
                 // todo: HOLD_ITEM (validate only)
-                // todo: ADD_ITEM_TO_TRAY (validate only)
+                case EWeevilAction.ADD_ITEM_TO_TRAY:
+                {
+                    var addItemToTray = new AddItemToTrayAction();
+                    addItemToTray.Deserialize(ref extraParamsReader);
+                    
+                    // todo: validate
+                    break;
+                }
                 case EWeevilAction.TELEPORT_OUT:
                 {
                     var teleportOut = new TeleportOutAction();
