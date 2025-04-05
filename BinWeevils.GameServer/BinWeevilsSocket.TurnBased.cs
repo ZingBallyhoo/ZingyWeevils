@@ -20,7 +20,7 @@ namespace BinWeevils.GameServer
             {
                 var user = GetUser();
                 var mainRoom = await user.GetRoom();
-                var gameRoom = await user.m_zone.GetRoom($"TurnBased_{mainRoom.m_name}_{request.m_slot}");
+                var gameRoom = await user.m_zone.GetRoom(BinWeevilsSocketHost.GetTurnBasedRoomName(mainRoom.m_name, request.m_slot));
                 var turnBasedGame = gameRoom!.GetData<TurnBasedGame>();
                 await turnBasedGame.IncomingRequest(user, request);
             });

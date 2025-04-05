@@ -103,9 +103,14 @@ namespace BinWeevils.GameServer
             }
         }
         
+        public static string GetTurnBasedRoomName(string location, int slot)
+        {
+            return $"TurnBased_{location}_{slot}";
+        }
+        
         private static async ValueTask CreateGameRoom(Zone zone, string location, int slot, string gamePath)
         {
-            var gameRoom = await zone.CreateRoom(new RoomDescription($"TurnBased_{location}_{slot}")
+            var gameRoom = await zone.CreateRoom(new RoomDescription(GetTurnBasedRoomName(location, slot))
             {
                 m_type = TURN_BASED_GAME_ROOM_TYPE
             });

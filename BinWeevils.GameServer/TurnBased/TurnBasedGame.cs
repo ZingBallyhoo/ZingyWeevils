@@ -51,7 +51,13 @@ namespace BinWeevils.GameServer.TurnBased
                 }
             }
             
-            var usersGameRoom = await user.GetRoom(BinWeevilsSocketHost.TURN_BASED_GAME_ROOM_TYPE);
+            var usersGameRoom = await user.GetRoomOrNull(BinWeevilsSocketHost.TURN_BASED_GAME_ROOM_TYPE);
+            if (usersGameRoom == null)
+            {
+                // sometimes when the game gets cancelled (stalemate, quit) the client is still able to send turns
+                return;
+            }
+            
             if (!ReferenceEquals(usersGameRoom, m_room))
             {
                 throw new InvalidDataException("user sent a request to a game they aren't in");
@@ -73,7 +79,7 @@ namespace BinWeevils.GameServer.TurnBased
                 }
                 default:
                 {
-                    Console.Out.WriteLine($"unknown request: {request}");
+                    throw new Exception($"unknown request: {request}");
                     break;
                 }
             }
@@ -199,7 +205,10 @@ namespace BinWeevils.GameServer.TurnBased
 
             if (!data.m_gameStarted)
             {
-                // doesn't matter, game not running
+                // no need to notify, game isnt running
+                
+                if (data.m_player1 == user.m_name) data.m_player1 = null;
+                if (data.m_player2 == user.m_name) data.m_player2 = null;
                 return;
             }
 
