@@ -1,11 +1,10 @@
-using BinWeevils.Protocol.XmlMessages;
 using PolyType;
 using PolyType.Abstractions;
 using PolyType.Utilities;
 
 namespace BinWeevils.GameServer.PolyType
 {
-    public static class DataObjSerializer
+    public static class KeyValueDeserializer
     {
         private static readonly MultiProviderTypeCache m_cache = new MultiProviderTypeCache
         {
@@ -17,9 +16,9 @@ namespace BinWeevils.GameServer.PolyType
         {
             private ITypeShapeFunc self => generationContext;
 
-            private DataObjConverter<T> ReEnter<T>(ITypeShape<T> typeShape)
+            private KeyValueConverter<T> ReEnter<T>(ITypeShape<T> typeShape)
             {
-                return (DataObjConverter<T>)self.Invoke(typeShape)!;
+                return (KeyValueConverter<T>)self.Invoke(typeShape)!;
             }
 
             public object? Invoke<T>(ITypeShape<T> typeShape, object? state = null)
@@ -31,36 +30,31 @@ namespace BinWeevils.GameServer.PolyType
             {
                 if (type.Type == typeof(string))
                 {
-                    return new DataObjStringConverter();
+                    return new StringKeyValueConverter();
                 }
                 if (type.Type == typeof(int))
                 {
-                    return new DataObjIntConverter();
-                }
-                if (type.Type == typeof(bool))
-                {
-                    return new DataObjBoolConverter();
+                    return new IntKeyValueConverter();
                 }
                 
+                var ctorShape = (IConstructorShape<T, object>)type.Constructor!;
                 var properties = type.Properties
-                    .Select(prop => (DataObjPropertyConverter<T>)prop.Accept(this)!)
+                    .Select(prop => (KeyValuePropertyConverter<T>)prop.Accept(this)!)
                     .ToArray();
-                return new DataObjObjectConverter<T>(properties);
+                return new ObjectKeyValueConverter<T>(ctorShape.GetDefaultConstructor(), properties);
             }
         
             public override object? VisitProperty<TDeclaringType, TPropertyType>(IPropertyShape<TDeclaringType, TPropertyType> propertyShape, object? state = null)
             {
                 var propertyConverter = ReEnter(propertyShape.PropertyType);
-                return new DataObjPropertyConverter<TDeclaringType, TPropertyType>(propertyShape, propertyConverter);
+                return new KeyValuePropertyConverter<TDeclaringType, TPropertyType>(propertyShape, propertyConverter);
             }
         }
         
-        public static ActionScriptObject ToXml<T>(T data) where T : IShapeable<T>
+        public static T Deserialize<T>(ReadOnlySpan<char> text) where T : IShapeable<T>
         {
-            var output = new ActionScriptObject();
-            var converter = (DataObjConverter<T>)m_cache.GetOrAdd(T.GetShape())!;
-            converter.AppendToXml(output, null, data);
-            return output;
+            var converter = (KeyValueConverter<T>)m_cache.GetOrAdd(T.GetShape())!;
+            return converter.Read(text);
         }
     }
 }

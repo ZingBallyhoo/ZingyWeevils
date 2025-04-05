@@ -4,6 +4,7 @@ using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
+using BinWeevils.GameServer.TurnBased;
 using BinWeevils.Protocol.Xml;
 using Microsoft.Extensions.Hosting;
 
@@ -16,6 +17,8 @@ namespace BinWeevils.GameServer
         private readonly TcpServer m_tcpServer;
         
         public const string ZONE = "Grime";
+        
+        public static readonly int TURN_BASED_GAME_ROOM_TYPE = RoomTypeIDs.NewType("TurnBasedGame");
         
         public BinWeevilsSocketHost(SmartFoxManager manager, LocationDefinitions locationDefinitions)
         {
@@ -87,7 +90,26 @@ namespace BinWeevils.GameServer
                 {
                     baseRoom.m_room = room;
                 }
+
+                foreach (var gameSlot in location.m_gameSlots)
+                {
+                    await CreateGameRoom(zone, location.m_name, gameSlot.m_slot);
+                }
+                foreach (var obj in location.m_objects)
+                {
+                    if (obj.m_type != "gameSlot") continue;
+                    await CreateGameRoom(zone, location.m_name, obj.m_slot);
+                }
             }
+        }
+        
+        private static async ValueTask CreateGameRoom(Zone zone, string location, int slot)
+        {
+            var gameRoom = await zone.CreateRoom(new RoomDescription($"TurnBased_{location}_{slot}")
+            {
+                m_type = TURN_BASED_GAME_ROOM_TYPE
+            });
+            gameRoom.SetData(new Mulch4Game(gameRoom));
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken=default)

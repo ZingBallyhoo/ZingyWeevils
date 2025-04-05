@@ -13,5 +13,10 @@ namespace BinWeevils.GameServer
         {
             return room.GetWeevilDesc().m_limbo;
         }
+
+        public static bool IsGame(this Room room)
+        {
+            return room.m_type != RoomTypeIDs.DEFAULT;
+        }
     }
 }

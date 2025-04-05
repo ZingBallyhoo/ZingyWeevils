@@ -1,5 +1,8 @@
+using BinWeevils.GameServer.PolyType;
+using BinWeevils.GameServer.TurnBased;
+using BinWeevils.Protocol;
+using BinWeevils.Protocol.KeyValue;
 using BinWeevils.Protocol.Str;
-using PolyType;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -9,21 +12,33 @@ namespace BinWeevils.GameServer
         private void HandleTurnBasedCommand(in XtClientMessage message, ref StrReader reader)
         {
             var turnedBasedDataStr = reader.GetString();
-            var turnBasedData = new Dictionary<string, string>();
+            Console.Out.WriteLine($"turn based: {turnedBasedDataStr}");
             
-            // todo: how can this be parsed properly?
-            // the client is sending whatever it wants depending on game+command...
-            // lookahead?
+            var request = ParseTurnBasedRequest(turnedBasedDataStr);
             
-            ReadOnlySpan<char> gameTypeID = default;
-            ReadOnlySpan<char> command = default;
-
-            foreach (var varRange in turnedBasedDataStr.Split(','))
+            m_taskQueue.Enqueue(async () =>
             {
-                var varSpan = turnedBasedDataStr[varRange];
+                var user = GetUser();
+                var mainRoom = await user.GetRoom();
+                var gameRoom = await user.m_zone.GetRoom($"TurnBased_{mainRoom.m_name}_{request.m_slot}");
+                var turnBasedGame = gameRoom!.GetData<TurnBasedGame>();
+                await turnBasedGame.IncomingRequest(user, request);
+            });
+        }
+        
+        private static bool TryParseGameAndCommand(ReadOnlySpan<char> request, out ReadOnlySpan<char> gameTypeID, out ReadOnlySpan<char> command)
+        {
+            gameTypeID = default;
+            command = default;
+            
+            // todo: just search..?
+
+            foreach (var varRange in request.Split(','))
+            {
+                var varSpan = request[varRange];
                 if (varSpan.Length == 0) continue; // trailing comma
                 
-                var indexOfColon = varSpan.IndexOf(',');
+                var indexOfColon = varSpan.IndexOf(':');
                 
                 var nameSpan = varSpan.Slice(0, indexOfColon);
                 var valueSpan = varSpan.Slice(indexOfColon+1);
@@ -35,26 +50,38 @@ namespace BinWeevils.GameServer
                 {
                     command = valueSpan;
                 }
+            }
+            
+            return gameTypeID.Length != 0 && command.Length != 0;
+        }
+        
+        private static TurnBasedGameRequest ParseTurnBasedRequest(ReadOnlySpan<char> request)
+        {
+            if (!TryParseGameAndCommand(request, out var gameTypeID, out var command))
+            {
+                throw new Exception("cant find game & command id");
+            }
                 
-                turnBasedData.Add(nameSpan.ToString(), valueSpan.ToString());
+            switch (gameTypeID)
+            {
+                case "mulch4":
+                {
+                    break;
+                }
+            }
+
+            switch (command)
+            {
+                case Modules.TURN_BASED_JOIN:
+                case Modules.TURN_BASED_REMOVE_PLAYER:
+                {
+                    return KeyValueDeserializer.Deserialize<TurnBasedGameRequest>(request);
+                }
+                default:
+                {
+                    throw new NotImplementedException($"unknown base command {command} - {request}");
+                }
             }
         }
-    }
-    
-    [GenerateShape]
-    public partial record TurnBasedGameRequest
-    {
-        [PropertyShape(Name = "uniqueGameSessionID")] public string m_uniqueGameSessionID;
-        [PropertyShape(Name = "gameTypeID")] public string m_gameTypeID;
-        [PropertyShape(Name = "command")] public string m_command;
-        [PropertyShape(Name = "gameSessionID")] public string m_gameSessionID;
-        [PropertyShape(Name = "userID")] public string m_userID;
-        [PropertyShape(Name = "slot")] public int m_slot;
-    }
-    
-    [GenerateShape]
-    public partial record Mulch4TakeTurnRequest : TurnBasedGameRequest
-    {
-        [PropertyShape(Name = "col")] public int m_column;
     }
 }

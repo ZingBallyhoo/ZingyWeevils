@@ -158,7 +158,7 @@ namespace BinWeevils.GameServer
                         m_userID = $"{user.m_id}"
                     }
                 };
-                await this.BroadcastXtRes(DataObjSerializer.EntryPoint(loginResponse));
+                await this.BroadcastXtRes(DataObjSerializer.ToXml(loginResponse));
             });
         }
         
@@ -171,6 +171,8 @@ namespace BinWeevils.GameServer
                 using var rooms = await GetUser().m_zone.GetRooms();
                 foreach (var room in rooms.m_value.GetRooms())
                 {
+                    if (room.IsGame()) continue;
+                    
                     var weevilDesc = room.GetWeevilDesc();
                     roomList.Add(new RoomInfo
                     {
@@ -219,8 +221,13 @@ namespace BinWeevils.GameServer
                 return;
             }
             
-            var module = message.m_command.Slice(0, 1);
-            // todo: find index of #
+            var module = message.m_command;
+            
+            var indexOfSeparator = message.m_command.IndexOf('#');
+            if (indexOfSeparator != -1)
+            {
+                module = module.Slice(0, indexOfSeparator);
+            }
             
             switch (module)
             {
