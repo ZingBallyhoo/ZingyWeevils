@@ -26,6 +26,16 @@ namespace BinWeevils.Protocol.XmlMessages
             m_type = type;
             m_value = value;
         }
+
+        public static Var Null(string name)
+        {
+            return new Var(name, TYPE_NULL, string.Empty);
+        }
+        
+        public static Var Number(string name, int value)
+        {
+            return new Var(name, TYPE_NUMBER, $"{value}");
+        }
         
         public static Var String(string name, string value)
         {

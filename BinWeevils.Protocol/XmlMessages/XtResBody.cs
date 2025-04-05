@@ -11,8 +11,8 @@ namespace BinWeevils.Protocol.XmlMessages
     [XmlCls("dataObj")]
     public partial class ActionScriptObject
     {
-        [XmlBody] public List<Var> m_vars;
-        [XmlBody] public List<SubActionScriptObject> m_objects;
+        [XmlBody] public List<Var> m_vars = new List<Var>();
+        [XmlBody] public List<SubActionScriptObject> m_objects = new List<SubActionScriptObject>();
     }
 
     [XmlCls("obj")]

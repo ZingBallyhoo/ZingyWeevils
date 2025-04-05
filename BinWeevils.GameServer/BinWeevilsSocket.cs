@@ -3,8 +3,10 @@ using ArcticFox.Codec;
 using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.PolyType;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML;
@@ -142,31 +144,21 @@ namespace BinWeevils.GameServer
                 weevilData.m_idx.SetValue(55);
                 user.SetUserData(weevilData);
                 
-                await this.BroadcastXtRes(new ActionScriptObject
+                var loginResponse = new LoginResponse
                 {
-                    m_vars =
-                    [
-                        Var.String("commandType", "login"),
-                        Var.String("success", "true"),
-                    ],
-                    m_objects =
-                    [
-                        new SubActionScriptObject
-                        {
-                            m_name = "user",
-                            m_type = "a",
-                            m_vars =
-                            [
-                                Var.String("weevilDef", weevilData.m_weevilDef),
-                                Var.String("ip", "no"),
-                                Var.String("apparel", weevilData.m_apparel),
-                                Var.String("idx", $"{weevilData.m_idx.GetValue()}"),
-                                Var.String("locale", "UK"),
-                                Var.String("userID", $"{user.m_id}")
-                            ]
-                        }
-                    ]
-                });
+                    m_commandType = "login",
+                    m_success = true,
+                    m_user = new LoginUser
+                    {
+                        m_weevilDef = weevilData.m_weevilDef,
+                        m_ip = "no",
+                        m_apparel = weevilData.m_apparel,
+                        m_idx = $"{weevilData.m_idx.GetValue()}",
+                        m_locale = "UK",
+                        m_userID = $"{user.m_id}"
+                    }
+                };
+                await this.BroadcastXtRes(DataObjSerializer.EntryPoint(loginResponse));
             });
         }
         
@@ -247,9 +239,14 @@ namespace BinWeevils.GameServer
                     HandleDinerCommand(message, ref reader);
                     return;
                 }
+                case Modules.TURN_BASED:
+                {
+                    HandleTurnBasedCommand(message, ref reader);
+                    return;
+                }
             }
 
-            Console.Out.WriteLine($"unknown command: {message.m_command}");
+            Console.Out.WriteLine($"unknown command: {message.m_command} {string.Join(" ", reader.ReadToEnd())}");
         }
 
         public void Abort()

@@ -2,6 +2,7 @@ using System.Net.Mime;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Xml;
+using ByteDev.FormUrlEncoded;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BinWeevils.Server.Controllers
@@ -24,7 +25,9 @@ namespace BinWeevils.Server.Controllers
             return new CheckVersionResponse
             {
                 m_ok = 1,
-                m_coreVersionNumber = 18
+                m_coreVersionNumber = 18,
+                m_vodPlayerVersion = 15,
+                m_vodContentVersion = 2,
             };
         }
         
@@ -178,6 +181,27 @@ namespace BinWeevils.Server.Controllers
         public string GetSpecialMoves()
         {
             return "responseCode=1&result=23";
+        }
+        
+        [HttpPost("weevil/geo")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public GeoResponse GetGeo()
+        {
+            return new GeoResponse
+            {
+                m_l = "uk"
+            };
+        }
+        
+        public class GeoResponse
+        {
+            [FormUrlEncodedPropertyName("l")] public string m_l { get; set; }
+        }
+        
+        [HttpGet("site/server-time")]
+        public string GetServerTime()
+        {
+            return "res=1&t=1597760479&x=y";
         }
     }
 }
