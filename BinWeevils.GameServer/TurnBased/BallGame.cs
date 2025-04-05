@@ -44,16 +44,12 @@ namespace BinWeevils.GameServer.TurnBased
 
         protected override async ValueTask HandlePlayerWinsRequest(TurnBasedGameRequest baseRequest)
         {
-            var winsRequest = (BallWinGameRequest)baseRequest;
-            
-            using var dataToken = await GetData();
-            var data = dataToken.m_value;
-            
-            if (winsRequest.m_userID != data.m_currentPlayer)
+            var winRequest = (BallWinGameRequest)baseRequest;
+            if (winRequest.m_userID != winRequest.m_userWinner)
             {
-                throw new InvalidDataException("only the current player can send this");
+                throw new InvalidDataException("only the winner sends this"); // (i think)
             }
-            if (winsRequest.m_userLoser == winsRequest.m_userWinner)
+            if (winRequest.m_userLoser == winRequest.m_userWinner)
             {
                 throw new InvalidDataException("winner and loser can't be the same user");
             }
@@ -63,9 +59,11 @@ namespace BinWeevils.GameServer.TurnBased
                 m_command = baseRequest.m_command,
                 m_loserMulch = 50,
                 m_winnerMulch = 100,
-                m_userLoser = winsRequest.m_userLoser,
-                m_userWinner = winsRequest.m_userWinner
+                m_userLoser = winRequest.m_userLoser,
+                m_userWinner = winRequest.m_userWinner
             });
+            
+            using var dataToken = await GetData();
             await Recycle(dataToken.m_value);
         }
     }
