@@ -1,9 +1,11 @@
 using ArcticFox.Net;
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.PolyType;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.XmlMessages;
+using PolyType;
 using StackXML;
 using StackXML.Str;
 
@@ -29,6 +31,11 @@ namespace BinWeevils.GameServer
             using var writeBuffer = new XmlWriteBuffer();
             writeBuffer.PutObject(BuildSysMessage(body));
             return bc.BroadcastZeroTerminatedAscii(writeBuffer.ToSpan());
+        }
+        
+        public static ValueTask BroadcastXtRes<T>(this IBroadcaster bc, T obj, int room=-1) where T : IShapeable<T>
+        {
+            return bc.BroadcastXtRes(DataObjSerializer.ToXml(obj), room);
         }
         
         public static ValueTask BroadcastXtRes(this IBroadcaster bc, ActionScriptObject obj, int room=-1)

@@ -66,6 +66,13 @@ namespace BinWeevils.GameServer
             {
                 case "mulch4":
                 {
+                    switch (command)
+                    {
+                        case Modules.TURN_BASED_TAKE_TURN:
+                        {
+                            return KeyValueDeserializer.Deserialize<Mulch4TakeTurnRequest>(request);
+                        }
+                    }
                     break;
                 }
             }

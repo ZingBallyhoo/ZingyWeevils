@@ -8,8 +8,8 @@ namespace BinWeevils.GameServer
     {
         public ValueTask UserJoinedRoom(Room room, User user)
         {
-            if (room.IsLimbo()) return ValueTask.CompletedTask;
             if (room.IsGame()) return ValueTask.CompletedTask;
+            if (room.IsLimbo()) return ValueTask.CompletedTask;
             
             var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
             
@@ -32,8 +32,8 @@ namespace BinWeevils.GameServer
 
         public ValueTask UserLeftRoom(Room room, User user)
         {
-            if (room.IsLimbo()) return ValueTask.CompletedTask;
             if (room.IsGame()) return ValueTask.CompletedTask;
+            if (room.IsLimbo()) return ValueTask.CompletedTask;
             
             return room.BroadcastSys(new UserLeaveRoomBody
             {

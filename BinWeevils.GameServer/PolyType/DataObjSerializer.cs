@@ -55,11 +55,18 @@ namespace BinWeevils.GameServer.PolyType
             }
         }
         
+        // todo: set up this way because we are passing in subclasses...
+        
         public static ActionScriptObject ToXml<T>(T data) where T : IShapeable<T>
         {
+            return ToXml(data, T.GetShape().Provider);
+        }
+        
+        private static ActionScriptObject ToXml(object data, ITypeShapeProvider provider)
+        {
             var output = new ActionScriptObject();
-            var converter = (DataObjConverter<T>)m_cache.GetOrAdd(T.GetShape())!;
-            converter.AppendToXml(output, null, data);
+            var converter = (DataObjConverter)m_cache.GetOrAdd(data.GetType(), provider)!;
+            converter.AppendAsObject(output, null, data);
             return output;
         }
     }

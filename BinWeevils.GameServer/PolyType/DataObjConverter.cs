@@ -4,11 +4,17 @@ namespace BinWeevils.GameServer.PolyType
 {
     public abstract class DataObjConverter
     {
+        public abstract void AppendAsObject(ActionScriptObject obj, string? name, object? value);
     }
 
     public abstract class DataObjConverter<T> : DataObjConverter
     {
         public abstract void AppendToXml(ActionScriptObject obj, string? name, T? value);
+
+        public override void AppendAsObject(ActionScriptObject obj, string? name, object? value)
+        {
+            AppendToXml(obj, name, (T?)value);
+        }
     }
     
     public class DataObjObjectConverter<T>(DataObjPropertyConverter<T>[] properties) : DataObjConverter<T>

@@ -158,7 +158,7 @@ namespace BinWeevils.GameServer
                         m_userID = $"{user.m_id}"
                     }
                 };
-                await this.BroadcastXtRes(DataObjSerializer.ToXml(loginResponse));
+                await this.BroadcastXtRes(loginResponse);
             });
         }
         
