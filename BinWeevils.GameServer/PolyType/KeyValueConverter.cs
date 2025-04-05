@@ -25,6 +25,14 @@ namespace BinWeevils.GameServer.PolyType
             return int.Parse(text);
         }
     }
+    
+    public class DoubleKeyValueConverter : KeyValueConverter<double>
+    {
+        public override double Read(ReadOnlySpan<char> text)
+        {
+            return double.Parse(text);
+        }
+    }
         
     public class ObjectKeyValueConverter<T>(Func<T> defaultConstructor, KeyValuePropertyConverter<T>[] properties) : KeyValueConverter<T>
     {

@@ -93,23 +93,35 @@ namespace BinWeevils.GameServer
 
                 foreach (var gameSlot in location.m_gameSlots)
                 {
-                    await CreateGameRoom(zone, location.m_name, gameSlot.m_slot);
+                    await CreateGameRoom(zone, location.m_name, gameSlot.m_slot, gameSlot.m_gamePath);
                 }
                 foreach (var obj in location.m_objects)
                 {
                     if (obj.m_type != "gameSlot") continue;
-                    await CreateGameRoom(zone, location.m_name, obj.m_slot);
+                    await CreateGameRoom(zone, location.m_name, obj.m_slot, obj.m_gamePath);
                 }
             }
         }
         
-        private static async ValueTask CreateGameRoom(Zone zone, string location, int slot)
+        private static async ValueTask CreateGameRoom(Zone zone, string location, int slot, string gamePath)
         {
             var gameRoom = await zone.CreateRoom(new RoomDescription($"TurnBased_{location}_{slot}")
             {
                 m_type = TURN_BASED_GAME_ROOM_TYPE
             });
-            gameRoom.SetData(new Mulch4Game(gameRoom));
+            
+            var gameFn = Path.GetFileNameWithoutExtension(gamePath);
+            TurnBasedGame? game = gameFn switch
+            {
+                "mulch4" => new Mulch4Game(gameRoom),
+                "squares" => null,
+                "reversi" => null,
+                "BallGame2Ball" => new BallGame(gameRoom), // todo: do we care about the number of balls? ig to validate
+                "BallGame6Ball" => new BallGame(gameRoom),
+                "BallGame12Ball" => new BallGame(gameRoom),
+                _ => throw new NotImplementedException($"unknown game: {gameFn}")
+            };
+            gameRoom.SetData(game);
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken=default)

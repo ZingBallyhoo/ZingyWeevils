@@ -36,6 +36,10 @@ namespace BinWeevils.GameServer.PolyType
                 {
                     return new IntKeyValueConverter();
                 }
+                if (type.Type == typeof(double))
+                {
+                    return new DoubleKeyValueConverter();
+                }
                 
                 var ctorShape = (IConstructorShape<T, object>)type.Constructor!;
                 var properties = type.Properties

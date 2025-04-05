@@ -26,6 +26,7 @@ namespace BinWeevils.Protocol
         public const string TURN_BASED_REMOVE_PLAYER = "rp";
         public const string TURN_BASED_TAKE_TURN = "tt";
         public const string TURN_BASED_USER_QUIT = "go"; // (game over)
+        public const string TURN_BASED_PLAYER_WINS = "cpwg"; // (client -> server win, for ball)
         
         public const string DINER = "9";
         public const string DINER_GRAB_TRAY = $"{DINER}#1";

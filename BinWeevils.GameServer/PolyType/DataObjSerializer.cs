@@ -41,6 +41,10 @@ namespace BinWeevils.GameServer.PolyType
                 {
                     return new DataObjBoolConverter();
                 }
+                if (type.Type == typeof(double))
+                {
+                    return new DataObjDoubleConverter();
+                }
                 
                 var properties = type.Properties
                     .Select(prop => (DataObjPropertyConverter<T>)prop.Accept(this)!)

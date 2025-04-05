@@ -75,6 +75,25 @@ namespace BinWeevils.GameServer
                     }
                     break;
                 }
+                case "ballGame":
+                {
+                    switch (command)
+                    {
+                        case Modules.TURN_BASED_JOIN:
+                        {
+                            return KeyValueDeserializer.Deserialize<BallJoinRequest>(request);
+                        }
+                        case Modules.TURN_BASED_TAKE_TURN:
+                        {
+                            return KeyValueDeserializer.Deserialize<BallTakeTurnRequest>(request);
+                        }
+                        case Modules.TURN_BASED_PLAYER_WINS:
+                        {
+                            return KeyValueDeserializer.Deserialize<BallWinGameRequest>(request);
+                        }
+                    }
+                    break;
+                }
             }
 
             switch (command)

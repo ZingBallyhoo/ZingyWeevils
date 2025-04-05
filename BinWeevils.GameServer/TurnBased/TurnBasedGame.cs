@@ -13,7 +13,7 @@ namespace BinWeevils.GameServer.TurnBased
     
     public abstract class TurnBasedGame<T> : TurnBasedGame, IRoomEventHandler where T : TurnBasedGameData, new()
     {
-        private readonly Room m_room;
+        protected readonly Room m_room;
         private readonly AsyncLockedAccess<T> m_gameData;
         private bool m_recycling;
 
@@ -22,6 +22,11 @@ namespace BinWeevils.GameServer.TurnBased
             m_room = room;
             m_gameData = new AsyncLockedAccess<T>(new T());
             m_recycling = false;
+        }
+        
+        protected async ValueTask<AsyncLockedAccess<T>.Token> GetData()
+        {
+            return await m_gameData.Get();
         }
         
         public override async ValueTask IncomingRequest(User user, TurnBasedGameRequest request)
@@ -58,7 +63,12 @@ namespace BinWeevils.GameServer.TurnBased
             {
                 case Modules.TURN_BASED_TAKE_TURN:
                 {
-                    await CommonTakeTurn(request);
+                    await HandleTurnRequest(request);
+                    break;
+                }
+                case Modules.TURN_BASED_PLAYER_WINS:
+                {
+                    await HandlePlayerWinsRequest(request);
                     break;
                 }
                 default:
@@ -73,7 +83,6 @@ namespace BinWeevils.GameServer.TurnBased
         {
             return new TResponse
             {
-                m_commandType = Modules.TURN_BASED,
                 m_command = request.m_command,
                 m_player1 = data.m_player1 ?? "",
                 m_player2 = data.m_player2 ?? "",
@@ -84,7 +93,7 @@ namespace BinWeevils.GameServer.TurnBased
         
         private async ValueTask JoinGame(User user, TurnBasedGameRequest request)
         {
-            using var dataToken = await m_gameData.Get();
+            using var dataToken = await GetData();
             var data = dataToken.m_value;
             
             // require the data lock to ensure nobody joins during recycle
@@ -129,10 +138,14 @@ namespace BinWeevils.GameServer.TurnBased
         }
         
         protected abstract TurnBasedGameTurnResponse TakeTurn(TurnBasedGameRequest baseRequest, T data);
-        
-        private async ValueTask CommonTakeTurn(TurnBasedGameRequest request)
+        protected virtual ValueTask HandlePlayerWinsRequest(TurnBasedGameRequest baseRequest)
         {
-            using var dataToken = await m_gameData.Get();
+            throw new NotImplementedException("this game is server-authoritative");
+        }
+        
+        private async ValueTask HandleTurnRequest(TurnBasedGameRequest request)
+        {
+            using var dataToken = await GetData();
             var data = dataToken.m_value;
             
             if (data.m_currentPlayer != request.m_userID)
@@ -158,7 +171,7 @@ namespace BinWeevils.GameServer.TurnBased
             }
         }
         
-        private async ValueTask Recycle(T data)
+        protected async ValueTask Recycle(T data)
         {
             data.Reset();
             
@@ -175,7 +188,7 @@ namespace BinWeevils.GameServer.TurnBased
                 return;
             }
             
-            using var dataToken = await m_gameData.Get();
+            using var dataToken = await GetData();
             var data = dataToken.m_value;
             
             if (data.m_player1 != user.m_name && data.m_player2 != user.m_name)
@@ -192,7 +205,6 @@ namespace BinWeevils.GameServer.TurnBased
 
             await m_room.BroadcastXtRes(new TurnBasedGameNotification
             {
-                m_commandType = Modules.TURN_BASED,
                 m_command = Modules.TURN_BASED_USER_QUIT,
                 m_userID = user.m_name
             });

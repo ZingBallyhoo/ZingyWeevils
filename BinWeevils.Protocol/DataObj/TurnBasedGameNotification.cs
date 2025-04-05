@@ -7,5 +7,10 @@ namespace BinWeevils.Protocol.DataObj
     {
         [PropertyShape(Name = "command")] public string m_command;
         [PropertyShape(Name = "userID")] public string m_userID;
+        
+        public TurnBasedGameNotification()
+        {
+            m_commandType = Modules.TURN_BASED;
+        }
     }
 }
