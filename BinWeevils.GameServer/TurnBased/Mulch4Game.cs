@@ -20,7 +20,7 @@ namespace BinWeevils.GameServer.TurnBased
             
             var turnResponse = MakeResponse<Mulch4TurnResponse>(request, data);
             
-            var firstEmptyRow = columnData.AsSpan().Cast<Mulch4GameData.BoardState, byte>().IndexOf((byte)Mulch4GameData.BoardState.Empty);
+            var firstEmptyRow = columnData.AsSpan().Cast<Mulch4GameData.TileState, byte>().IndexOf((byte)Mulch4GameData.TileState.Empty);
             if (firstEmptyRow == -1)
             {
                 // can't place there :(
@@ -30,7 +30,7 @@ namespace BinWeevils.GameServer.TurnBased
             
             var isPlayer1 = request.m_userID == data.m_player1;
             
-            columnData[firstEmptyRow] = isPlayer1 ? Mulch4GameData.BoardState.Player1 : Mulch4GameData.BoardState.Player2;
+            columnData[firstEmptyRow] = isPlayer1 ? Mulch4GameData.TileState.Player1 : Mulch4GameData.TileState.Player2;
             turnResponse.m_nextPlayer = isPlayer1 ? data.m_player2! : data.m_player1!;
             turnResponse.m_col = request.m_column;
             turnResponse.m_row = firstEmptyRow;
@@ -38,7 +38,7 @@ namespace BinWeevils.GameServer.TurnBased
             var winningSlots = data.FindWinningSlots(request.m_column, firstEmptyRow);
             turnResponse.m_winnerFound = winningSlots != null;
             turnResponse.m_winningSlots = winningSlots == null ? null : string.Join(',', winningSlots);
-            turnResponse.m_staleMate = data.m_columns.All(x => x.All(y => y != Mulch4GameData.BoardState.Empty));
+            turnResponse.m_staleMate = data.m_columns.All(x => x.All(y => y != Mulch4GameData.TileState.Empty));
             
             return turnResponse;
         }

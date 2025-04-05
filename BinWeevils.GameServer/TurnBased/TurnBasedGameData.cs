@@ -1,6 +1,6 @@
 namespace BinWeevils.GameServer.TurnBased
 {
-    public class TurnBasedGameData
+    public abstract class TurnBasedGameData
     {
         public string? m_player1;
         public string? m_player2;
@@ -14,5 +14,7 @@ namespace BinWeevils.GameServer.TurnBased
             m_player2 = null;
             m_currentPlayer = null;
         }
+        
+        public abstract string Serialize();
     }
 }

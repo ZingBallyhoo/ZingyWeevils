@@ -1,6 +1,5 @@
 using ArcticFox.Net.Util;
 using ArcticFox.SmartFoxServer;
-using BinWeevils.GameServer.PolyType;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.KeyValue;
@@ -124,7 +123,7 @@ namespace BinWeevils.GameServer.TurnBased
                 await m_room.BroadcastXtRes(resp);
             } else
             {
-                // todo: gameData for spectators...
+                resp.m_gameData = data.Serialize();
                 await user.BroadcastXtRes(resp);
             }
         }
@@ -145,7 +144,11 @@ namespace BinWeevils.GameServer.TurnBased
             
             // can't be a stalemate if someone won
             response.m_staleMate &= !response.m_winnerFound;
-            data.m_currentPlayer = response.m_nextPlayer;
+            if (response.m_success)
+            {
+                if (response.m_nextPlayer == null) throw new NullReferenceException("m_nextPlayer not assigned");
+                data.m_currentPlayer = response.m_nextPlayer;
+            }
             
             await m_room.BroadcastXtRes(response);
             
