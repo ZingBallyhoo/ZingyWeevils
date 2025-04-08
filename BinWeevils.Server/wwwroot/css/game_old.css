@@ -1,15 +1,20 @@
 /* CSS Document */
 
 body{
-    background-color:#a4d99d;
     margin:0px;
     padding:0px;
-    background-image:url(../images/bgTile.jpg);
-    background-repeat:repeat-x;
     position:relative;
     font-family:Arial, Helvetica, sans-serif;
     font-size:12px;
     color:#008A00;
+
+    /*background-color:#a4d99d;
+    background-image:url(../images/bgTile.jpg);
+    background-repeat:repeat-x;*/
+    
+    background: linear-gradient(rgb(146, 186, 231) 12.918px, rgb(164, 217, 157) 645.9px);
+    background-repeat: no-repeat;
+    background-color: rgb(164, 217, 157);
 }
 
 a{
@@ -63,12 +68,4 @@ a{
     margin-left:120px;
     text-align:center;
     padding-top:20px;
-}
-
-#affiliateheader{
-    padding-bottom:10px;
-}
-
-#affiliatefooter{
-    margin-top:10px;
 }
