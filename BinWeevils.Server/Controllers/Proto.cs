@@ -32,7 +32,7 @@ namespace BinWeevils.Server.Controllers
         }
         
         [StructuredFormPost("php/getAdPaths.php")]
-        [StructuredFormPost("binConfig/uk/getAdPaths.php")]
+        [StructuredFormPost("binConfig/{cluster}/getAdPaths.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public AdPathsResponse GetAdPaths([FromBody] AdPathsRequest request)
         {

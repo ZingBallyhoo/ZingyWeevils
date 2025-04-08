@@ -6,13 +6,16 @@ using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
 using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using StackXML;
 using Stl.DependencyInjection;
 
 internal static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddRazorPages();
@@ -60,7 +63,23 @@ internal static class Program
         var cdnFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "/cdn");
         app.UseStaticFiles(cdnFallbackFs);
 
-        app.Run();
+        app.Start();
+        
+        if (app.Environment.IsDevelopment())
+        {
+            var server = app.Services.GetRequiredService<IServer>();
+            var addressFeature = server.Features.GetRequiredFeature<IServerAddressesFeature>();
+            var host = addressFeature.Addresses.SingleOrDefault() ?? "unknown";
+            
+            app.Logger.LogInformation("Ruffle Desktop CLI: {Cli}", string.Join(" ", [
+                "ruffle.exe",
+                $"{host}/main.swf",
+                "--tcp-connections allow",
+                "--dummy-external-interface"
+            ]));
+        }
+        
+        await app.WaitForShutdownAsync();
     }
     
     private static StaticFileOptions InitArchiveStaticFiles(string dir, string requestPath)
