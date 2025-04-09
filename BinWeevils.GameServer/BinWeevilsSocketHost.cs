@@ -119,7 +119,7 @@ namespace BinWeevils.GameServer
             TurnBasedGame? game = gameFn switch
             {
                 "mulch4" => new Mulch4Game(gameRoom),
-                "squares" => null,
+                "squares" => new SquaresGame(gameRoom),
                 "reversi" => null,
                 "BallGame2Ball" => new BallGame(gameRoom), // todo: do we care about the number of balls? ig to validate
                 "BallGame6Ball" => new BallGame(gameRoom),

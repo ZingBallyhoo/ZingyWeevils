@@ -33,6 +33,19 @@ namespace BinWeevils.GameServer.PolyType
             return double.Parse(text);
         }
     }
+    
+    public class BoolKeyValueConverter : KeyValueConverter<bool>
+    {
+        public override bool Read(ReadOnlySpan<char> text)
+        {
+            return text switch
+            {
+                "true" => true,
+                "false" => false,
+                _ => throw new InvalidDataException($"unknown bool token: \"{text}\"")
+            };
+        }
+    }
         
     public class ObjectKeyValueConverter<T>(Func<T> defaultConstructor, KeyValuePropertyConverter<T>[] properties) : KeyValueConverter<T>
     {
@@ -53,7 +66,11 @@ namespace BinWeevils.GameServer.PolyType
                 var valueSpan = varSpan.Slice(indexOfColon+1);
                     
                 var nameString = nameSpan.ToString();
-                var property = m_propertiesToRead.Single(x => x.Name == nameString);
+                var property = m_propertiesToRead.SingleOrDefault(x => x.Name == nameString);
+                if (property == null)
+                {
+                    throw new InvalidDataException($"{typeof(T)}: unknown field \"{nameSpan}\"");
+                }
                     
                 property.Read(valueSpan, ref inst);
             }

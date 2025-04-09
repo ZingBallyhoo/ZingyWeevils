@@ -40,6 +40,10 @@ namespace BinWeevils.GameServer.PolyType
                 {
                     return new DoubleKeyValueConverter();
                 }
+                if (type.Type == typeof(bool))
+                {
+                    return new BoolKeyValueConverter();
+                }
                 
                 var ctorShape = (IConstructorShape<T, object>)type.Constructor!;
                 var properties = type.Properties

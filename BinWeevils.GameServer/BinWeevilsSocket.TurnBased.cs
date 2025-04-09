@@ -75,6 +75,17 @@ namespace BinWeevils.GameServer
                     }
                     break;
                 }
+                case "squaresGame":
+                {
+                    switch (command)
+                    {
+                        case Modules.TURN_BASED_TAKE_TURN:
+                        {
+                            return KeyValueDeserializer.Deserialize<SquaresTakeTurnRequest>(request);
+                        }
+                    }
+                    break;
+                }
                 case "ballGame":
                 {
                     switch (command)
