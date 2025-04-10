@@ -9,7 +9,8 @@ namespace BinWeevils.Protocol
             Spheroid = 1,
             Cone = 2,
             ConeNarrowInv = 3,
-            Cuboid = 4
+            Cuboid = 4,
+            Count,
         }
         
         public enum HeadType : byte
@@ -17,7 +18,8 @@ namespace BinWeevils.Protocol
             Spheroid = 1,
             Cone = 2,
             ConeInv = 3,
-            Cuboid = 4
+            Cuboid = 4,
+            Count,
         }
 
         public enum EyeType : byte
@@ -27,7 +29,8 @@ namespace BinWeevils.Protocol
             HighTogether = 3,
             TopTogether = 4,
             TopApart = 5,
-            MiddleSide = 6
+            MiddleSide = 6,
+            Count,
         }
         
         public enum AntennaType : byte
@@ -53,6 +56,8 @@ namespace BinWeevils.Protocol
             SuperHalloween = 14,
             SuperFire = 15,
             SuperIce = 16,
+            Count,
+            CountStandard = SuperOriginal,
         }
 
         public enum LegType : byte
@@ -62,7 +67,8 @@ namespace BinWeevils.Protocol
             SuperLegsSummerFair = 2,
             SuperLegsOriginal = 3,
             SuperLegsPurpleYellowBlue = 4,
-            SuperLegsHalloween = 5
+            SuperLegsHalloween = 5,
+            Count,
         }
         
         public HeadType m_headType;
@@ -83,6 +89,9 @@ namespace BinWeevils.Protocol
 
         public const int COLOR_COUNT = 52;
         public const int EYE_COLOR_COUNT = 58;
+        
+        public const int LEGACY_COLOR_COUNT = 23;
+        public const int LEGACY_EYE_COLOR_COUNT = 12;
 
         public const string DEFAULT = "101101406100171700"; // pea/cabbage
         public const string ZINGY = "102311611105070700";

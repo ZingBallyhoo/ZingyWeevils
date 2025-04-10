@@ -144,6 +144,39 @@ namespace BinWeevils.GameServer
                 weevilData.m_idx.SetValue(55);
                 user.SetUserData(weevilData);
                 
+                if (user.m_name.Contains("fairriver"))
+                {
+                    weevilData.m_weevilDef.SetValue(WeevilDef.DEFAULT);
+                } else if (user.m_name.Contains("zingy"))
+                {
+                    weevilData.m_weevilDef.SetValue(WeevilDef.ZINGY);
+                } else if (user.m_name.Contains("scribbles"))
+                {
+                    weevilData.m_weevilDef.SetValue(WeevilDef.DEFINITELY_SCRIBBLES);
+                } else
+                {
+                    var def = new WeevilDef(WeevilDef.DEFAULT)
+                    {
+                        m_headType = (WeevilDef.HeadType)Random.Shared.Next((int)WeevilDef.HeadType.Spheroid, (int)WeevilDef.HeadType.Count),
+                        m_headColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
+                        m_bodyType = (WeevilDef.BodyType)Random.Shared.Next((int)WeevilDef.BodyType.Spheroid, (int)WeevilDef.BodyType.Count),
+                        m_bodyColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
+                        m_eyeType = (WeevilDef.EyeType)Random.Shared.Next((int)WeevilDef.EyeType.MiddleTogether, (int)WeevilDef.EyeType.Count),
+                        m_eyeColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_EYE_COLOR_COUNT),
+                        m_lids = Random.Shared.Next(0, 1) == 1,
+                        m_antennaType = (WeevilDef.AntennaType)Random.Shared.Next(0, (int)WeevilDef.AntennaType.SuperOriginal + 1),
+                        m_antennaColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
+                        m_legColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
+                        m_legType = WeevilDef.LegType.Normal
+                    };
+                    if (!def.Validate())
+                    {
+                        throw new InvalidDataException();
+                    }
+                    
+                    weevilData.m_weevilDef.SetValue(def.AsString());
+                }
+                
                 var loginResponse = new LoginResponse
                 {
                     m_commandType = "login",
