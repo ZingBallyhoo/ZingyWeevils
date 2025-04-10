@@ -9,6 +9,7 @@ using BinWeevils.Server.Controllers;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.FileProviders;
 using StackXML;
 using Stl.DependencyInjection;
@@ -53,6 +54,16 @@ internal static class Program
             m_swallowExceptions = false,
         });
         
+        // internally redirect legacy requests
+        app.UseRewriter(new RewriteOptions()
+            .AddRedirect("^assetsTycoon/VODroom\\.swf", "cdn/users/VODroom6.swf") // vodRoom
+            .AddRedirect("bwtv/menu3\\.swf", "bwtv/menu4.swf") // vodRoom
+            .AddRewrite("^bwtv/(.+)", "cdn/bwtv/$1", true) // vodRoom
+            .AddRewrite("^cinema/lobbyScreenData\\.xml", "cdn/binConfig/uk/lobbyScreenData.xml", true) // riggs
+            .AddRewrite("^cinema/cinema\\.xml", "cdn/externalUIs/cinema/cinema.xml", true) // riggs
+            .AddRedirect("^cinema/(.+).flv", "cdn/ads/binweevils/binTycoonTour2.flv") // riggs
+        );
+        
         var archivePath = app.Configuration["ArchivePath"]!;
         
         var playFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "");
@@ -63,7 +74,7 @@ internal static class Program
         var cdnFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "/cdn");
         app.UseStaticFiles(cdnFallbackFs);
 
-        app.Start();
+        await app.StartAsync();
         
         if (app.Environment.IsDevelopment())
         {

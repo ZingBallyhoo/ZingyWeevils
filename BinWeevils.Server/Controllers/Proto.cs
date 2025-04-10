@@ -26,7 +26,7 @@ namespace BinWeevils.Server.Controllers
             {
                 m_ok = 1,
                 m_coreVersionNumber = 18,
-                m_vodPlayerVersion = 15,
+                m_vodPlayerVersion = 12,
                 m_vodContentVersion = 2,
             };
         }
