@@ -16,5 +16,28 @@
             }
         ]
     }
+    window.fetch = new Proxy(window.fetch, {
+        apply: function (target, that, args) {
+            // some assets just use hardcoded domains (e.g diner) -_-
+            
+            // console.log(args[0]);
+            
+            let request = args[0];
+            // not always a request, but if not, there will be no url field and nothing will happen
+            
+            let requestUrl = request.url;
+            if (requestUrl !== undefined) {
+                let parsedUrl = new URL(requestUrl);
+                
+                if (parsedUrl.host === "play.binweevils.com") {
+                    parsedUrl.host = window.location.host;
+                    request = new Request(parsedUrl.toString(), request);
+                }
+            }
+
+            args[0] = request;
+            return target.apply(that, args);
+        },
+    });
     </script>
 }    

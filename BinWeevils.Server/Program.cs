@@ -62,12 +62,15 @@ internal static class Program
             .AddRewrite("^cinema/lobbyScreenData\\.xml", "cdn/binConfig/uk/lobbyScreenData.xml", true) // riggs
             .AddRewrite("^cinema/cinema\\.xml", "cdn/externalUIs/cinema/cinema.xml", true) // riggs
             .AddRedirect("^cinema/(.+).flv", "cdn/ads/binweevils/binTycoonTour2.flv") // riggs
+            .AddRewrite("^nestNews/xml/uk/nestNews\\.xml", "nestNews/xml/nestNews.xml", true)
         );
         
         var archivePath = app.Configuration["ArchivePath"]!;
         
         var playFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "");
         app.UseStaticFiles(playFs);
+        var playFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "");
+        app.UseStaticFiles(playFallbackFs);
         
         var cdnFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "/cdn");
         app.UseStaticFiles(cdnFs);
