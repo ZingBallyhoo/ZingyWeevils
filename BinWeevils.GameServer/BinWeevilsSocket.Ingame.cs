@@ -332,7 +332,14 @@ namespace BinWeevils.GameServer
                     break;
                 }
                 // todo: HOLD_TRAY (validate only)
-                // todo: HOLD_ITEM (validate only)
+                case EWeevilAction.HOLD_ITEM:
+                {
+                    var holdItem = new HoldItemAction();
+                    holdItem.Deserialize(ref extraParamsReader);
+                    
+                    // todo: validate
+                    break;
+                }
                 case EWeevilAction.ADD_ITEM_TO_TRAY:
                 {
                     var addItemToTray = new AddItemToTrayAction();

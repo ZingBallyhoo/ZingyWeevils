@@ -14,6 +14,7 @@ namespace BinWeevils.Database
         [Required] public byte m_fitness { get; set; }
         [Required] public byte m_happiness { get; set; }
         
-        [Required] public virtual WalletDB m_wallet { get; set; }
+        [Required] public int m_mulch { get; set; }
+        [Required] public int m_dosh { get; set; }
     }
 }

@@ -23,13 +23,12 @@ namespace BinWeevils.Server.Controllers
         public async Task<WeevilStatsResponse> GetWeevilStats()
         {
             var weevil = await m_dbContext.m_weevilDBs
-                .Include(x => x.m_wallet)
-                .SingleOrDefaultAsync(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name);
+                .SingleAsync(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name);
             
             var stats = new WeevilStatsResponse
             {
                 m_level = weevil!.m_lastAcknowledgedLevel,
-                m_mulch = weevil.m_wallet.m_mulch,
+                m_mulch = weevil.m_mulch,
                 m_xp = weevil.m_xp,
                 m_xpLowerThreshold = 0,
                 m_xpUpperThreshold = 1000,

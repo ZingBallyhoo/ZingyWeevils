@@ -19,10 +19,6 @@ namespace BinWeevils.Database
             {
                 b.ToTable("Weevil");
             });
-            modelBuilder.Entity<WalletDB>(b =>
-            {
-                b.ToTable("Wallet");
-            });
         }
     }
 }

@@ -67,11 +67,7 @@ namespace BinWeevils.GameServer
                 m_fitness = 100,
                 m_happiness = 100,
                 m_xp = 146138,
-                m_lastAcknowledgedLevel = 1
-            };
-            dbWeevil.m_wallet = new WalletDB
-            {
-                m_weevil = dbWeevil,
+                m_lastAcknowledgedLevel = 1,
                 m_mulch = 2000,
                 m_dosh = 0
             };
