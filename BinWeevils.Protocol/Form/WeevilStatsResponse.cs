@@ -6,9 +6,9 @@ namespace BinWeevils.Protocol.Form
     {
         [FormUrlEncodedPropertyName("level")] public int m_level { get; set; }
         [FormUrlEncodedPropertyName("mulch")] public int m_mulch { get; set; }
-        [FormUrlEncodedPropertyName("xp")] public int m_xp { get; set; }
-        [FormUrlEncodedPropertyName("xp1")] public int m_xpLowerThreshold { get; set; }
-        [FormUrlEncodedPropertyName("xp2")] public int m_xpUpperThreshold { get; set; }
+        [FormUrlEncodedPropertyName("xp")] public uint m_xp { get; set; }
+        [FormUrlEncodedPropertyName("xp1")] public uint m_xpLowerThreshold { get; set; }
+        [FormUrlEncodedPropertyName("xp2")] public uint m_xpUpperThreshold { get; set; }
         [FormUrlEncodedPropertyName("food")] public int m_food { get; set; }
         [FormUrlEncodedPropertyName("fitness")] public int m_fitness { get; set; }
         [FormUrlEncodedPropertyName("happiness")] public int m_happiness { get; set; }

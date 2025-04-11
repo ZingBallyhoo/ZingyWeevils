@@ -94,51 +94,6 @@ namespace BinWeevils.Server.Controllers
             return Results.File(m_configuration["NestLocationDefinitions"]!);
         }
         
-        [HttpGet("nest/get-weevil-stats")]
-        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public WeevilStatsResponse GetWeevilStats()
-        {
-            var stats = new WeevilStatsResponse
-            {
-                m_level = 99,
-                m_mulch = 1000,
-                m_xp = 0,
-                m_xpLowerThreshold = 0,
-                m_xpUpperThreshold = 1000,
-                m_food = 100,
-                m_fitness = 100,
-                m_happiness = 100,
-                m_activated = 1,
-                m_daysRemaining = 99,
-                m_chatState = true,
-                m_chatKey = 0,
-                m_serverTime = 0
-            };
-            
-            var hashStr = string.Join("", new object[]
-            {
-                stats.m_level,
-                stats.m_mulch,
-                stats.m_xp,
-                stats.m_xpLowerThreshold,
-                stats.m_xpUpperThreshold,
-                stats.m_food,
-                stats.m_fitness,
-                stats.m_happiness,
-                
-                stats.m_activated,
-                stats.m_daysRemaining,
-                
-                //chatState,
-                //chatKey,
-                
-                stats.m_serverTime
-            }.Select(x => x.ToString()));
-            
-            stats.m_hash = Rssmv.Hash(hashStr);
-            return stats;
-        }
-        
         [HttpGet("weevil/get-progress")]
         public string GetIntroProgress()
         {
@@ -202,6 +157,12 @@ namespace BinWeevils.Server.Controllers
         public string GetServerTime()
         {
             return "res=1&t=1597760479&x=y";
+        }
+        
+        [HttpPost("nest/get-nest-state")]
+        public string GetNestState()
+        {
+            return "responseCode=1&err=OK&xp=146138&score=8300&fuel=77051&lastUpdate=2020-08-18 04:02:42";
         }
     }
 }

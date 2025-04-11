@@ -7,6 +7,8 @@ using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
 using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
@@ -55,9 +57,20 @@ internal static class Program
             .AddEntityFrameworkStores<WeevilDBContext>()
             .AddDefaultTokenProviders();
         
+        builder.Services
+            .AddAuthentication()
+            .AddScheme<AuthenticationSchemeOptions, UsernameOnlyAuthenticationHandler>("UsernameOnly", _ => { });
+        builder.Services.AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .AddAuthenticationSchemes("UsernameOnly")
+                .Build());
+        
         var app = builder.Build();
 
         app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapStaticAssets();
         app.MapControllers();
@@ -71,7 +84,7 @@ internal static class Program
             m_options = amfOptions,
             m_shapeProvider = GatewayShapeWitness.ShapeProvider,
             m_swallowExceptions = false,
-        });
+        }).RequireAuthorization();
         
         // internally redirect legacy requests
         app.UseRewriter(new RewriteOptions()
