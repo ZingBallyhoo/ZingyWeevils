@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BinWeevils.Server.Controllers
 {
     [Authorize]
+    [Route("api/weevil")]
     public class WeevilController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
@@ -17,7 +18,7 @@ namespace BinWeevils.Server.Controllers
             m_dbContext = dbContext;
         }
         
-        [StructuredFormPost("weevil/buy-food")]
+        [StructuredFormPost("buy-food")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BuyFoodResponse> BuyFood([FromBody] BuyFoodRequest request)
         {
@@ -49,6 +50,25 @@ namespace BinWeevils.Server.Controllers
                 m_success = 1,
                 m_food = dto.m_food,
                 m_mulch = dto.m_mulch
+            };
+        }
+        
+        [StructuredFormPost("update-stats")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<UpdateStatsResponse> UpdateStats([FromBody] UpdateStatsRequest request)
+        {
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_food <= request.m_fitness)
+                .Where(x => Math.Abs(x.m_fitness - request.m_fitness) <= 5)
+                .Where(x => Math.Abs(x.m_happiness - request.m_happiness) <= 5)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_food, x => Math.Min(request.m_food, (byte)100))
+                    .SetProperty(x => x.m_fitness, x => Math.Min(request.m_fitness, (byte)100))
+                    .SetProperty(x => x.m_happiness, x => Math.Min(request.m_happiness, (byte)100)));
+            return new UpdateStatsResponse
+            {
+                m_result = rowsUpdated
             };
         }
     }

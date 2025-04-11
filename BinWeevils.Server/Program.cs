@@ -79,7 +79,7 @@ internal static class Program
         
         var amfOptions = new AmfOptions();
         amfOptions.AddTypedObject<GetLoginDetailsResponse>();
-        app.MapAmfGateway("php/amfphp/gateway.php", new AmfGatewaySettings
+        app.MapAmfGateway("api/php/amfphp/gateway.php", new AmfGatewaySettings
         {
             m_options = amfOptions,
             m_shapeProvider = GatewayShapeWitness.ShapeProvider,
@@ -99,10 +99,11 @@ internal static class Program
         
         var archivePath = app.Configuration["ArchivePath"]!;
         
-        var playFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "");
-        app.UseStaticFiles(playFs);
+        // play stuff is older than root stuff
         var playFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "");
         app.UseStaticFiles(playFallbackFs);
+        var playFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "");
+        app.UseStaticFiles(playFs);
         
         var cdnFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "/cdn");
         app.UseStaticFiles(cdnFs);

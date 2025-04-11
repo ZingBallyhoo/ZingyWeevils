@@ -35,6 +35,9 @@ namespace BinWeevils.GameServer
             } else if (name.Contains("scribbles"))
             {
                 weevilDef = WeevilDef.DEFINITELY_SCRIBBLES;
+            } else if (name.Contains("coolcat"))
+            {
+                weevilDef = "1061064041061709";
             } else
             {
                 var def = new WeevilDef(WeevilDef.DEFAULT)

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BinWeevils.Server.Controllers
 {
     [Authorize]
+    [Route("api/nest")]
     public class NestController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
@@ -18,7 +19,7 @@ namespace BinWeevils.Server.Controllers
             m_dbContext = dbContext;
         }
         
-        [HttpGet("nest/get-weevil-stats")]
+        [HttpGet("get-weevil-stats")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<WeevilStatsResponse> GetWeevilStats()
         {
