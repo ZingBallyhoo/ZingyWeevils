@@ -10,7 +10,7 @@ namespace BinWeevils.GameServer
         public readonly User m_user;
         
         public TypedVar<int> m_idx;
-        public TypedVar<string> m_weevilDef;
+        public TypedVar<ulong> m_weevilDef;
         public TypedVar<string> m_apparel;
         public TypedVar<int> m_locID;
         public TypedVar<int> m_doorID;
@@ -32,7 +32,7 @@ namespace BinWeevils.GameServer
             m_user = user;
             
             m_idx = new TypedVar<int>(this, "idx", Var.TYPE_STRING); // ! intentionally string
-            m_weevilDef = new TypedVar<string>(this, "weevilDef", Var.TYPE_STRING);
+            m_weevilDef = new TypedVar<ulong>(this, "weevilDef", Var.TYPE_STRING);
             m_apparel = new TypedVar<string>(this, "apparel", Var.TYPE_STRING);
             m_locID = new TypedVar<int>(this, "locID", Var.TYPE_NUMBER);
             m_doorID = new TypedVar<int>(this, "doorID", Var.TYPE_NUMBER);
@@ -44,7 +44,7 @@ namespace BinWeevils.GameServer
             m_z = new TypedVar<double>(this, "z", Var.TYPE_NUMBER);
             m_r = new TypedVar<int>(this, "r", Var.TYPE_NUMBER);
             
-            m_weevilDef.SetValue(WeevilDef.DEFINITELY_SCRIBBLES);
+            m_weevilDef.SetValue(ulong.Parse(WeevilDef.DEFAULT));
         }
     }
 }

@@ -3,7 +3,6 @@ using ArcticFox.Codec;
 using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
-using BinWeevils.GameServer.PolyType;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
@@ -15,8 +14,12 @@ namespace BinWeevils.GameServer
 {
     public partial class BinWeevilsSocket : SmartFoxSocketBase, ISpanConsumer<char>
     {
+        private readonly WeevilSocketServices m_services;
+        
         public BinWeevilsSocket(SocketInterface socket, SmartFoxManager manager) : base(socket, manager)
         {
+            m_services = new WeevilSocketServices(manager.m_provider);
+            
             // todo: will differ for bluebox/socket...
             m_netInputCodec = new CodecChain()
                 .AddCodec(new ZeroDelimitedDecodeCodec())
@@ -130,8 +133,10 @@ namespace BinWeevils.GameServer
                     
             m_taskQueue.Enqueue(async () =>
             {
-                var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
+                var weevilIdx = await m_services.CreateTempAccount(login.m_data.m_nickname);
+                var loginDto = await m_services.GetLoginData(weevilIdx);
                 
+                var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
                 var nestDesc = new WeevilRoomDescription($"nest_{login.m_data.m_nickname}")
                 {
                     m_creator = user,
@@ -141,41 +146,9 @@ namespace BinWeevils.GameServer
                 await user.m_zone.CreateRoom(nestDesc);
                 
                 var weevilData = new WeevilData(user);
-                weevilData.m_idx.SetValue(55);
+                weevilData.m_idx.SetValue(weevilIdx);
+                weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
                 user.SetUserData(weevilData);
-                
-                if (user.m_name.Contains("fairriver"))
-                {
-                    weevilData.m_weevilDef.SetValue(WeevilDef.DEFAULT);
-                } else if (user.m_name.Contains("zingy"))
-                {
-                    weevilData.m_weevilDef.SetValue(WeevilDef.ZINGY);
-                } else if (user.m_name.Contains("scribbles"))
-                {
-                    weevilData.m_weevilDef.SetValue(WeevilDef.DEFINITELY_SCRIBBLES);
-                } else
-                {
-                    var def = new WeevilDef(WeevilDef.DEFAULT)
-                    {
-                        m_headType = (WeevilDef.HeadType)Random.Shared.Next((int)WeevilDef.HeadType.Spheroid, (int)WeevilDef.HeadType.Count),
-                        m_headColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
-                        m_bodyType = (WeevilDef.BodyType)Random.Shared.Next((int)WeevilDef.BodyType.Spheroid, (int)WeevilDef.BodyType.Count),
-                        m_bodyColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
-                        m_eyeType = (WeevilDef.EyeType)Random.Shared.Next((int)WeevilDef.EyeType.MiddleTogether, (int)WeevilDef.EyeType.Count),
-                        m_eyeColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_EYE_COLOR_COUNT),
-                        m_lids = Random.Shared.Next(0, 1) == 1,
-                        m_antennaType = (WeevilDef.AntennaType)Random.Shared.Next(0, (int)WeevilDef.AntennaType.SuperOriginal + 1),
-                        m_antennaColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
-                        m_legColorIdx = (byte)Random.Shared.Next(0, WeevilDef.LEGACY_COLOR_COUNT),
-                        m_legType = WeevilDef.LegType.Normal
-                    };
-                    if (!def.Validate())
-                    {
-                        throw new InvalidDataException();
-                    }
-                    
-                    weevilData.m_weevilDef.SetValue(def.AsString());
-                }
                 
                 var loginResponse = new LoginResponse
                 {
@@ -183,7 +156,7 @@ namespace BinWeevils.GameServer
                     m_success = true,
                     m_user = new LoginUser
                     {
-                        m_weevilDef = weevilData.m_weevilDef,
+                        m_weevilDef = $"{weevilData.m_weevilDef.GetValue()}",
                         m_ip = "no",
                         m_apparel = weevilData.m_apparel,
                         m_idx = $"{weevilData.m_idx.GetValue()}",

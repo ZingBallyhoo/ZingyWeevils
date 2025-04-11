@@ -1,6 +1,7 @@
 using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.Database;
 using BinWeevils.GameServer;
 using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
@@ -9,7 +10,10 @@ using BinWeevils.Server.Controllers;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using StackXML;
 using Stl.DependencyInjection;
@@ -35,6 +39,21 @@ internal static class Program
         
         builder.Services.AddSingleton<LocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));
+        
+        var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        builder.Services.AddDbContext<WeevilDBContext>(options =>
+            options.UseSqlite(connection));
+        builder.Services.AddIdentity<WeevilAccount, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+            })
+            .AddEntityFrameworkStores<WeevilDBContext>()
+            .AddDefaultTokenProviders();
         
         var app = builder.Build();
 
@@ -76,6 +95,14 @@ internal static class Program
         app.UseStaticFiles(cdnFs);
         var cdnFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "/cdn");
         app.UseStaticFiles(cdnFallbackFs);
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<WeevilDBContext>();
+            await context.Database.EnsureCreatedAsync();
+        }
 
         await app.StartAsync();
         
