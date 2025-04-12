@@ -18,6 +18,41 @@ namespace BinWeevils.Server.Controllers
             m_dbContext = dbContext;
         }
         
+        [StructuredFormPost("data")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<WeevilDataResponse> GetData([FromBody] WeevilDataRequest request)
+        {
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_name)
+                .Select(x => new
+                {
+                    x.m_idx,
+                    x.m_createdAt,
+                    m_lastSeen = x.m_lastLogin,
+                    x.m_weevilDef,
+                    x.m_lastAcknowledgedLevel
+                })
+                .SingleOrDefaultAsync();
+            if (dto == null)
+            {
+                return new WeevilDataResponse
+                {
+                    m_result = 0
+                };
+            }
+            
+            return new WeevilDataResponse
+            {
+                m_result = 1,
+                m_idx = dto.m_idx,
+                m_weevilDef = dto.m_weevilDef,
+                m_level = dto.m_lastAcknowledgedLevel,
+                m_tycoon = 1,
+                m_lastLog = dto.m_lastSeen.ToString("yyyy-MM-dd HH:mm:ss"),
+                m_dateJoined = dto.m_createdAt.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+        }
+        
         [StructuredFormPost("buy-food")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BuyFoodResponse> BuyFood([FromBody] BuyFoodRequest request)

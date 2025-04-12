@@ -62,9 +62,12 @@ namespace BinWeevils.GameServer
                 weevilDef = def.AsString();
             }
                 
+            var now = DateTime.UtcNow;
             var dbWeevil = new WeevilDB
             {
                 m_name = name,
+                m_createdAt = now,
+                m_lastLogin = now,
                 m_weevilDef = ulong.Parse(weevilDef),
                 m_food = 100,
                 m_fitness = 100,
