@@ -26,13 +26,16 @@ namespace BinWeevils.Server.Controllers
             var weevil = await m_dbContext.m_weevilDBs
                 .SingleAsync(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name);
             
+            WeevilLevels.GetLevelThresholds(weevil.m_lastAcknowledgedLevel, 
+                out var xpLowerThreshold, 
+                out var xpUpperThreshold);
             var stats = new WeevilStatsResponse
             {
-                m_level = weevil!.m_lastAcknowledgedLevel,
+                m_level = weevil.m_lastAcknowledgedLevel,
                 m_mulch = weevil.m_mulch,
                 m_xp = weevil.m_xp,
-                m_xpLowerThreshold = 0,
-                m_xpUpperThreshold = 1000,
+                m_xpLowerThreshold = xpLowerThreshold,
+                m_xpUpperThreshold = xpUpperThreshold,
                 m_food = weevil.m_food,
                 m_fitness = weevil.m_fitness,
                 m_happiness = weevil.m_happiness,
@@ -43,8 +46,8 @@ namespace BinWeevils.Server.Controllers
                 m_serverTime = 0
             };
             
-            var hashStr = string.Join("", new object[]
-            {
+            var hashStr = string.Join("",
+            [
                 stats.m_level,
                 stats.m_mulch,
                 stats.m_xp,
@@ -61,10 +64,76 @@ namespace BinWeevils.Server.Controllers
                 //chatKey,
                 
                 stats.m_serverTime
-            }.Select(x => x.ToString()));
+            ]);
             
             stats.m_hash = Rssmv.Hash(hashStr);
             return stats;
+        }
+        
+        [HttpGet("level-up")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<LevelUpResponse> LevelUp()
+        {
+            var checkDto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_xp,
+                    x.m_lastAcknowledgedLevel
+                })
+                .SingleAsync();
+            
+            var desiredLevel = WeevilLevels.DetermineLevel(checkDto.m_xp);
+            if (desiredLevel <= checkDto.m_lastAcknowledgedLevel)
+            {
+                return new LevelUpResponse();
+            }
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_lastAcknowledgedLevel == checkDto.m_lastAcknowledgedLevel)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_lastAcknowledgedLevel, x => x.m_lastAcknowledgedLevel + 1));
+            if (rowsUpdated == 0)
+            {
+                return new LevelUpResponse();
+            }
+            
+            var responseDto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_lastAcknowledgedLevel,
+                    x.m_mulch,
+                    x.m_xp
+                })
+                .SingleAsync();
+            
+            WeevilLevels.GetLevelThresholds(responseDto.m_lastAcknowledgedLevel, 
+                out var xpLowerThreshold, 
+                out var xpUpperThreshold);
+            var response = new LevelUpResponse
+            {
+                m_level = responseDto.m_lastAcknowledgedLevel,
+                m_mulch = responseDto.m_mulch,
+                m_xp = responseDto.m_xp,
+                m_xpLowerThreshold = xpLowerThreshold,
+                m_xpUpperThreshold = xpUpperThreshold,
+                m_serverTime = 0
+            };
+
+            var hashStr = string.Join("",
+            [
+                response.m_level,
+                response.m_mulch,
+                response.m_xp,
+                response.m_xpLowerThreshold,
+                response.m_xpUpperThreshold,
+                response.m_serverTime
+            ]);
+            
+            response.m_hash = Rssmv.Hash(hashStr);
+            return response;
         }
     }
 }
