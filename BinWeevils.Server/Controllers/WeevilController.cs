@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BinWeevils.Server.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/weevil")]
     public class WeevilController : Controller
     {

@@ -16,7 +16,9 @@ namespace BinWeevils.Server
         {
             if (!Context.Request.Cookies.TryGetValue("username", out var username))
             {
-                return Task.FromResult(AuthenticateResult.Fail("no username cookie"));
+                var random = Random.Shared.Next(0, 9999999);
+                username = $"fairriver{random}";
+                Context.Response.Cookies.Append("username", username);
             }
             
             var principal = new ClaimsPrincipal(new ClaimsIdentity([

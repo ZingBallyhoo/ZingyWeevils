@@ -12,16 +12,12 @@ namespace BinWeevils.Server.Controllers
             {
                 case "weevilservices.cWeevilLoginService.getLoginDetails":
                 {
-                    var random = Random.Shared.Next(0, 9999999);
-                    if (!context.m_httpContext.Request.Cookies.TryGetValue("username", out var username))
-                    {
-                        username = $"fairriver{random}";
-                    }
+                    var username = context.m_httpContext.User.Identity!.Name;
                     
                     return new GetLoginDetailsResponse
                     {
                         m_userName = username,
-                        m_userIdx = random,
+                        m_userIdx = 0, // todo: we can't get this here...
                         m_tycoon = 1,
                         m_loginKey = ""
                     };
