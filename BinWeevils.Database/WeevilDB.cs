@@ -13,8 +13,11 @@ namespace BinWeevils.Database
         [Required] public DateTime m_lastLogin;
         
         [Required] public ulong m_weevilDef { get; set; }
+        [Required] public ushort m_introProgress { get; set; }
+        
         [Required] public uint m_xp { get; set; }
         [Required] public int m_lastAcknowledgedLevel { get; set; }
+        
         [Required] public byte m_food { get; set; }
         [Required] public byte m_fitness { get; set; }
         [Required] public byte m_happiness { get; set; }

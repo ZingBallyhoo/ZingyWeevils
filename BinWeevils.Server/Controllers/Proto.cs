@@ -94,12 +94,6 @@ namespace BinWeevils.Server.Controllers
             return Results.File(m_configuration["NestLocationDefinitions"]!);
         }
         
-        [HttpGet("api/weevil/get-progress")]
-        public string GetIntroProgress()
-        {
-            return "res=0";
-        }
-        
         [HttpGet("api/php/getTreasureHunt.php")]
         public string GetTreasureHunt()
         {

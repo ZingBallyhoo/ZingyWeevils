@@ -95,17 +95,47 @@ namespace BinWeevils.Server.Controllers
         {
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Where(x => x.m_food <= request.m_fitness)
-                .Where(x => Math.Abs(x.m_fitness - request.m_fitness) <= 5)
+                .Where(x => x.m_food <= request.m_food)
+                .Where(x => Math.Abs(x.m_fitness - request.m_fitness) <= 20)
                 .Where(x => Math.Abs(x.m_happiness - request.m_happiness) <= 5)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_food, x => Math.Min(request.m_food, (byte)100))
-                    .SetProperty(x => x.m_fitness, x => Math.Min(request.m_fitness, (byte)100))
-                    .SetProperty(x => x.m_happiness, x => Math.Min(request.m_happiness, (byte)100)));
+                    .SetProperty(x => x.m_food, Math.Min(request.m_food, (byte)100))
+                    .SetProperty(x => x.m_fitness, Math.Min(request.m_fitness, (byte)100))
+                    .SetProperty(x => x.m_happiness, Math.Min(request.m_happiness, (byte)100)));
             return new UpdateStatsResponse
             {
                 m_result = rowsUpdated
             };
+        }
+        
+        [HttpGet("get-progress")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetIntroProgressResponse> GetIntroProgress()
+        {
+            var progress = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => x.m_introProgress)
+                .SingleAsync();
+            
+            var encodedProgress = new EncodedIntroProgress(progress);
+            return new GetIntroProgressResponse
+            {
+                m_result = encodedProgress.ToString()
+            };
+        }
+        
+        [StructuredFormPost("set-progress")]
+        public async Task SetIntroProgress([FromBody] SetIntroProgressRequest request)
+        {
+            var encodedProgress = new EncodedIntroProgress(request.m_progress);
+            
+            // todo: validate that not progressing backwards?
+            // but who cares...
+            
+            await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_introProgress, encodedProgress.m_bits));
         }
     }
 }

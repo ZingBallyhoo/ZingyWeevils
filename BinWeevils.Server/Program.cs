@@ -95,6 +95,10 @@ internal static class Program
             .AddRewrite("^cinema/cinema\\.xml", "cdn/externalUIs/cinema/cinema.xml", true) // riggs
             .AddRedirect("^cinema/(.+).flv", "cdn/ads/binweevils/binTycoonTour2.flv") // riggs
             .AddRewrite("^nestNews/xml/uk/nestNews\\.xml", "nestNews/xml/nestNews.xml", true)
+        
+            // overwritten with incompatible versions...
+            .AddRewrite("^externalUIs/petBuilder\\.swf", "cdn/play/externalUIs/petBuilder.swf", true)
+            .AddRewrite("^overlayUIs/introGuide\\.swf", "cdn/play/overlayUIs/introGuide.swf", true)
         );
         
         var archivePath = app.Configuration["ArchivePath"]!;
