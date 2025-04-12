@@ -28,7 +28,13 @@ namespace BinWeevils.GameServer
         
         public static ValueTask BroadcastSys(this IBroadcaster bc, MsgBody body, CDataMode cdataMode=CDataMode.On)
         {
-            using var writeBuffer = new XmlWriteBuffer();
+            using var writeBuffer = new XmlWriteBuffer
+            {
+                m_params = new XmlWriteParams
+                {
+                    m_cdataMode = cdataMode
+                }
+            };
             writeBuffer.PutObject(BuildSysMessage(body));
             return bc.BroadcastZeroTerminatedAscii(writeBuffer.ToSpan());
         }

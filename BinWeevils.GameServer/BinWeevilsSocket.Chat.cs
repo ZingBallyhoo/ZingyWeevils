@@ -56,7 +56,7 @@ namespace BinWeevils.GameServer
                     {
                         m_id = checked((int)user.m_id)
                     }
-                });
+                }, CDataMode.OnEncoded);
             });
         }
     }
