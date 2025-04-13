@@ -11,7 +11,6 @@ namespace BinWeevils.Server.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/nest")]
     public class NestController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
@@ -21,7 +20,7 @@ namespace BinWeevils.Server.Controllers
             m_dbContext = dbContext;
         }
         
-        [HttpGet("get-weevil-stats")]
+        [HttpGet("api/nest/get-weevil-stats")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<WeevilStatsResponse> GetWeevilStats()
         {
@@ -72,7 +71,7 @@ namespace BinWeevils.Server.Controllers
             return stats;
         }
         
-        [HttpGet("level-up")]
+        [HttpGet("api/nest/level-up")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<LevelUpResponse> LevelUp()
         {
@@ -138,7 +137,7 @@ namespace BinWeevils.Server.Controllers
             return response;
         }
         
-        [StructuredFormPost("get-stored-items")]
+        [StructuredFormPost("api/nest/get-stored-items")]
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<StoredItems> GetStoredItems([FromBody] GetStoredItemsRequest request)
         {
@@ -177,6 +176,48 @@ namespace BinWeevils.Server.Controllers
             }
             
             return storedItems;
+        }
+        
+        [StructuredFormPost("api/php/addItemToNest.php")]
+        public async Task AddItemToNest([FromBody] AddItemToNestRequest request)
+        {
+            // no concurrency check for placing but doesn't actually matter...
+
+            var nest = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_nest.m_id == request.m_nestID) // dont lie :(
+                .Include(x => x.m_nest)
+                    .ThenInclude(x => x.m_rooms.Where(room => room.m_id == request.m_locationID))
+                .Include(x => x.m_nest)
+                    .ThenInclude(x => x.m_items.Where(item => item.m_id == request.m_itemID && item.m_placedItem == null))
+                // todo: would be ideal...
+                //.Include(x => x.m_nest)
+                //    .ThenInclude(x => x.m_items.Where(item => item.m_id == request.m_itemID && item.m_placedItem != null))
+                .Select(x => x.m_nest)
+                .SingleAsync();
+            var room = nest.m_rooms.Single();
+            var item = nest.m_items.Single();
+            
+            if (room.m_nestID != request.m_nestID) throw new Exception();
+            if (room.m_id != request.m_locationID) throw new Exception();
+            
+            // todo: validate before normalizing
+            if (request.m_furnitureID == 0)
+            {
+                request.m_spot = 0;
+            } else
+            {
+                request.m_currentPos = 0;
+            }
+            
+            item.m_placedItem = new NestPlacedItemDB
+            {
+                m_room = room,
+                m_currentPos = request.m_currentPos,
+                m_placedOnFurnitureID = request.m_furnitureID,
+                m_spotOnFurniture = request.m_spot
+            };
+            await m_dbContext.SaveChangesAsync();
         }
     }
 }

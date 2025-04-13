@@ -60,6 +60,7 @@ namespace BinWeevils.Database
     public class NestItemDB
     {
         [Key] public uint m_id { get; set; }
+        public int m_nestID { get; set; }
         // todo: color...
         
         [Required] public virtual ItemType m_itemType { get; set; }
@@ -71,7 +72,7 @@ namespace BinWeevils.Database
     
     public class NestPlacedItemDB
     {
-        // todo: could share key? but its not required
+        // todo: key sharing is required for ornaments. figure it out
         [Key] public int m_id { get; set; }
         
         public int m_roomID { get; set; }
