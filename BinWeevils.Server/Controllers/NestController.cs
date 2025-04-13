@@ -2,6 +2,7 @@ using System.Net.Mime;
 using BinWeevils.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
+using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -135,6 +136,45 @@ namespace BinWeevils.Server.Controllers
             
             response.m_hash = Rssmv.Hash(hashStr);
             return response;
+        }
+        
+        [StructuredFormPost("get-stored-items")]
+        [Produces(MediaTypeNames.Application.Xml)]
+        public async Task<StoredItems> GetStoredItems([FromBody] GetStoredItemsRequest request)
+        {
+            var actuallyMine = request.m_userID == ControllerContext.HttpContext.User.Identity!.Name;
+            if (actuallyMine != request.m_mine) throw new InvalidDataException();
+            
+            if (!request.m_mine)
+            {
+                // for now.. why would this be needed
+                return new StoredItems();
+            }
+            
+            var h = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name ==  ControllerContext.HttpContext.User.Identity!.Name)
+                .SelectMany(x => x.m_nest.m_items)
+                .Where(x => x.m_placedItem == null)
+                .Select(x => new
+                {
+                    x.m_id,
+                    m_configName = x.m_itemType.m_configLocation
+                })
+                .ToArrayAsync();
+            
+            var storedItems = new StoredItems();
+            foreach (var h2 in h)
+            {
+                storedItems.m_items.Add(new NestInventoryItem
+                {
+                    m_id = h2.m_id,
+                    m_configName = h2.m_configName,
+                    m_deliveryTime = 0,
+                    m_clrTemp = ""
+                });
+            }
+            
+            return storedItems;
         }
     }
 }

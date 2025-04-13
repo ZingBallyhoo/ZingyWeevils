@@ -42,10 +42,8 @@ internal static class Program
         builder.Services.AddSingleton<LocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));
         
-        var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
         builder.Services.AddDbContext<WeevilDBContext>(options =>
-            options.UseSqlite(connection));
+            options.UseSqlite("Filename=db.sqlite"));
         builder.Services.AddIdentity<WeevilAccount, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 1;
@@ -120,7 +118,11 @@ internal static class Program
             var services = scope.ServiceProvider;
 
             var context = services.GetRequiredService<WeevilDBContext>();
+            await context.Database.EnsureDeletedAsync(); // reset
             await context.Database.EnsureCreatedAsync();
+            
+            var sql = await File.ReadAllTextAsync(Path.Combine(archivePath, "..", "other", "itemType.sql"));
+            await context.Database.ExecuteSqlRawAsync(sql);
         }
 
         await app.StartAsync();

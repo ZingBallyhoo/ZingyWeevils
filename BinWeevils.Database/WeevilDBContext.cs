@@ -28,6 +28,13 @@ namespace BinWeevils.Database
                 // (constraint)
                 b.HasAlternateKey(p => new { p.m_nestID, p.m_type });
             });
+            
+            modelBuilder.Entity<NestPlacedItemDB>(b =>
+            {
+                // (constraint)
+                // todo: need to enforce pos is 0 if placed on furniture?
+                b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, p.m_placedOnFurnitureID, p.m_spotOnFurniture });
+            });
         }
         
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -75,17 +82,25 @@ namespace BinWeevils.Database
             await m_weevilDBs.AddAsync(dbWeevil);
             await SaveChangesAsync();
             
-            /*dbWeevil.m_nest.m_items.Add(new NestItemDB
+            //var test = await m_itemTypes.Where(x => x.m_configLocation == "f_shelf1").ToArrayAsync();
+            //Console.Out.WriteLine($"{test.Length}");
+            
+            dbWeevil.m_nest.m_items.Add(new NestItemDB
             {
-                m_itemType = await m_itemTypes.SingleAsync(x => x.m_name == "o_egg"),
+                // todo: there are 2 f_shelf1... one with color one without
+                
+                m_itemType = await m_itemTypes
+                    .Where(x => x.m_paletteID == -1)
+                    .SingleAsync(x => x.m_configLocation == "f_shelf1"),
                 m_nest = nest
             });
             dbWeevil.m_nest.m_items.Add(new NestItemDB
             {
-                m_itemType = await m_itemTypes.SingleAsync(x => x.m_name == "f_shelf1"),
+                m_itemType = await m_itemTypes
+                    .SingleAsync(x => x.m_configLocation == "o_egg"),
                 m_nest = nest
             });
-            await SaveChangesAsync();*/
+            await SaveChangesAsync();
             
             return dbWeevil;
         }

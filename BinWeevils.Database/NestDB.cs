@@ -41,7 +41,8 @@ namespace BinWeevils.Database
                     {
                         m_type = ENestRoom.Plaza
                     }
-                ]
+                ],
+                m_items = []
             };
         }
     }
@@ -63,19 +64,22 @@ namespace BinWeevils.Database
         
         [Required] public virtual ItemType m_itemType { get; set; }
         [Required] public virtual NestDB m_nest { get; set; }
+        
+        public virtual NestPlacedItemDB? m_placedItem { get; set; }
 
     }
     
     public class NestPlacedItemDB
     {
+        // todo: could share key? but its not required
         [Key] public int m_id { get; set; }
+        
         public int m_roomID { get; set; }
         public int m_currentPos { get; set; }
 
         public int m_placedOnFurnitureID { get; set; }
         public int m_spotOnFurniture { get; set; }
         
-        [Required] public virtual NestItemDB m_item { get; set; }
         [Required] public virtual NestRoomDB m_room { get; set; }
         public virtual NestPlacedItemDB? m_placedOnFurniture { get; set; } // ornaments can get placed on furniture
     }
