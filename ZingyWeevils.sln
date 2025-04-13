@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Database", "BinW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Tests", "BinWeevils.Tests\BinWeevils.Tests.csproj", "{56D95221-D3B6-4480-B382-162DD76D84E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Tools.CoreDiff", "BinWeevils.Tools.CoreDiff\BinWeevils.Tools.CoreDiff.csproj", "{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -330,6 +332,18 @@ Global
 		{56D95221-D3B6-4480-B382-162DD76D84E9}.Release|x64.Build.0 = Release|Any CPU
 		{56D95221-D3B6-4480-B382-162DD76D84E9}.Release|x86.ActiveCfg = Release|Any CPU
 		{56D95221-D3B6-4480-B382-162DD76D84E9}.Release|x86.Build.0 = Release|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Debug|x64.Build.0 = Debug|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Debug|x86.Build.0 = Debug|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x64.ActiveCfg = Release|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x64.Build.0 = Release|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x86.ActiveCfg = Release|Any CPU
+		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C9D86D65-5042-4B53-A136-44423B5DD562} = {DFAD127F-3562-4335-B371-2E3E5CA03767}

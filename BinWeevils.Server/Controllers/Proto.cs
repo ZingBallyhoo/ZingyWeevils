@@ -1,5 +1,4 @@
 using System.Net.Mime;
-using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Xml;
 using ByteDev.FormUrlEncoded;
@@ -22,11 +21,14 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public CheckVersionResponse CheckVersion([FromBody] CheckVersionRequest r)
         {
+            // (use 29 for trace, but its really spammy)
+            // cluster is set to "h" in PlayGamePartial as it causes the camera & tv towers to be disabled
+            // neither work anyway
             return new CheckVersionResponse
             {
                 m_ok = 1,
-                m_coreVersionNumber = 18,
-                m_vodPlayerVersion = 12,
+                m_coreVersionNumber = 30,
+                m_vodPlayerVersion = 15,
                 m_vodContentVersion = 2,
             };
         }
@@ -81,6 +83,7 @@ namespace BinWeevils.Server.Controllers
         }
         
         [HttpGet("binConfig/getFile/0/locationDefinitions.xml")]
+        [HttpGet("binConfig/getFile/0/{cluster}/locationDefinitions.xml")]
         [Produces(MediaTypeNames.Application.Xml)]
         public IResult GetLocationDefinitions()
         {
@@ -88,6 +91,7 @@ namespace BinWeevils.Server.Controllers
         }
         
         [HttpGet("binConfig/getFile/0/nestLocDefs.xml")]
+        [HttpGet("binConfig/getFile/0/{cluster}/nestLocDefs.xml")]
         [Produces(MediaTypeNames.Application.Xml)]
         public IResult GetNestLocationDefinitions()
         {
@@ -119,6 +123,7 @@ namespace BinWeevils.Server.Controllers
         }
         
         [HttpPost("api/nest/getconfig")]
+        // [HttpPost("api/php/getNestConfig.php")]
         public string GetNestConfig()
         {
             var idx = 55; // todo: luckily this doesnt matter

@@ -88,8 +88,9 @@ internal static class Program
         
         // internally redirect legacy requests
         app.UseRewriter(new RewriteOptions()
-            .AddRedirect("^assetsTycoon/VODroom\\.swf", "cdn/users/VODroom6.swf") // vodRoom
-            .AddRedirect("bwtv/menu3\\.swf", "bwtv/menu4.swf") // vodRoom
+            .AddRedirect("^assetsTycoon/VODroom\\.swf", "cdn/users/VODroom4.swf") // vodRoom
+            .AddRedirect("bwtv/menu3\\.swf", "bwtv/menu5.swf") // vodRoom
+            .AddRedirect("^bwtv/player_cs3_2\\.swf", "bwtv/player_cs3_15.swf")
             .AddRewrite("^bwtv/(.+)", "cdn/bwtv/$1", true) // vodRoom
             .AddRewrite("^cinema/lobbyScreenData\\.xml", "cdn/binConfig/uk/lobbyScreenData.xml", true) // riggs
             .AddRewrite("^cinema/cinema\\.xml", "cdn/externalUIs/cinema/cinema.xml", true) // riggs
