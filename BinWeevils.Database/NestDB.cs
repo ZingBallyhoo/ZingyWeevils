@@ -8,7 +8,7 @@ namespace BinWeevils.Database
     [Table("NestDB")]
     public class NestDB
     {
-        [Key] public int m_id { get; set; }
+        [Key] public uint m_id { get; set; }
         [ConcurrencyCheck] public DateTime m_lastUpdated { get; set; }
         
         public virtual ICollection<NestRoomDB> m_rooms { get; set; }
@@ -49,22 +49,20 @@ namespace BinWeevils.Database
     
     public class NestRoomDB
     {
-        [Key] public int m_id { get; set; }
+        [Key] public uint m_id { get; set; }
         [Required] public ENestRoom m_type { get; set; } // maps to id in xml...
         [Required] public string m_color { get; set; } = "0|0|0";
         
-        public int m_nestID;
-        [Required] public virtual NestDB m_nest { get; set; }
+        public uint m_nestID { get; set; }
+        [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
     }
     
     public class NestItemDB
     {
         [Key] public uint m_id { get; set; }
-        public int m_nestID { get; set; }
         // todo: color...
         
         [Required] public virtual ItemType m_itemType { get; set; }
-        [Required] public virtual NestDB m_nest { get; set; }
         
         public virtual NestPlacedItemDB? m_placedItem { get; set; }
 
@@ -72,16 +70,19 @@ namespace BinWeevils.Database
     
     public class NestPlacedItemDB
     {
-        // todo: key sharing is required for ornaments. figure it out
-        [Key] public int m_id { get; set; }
+        [Key] public uint m_id { get; set; }
         
         public int m_roomID { get; set; }
         public int m_currentPos { get; set; }
 
-        public int m_placedOnFurnitureID { get; set; }
+        public uint m_placedOnFurnitureID => 0;
         public int m_spotOnFurniture { get; set; }
         
-        [Required] public virtual NestRoomDB m_room { get; set; }
-        public virtual NestPlacedItemDB? m_placedOnFurniture { get; set; } // ornaments can get placed on furniture
+        [Required, ForeignKey(nameof(m_roomID))] public virtual NestRoomDB m_room { get; set; }
+        [Required, ForeignKey(nameof(m_id))] public virtual NestItemDB m_item { get; set; }
+        
+        //[ForeignKey(nameof(m_placedOnFurnitureID))] public virtual NestPlacedItemDB? m_placedOnFurniture { get; set; } // ornaments can get placed on furniture
+        
+        public virtual ICollection<NestPlacedItemDB> m_ornaments { get; set; }
     }
 }

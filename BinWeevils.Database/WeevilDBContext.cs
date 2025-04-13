@@ -29,11 +29,25 @@ namespace BinWeevils.Database
                 b.HasAlternateKey(p => new { p.m_nestID, p.m_type });
             });
             
+            modelBuilder.Entity<NestItemDB>(b =>
+            {
+                b.HasOne(x => x.m_placedItem)
+                 .WithOne(x => x.m_item)
+                 .IsRequired(false);
+            });
+            
             modelBuilder.Entity<NestPlacedItemDB>(b =>
             {
                 // (constraint)
                 // todo: need to enforce pos is 0 if placed on furniture?
-                b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, p.m_placedOnFurnitureID, p.m_spotOnFurniture });
+                b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, /*p.m_placedOnFurnitureID,*/ p.m_spotOnFurniture });
+                
+                //b.HasMany(x => x.m_ornaments)
+                // .WithOne();
+                
+                //b.HasOne(x => x.m_placedOnFurniture)
+                //  .WithMany()
+                //  .IsRequired(false);
             });
         }
         
@@ -93,14 +107,12 @@ namespace BinWeevils.Database
                 
                 m_itemType = await m_itemTypes
                     .Where(x => x.m_paletteID == -1)
-                    .SingleAsync(x => x.m_configLocation == "f_shelf1"),
-                m_nest = nest
+                    .SingleAsync(x => x.m_configLocation == "f_shelf1")
             });
             dbWeevil.m_nest.m_items.Add(new NestItemDB
             {
                 m_itemType = await m_itemTypes
-                    .SingleAsync(x => x.m_configLocation == "o_egg"),
-                m_nest = nest
+                    .SingleAsync(x => x.m_configLocation == "o_egg")
             });
             await SaveChangesAsync();
             

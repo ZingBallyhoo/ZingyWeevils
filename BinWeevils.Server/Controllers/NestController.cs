@@ -11,6 +11,7 @@ namespace BinWeevils.Server.Controllers
 {
     [Authorize]
     [ApiController]
+    [Route("api")]
     public class NestController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
@@ -20,7 +21,7 @@ namespace BinWeevils.Server.Controllers
             m_dbContext = dbContext;
         }
         
-        [HttpGet("api/nest/get-weevil-stats")]
+        [HttpGet("nest/get-weevil-stats")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<WeevilStatsResponse> GetWeevilStats()
         {
@@ -71,7 +72,7 @@ namespace BinWeevils.Server.Controllers
             return stats;
         }
         
-        [HttpGet("api/nest/level-up")]
+        [HttpGet("nest/level-up")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<LevelUpResponse> LevelUp()
         {
@@ -137,7 +138,7 @@ namespace BinWeevils.Server.Controllers
             return response;
         }
         
-        [StructuredFormPost("api/nest/get-stored-items")]
+        [StructuredFormPost("nest/get-stored-items")]
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<StoredItems> GetStoredItems([FromBody] GetStoredItemsRequest request)
         {
@@ -178,7 +179,42 @@ namespace BinWeevils.Server.Controllers
             return storedItems;
         }
         
-        [StructuredFormPost("api/php/addItemToNest.php")]
+        [StructuredFormPost("nest/getconfig")]
+        [Produces(MediaTypeNames.Application.Xml)]
+        public async Task<NestConfig> GetNestConfig([FromBody] GetNestConfigRequest request)
+        {
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Include(x => x.m_nest.m_rooms)
+                .Include(x => x.m_nest.m_items.Where(item => item.m_placedItem != null))
+                    .ThenInclude(item => item.m_placedItem)
+                .Select(x => new
+                {
+                    x.m_nest,
+                    x.m_idx,
+                })
+                .SingleAsync();
+            
+            var nestConfig = new NestConfig
+            {
+                m_id = dto.m_nest.m_id,
+                m_idx = dto.m_idx,
+                m_fuel = 46807
+            };
+            foreach (var room in dto.m_nest.m_rooms)
+            {
+                nestConfig.m_locs.Add(new NestConfig.Loc
+                {
+                    m_id = (uint)room.m_type,
+                    m_instanceID = room.m_id,
+                    m_colour = room.m_color
+                });
+            }
+            
+            return nestConfig;
+        }
+        
+        [StructuredFormPost("php/addItemToNest.php")]
         public async Task AddItemToNest([FromBody] AddItemToNestRequest request)
         {
             // no concurrency check for placing but doesn't actually matter...
@@ -198,7 +234,7 @@ namespace BinWeevils.Server.Controllers
             var room = nest.m_rooms.Single();
             var item = nest.m_items.Single();
             
-            if (room.m_nestID != request.m_nestID) throw new Exception();
+            if (room.m_nest.m_id != request.m_nestID) throw new Exception();
             if (room.m_id != request.m_locationID) throw new Exception();
             
             // todo: validate before normalizing
@@ -214,7 +250,7 @@ namespace BinWeevils.Server.Controllers
             {
                 m_room = room,
                 m_currentPos = request.m_currentPos,
-                m_placedOnFurnitureID = request.m_furnitureID,
+                //m_placedOnFurnitureID = request.m_furnitureID,
                 m_spotOnFurniture = request.m_spot
             };
             await m_dbContext.SaveChangesAsync();
