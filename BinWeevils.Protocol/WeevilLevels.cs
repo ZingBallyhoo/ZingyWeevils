@@ -88,9 +88,14 @@ namespace BinWeevils.Protocol
         
         public static int DetermineLevel(uint xp)
         {
+            return DetermineLevel(checked((int)xp));
+        }
+            
+        public static int DetermineLevel(int xp)
+        {
             if (xp == 0) return 1;
             
-            var index = s_thresholds.BinarySearch((int)xp);
+            var index = s_thresholds.BinarySearch(xp);
             if (index >= 0)
             {
                 // exactly on the level

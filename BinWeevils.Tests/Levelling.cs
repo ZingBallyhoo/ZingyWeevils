@@ -10,7 +10,7 @@ public class Levelling
     [InlineData(30, 2)]
     [InlineData(31, 2)]
     [InlineData(2840000, 80)]
-    [InlineData(uint.MaxValue, 80)]
+    [InlineData(int.MaxValue, 80)]
     public void DetermineLevel(uint xp, int expectedLevel)
     {
         var actualLevel = WeevilLevels.DetermineLevel(xp);
