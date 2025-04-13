@@ -59,7 +59,7 @@ namespace BinWeevils.Database
     
     public class NestItemDB
     {
-        [Key] public int m_id { get; set; }
+        [Key] public uint m_id { get; set; }
         // todo: color...
         
         [Required] public virtual ItemType m_itemType { get; set; }

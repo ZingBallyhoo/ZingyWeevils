@@ -3,9 +3,8 @@ using StackXML;
 namespace BinWeevils.Protocol.Xml
 {
     [XmlCls("item")]
-    public partial record NestItemBase
+    public partial record NestItemBase : ItemBase
     {
-        [XmlField("id")] public int m_id;
         [XmlField("configName")] public string m_configName;
         [XmlField("clr")] public string m_clrTemp;
     }

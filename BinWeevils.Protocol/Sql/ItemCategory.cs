@@ -1,6 +1,6 @@
-namespace BinWeevils.Protocol
+namespace BinWeevils.Protocol.Sql
 {
-    public enum ENestRoomCategory
+    public enum ItemCategory
     {
         Hall = 0,
         Room = 1,

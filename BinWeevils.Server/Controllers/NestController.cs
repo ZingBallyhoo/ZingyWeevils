@@ -158,7 +158,8 @@ namespace BinWeevils.Server.Controllers
                 .Select(x => new
                 {
                     x.m_id,
-                    m_configName = x.m_itemType.m_configLocation
+                    x.m_itemType.m_configLocation,
+                    x.m_itemType.m_category
                 })
                 .ToArrayAsync();
             
@@ -167,8 +168,9 @@ namespace BinWeevils.Server.Controllers
             {
                 storedItems.m_items.Add(new NestInventoryItem
                 {
-                    m_id = h2.m_id,
-                    m_configName = h2.m_configName,
+                    m_databaseID = h2.m_id,
+                    m_category = (int)h2.m_category,
+                    m_configName = h2.m_configLocation,
                     m_deliveryTime = 0,
                     m_clrTemp = ""
                 });
