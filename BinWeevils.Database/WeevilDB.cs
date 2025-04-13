@@ -24,5 +24,7 @@ namespace BinWeevils.Database
         
         [Required] public int m_mulch { get; set; }
         [Required] public int m_dosh { get; set; }
+        
+        [Required] public virtual NestDB m_nest { get; set; }
     }
 }

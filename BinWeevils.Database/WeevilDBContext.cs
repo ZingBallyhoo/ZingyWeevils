@@ -8,6 +8,7 @@ namespace BinWeevils.Database
     {
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<ItemType> m_itemTypes { get; set; }
+        public DbSet<NestDB> m_nests { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
@@ -20,6 +21,12 @@ namespace BinWeevils.Database
             modelBuilder.Entity<WeevilDB>(b =>
             {
                 b.ToTable("Weevil");
+            });
+            
+            modelBuilder.Entity<NestRoomDB>(b =>
+            {
+                // (constraint)
+                b.HasAlternateKey(p => new { p.m_nestID, p.m_type });
             });
         }
         
@@ -35,5 +42,79 @@ namespace BinWeevils.Database
             configurationBuilder.Properties<ItemShopType>()
                 .HaveConversion<string>();
         }
+        
+        public async Task<WeevilDB> CreateWeevil(WeevilCreateParams createParams)
+        {
+            var now = DateTime.Now;;
+            
+            var dbWeevil = new WeevilDB
+            {
+                m_name = createParams.m_name,
+                m_createdAt = now,
+                m_lastLogin = now,
+                m_weevilDef = createParams.m_weevilDef,
+                m_food = 75,
+                m_fitness = 50,
+                m_happiness = 75,
+                m_xp = 0,
+                m_lastAcknowledgedLevel = 1,
+                m_mulch = 2000,
+                m_dosh = 0
+            };
+            
+            NestDB nest;
+            if (createParams.m_nestDef != null)
+            {
+                nest = await CreateNest(createParams.m_nestDef);
+            } else
+            {
+                nest = NestDB.Empty();
+            }
+            dbWeevil.m_nest = nest;
+            
+            await m_weevilDBs.AddAsync(dbWeevil);
+            await SaveChangesAsync();
+            
+            /*dbWeevil.m_nest.m_items.Add(new NestItemDB
+            {
+                m_itemType = await m_itemTypes.SingleAsync(x => x.m_name == "o_egg"),
+                m_nest = nest
+            });
+            dbWeevil.m_nest.m_items.Add(new NestItemDB
+            {
+                m_itemType = await m_itemTypes.SingleAsync(x => x.m_name == "f_shelf1"),
+                m_nest = nest
+            });
+            await SaveChangesAsync();*/
+            
+            return dbWeevil;
+        }
+        
+        private async Task<NestDB> CreateNest(string nestDef)
+        {
+            throw new NotImplementedException();
+        }
+        
+        /*public async Task<bool> TakeMulch(IQueryable<WeevilDB> weevil, int amount)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            }
+            
+            var rowsUpdated = await weevil
+                .Where(x => x.m_mulch >= amount)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - amount));
+            return rowsUpdated == 1;
+        }*/
+    }
+    
+    public class WeevilCreateParams
+    {
+        public required string m_name;
+        public required ulong m_weevilDef;
+        
+        public string? m_nestDef;
     }
 }

@@ -12,4 +12,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\BinWeevils.Protocol\BinWeevils.Protocol.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -61,22 +61,16 @@ namespace BinWeevils.GameServer
                 
                 weevilDef = def.AsString();
             }
-                
-            var now = DateTime.UtcNow;
-            var dbWeevil = new WeevilDB
+            
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            
+            var dbWeevil = await context.CreateWeevil(new WeevilCreateParams
             {
                 m_name = name,
-                m_createdAt = now,
-                m_lastLogin = now,
-                m_weevilDef = ulong.Parse(weevilDef),
-                m_food = 75,
-                m_fitness = 50,
-                m_happiness = 75,
-                m_xp = 0,
-                m_lastAcknowledgedLevel = 1,
-                m_mulch = 2000,
-                m_dosh = 0
-            };
+                m_weevilDef = ulong.Parse(weevilDef)
+            });
+            
             var result = await identityManager.CreateAsync(new WeevilAccount
             {
                 UserName = name,
@@ -87,6 +81,8 @@ namespace BinWeevils.GameServer
             
             account = await identityManager.FindByNameAsync(name);
             if (account == null) throw new NullReferenceException(nameof(account));
+            
+            await transaction.CommitAsync();
             return account.m_weevilIdx;
         }
         
