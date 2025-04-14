@@ -170,9 +170,10 @@ namespace BinWeevils.Server.Controllers
                 {
                     m_databaseID = h2.m_id,
                     m_category = (int)h2.m_category,
+                    m_powerConsumption = 0, // todo
                     m_configName = h2.m_configLocation,
-                    m_deliveryTime = 0,
-                    m_clrTemp = ""
+                    m_clrTemp = "", // todo
+                    m_deliveryTime = 0, // todo
                 });
             }
             
@@ -185,29 +186,58 @@ namespace BinWeevils.Server.Controllers
         {
             var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Include(x => x.m_nest.m_rooms)
-                .Include(x => x.m_nest.m_items.Where(item => item.m_placedItem != null))
-                    .ThenInclude(item => item.m_placedItem)
-                .Select(x => new
+                .Select(weev => new
                 {
-                    x.m_nest,
-                    x.m_idx,
+                    weev.m_idx,
+                    m_nestID = weev.m_nest.m_id,
+                    m_rooms = weev.m_nest.m_rooms.Select(y => new
+                    {
+                        y.m_type,
+                        y.m_id,
+                        y.m_color
+                    }),
+                    m_items = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(y => new {
+                        y.m_id,
+                        y.m_itemType.m_configLocation,
+                        y.m_itemType.m_category,
+                        y.m_placedItem!.m_roomID,
+                        y.m_placedItem!.m_currentPos,
+                        m_placedOnFurnitureID = y.m_placedItem!.m_placedOnFurnitureID ?? 0,
+                        y.m_placedItem!.m_spotOnFurniture,
+                    })
                 })
+                .AsSplitQuery()
                 .SingleAsync();
             
             var nestConfig = new NestConfig
             {
-                m_id = dto.m_nest.m_id,
+                m_id = dto.m_nestID,
                 m_idx = dto.m_idx,
-                m_fuel = 46807
+                m_fuel = 46807 // todo
             };
-            foreach (var room in dto.m_nest.m_rooms)
+            foreach (var room in dto.m_rooms)
             {
                 nestConfig.m_locs.Add(new NestConfig.Loc
                 {
                     m_id = (uint)room.m_type,
                     m_instanceID = room.m_id,
                     m_colour = room.m_color
+                });
+            }
+
+            foreach (var item in dto.m_items)
+            {
+                nestConfig.m_items.Add(new NestItem
+                {
+                    m_databaseID = item.m_id,
+                    m_category = (int)item.m_category,
+                    m_powerConsumption = 0, // todo
+                    m_configName = item.m_configLocation,
+                    m_clrTemp = "0|0|0", // todo
+                    m_locID = item!.m_roomID,
+                    m_currentPos = item.m_currentPos,
+                    m_placedOnFurnitureID = item.m_placedOnFurnitureID,
+                    m_spot = item.m_spotOnFurniture,
                 });
             }
             

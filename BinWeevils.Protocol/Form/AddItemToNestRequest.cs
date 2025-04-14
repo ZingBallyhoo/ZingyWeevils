@@ -11,8 +11,8 @@ namespace BinWeevils.Protocol.Form
         [FormUrlEncodedPropertyName("itemID")] public int m_itemID { get; set; }
         [FormUrlEncodedPropertyName("itemType")] public string m_itemType { get; set; }
         
-        [FormUrlEncodedPropertyName("currentframe")] public int m_currentPos { get; set; }
+        [FormUrlEncodedPropertyName("currentframe")] public uint m_currentPos { get; set; }
         [FormUrlEncodedPropertyName("fID")] public uint m_furnitureID { get; set; }
-        [FormUrlEncodedPropertyName("spot")] public int m_spot { get; set; }
+        [FormUrlEncodedPropertyName("spot")] public uint m_spot { get; set; }
     }
 }
