@@ -12,7 +12,6 @@ namespace BinWeevils.Database
         [ConcurrencyCheck] public DateTime m_lastUpdated { get; set; }
         
         public virtual ICollection<NestRoomDB> m_rooms { get; set; }
-        
         public virtual ICollection<NestItemDB> m_items { get; set; }
         
         public static NestDB Empty()

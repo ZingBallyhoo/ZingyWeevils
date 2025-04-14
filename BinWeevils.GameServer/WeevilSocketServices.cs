@@ -15,7 +15,7 @@ namespace BinWeevils.GameServer
             m_rootProvider = rootProvider;
         }
         
-        public async Task<int> CreateTempAccount(string name)
+        public async Task<uint> CreateTempAccount(string name)
         {
             await using var scope = m_rootProvider.CreateAsyncScope();
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
@@ -86,7 +86,7 @@ namespace BinWeevils.GameServer
             return account.m_weevilIdx;
         }
         
-        public async Task<LoginDto> GetLoginData(int weevilIdx)
+        public async Task<LoginDto> GetLoginData(uint weevilIdx)
         {
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();

@@ -249,6 +249,10 @@ namespace BinWeevils.Server.Controllers
         {
             // no concurrency check for placing but doesn't actually matter...
             
+            if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to remove an item from someone else's nest");
+            }
             if (request.m_itemID == request.m_furnitureID)
             {
                 throw new InvalidDataException("could break our query");
@@ -305,6 +309,31 @@ namespace BinWeevils.Server.Controllers
             };
             dto.m_nest.m_lastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
+        }
+        
+        [StructuredFormPost("php/removeItemFromNest.php")]
+        public async Task RemoveItemFromNest([FromBody] RemoveItemFromNestRequest request)
+        {
+            if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to remove an item from someone else's nest");
+            }
+            
+            var actualNestID = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => x.m_nest.m_id)
+                .SingleAsync();
+            if (actualNestID != request.m_nestID)
+            {
+                throw new Exception("sent wrong nest id");
+            }
+            
+            var rowsUpdated = await m_dbContext.m_nestPlacedItems
+                .Where(x => x.m_id == request.m_itemID)
+                .Where(x => x.m_room.m_nestID == request.m_nestID)
+                .ExecuteDeleteAsync();
+            
+            if (rowsUpdated != 1) throw new Exception("failed to remove item from nest");
         }
     }
 }

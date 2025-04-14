@@ -9,6 +9,7 @@ namespace BinWeevils.Database
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<NestDB> m_nests { get; set; }
+        public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
@@ -38,6 +39,8 @@ namespace BinWeevils.Database
             
             modelBuilder.Entity<NestPlacedItemDB>(b =>
             {
+                b.ToTable("NestPlacedItemDB");
+                
                 // (constraint)
                 // this constraint does two things
                 // 1 - prevent placing multiple ornaments in the same spot
@@ -45,16 +48,10 @@ namespace BinWeevils.Database
                 // validating more than that is hard because it requires full collision checks
                 b.HasAlternateKey(p => new { p.m_roomID, p.m_posIdentity, p.m_spotOnFurniture, p.m_posSnimationFrame });
                 
-                // todo: not sure which is right yet.
-                //b.HasMany(x => x.m_ornaments)
-                // .WithOne(x => x.m_placedOnFurniture)
-                // .OnDelete(DeleteBehavior.Cascade)
-                // .IsRequired(false);
-                
-                //b.HasOne(x => x.m_placedOnFurniture)
-                // .WithMany(x => x.m_ornaments)
-                // .IsRequired(false);
-                // .OnDelete(DeleteBehavior.Cascade);*/
+                b.HasMany(x => x.m_ornaments)
+                 .WithOne(x => x.m_placedOnFurniture)
+                 .OnDelete(DeleteBehavior.Cascade)
+                 .IsRequired(false);
             });
         }
         

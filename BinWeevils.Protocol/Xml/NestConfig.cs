@@ -6,7 +6,7 @@ namespace BinWeevils.Protocol.Xml
     public partial class NestConfig
     {
         [XmlField("id")] public uint m_id;
-        [XmlField("idx")] public int m_idx;
+        [XmlField("idx")] public uint m_idx;
         [XmlField("lastUpdate")] public string m_lastUpdate;
         [XmlField("score")] public uint m_score;
         [XmlField("gardenCanSubmit")] public bool m_gardenCanSubmit;

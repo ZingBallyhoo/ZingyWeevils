@@ -6,7 +6,7 @@ namespace BinWeevils.Database
 {
     public class WeevilAccount : IdentityUser
     {
-        [Required] public int m_weevilIdx { get; set; }
+        [Required] public uint m_weevilIdx { get; set; }
         [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }
 }

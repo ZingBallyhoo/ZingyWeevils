@@ -7,7 +7,7 @@ namespace BinWeevils.Database
         // todo: idx exposes implementation details of the original server...
         // canBuyBinPet = `myLevel >= 8 || myUserIDX <= 1860458`
         
-        [Key] public int m_idx { get; set; }
+        [Key] public uint m_idx { get; set; }
         [Required] public string m_name { get; set; }
         [Required] public DateTime m_createdAt;
         [Required] public DateTime m_lastLogin;
