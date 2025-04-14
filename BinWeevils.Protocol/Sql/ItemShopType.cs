@@ -5,12 +5,12 @@ namespace BinWeevils.Protocol.Sql
     public enum ItemShopType
     {
         [DataMember(Name = "")] None,
-        [DataMember(Name = "nestco")] Nestco,
-        [DataMember(Name = "tycoon")] Tycoon,
+        [DataMember(Name = "nestco")] nestco,
+        [DataMember(Name = "tycoon")] tycoon,
         [DataMember(Name = "garden")] Garden,
-        [DataMember(Name = "nightClub")] NightClub,
+        [DataMember(Name = "nightClub")] nightClub,
         [DataMember(Name = "binPetShop")] BinPetShop,
-        [DataMember(Name = "photoStudio")] PhotoStudio,
+        [DataMember(Name = "photoStudio")] photoStudio,
         [DataMember(Name = "popUpShop")] PopUpShop,
     }
 }
