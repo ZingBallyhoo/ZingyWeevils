@@ -73,7 +73,7 @@ namespace BinWeevils.Database
         [Key] public uint m_id { get; set; }
         
         public uint m_roomID { get; set; }
-        public uint m_currentPos { get; set; }
+        public uint m_posSnimationFrame { get; set; }
 
         public uint? m_placedOnFurnitureID { get; set; }
         public uint m_placedOnFurnitureIDShadow { get; set; }

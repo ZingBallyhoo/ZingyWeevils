@@ -201,7 +201,7 @@ namespace BinWeevils.Server.Controllers
                         y.m_itemType.m_configLocation,
                         y.m_itemType.m_category,
                         y.m_placedItem!.m_roomID,
-                        y.m_placedItem!.m_currentPos,
+                        y.m_placedItem!.m_posSnimationFrame,
                         m_placedOnFurnitureID = y.m_placedItem!.m_placedOnFurnitureID ?? 0,
                         y.m_placedItem!.m_spotOnFurniture,
                     })
@@ -235,7 +235,7 @@ namespace BinWeevils.Server.Controllers
                     m_configName = item.m_configLocation,
                     m_clrTemp = "0|0|0", // todo
                     m_locID = item!.m_roomID,
-                    m_currentPos = item.m_currentPos,
+                    m_currentPos = item.m_posSnimationFrame,
                     m_placedOnFurnitureID = item.m_placedOnFurnitureID,
                     m_spot = item.m_spotOnFurniture,
                 });
@@ -278,16 +278,18 @@ namespace BinWeevils.Server.Controllers
                 request.m_spot = 0;
             } else
             {
-                request.m_currentPos = 0;
+                if (request.m_itemType != "o") throw new InvalidDataException();
+                request.m_posAnimationFrame = 0;
                 placedOnFurnitureID = request.m_furnitureID;
             }
             
             dto.m_item.m_placedItem = new NestPlacedItemDB
             {
                 m_roomID = request.m_locationID,
-                m_currentPos = request.m_currentPos,
+                m_posSnimationFrame = request.m_posAnimationFrame,
                 m_placedOnFurnitureID = placedOnFurnitureID,
-                m_placedOnFurnitureIDShadow = placedOnFurnitureID ?? 0,
+                // if we aren't placed on furniture, "turn off" the constraint
+                m_placedOnFurnitureIDShadow = placedOnFurnitureID ?? request.m_itemID,
                 m_spotOnFurniture = request.m_spot
             };
             await m_dbContext.SaveChangesAsync();
