@@ -95,9 +95,9 @@ namespace BinWeevils.Server.Controllers
         {
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Where(x => x.m_food <= request.m_food)
+                .Where(x => x.m_food >= request.m_food) // can only decrease
                 .Where(x => Math.Abs(x.m_fitness - request.m_fitness) <= 20)
-                .Where(x => Math.Abs(x.m_happiness - request.m_happiness) <= 5)
+                .Where(x => Math.Abs(x.m_happiness - request.m_happiness) <= 10)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_food, Math.Min(request.m_food, (byte)100))
                     .SetProperty(x => x.m_fitness, Math.Min(request.m_fitness, (byte)100))
