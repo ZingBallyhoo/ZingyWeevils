@@ -454,17 +454,19 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/removeItemFromNest.php")]
         public async Task RemoveItemFromNest([FromBody] RemoveItemFromNestRequest request)
         {
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
             {
                 throw new Exception("trying to remove an item from someone else's nest");
             }
             
             // todo: use a claim for nest too?
-            var actualNestID = await m_dbContext.m_weevilDBs
+            var nest = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Select(x => x.m_nest.m_id)
+                .Select(x => x.m_nest)
                 .SingleAsync();
-            if (actualNestID != request.m_nestID)
+            if (nest.m_id != request.m_nestID)
             {
                 throw new Exception("sent wrong nest id");
             }
@@ -475,6 +477,11 @@ namespace BinWeevils.Server.Controllers
                 .ExecuteDeleteAsync();
             
             if (rowsUpdated != 1) throw new Exception("failed to remove item from nest");
+            
+            nest.m_lastUpdated = DateTime.Now;
+            await m_dbContext.SaveChangesAsync();
+            
+            await transaction.CommitAsync();
         }
     }
 }
