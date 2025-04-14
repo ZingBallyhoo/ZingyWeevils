@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
+using BinWeevils.Protocol.Xml;
 
 namespace BinWeevils.Database
 {
@@ -50,7 +51,7 @@ namespace BinWeevils.Database
     {
         [Key] public uint m_id { get; set; }
         [Required] public ENestRoom m_type { get; set; } // maps to id in xml...
-        [Required] public string m_color { get; set; } = "0|0|0";
+        [Required] public NestRoomColor m_color { get; set; }
         
         public uint m_nestID { get; set; }
         [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }

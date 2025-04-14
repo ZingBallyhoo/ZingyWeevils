@@ -233,7 +233,7 @@ namespace BinWeevils.Server.Controllers
                 {
                     m_id = (uint)room.m_type,
                     m_instanceID = room.m_id,
-                    m_colour = room.m_color
+                    m_color = room.m_color
                 });
             }
 
@@ -526,6 +526,29 @@ namespace BinWeevils.Server.Controllers
             nest.m_lastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
             
+            await transaction.CommitAsync();
+        }
+        
+        [StructuredFormPost("php/setLocColour.php")]
+        public async Task SetLocColor([FromBody] SetLocColorRequest request)
+        {
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+
+            var nest = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(weev => weev.m_nest)
+                .Where(nest => nest.m_id == request.m_nestID)
+                .Where(nest => nest.m_rooms.Any(room => room.m_id == request.m_locID))
+                .SingleAsync();
+            
+            var parsedCol = NestRoomColor.Parse(request.m_col, null);
+            await m_dbContext.m_nestRooms
+                .Where(x => x.m_id == request.m_locID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_color, parsedCol));
+            
+            nest.m_lastUpdated = DateTime.Now;
+            await m_dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
         }
     }

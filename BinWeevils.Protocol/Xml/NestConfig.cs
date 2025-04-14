@@ -22,7 +22,7 @@ namespace BinWeevils.Protocol.Xml
         {
             [XmlField("id")] public uint m_id;
             [XmlField("instanceID")] public uint m_instanceID;
-            [XmlField("colour")] public string m_colour;
+            [XmlField("colour")] public NestRoomColor m_color;
         }
     }
 }

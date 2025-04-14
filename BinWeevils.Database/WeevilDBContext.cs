@@ -9,6 +9,7 @@ namespace BinWeevils.Database
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<NestDB> m_nests { get; set; }
+        public DbSet<NestRoomDB> m_nestRooms { get; set; }
         public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
@@ -26,8 +27,12 @@ namespace BinWeevils.Database
             
             modelBuilder.Entity<NestRoomDB>(b =>
             {
+                b.ToTable("NestRoomDB");
+
                 // (constraint)
                 b.HasAlternateKey(p => new { p.m_nestID, p.m_type });
+                
+                b.ComplexProperty(x => x.m_color);
             });
             
             modelBuilder.Entity<NestItemDB>(b =>
