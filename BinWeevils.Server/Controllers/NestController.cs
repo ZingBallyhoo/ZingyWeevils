@@ -287,6 +287,7 @@ namespace BinWeevils.Server.Controllers
                 m_roomID = request.m_locationID,
                 m_currentPos = request.m_currentPos,
                 m_placedOnFurnitureID = placedOnFurnitureID,
+                m_placedOnFurnitureIDShadow = placedOnFurnitureID ?? 0,
                 m_spotOnFurniture = request.m_spot
             };
             await m_dbContext.SaveChangesAsync();

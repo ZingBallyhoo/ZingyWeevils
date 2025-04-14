@@ -76,6 +76,7 @@ namespace BinWeevils.Database
         public uint m_currentPos { get; set; }
 
         public uint? m_placedOnFurnitureID { get; set; }
+        public uint m_placedOnFurnitureIDShadow { get; set; }
         public uint m_spotOnFurniture { get; set; }
         
         [Required, ForeignKey(nameof(m_roomID))] public virtual NestRoomDB m_room { get; set; }

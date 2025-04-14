@@ -39,10 +39,9 @@ namespace BinWeevils.Database
             modelBuilder.Entity<NestPlacedItemDB>(b =>
             {
                 // (constraint)
-                // todo: USING THIS -> EFCORE ADDS NOT-NULL CONSTRAINT. very rude
-                //b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, p.m_placedOnFurnitureID, p.m_spotOnFurniture });
-                
-                // todo: need to enforce pos is 0 if placed on furniture?
+                // todo: we have to use a "shadow" column because using the foreign key in an alt-key causes
+                // ef core to promote it to non-null...
+                b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, p.m_placedOnFurnitureIDShadow, p.m_spotOnFurniture });
                 
                 // todo: not sure which is right yet.
                 //b.HasMany(x => x.m_ornaments)
