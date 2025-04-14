@@ -6,9 +6,9 @@ namespace BinWeevils.Protocol.Form
     {
         [FormUrlEncodedPropertyName("userID")] public string m_userName { get; set; }
         
-        [FormUrlEncodedPropertyName("nestID")] public int m_nestID { get; set; }
-        [FormUrlEncodedPropertyName("locationID")] public int m_locationID { get; set; }
-        [FormUrlEncodedPropertyName("itemID")] public int m_itemID { get; set; }
+        [FormUrlEncodedPropertyName("nestID")] public uint m_nestID { get; set; }
+        [FormUrlEncodedPropertyName("locationID")] public uint m_locationID { get; set; }
+        [FormUrlEncodedPropertyName("itemID")] public uint m_itemID { get; set; }
         [FormUrlEncodedPropertyName("itemType")] public string m_itemType { get; set; }
         
         [FormUrlEncodedPropertyName("currentframe")] public uint m_currentPos { get; set; }

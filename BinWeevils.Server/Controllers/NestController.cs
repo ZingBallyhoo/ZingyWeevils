@@ -151,7 +151,7 @@ namespace BinWeevils.Server.Controllers
                 return new StoredItems();
             }
             
-            var h = await m_dbContext.m_weevilDBs
+            var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name ==  ControllerContext.HttpContext.User.Identity!.Name)
                 .SelectMany(x => x.m_nest.m_items)
                 .Where(x => x.m_placedItem == null)
@@ -164,14 +164,14 @@ namespace BinWeevils.Server.Controllers
                 .ToArrayAsync();
             
             var storedItems = new StoredItems();
-            foreach (var h2 in h)
+            foreach (var item in dto)
             {
                 storedItems.m_items.Add(new NestInventoryItem
                 {
-                    m_databaseID = h2.m_id,
-                    m_category = (int)h2.m_category,
+                    m_databaseID = item.m_id,
+                    m_category = (int)item.m_category,
                     m_powerConsumption = 0, // todo
-                    m_configName = h2.m_configLocation,
+                    m_configName = item.m_configLocation,
                     m_clrTemp = "", // todo
                     m_deliveryTime = 0, // todo
                 });
@@ -253,42 +253,40 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new InvalidDataException("could break our query");
             }
-
-            var nest = await m_dbContext.m_weevilDBs
+            
+            var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_nest.m_id == request.m_nestID) // dont lie :(
-                .Include(x => x.m_nest)
-                    .ThenInclude(x => x.m_rooms.Where(room => room.m_id == request.m_locationID))
-                .Include(x => x.m_nest)
-                    .ThenInclude(x => x.m_items.Where(item => 
-                        (item.m_id == request.m_itemID && item.m_placedItem == null) ||
-                        (item.m_id == request.m_furnitureID && item.m_placedItem != null)
-                    ))
-                    .ThenInclude(x => x.m_placedItem)
-                .Select(x => x.m_nest)
+                .Where(x => x.m_nest.m_rooms.Any(room => room.m_id == request.m_locationID))
+                .Where(x => 
+                    request.m_furnitureID == 0 || 
+                    x.m_nest.m_items.Any(item => 
+                        item.m_id == request.m_furnitureID && 
+                        item.m_placedItem != null && 
+                        item.m_placedItem.m_roomID == request.m_locationID))
+                .Select(x => new
+                {
+                    // todo: update nest modified time
+                    m_item = x.m_nest.m_items.Single(item => item.m_id == request.m_itemID && item.m_placedItem == null)
+                })
+                .AsSplitQuery()
                 .SingleAsync();
-            var room = nest.m_rooms.Single();
-            var item = nest.m_items.Single(x => x.m_id == request.m_itemID);
             
-            if (room.m_nest.m_id != request.m_nestID) throw new Exception();
-            if (room.m_id != request.m_locationID) throw new Exception();
-            
-            // todo: validate before normalizing
-            NestPlacedItemDB? placedOnFurniture = null;
+            uint? placedOnFurnitureID = null;
             if (request.m_furnitureID == 0)
             {
                 request.m_spot = 0;
             } else
             {
                 request.m_currentPos = 0;
-                placedOnFurniture = nest.m_items.Single(x => x.m_id == request.m_furnitureID).m_placedItem;
+                placedOnFurnitureID = request.m_furnitureID;
             }
             
-            item.m_placedItem = new NestPlacedItemDB
+            dto.m_item.m_placedItem = new NestPlacedItemDB
             {
-                m_room = room,
+                m_roomID = request.m_locationID,
                 m_currentPos = request.m_currentPos,
-                m_placedOnFurniture = placedOnFurniture,
+                m_placedOnFurnitureID = placedOnFurnitureID,
                 m_spotOnFurniture = request.m_spot
             };
             await m_dbContext.SaveChangesAsync();
