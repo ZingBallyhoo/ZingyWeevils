@@ -3,6 +3,7 @@ using BinWeevils.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Form.Nest;
+using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly WeevilDBContext m_dbContext;
         private readonly ItemConfigRepository m_configRepo;
+        private readonly NestLocationDefinitions m_locations;
         
-        public NestController(WeevilDBContext dbContext, ItemConfigRepository configRepo)
+        public NestController(WeevilDBContext dbContext, ItemConfigRepository configRepo, NestLocationDefinitions locations)
         {
             m_dbContext = dbContext;
             m_configRepo = configRepo;
+            m_locations = locations;
         }
         
         [HttpGet("nest/get-weevil-stats")]
@@ -348,6 +351,13 @@ namespace BinWeevils.Server.Controllers
             };
             await NormalizeItemPlacement(validateParams); 
             
+            var locDef = m_locations.m_locations.Single(x => x.m_id == (int)dto.m_roomType);
+            var locCategory = (ItemCategory)locDef.m_category;
+            if (dto.m_itemData.m_category != locCategory)
+            {
+                throw new InvalidDataException($"trying to place {dto.m_itemData.m_configLocation} in wrong room type. {locCategory} vs {dto.m_itemData.m_category}");
+            }
+            
             dto.m_itemData.m_item.m_placedItem = new NestPlacedItemDB
             {
                 m_roomID = request.m_locationID,
@@ -383,7 +393,7 @@ namespace BinWeevils.Server.Controllers
             if (itemConfig.m_positions.All(x => x.m_frame != para.m_posAnimationFrame) && 
                 !(para.m_posAnimationFrame == 0 && itemConfig.m_positions.Count == 0))
             {
-                throw new InvalidDataException("requesting a frame that doesn't exist");
+                throw new InvalidDataException($"requesting a frame of {para.m_configLocation} that doesn't exist ({para.m_posAnimationFrame})");
             }
             
             // todo: validate loc category
@@ -392,7 +402,7 @@ namespace BinWeevils.Server.Controllers
             if (isActuallyOrnament != (para.m_placedOnFurnitureID != 0) ||
                 isActuallyOrnament != (para.m_itemType == "o"))
             {
-                throw new InvalidDataException("lying about ornament");
+                throw new InvalidDataException($"lying about ornament status of {para.m_configLocation}");
             }
             
             if (para.m_placedOnFurnitureID == 0)
@@ -402,17 +412,17 @@ namespace BinWeevils.Server.Controllers
             {
                 if (para.m_placedOnConfigLocation == null)
                 {
-                    throw new InvalidDataException("trying to place on invalid furniture");
+                    throw new InvalidDataException($"trying to place {para.m_configLocation} on invalid furniture");
                 }
                 
                 var placedOnItemConfig = await m_configRepo.GetConfig(para.m_placedOnConfigLocation);
                 if (para.m_spot >= placedOnItemConfig.m_numSpots)
                 {
-                    throw new InvalidDataException($"trying to place on invalid spot. {para.m_spot} vs {placedOnItemConfig.m_numSpots}");
+                    throw new InvalidDataException($"trying to place {para.m_configLocation} on invalid spot of {para.m_placedOnConfigLocation}. {para.m_spot} vs {placedOnItemConfig.m_numSpots}");
                 }
                 if (placedOnItemConfig.m_type != "furniture")
                 {
-                    throw new InvalidDataException("trying to place on non-furniture item");
+                    throw new InvalidDataException($"trying to place {para.m_configLocation} on non-furniture item {para.m_placedOnConfigLocation}");
                 }
                 
                 para.m_posAnimationFrame = 0;
@@ -431,7 +441,7 @@ namespace BinWeevils.Server.Controllers
                 .AnyAsync(item => item.m_id == request.m_itemID && item.m_placedItem != null);
             if (!validCheck)
             {
-                throw new Exception();
+                throw new Exception("invalid update item request");
             }
             
             var dto = await m_dbContext.m_nestPlacedItems

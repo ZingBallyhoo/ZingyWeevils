@@ -41,6 +41,8 @@ internal static class Program
         
         builder.Services.AddSingleton<LocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));
+        builder.Services.AddSingleton<NestLocationDefinitions>(p => 
+            XmlReadBuffer.ReadStatic<NestLocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["NestLocationDefinitions"]!)));
         builder.Services.AddSingleton<ItemConfigRepository>();
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
