@@ -39,9 +39,11 @@ namespace BinWeevils.Database
             modelBuilder.Entity<NestPlacedItemDB>(b =>
             {
                 // (constraint)
-                // todo: we have to use a "shadow" column because using the foreign key in an alt-key causes
-                // ef core to promote it to non-null...
-                b.HasAlternateKey(p => new { p.m_roomID, p.m_placedOnFurnitureIDShadow, p.m_spotOnFurniture });
+                // this constraint does two things
+                // 1 - prevent placing multiple ornaments in the same spot
+                // 2 - prevent placing multiple frames of the same item
+                // validating more than that is hard because it requires full collision checks
+                b.HasAlternateKey(p => new { p.m_roomID, p.m_posIdentity, p.m_spotOnFurniture, p.m_posSnimationFrame });
                 
                 // todo: not sure which is right yet.
                 //b.HasMany(x => x.m_ornaments)

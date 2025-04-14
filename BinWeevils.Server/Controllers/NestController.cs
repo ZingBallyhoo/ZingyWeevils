@@ -266,11 +266,22 @@ namespace BinWeevils.Server.Controllers
                         item.m_placedItem.m_roomID == request.m_locationID))
                 .Select(x => new
                 {
-                    // todo: update nest modified time
-                    m_item = x.m_nest.m_items.Single(item => item.m_id == request.m_itemID && item.m_placedItem == null)
+                    x.m_nest,
+                    m_itemData = x.m_nest.m_items
+                        .Where(item => item.m_id == request.m_itemID && item.m_placedItem == null)
+                        .Select(item => new
+                        {
+                            m_item = item,
+                            item.m_itemType.m_itemTypeID
+                        })
+                        .Single()
                 })
                 .AsSplitQuery()
                 .SingleAsync();
+            
+            // todo: validate loc category
+            // todo: validate num spots
+            // todo: validate num frames
             
             uint? placedOnFurnitureID = null;
             if (request.m_furnitureID == 0)
@@ -283,15 +294,16 @@ namespace BinWeevils.Server.Controllers
                 placedOnFurnitureID = request.m_furnitureID;
             }
             
-            dto.m_item.m_placedItem = new NestPlacedItemDB
+            dto.m_itemData.m_item.m_placedItem = new NestPlacedItemDB
             {
                 m_roomID = request.m_locationID,
                 m_posSnimationFrame = request.m_posAnimationFrame,
                 m_placedOnFurnitureID = placedOnFurnitureID,
                 // if we aren't placed on furniture, "turn off" the constraint
-                m_placedOnFurnitureIDShadow = placedOnFurnitureID ?? request.m_itemID,
+                m_posIdentity = placedOnFurnitureID ?? dto.m_itemData.m_itemTypeID,
                 m_spotOnFurniture = request.m_spot
             };
+            dto.m_nest.m_lastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
         }
     }

@@ -6,7 +6,7 @@ namespace BinWeevils.Protocol.Sql
     [Table("itemType")]
     public class ItemType
     {
-        [Key, Column("itemTypeID")] public int m_itemTypeID { get; set; }
+        [Key, Column("itemTypeID")] public uint m_itemTypeID { get; set; }
         [Column("category")] public ItemCategory m_category { get; set; }
         [Column("configLocation")] public string m_configLocation { get; set; }
         [Column("shopType")] public ItemShopType m_shopType { get; set; }
