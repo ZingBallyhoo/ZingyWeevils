@@ -12,7 +12,7 @@ namespace BinWeevils.Protocol.Form
         [FormUrlEncodedPropertyName("itemType")] public string m_itemType { get; set; }
         
         [FormUrlEncodedPropertyName("currentframe")] public int m_currentPos { get; set; }
-        [FormUrlEncodedPropertyName("fID")] public int m_furnitureID { get; set; }
+        [FormUrlEncodedPropertyName("fID")] public uint m_furnitureID { get; set; }
         [FormUrlEncodedPropertyName("spot")] public int m_spot { get; set; }
     }
 }

@@ -218,6 +218,11 @@ namespace BinWeevils.Server.Controllers
         public async Task AddItemToNest([FromBody] AddItemToNestRequest request)
         {
             // no concurrency check for placing but doesn't actually matter...
+            
+            if (request.m_itemID == request.m_furnitureID)
+            {
+                throw new InvalidDataException("could break our query");
+            }
 
             var nest = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
@@ -225,32 +230,35 @@ namespace BinWeevils.Server.Controllers
                 .Include(x => x.m_nest)
                     .ThenInclude(x => x.m_rooms.Where(room => room.m_id == request.m_locationID))
                 .Include(x => x.m_nest)
-                    .ThenInclude(x => x.m_items.Where(item => item.m_id == request.m_itemID && item.m_placedItem == null))
-                // todo: would be ideal...
-                //.Include(x => x.m_nest)
-                //    .ThenInclude(x => x.m_items.Where(item => item.m_id == request.m_itemID && item.m_placedItem != null))
+                    .ThenInclude(x => x.m_items.Where(item => 
+                        (item.m_id == request.m_itemID && item.m_placedItem == null) ||
+                        (item.m_id == request.m_furnitureID && item.m_placedItem != null)
+                    ))
+                    .ThenInclude(x => x.m_placedItem)
                 .Select(x => x.m_nest)
                 .SingleAsync();
             var room = nest.m_rooms.Single();
-            var item = nest.m_items.Single();
+            var item = nest.m_items.Single(x => x.m_id == request.m_itemID);
             
             if (room.m_nest.m_id != request.m_nestID) throw new Exception();
             if (room.m_id != request.m_locationID) throw new Exception();
             
             // todo: validate before normalizing
+            NestPlacedItemDB? placedOnFurniture = null;
             if (request.m_furnitureID == 0)
             {
                 request.m_spot = 0;
             } else
             {
                 request.m_currentPos = 0;
+                placedOnFurniture = nest.m_items.Single(x => x.m_id == request.m_furnitureID).m_placedItem;
             }
             
             item.m_placedItem = new NestPlacedItemDB
             {
                 m_room = room,
                 m_currentPos = request.m_currentPos,
-                //m_placedOnFurnitureID = request.m_furnitureID,
+                m_placedOnFurniture = placedOnFurniture,
                 m_spotOnFurniture = request.m_spot
             };
             await m_dbContext.SaveChangesAsync();

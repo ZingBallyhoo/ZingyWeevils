@@ -39,15 +39,21 @@ namespace BinWeevils.Database
             modelBuilder.Entity<NestPlacedItemDB>(b =>
             {
                 // (constraint)
-                // todo: need to enforce pos is 0 if placed on furniture?
-                b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, /*p.m_placedOnFurnitureID,*/ p.m_spotOnFurniture });
+                // todo: USING THIS -> EFCORE ADDS NOT-NULL CONSTRAINT. very rude
+                //b.HasAlternateKey(p => new { p.m_roomID, p.m_currentPos, p.m_placedOnFurnitureID, p.m_spotOnFurniture });
                 
+                // todo: need to enforce pos is 0 if placed on furniture?
+                
+                // todo: not sure which is right yet.
                 //b.HasMany(x => x.m_ornaments)
-                // .WithOne();
+                // .WithOne(x => x.m_placedOnFurniture)
+                // .OnDelete(DeleteBehavior.Cascade)
+                // .IsRequired(false);
                 
                 //b.HasOne(x => x.m_placedOnFurniture)
-                //  .WithMany()
-                //  .IsRequired(false);
+                // .WithMany(x => x.m_ornaments)
+                // .IsRequired(false);
+                // .OnDelete(DeleteBehavior.Cascade);*/
             });
         }
         

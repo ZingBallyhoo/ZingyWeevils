@@ -72,16 +72,16 @@ namespace BinWeevils.Database
     {
         [Key] public uint m_id { get; set; }
         
-        public int m_roomID { get; set; }
+        public uint m_roomID { get; set; }
         public int m_currentPos { get; set; }
 
-        public uint m_placedOnFurnitureID => 0;
+        public uint? m_placedOnFurnitureID { get; set; }
         public int m_spotOnFurniture { get; set; }
         
         [Required, ForeignKey(nameof(m_roomID))] public virtual NestRoomDB m_room { get; set; }
         [Required, ForeignKey(nameof(m_id))] public virtual NestItemDB m_item { get; set; }
         
-        //[ForeignKey(nameof(m_placedOnFurnitureID))] public virtual NestPlacedItemDB? m_placedOnFurniture { get; set; } // ornaments can get placed on furniture
+        public virtual NestPlacedItemDB? m_placedOnFurniture { get; set; } // ornaments can get placed on furniture
         
         public virtual ICollection<NestPlacedItemDB> m_ornaments { get; set; }
     }
