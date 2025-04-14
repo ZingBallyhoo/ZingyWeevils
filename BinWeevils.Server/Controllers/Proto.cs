@@ -149,12 +149,6 @@ namespace BinWeevils.Server.Controllers
             return "res=1&t=1597760479&x=y";
         }
         
-        [HttpPost("api/nest/get-nest-state")]
-        public string GetNestState()
-        {
-            return "responseCode=1&err=OK&xp=146138&score=8300&fuel=77051&lastUpdate=2020-08-18 04:02:42";
-        }
-        
         [HttpPost("api/php/hardestTrackUnlocked.php")]
         public string HardestUnlockedTrack()
         {

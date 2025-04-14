@@ -193,6 +193,8 @@ namespace BinWeevils.Server.Controllers
                 {
                     weev.m_idx,
                     m_nestID = weev.m_nest.m_id,
+                    m_lastUpdate = weev.m_nest.m_lastUpdated,
+                    m_weevilXp = weev.m_xp,
                     m_rooms = weev.m_nest.m_rooms.Select(y => new
                     {
                         y.m_type,
@@ -207,7 +209,8 @@ namespace BinWeevils.Server.Controllers
                         y.m_placedItem!.m_posAnimationFrame,
                         m_placedOnFurnitureID = y.m_placedItem!.m_placedOnFurnitureID ?? 0,
                         y.m_placedItem!.m_spotOnFurniture,
-                    })
+                    }),
+                    m_score = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
                 })
                 .AsSplitQuery()
                 .SingleAsync();
@@ -216,6 +219,9 @@ namespace BinWeevils.Server.Controllers
             {
                 m_id = dto.m_nestID,
                 m_idx = dto.m_idx,
+                m_lastUpdate = dto.m_lastUpdate.ToAs3Date(),
+                m_score = (uint)dto.m_score,
+                m_weevilXp = dto.m_weevilXp,
                 m_fuel = 46807 // todo
             };
             foreach (var room in dto.m_rooms)
@@ -245,6 +251,36 @@ namespace BinWeevils.Server.Controllers
             }
             
             return nestConfig;
+        }
+        
+        [StructuredFormPost("nest/get-nest-state")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetNestStateResponse> GetNestState([FromBody] GetNestStateRequest request)
+        {
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_userName)
+                .Select(weev => new
+                {
+                    weev.m_xp,
+                    weev.m_nest.m_lastUpdated,
+                    m_score = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
+                })
+                .SingleOrDefaultAsync();
+            
+            if (dto == null)
+            {
+                return new GetNestStateResponse();
+            }
+            
+            return new GetNestStateResponse
+            {
+                m_responseCode = 1,
+                m_error = "OK",
+                m_weevilXp = dto.m_xp,
+                m_score = dto.m_score,
+                m_fuel = 222, // todo
+                m_lastUpdate = dto.m_lastUpdated.ToAs3Date(),
+            };
         }
         
         [StructuredFormPost("php/addItemToNest.php")]
@@ -475,7 +511,6 @@ namespace BinWeevils.Server.Controllers
                 .Where(x => x.m_id == request.m_itemID)
                 .Where(x => x.m_room.m_nestID == request.m_nestID)
                 .ExecuteDeleteAsync();
-            
             if (rowsUpdated != 1) throw new Exception("failed to remove item from nest");
             
             nest.m_lastUpdated = DateTime.Now;

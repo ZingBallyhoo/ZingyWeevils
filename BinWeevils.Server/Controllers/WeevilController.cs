@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Database;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace BinWeevils.Server.Controllers
                 {
                     x.m_idx,
                     x.m_createdAt,
-                    m_lastSeen = x.m_lastLogin,
+                    x.m_lastLogin,
                     x.m_weevilDef,
                     x.m_lastAcknowledgedLevel
                 })
@@ -49,8 +50,8 @@ namespace BinWeevils.Server.Controllers
                 m_weevilDef = dto.m_weevilDef,
                 m_level = dto.m_lastAcknowledgedLevel,
                 m_tycoon = 1,
-                m_lastLog = dto.m_lastSeen.ToString("yyyy-MM-dd HH:mm:ss"),
-                m_dateJoined = dto.m_createdAt.ToString("yyyy-MM-dd HH:mm:ss")
+                m_lastLog = dto.m_lastLogin.ToAs3Date(),
+                m_dateJoined = dto.m_createdAt.ToAs3Date()
             };
         }
         

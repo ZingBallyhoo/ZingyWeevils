@@ -9,8 +9,8 @@ namespace BinWeevils.Database
         
         [Key] public uint m_idx { get; set; }
         [Required] public string m_name { get; set; }
-        [Required] public DateTime m_createdAt;
-        [Required] public DateTime m_lastLogin;
+        [Required] public DateTime m_createdAt { get; set; }
+        [Required] public DateTime m_lastLogin { get; set; }
         
         [Required] public ulong m_weevilDef { get; set; }
         [Required] public ushort m_introProgress { get; set; }
