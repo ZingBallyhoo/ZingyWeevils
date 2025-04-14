@@ -2,6 +2,7 @@ using System.Net.Mime;
 using BinWeevils.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
+using BinWeevils.Protocol.Form.Nest;
 using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace BinWeevils.Server.Controllers
     public class NestController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly ItemConfigRepository m_configRepo;
         
-        public NestController(WeevilDBContext dbContext)
+        public NestController(WeevilDBContext dbContext, ItemConfigRepository configRepo)
         {
             m_dbContext = dbContext;
+            m_configRepo = configRepo;
         }
         
         [HttpGet("nest/get-weevil-stats")]
@@ -201,7 +204,7 @@ namespace BinWeevils.Server.Controllers
                         y.m_itemType.m_configLocation,
                         y.m_itemType.m_category,
                         y.m_placedItem!.m_roomID,
-                        y.m_placedItem!.m_posSnimationFrame,
+                        y.m_placedItem!.m_posAnimationFrame,
                         m_placedOnFurnitureID = y.m_placedItem!.m_placedOnFurnitureID ?? 0,
                         y.m_placedItem!.m_spotOnFurniture,
                     })
@@ -235,7 +238,7 @@ namespace BinWeevils.Server.Controllers
                     m_configName = item.m_configLocation,
                     m_clrTemp = "0|0|0", // todo
                     m_locID = item!.m_roomID,
-                    m_currentPos = item.m_posSnimationFrame,
+                    m_currentPos = item.m_posAnimationFrame,
                     m_placedOnFurnitureID = item.m_placedOnFurnitureID,
                     m_spot = item.m_spotOnFurniture,
                 });
@@ -247,7 +250,7 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/addItemToNest.php")]
         public async Task AddItemToNest([FromBody] AddItemToNestRequest request)
         {
-            // no concurrency check for placing but doesn't actually matter...
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
             {
@@ -261,7 +264,7 @@ namespace BinWeevils.Server.Controllers
             var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_nest.m_id == request.m_nestID) // dont lie :(
-                .Where(x => x.m_nest.m_rooms.Any(room => room.m_id == request.m_locationID))
+                //.Where(x => x.m_nest.m_rooms.Any(room => room.m_id == request.m_locationID))
                 .Where(x => 
                     request.m_furnitureID == 0 || 
                     x.m_nest.m_items.Any(item => 
@@ -271,44 +274,181 @@ namespace BinWeevils.Server.Controllers
                 .Select(x => new
                 {
                     x.m_nest,
+                    m_placedOnItemData = x.m_nest.m_items
+                        .Where(item => item.m_id == request.m_furnitureID &&
+                                       item.m_placedItem != null &&
+                                       item.m_placedItem.m_roomID == request.m_locationID)
+                        .Select(item => new
+                        {
+                            item.m_itemType.m_configLocation
+                        })
+                        .SingleOrDefault(),
                     m_itemData = x.m_nest.m_items
                         .Where(item => item.m_id == request.m_itemID && item.m_placedItem == null)
                         .Select(item => new
                         {
                             m_item = item,
-                            item.m_itemType.m_itemTypeID
+                            item.m_itemType.m_itemTypeID,
+                            item.m_itemType.m_category,
+                            item.m_itemType.m_configLocation,
                         })
-                        .Single()
+                        .Single(),
+                    m_roomType = x.m_nest.m_rooms
+                        .Where(room => room.m_id == request.m_locationID)
+                        .Select(room => room.m_type).Single()
                 })
                 .AsSplitQuery()
                 .SingleAsync();
             
-            // todo: validate loc category
-            // todo: validate num spots
-            // todo: validate num frames
-            
-            uint? placedOnFurnitureID = null;
-            if (request.m_furnitureID == 0)
+            var validateParams = new NormalizeItemParams
             {
-                request.m_spot = 0;
-            } else
-            {
-                if (request.m_itemType != "o") throw new InvalidDataException();
-                request.m_posAnimationFrame = 0;
-                placedOnFurnitureID = request.m_furnitureID;
-            }
+                m_itemType = request.m_itemType,
+                m_posAnimationFrame = request.m_posAnimationFrame,
+                m_placedOnFurnitureID = request.m_furnitureID,
+                m_spot = request.m_spot,
+                
+                m_configLocation = dto.m_itemData.m_configLocation,
+                m_placedOnConfigLocation = dto.m_placedOnItemData?.m_configLocation
+            };
+            await NormalizeItemPlacement(validateParams); 
             
             dto.m_itemData.m_item.m_placedItem = new NestPlacedItemDB
             {
                 m_roomID = request.m_locationID,
-                m_posSnimationFrame = request.m_posAnimationFrame,
-                m_placedOnFurnitureID = placedOnFurnitureID,
+                m_posAnimationFrame = validateParams.m_posAnimationFrame,
+                m_placedOnFurnitureID = validateParams.m_placedOnFurnitureID != 0 ? 
+                    validateParams.m_placedOnFurnitureID : null,
                 // if we aren't placed on furniture, "turn off" the constraint
-                m_posIdentity = placedOnFurnitureID ?? dto.m_itemData.m_itemTypeID,
-                m_spotOnFurniture = request.m_spot
+                m_posIdentity = validateParams.m_placedOnFurnitureID != 0 ? 
+                    validateParams.m_placedOnFurnitureID : dto.m_itemData.m_itemTypeID,
+                m_spotOnFurniture = validateParams.m_spot
             };
             dto.m_nest.m_lastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
+            
+            await transaction.CommitAsync();
+        }
+        
+        private class NormalizeItemParams
+        {
+            public string m_itemType;
+            public byte m_posAnimationFrame;
+            public uint m_placedOnFurnitureID;
+            public byte m_spot;
+            
+            public string m_configLocation;
+            public string? m_placedOnConfigLocation;
+        }
+        
+        private async Task NormalizeItemPlacement(NormalizeItemParams para)
+        {
+            var itemConfig = await m_configRepo.GetConfig(para.m_configLocation);
+            
+            if (itemConfig.m_positions.All(x => x.m_frame != para.m_posAnimationFrame) && 
+                !(para.m_posAnimationFrame == 0 && itemConfig.m_positions.Count == 0))
+            {
+                throw new InvalidDataException("requesting a frame that doesn't exist");
+            }
+            
+            // todo: validate loc category
+            
+            var isActuallyOrnament = itemConfig.m_type == "ornament";
+            if (isActuallyOrnament != (para.m_placedOnFurnitureID != 0) ||
+                isActuallyOrnament != (para.m_itemType == "o"))
+            {
+                throw new InvalidDataException("lying about ornament");
+            }
+            
+            if (para.m_placedOnFurnitureID == 0)
+            {
+                para.m_spot = 0;
+            } else
+            {
+                if (para.m_placedOnConfigLocation == null)
+                {
+                    throw new InvalidDataException("trying to place on invalid furniture");
+                }
+                
+                var placedOnItemConfig = await m_configRepo.GetConfig(para.m_placedOnConfigLocation);
+                if (para.m_spot >= placedOnItemConfig.m_numSpots)
+                {
+                    throw new InvalidDataException($"trying to place on invalid spot. {para.m_spot} vs {placedOnItemConfig.m_numSpots}");
+                }
+                if (placedOnItemConfig.m_type != "furniture")
+                {
+                    throw new InvalidDataException("trying to place on non-furniture item");
+                }
+                
+                para.m_posAnimationFrame = 0;
+            }
+        }
+        
+        [StructuredFormPost("php/updateItemPosition.php")]
+        public async Task UpdateItemPosition([FromBody] UpdateNestItemPositionRequest request)
+        {
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var validCheck = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(weev => weev.m_nest.m_id == request.m_nestID)
+                .SelectMany(weev => weev.m_nest.m_items)
+                .AnyAsync(item => item.m_id == request.m_itemID && item.m_placedItem != null);
+            if (!validCheck)
+            {
+                throw new Exception();
+            }
+            
+            var dto = await m_dbContext.m_nestPlacedItems
+                .Where(x => x.m_id == request.m_itemID)
+                .Select(x => new
+                {
+                    x.m_room.m_nest,
+                    m_placedOnItemData = x.m_room.m_nest.m_items
+                        .Where(item => item.m_id == request.m_furnitureID &&
+                                       item.m_placedItem != null &&
+                                       item.m_placedItem.m_roomID == x.m_roomID)
+                        .Select(item => new
+                        {
+                            item.m_itemType.m_configLocation
+                        })
+                        .SingleOrDefault(),
+                    m_placedItem = x,
+                    m_itemData = new
+                    {
+                        x.m_item.m_itemType.m_itemTypeID,
+                        x.m_item.m_itemType.m_category,
+                        x.m_item.m_itemType.m_configLocation,
+                    }
+                })
+                .SingleAsync();
+                
+            var validateParams = new NormalizeItemParams
+            {
+                m_itemType = request.m_itemType,
+                m_posAnimationFrame = request.m_posAnimationFrame,
+                m_placedOnFurnitureID = request.m_furnitureID,
+                m_spot = request.m_spot,
+                
+                m_configLocation = dto.m_itemData.m_configLocation,
+                m_placedOnConfigLocation = dto.m_placedOnItemData?.m_configLocation
+            };
+            await NormalizeItemPlacement(validateParams); 
+            
+            await m_dbContext.m_nestPlacedItems
+                .Where(x => x.m_id == request.m_itemID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_posAnimationFrame, validateParams.m_posAnimationFrame)
+                    .SetProperty(x => x.m_placedOnFurnitureID, validateParams.m_placedOnFurnitureID != 0 ? 
+                         validateParams.m_placedOnFurnitureID : null)
+                    .SetProperty(x => x.m_posIdentity, validateParams.m_placedOnFurnitureID != 0 ? 
+                         validateParams.m_placedOnFurnitureID : dto.m_itemData.m_itemTypeID)
+                    .SetProperty(x => x.m_spotOnFurniture, validateParams.m_spot)
+                );
+            
+            dto.m_nest.m_lastUpdated = DateTime.Now;
+            await m_dbContext.SaveChangesAsync();
+            
+            await transaction.CommitAsync();
         }
         
         [StructuredFormPost("php/removeItemFromNest.php")]
@@ -319,6 +459,7 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("trying to remove an item from someone else's nest");
             }
             
+            // todo: use a claim for nest too?
             var actualNestID = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => x.m_nest.m_id)

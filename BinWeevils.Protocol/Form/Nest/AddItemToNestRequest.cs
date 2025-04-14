@@ -1,6 +1,6 @@
 using ByteDev.FormUrlEncoded;
 
-namespace BinWeevils.Protocol.Form
+namespace BinWeevils.Protocol.Form.Nest
 {
     public class AddItemToNestRequest
     {
@@ -11,8 +11,8 @@ namespace BinWeevils.Protocol.Form
         [FormUrlEncodedPropertyName("itemID")] public uint m_itemID { get; set; }
         [FormUrlEncodedPropertyName("itemType")] public string m_itemType { get; set; }
         
-        [FormUrlEncodedPropertyName("currentframe")] public uint m_posAnimationFrame { get; set; }
+        [FormUrlEncodedPropertyName("currentframe")] public byte m_posAnimationFrame { get; set; }
         [FormUrlEncodedPropertyName("fID")] public uint m_furnitureID { get; set; }
-        [FormUrlEncodedPropertyName("spot")] public uint m_spot { get; set; }
+        [FormUrlEncodedPropertyName("spot")] public byte m_spot { get; set; }
     }
 }

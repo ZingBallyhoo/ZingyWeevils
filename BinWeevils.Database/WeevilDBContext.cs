@@ -46,7 +46,7 @@ namespace BinWeevils.Database
                 // 1 - prevent placing multiple ornaments in the same spot
                 // 2 - prevent placing multiple frames of the same item
                 // validating more than that is hard because it requires full collision checks
-                b.HasAlternateKey(p => new { p.m_roomID, p.m_posIdentity, p.m_spotOnFurniture, p.m_posSnimationFrame });
+                b.HasAlternateKey(p => new { p.m_roomID, p.m_posIdentity, p.m_spotOnFurniture, p.m_posAnimationFrame });
                 
                 b.HasMany(x => x.m_ornaments)
                  .WithOne(x => x.m_placedOnFurniture)
