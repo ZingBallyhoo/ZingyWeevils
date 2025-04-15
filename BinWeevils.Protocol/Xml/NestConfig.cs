@@ -24,5 +24,16 @@ namespace BinWeevils.Protocol.Xml
             [XmlField("instanceID")] public uint m_instanceID;
             [XmlField("colour")] public NestRoomColor m_color;
         }
+        
+        [XmlCls("loc")]
+        public partial class BusinessLoc : Loc
+        {
+            [XmlField("name")] public string m_name;
+            [XmlField("busOpen")] public bool m_busOpen;
+            [XmlField("busType")] public uint m_busType;
+            [XmlField("signClr")] public uint m_signColour;
+            [XmlField("signTxtClr")] public uint m_signTextColour;
+            [XmlField("playList")] public string m_playList;
+        }
     }
 }

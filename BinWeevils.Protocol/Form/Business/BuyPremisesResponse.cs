@@ -1,6 +1,6 @@
 using ByteDev.FormUrlEncoded;
 
-namespace BinWeevils.Protocol.Form
+namespace BinWeevils.Protocol.Form.Business
 {
     public class BuyPremisesResponse
     {

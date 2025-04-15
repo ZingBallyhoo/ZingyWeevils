@@ -1,3 +1,4 @@
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace BinWeevils.Database
         public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestRoomDB> m_nestRooms { get; set; }
         public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
+        public DbSet<BusinessDB> m_businesses { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
@@ -33,6 +35,10 @@ namespace BinWeevils.Database
                 b.HasAlternateKey(p => new { p.m_nestID, p.m_type });
                 
                 b.ComplexProperty(x => x.m_color);
+                
+                b.HasOne(x => x.m_business)
+                    .WithOne(x => x.m_room)
+                    .IsRequired(false);
             });
             
             modelBuilder.Entity<NestItemDB>(b =>
@@ -57,6 +63,11 @@ namespace BinWeevils.Database
                  .WithOne(x => x.m_placedOnFurniture)
                  .OnDelete(DeleteBehavior.Cascade)
                  .IsRequired(false);
+            });
+            
+            modelBuilder.Entity<BusinessDB>(b =>
+            {
+                b.ToTable("BusinessDB");
             });
         }
         

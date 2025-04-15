@@ -202,7 +202,8 @@ namespace BinWeevils.Server.Controllers
                     {
                         y.m_type,
                         y.m_id,
-                        y.m_color
+                        y.m_color,
+                        y.m_business
                     }),
                     m_items = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(y => new {
                         y.m_id,
@@ -229,12 +230,28 @@ namespace BinWeevils.Server.Controllers
             };
             foreach (var room in dto.m_rooms)
             {
-                nestConfig.m_locs.Add(new NestConfig.Loc
+                NestConfig.Loc loc;
+                if (room.m_business != null)
                 {
-                    m_id = (uint)room.m_type,
-                    m_instanceID = room.m_id,
-                    m_color = room.m_color
-                });
+                    loc = new NestConfig.BusinessLoc
+                    {
+                        m_name = room.m_business.m_name,
+                        m_busOpen = room.m_business.m_open,
+                        m_busType = (uint)room.m_business.m_type,
+                        m_signColour = room.m_business.m_signColor,
+                        m_signTextColour = room.m_business.m_signTextColor, 
+                        m_playList = "" // todo
+                    };
+                } else
+                {
+                    loc = new NestConfig.Loc();
+                }
+                
+                loc.m_id = (uint)room.m_type;
+                loc.m_instanceID = room.m_id;
+                loc.m_color = room.m_color;
+                
+                nestConfig.m_locs.Add(loc);
             }
 
             foreach (var item in dto.m_items)

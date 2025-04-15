@@ -55,6 +55,8 @@ namespace BinWeevils.Database
         
         public uint m_nestID { get; set; }
         [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
+        
+        public virtual BusinessDB? m_business { get; set; }
     }
     
     public class NestItemDB
