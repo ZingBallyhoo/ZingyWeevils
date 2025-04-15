@@ -10,8 +10,22 @@ namespace BinWeevils.Database
     public class NestDB
     {
         [Key] public uint m_id { get; set; }
-        [ConcurrencyCheck] public DateTime m_lastUpdated { get; set; }
         
+        public DateTime m_lastUpdated { get; set; }
+        
+        private DateTime m_itemsLastUpdatedBacking;
+
+        [ConcurrencyCheck]
+        public DateTime m_itemsLastUpdated
+        {
+            get => m_itemsLastUpdatedBacking;
+            set
+            {
+                m_lastUpdated = value;
+                m_itemsLastUpdatedBacking = value;
+            }
+        }
+
         public virtual ICollection<NestRoomDB> m_rooms { get; set; } = [];
         public virtual ICollection<NestItemDB> m_items { get; set; } = [];
         
@@ -19,7 +33,7 @@ namespace BinWeevils.Database
         {
             return new NestDB
             {
-                m_lastUpdated = DateTime.Now,
+                m_itemsLastUpdated = DateTime.Now,
                 m_rooms = [
                     new NestRoomDB
                     {

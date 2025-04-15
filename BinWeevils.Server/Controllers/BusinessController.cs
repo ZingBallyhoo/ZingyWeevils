@@ -15,6 +15,17 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly WeevilDBContext m_dbContext;
         
+        private static readonly HashSet<uint> s_allowedColors = [
+            0x990000, 0x00AA00, 0x000099, 
+            0x997700, 0x880088, 0xAADFFF, 
+            0x0066FF, 0xFF9900, 0xCCCC00,
+            0x00EEEE, 0xCC00CC, 0xFFFFFF,
+            0xFFD5DD, 0xAAFF00, 0xFFCC00, 
+            0xEEEE00, 0xFF8484, 0x282828, 
+            0x999999, 0xFFFFB9, 0xEE0000, 
+            0x006600,
+        ];
+        
         public BusinessController(WeevilDBContext dbContext)
         {
             m_dbContext = dbContext;
@@ -130,6 +141,45 @@ namespace BinWeevils.Server.Controllers
             {
                 m_result = SubmitBusinessNameResponse.RESULT_SUCCESS
             };
+        }
+        
+        [StructuredFormPost("php/saveTycoonBusinessState.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task SaveBusinessState([FromBody] SaveBusinessStateRequest request)
+        {
+            if (!s_allowedColors.Contains(request.m_signColor) || !s_allowedColors.Contains(request.m_signTextColor))
+            {
+                throw new InvalidDataException("invalid color passed to saveTycoonBusinessState");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var nest = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(weev => weev.m_nest.m_rooms.Any(x => x.m_id == request.m_locID))
+                .Select(weev => weev.m_nest)
+                .SingleAsync();
+            if (nest == null)
+            {
+                throw new Exception("invalid save business state request");
+            }
+            
+            var rowsUpdated = await m_dbContext.m_businesses
+                .Where(x => x.m_id == request.m_locID)
+                .Where(x => x.m_type == EBusinessType.NightClub)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_signColor, request.m_signColor)
+                    .SetProperty(x => x.m_signTextColor, request.m_signTextColor)
+                    .SetProperty(x => x.m_open, request.m_busOpen != 0));
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("business save state failed");
+            }
+            
+            nest.m_lastUpdated = DateTime.Now;
+            await m_dbContext.SaveChangesAsync();
+            
+            await transaction.CommitAsync();
         }
     }
 }

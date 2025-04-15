@@ -386,7 +386,7 @@ namespace BinWeevils.Server.Controllers
                     validateParams.m_placedOnFurnitureID : dto.m_itemData.m_itemTypeID,
                 m_spotOnFurniture = validateParams.m_spot
             };
-            dto.m_nest.m_lastUpdated = DateTime.Now;
+            dto.m_nest.m_itemsLastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
             
             await transaction.CommitAsync();
@@ -508,7 +508,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_spotOnFurniture, validateParams.m_spot)
                 );
             
-            dto.m_nest.m_lastUpdated = DateTime.Now;
+            dto.m_nest.m_itemsLastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
             
             await transaction.CommitAsync();
@@ -540,7 +540,7 @@ namespace BinWeevils.Server.Controllers
                 .ExecuteDeleteAsync();
             if (rowsUpdated != 1) throw new Exception("failed to remove item from nest");
             
-            nest.m_lastUpdated = DateTime.Now;
+            nest.m_itemsLastUpdated = DateTime.Now;
             await m_dbContext.SaveChangesAsync();
             
             await transaction.CommitAsync();
