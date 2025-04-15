@@ -407,21 +407,35 @@ namespace BinWeevils.Server.Controllers
         {
             var itemConfig = await m_configRepo.GetConfig(para.m_configLocation);
             
-            if (itemConfig.m_positions.All(x => x.m_frame != para.m_posAnimationFrame) && 
-                !(para.m_posAnimationFrame == 0 && itemConfig.m_positions.Count == 0))
+            var isFurniture = itemConfig.m_type == "furniture";
+            var isOrnament = itemConfig.m_type == "ornament";
+            
+            var expectedType = itemConfig.m_type switch
             {
-                throw new InvalidDataException($"requesting a frame of {para.m_configLocation} that doesn't exist ({para.m_posAnimationFrame})");
+                "furniture" => "f",
+                "ornament" => "o",
+                _ => "d"
+            };
+            if (expectedType != para.m_itemType)
+            {
+                throw new InvalidDataException($"lying about item type of {para.m_configLocation}");
             }
             
-            // todo: validate loc category
+            if (isFurniture)
+            {
+                if (itemConfig.m_positions.All(x => x.m_frame != para.m_posAnimationFrame))
+                {
+                    throw new InvalidDataException($"requesting a frame of {para.m_configLocation} that doesn't exist ({para.m_posAnimationFrame})");
+                }
+            } else
+            {
+                para.m_posAnimationFrame = 0;
+            }
             
-            var isActuallyOrnament = itemConfig.m_type == "ornament";
-            if (isActuallyOrnament != (para.m_placedOnFurnitureID != 0) ||
-                isActuallyOrnament != (para.m_itemType == "o"))
+            if (isOrnament != (para.m_placedOnFurnitureID != 0))
             {
                 throw new InvalidDataException($"lying about ornament status of {para.m_configLocation}");
             }
-            
             if (para.m_placedOnFurnitureID == 0)
             {
                 para.m_spot = 0;
