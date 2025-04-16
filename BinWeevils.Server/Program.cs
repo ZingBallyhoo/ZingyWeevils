@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Proto;
 using StackXML;
 using Stl.DependencyInjection;
 
@@ -38,6 +39,7 @@ internal static class Program
         builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());
         builder.Services.UseRegisterAttributeScanner().RegisterFrom(typeof(Zone).Assembly);
         builder.Services.AddSingleton<ISystemHandler, WeevilSystemHandler>();
+        builder.Services.AddSingleton(new ActorSystem());
         
         builder.Services.AddSingleton<LocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));

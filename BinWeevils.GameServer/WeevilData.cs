@@ -2,12 +2,14 @@ using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.XmlMessages;
+using Proto;
 
 namespace BinWeevils.GameServer
 {
     public class WeevilData : VarBag
     {
         public readonly User m_user;
+        public readonly PID m_nest;
         
         public TypedVar<uint> m_idx;
         public TypedVar<ulong> m_weevilDef;
@@ -27,9 +29,10 @@ namespace BinWeevils.GameServer
         // todo: petDef
         // todo: petState
 
-        public WeevilData(User user)
+        public WeevilData(User user, PID nest)
         {
             m_user = user;
+            m_nest = nest;
             
             m_idx = new TypedVar<uint>(this, "idx", Var.TYPE_STRING); // ! intentionally string
             m_weevilDef = new TypedVar<ulong>(this, "weevilDef", Var.TYPE_STRING);

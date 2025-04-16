@@ -3,6 +3,7 @@ using BinWeevils.Protocol;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Proto;
 
 namespace BinWeevils.GameServer
 {
@@ -97,6 +98,11 @@ namespace BinWeevils.GameServer
                 {
                     m_weevilDef = x.m_weevilDef,
                 }).SingleAsync();;
+        }
+        
+        public ActorSystem GetActorSystem()
+        {
+            return m_rootProvider.GetRequiredService<ActorSystem>();
         }
     }
     

@@ -12,4 +12,8 @@
       <ProjectReference Include="..\BinWeevils.Protocol\BinWeevils.Protocol.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Proto.Actor" Version="1.7.0" />
+    </ItemGroup>
+
 </Project>

@@ -3,11 +3,13 @@ using ArcticFox.Codec;
 using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
+using Proto;
 using StackXML;
 
 namespace BinWeevils.GameServer
@@ -136,16 +138,27 @@ namespace BinWeevils.GameServer
                 var weevilIdx = await m_services.CreateTempAccount(login.m_data.m_nickname);
                 var loginDto = await m_services.GetLoginData(weevilIdx);
                 
+                var actorSystem = m_services.GetActorSystem();
+                
                 var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
+                var nestProps = Props.FromProducer(() => new NestActor
+                {
+                    m_us = user
+                });
+                var nestActor = actorSystem.Root.SpawnNamed(nestProps, $"nest_{login.m_data.m_nickname}");
                 var nestDesc = new WeevilRoomDescription($"nest_{login.m_data.m_nickname}")
                 {
                     m_creator = user,
                     m_maxUsers = 20,
-                    m_isTemporary = true
+                    m_isTemporary = true,
+                    m_data = new NestRoom
+                    {
+                        m_nest = nestActor
+                    }
                 };
                 await user.m_zone.CreateRoom(nestDesc);
                 
-                var weevilData = new WeevilData(user);
+                var weevilData = new WeevilData(user, nestActor);
                 weevilData.m_idx.SetValue(weevilIdx);
                 weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
                 user.SetUserData(weevilData);
@@ -265,6 +278,16 @@ namespace BinWeevils.GameServer
             }
 
             Console.Out.WriteLine($"unknown command: {message.m_command} {string.Join(" ", reader.ReadToEnd())}");
+        }
+
+        public override ValueTask CleanupAsync()
+        {
+            var user = GetUser();
+            if (user.GetUserDataAs<WeevilData>() is {} weevilData)
+            {
+                m_services.GetActorSystem().Root.Stop(weevilData.m_nest);
+            }
+            return base.CleanupAsync();
         }
 
         public void Abort()

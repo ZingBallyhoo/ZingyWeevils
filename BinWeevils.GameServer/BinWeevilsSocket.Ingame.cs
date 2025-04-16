@@ -100,7 +100,18 @@ namespace BinWeevils.GameServer
                         weevil.m_doorID.SetValue(joinRoomRequest.m_entryDoorID);
                         
                         var newRoom = await user.m_zone.GetRoom(joinRoomRequest.m_roomName);
-                        await user.MoveTo(newRoom);
+                        if (newRoom.GetDataAs<NestRoom>() is {} nestRoom)
+                        {
+                            var system = m_services.GetActorSystem();
+                            var joinSuccess = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(user, newRoom), CancellationToken.None);
+                            if (!joinSuccess)
+                            {
+                                return;
+                            }
+                        } else
+                        {
+                            await user.MoveTo(newRoom);
+                        }
                         
                         // todo: should we have a callback from inside the join lock?
                         var allWeevils = await newRoom.GetAllUserData<WeevilData>();

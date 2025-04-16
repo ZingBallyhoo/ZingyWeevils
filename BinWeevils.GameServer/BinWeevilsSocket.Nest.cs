@@ -1,5 +1,6 @@
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using StackXML.Str;
@@ -43,13 +44,8 @@ namespace BinWeevils.GameServer
                         var us = GetUser();
                         if (us.m_name == outgoingInvite.m_userName) throw new InvalidDataException("trying to invite self");
                         
-                        var otherUser = await us.m_zone.GetUser(outgoingInvite.m_userName!);
-                        if (otherUser == null) return;
-                        
-                        await otherUser.BroadcastXtStr(Modules.NEST_INVITE_TO_NEST, new NestInvite
-                        {
-                            m_userName = us.m_name
-                        });
+                        var nest = us.GetUserData<WeevilData>().m_nest;
+                        m_services.GetActorSystem().Root.Send(nest, outgoingInvite);
                     });
                     break;
                 }
@@ -70,6 +66,24 @@ namespace BinWeevils.GameServer
                         {
                             m_name = us.m_name
                         });
+                    });
+                    break;
+                }
+                case Modules.NEST_DENY_NEST_INVITE: // 5#6
+                {
+                    var deniedInvite = new NestInvite();
+                    deniedInvite.Deserialize(ref reader);
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var us = GetUser();
+                        if (us.m_name == deniedInvite.m_userName) throw new InvalidDataException("trying to be a deny invite to own nest");
+                        
+                        var nestOwner = await us.m_zone.GetUser(deniedInvite.m_userName!);
+                        if (nestOwner == null) return;
+                        
+                        var nest = nestOwner.GetUserData<WeevilData>().m_nest;
+                        m_services.GetActorSystem().Root.Send(nest, new NestActor.DenyNestInvite(us.m_name));
                     });
                     break;
                 }
