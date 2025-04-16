@@ -141,24 +141,14 @@ namespace BinWeevils.GameServer
                 var actorSystem = m_services.GetActorSystem();
                 
                 var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
-                var nestProps = Props.FromProducer(() => new NestActor
+                var userProps = Props.FromProducer(() => new SocketActor
                 {
-                    m_us = user
+                    m_user = user
                 });
-                var nestActor = actorSystem.Root.SpawnNamed(nestProps, $"nest_{login.m_data.m_nickname}");
-                var nestDesc = new WeevilRoomDescription($"nest_{login.m_data.m_nickname}")
-                {
-                    m_creator = user,
-                    m_maxUsers = 20,
-                    m_isTemporary = true,
-                    m_data = new NestRoom
-                    {
-                        m_nest = nestActor
-                    }
-                };
-                await user.m_zone.CreateRoom(nestDesc);
+                var userActor = actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");
+                var nestActor = await actorSystem.Root.RequestAsync<PID>(userActor, new SocketActor.CreateNest());
                 
-                var weevilData = new WeevilData(user, nestActor);
+                var weevilData = new WeevilData(user, userActor, nestActor);
                 weevilData.m_idx.SetValue(weevilIdx);
                 weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
                 user.SetUserData(weevilData);
@@ -285,7 +275,7 @@ namespace BinWeevils.GameServer
             var user = GetUser();
             if (user.GetUserDataAs<WeevilData>() is {} weevilData)
             {
-                m_services.GetActorSystem().Root.Stop(weevilData.m_nest);
+                m_services.GetActorSystem().Root.Stop(weevilData.m_userActor);
             }
             return base.CleanupAsync();
         }

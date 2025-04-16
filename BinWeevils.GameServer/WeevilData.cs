@@ -9,7 +9,8 @@ namespace BinWeevils.GameServer
     public class WeevilData : VarBag
     {
         public readonly User m_user;
-        public readonly PID m_nest;
+        public readonly PID m_userActor;
+        public readonly PID m_nestActor;
         
         public TypedVar<uint> m_idx;
         public TypedVar<ulong> m_weevilDef;
@@ -29,10 +30,11 @@ namespace BinWeevils.GameServer
         // todo: petDef
         // todo: petState
 
-        public WeevilData(User user, PID nest)
+        public WeevilData(User user, PID userActor, PID nestActor)
         {
             m_user = user;
-            m_nest = nest;
+            m_userActor = userActor;
+            m_nestActor = nestActor;
             
             m_idx = new TypedVar<uint>(this, "idx", Var.TYPE_STRING); // ! intentionally string
             m_weevilDef = new TypedVar<ulong>(this, "weevilDef", Var.TYPE_STRING);

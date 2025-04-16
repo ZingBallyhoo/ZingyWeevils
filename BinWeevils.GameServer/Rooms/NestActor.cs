@@ -8,10 +8,10 @@ namespace BinWeevils.GameServer.Rooms
     public class NestActor : IActor
     {
         public required User m_us;
-        private readonly HashSet<string> m_invitedUsers = [];
+        private readonly Dictionary<string, PID> m_invitedUsers = [];
         
         public record Join(User user, Room room);
-        public record RemoveNestGuest(string userName);
+        public record RemoveGuest(string userName);
         public record RemoveAllGuests();
         public record DenyNestInvite(string userName);
         
@@ -27,23 +27,28 @@ namespace BinWeevils.GameServer.Rooms
                 }
                 case NestInvite invite:
                 {
-                    await AddInvite(invite.m_userName);
-                    break;
-                }
-                case RemoveNestGuest removeNestInvite:
-                {
-                    await RemoveInvite_Kick(removeNestInvite.userName);
+                    await AddInvite(context, invite.m_userName);
                     break;
                 }
                 case DenyNestInvite denyNestInvite:
                 {
-                    await RemoveInvite_GoneOrDenied(denyNestInvite.userName);
+                    await GuestRemovedInvite(context, denyNestInvite.userName);
+                    break;
+                }
+                case Terminated guestTerminated:
+                {
+                    await GuestRemovedInvite(context, guestTerminated.Who.Id);
+                    break;
+                }
+                case RemoveGuest removeNestInvite:
+                {
+                    await KickGuest(context, removeNestInvite.userName);
                     break;
                 }
                 case RemoveAllGuests:
                 case Stopping:
                 {
-                    await RemoveAllGuestsNow();
+                    await KickAllGuests(context);
                     break;
                 }
             }
@@ -51,7 +56,7 @@ namespace BinWeevils.GameServer.Rooms
         
         private async Task<bool> TryJoin(Join request)
         {
-            if (m_us.m_name != request.user.m_name && !m_invitedUsers.Contains(request.user.m_name))
+            if (m_us.m_name != request.user.m_name && !m_invitedUsers.ContainsKey(request.user.m_name))
             {
                 // try to salvage the situation...
                 await request.user.BroadcastXtStr(Modules.NEST_RETURN_TO_NEST, new NestInvite
@@ -65,17 +70,23 @@ namespace BinWeevils.GameServer.Rooms
             return true;
         }
         
-        private async Task AddInvite(string name)
+        private async Task AddInvite(IContext context, string name)
         {
-            if (!m_invitedUsers.Add(name)) return;
-                    
+            if (m_invitedUsers.ContainsKey(name)) return;
+            
             var otherUser = await m_us.m_zone.GetUser(name);
-            if (otherUser == null)
+            if (otherUser?.GetUserDataAs<WeevilData>() is not {} weevilData)
             {
                 // oops.. remove the invite from our ui
-                await RemoveInvite_GoneOrDenied(name);
+                await m_us.BroadcastXtStr(Modules.NEST_REMOVE_GUESTS, new NestInvite
+                {
+                    m_userName = name
+                });
                 return;
             }
+            
+            m_invitedUsers.Add(name, weevilData.m_userActor);
+            context.Watch(weevilData.m_userActor);
                     
             await otherUser.BroadcastXtStr(Modules.NEST_INVITE_TO_NEST, new NestInvite
             {
@@ -83,14 +94,25 @@ namespace BinWeevils.GameServer.Rooms
             });
         }
         
-        private async Task RemoveInvite_Kick(string name)
+        private async Task GuestRemovedInvite(IContext context, string name)
         {
-            if (!m_invitedUsers.Remove(name)) return;
-            await Kick(name);
+            if (!m_invitedUsers.Remove(name, out var userActor)) return;
+            
+            await m_us.BroadcastXtStr(Modules.NEST_REMOVE_GUESTS, new NestInvite
+            {
+                m_userName = name
+            });
+            context.Unwatch(userActor);
         }
         
-        private async Task Kick(string name)
+        private async Task KickGuest(IContext context, string name)
         {
+            if (!m_invitedUsers.Remove(name, out var userActor))
+            {
+                return;
+            }
+            context.Unwatch(userActor);
+            
             var otherUser = await m_us.m_zone.GetUser(name);
             if (otherUser == null) return;
             
@@ -106,21 +128,11 @@ namespace BinWeevils.GameServer.Rooms
             // todo: remove from room..?
         }
         
-        private async Task RemoveInvite_GoneOrDenied(string name)
+        private async Task KickAllGuests(IContext context)
         {
-            if (!m_invitedUsers.Remove(name)) return;
-            
-            await m_us.BroadcastXtStr(Modules.NEST_REMOVE_GUESTS, new NestInvite
+            foreach (var userName in m_invitedUsers.Keys.ToArray())
             {
-                m_userName = name
-            });
-        }
-        
-        private async Task RemoveAllGuestsNow()
-        {
-            foreach (var user in m_invitedUsers)
-            {
-                await Kick(user);
+                await KickGuest(context, userName);
             }
             m_invitedUsers.Clear();
         }

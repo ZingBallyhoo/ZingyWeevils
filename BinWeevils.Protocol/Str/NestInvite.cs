@@ -7,5 +7,7 @@ namespace BinWeevils.Protocol.Str
         // (for either direction)
         
         [StrField] public string m_userName;
+        
+        public const string ALL_GUESTS = "-1";
     }
 }
