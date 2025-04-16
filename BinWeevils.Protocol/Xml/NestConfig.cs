@@ -20,7 +20,7 @@ namespace BinWeevils.Protocol.Xml
         [XmlCls("loc")]
         public partial class Loc
         {
-            [XmlField("id")] public uint m_id;
+            [XmlField("id")] public int m_id;
             [XmlField("instanceID")] public uint m_instanceID;
             [XmlField("colour")] public NestRoomColor m_color;
         }

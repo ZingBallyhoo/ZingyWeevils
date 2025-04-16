@@ -28,6 +28,15 @@ namespace BinWeevils.Protocol
         public const string TURN_BASED_USER_QUIT = "go"; // (game over)
         public const string TURN_BASED_PLAYER_WINS = "cpwg"; // (client -> server win, for ball)
         
+        public const string NEST = "5";
+        public const string NEST_SET_DOOR = $"{NEST}#1";
+        public const string NEST_JOIN_LOCATION = $"{NEST}#2";
+        public const string NEST_INVITE_TO_NEST = $"{NEST}#3";
+        public const string NEST_REMOVE_GUESTS = $"{NEST}#4";
+        public const string NEST_GUEST_JOINED_NEST = $"{NEST}#5";
+        public const string NEST_REMOVE_NEST_INVITE = $"{NEST}#6";
+        public const string NEST_RETURN_TO_NEST = $"{NEST}#7";
+        
         public const string DINER = "9";
         public const string DINER_GRAB_TRAY = $"{DINER}#1";
         public const string DINER_DROP_TRAY = $"{DINER}#2";

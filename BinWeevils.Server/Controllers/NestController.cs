@@ -191,10 +191,11 @@ namespace BinWeevils.Server.Controllers
         public async Task<NestConfig> GetNestConfig([FromBody] GetNestConfigRequest request)
         {
             var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_name == request.m_userName)
                 .Select(weev => new
                 {
                     weev.m_idx,
+                    m_isMine = weev.m_name == ControllerContext.HttpContext.User.Identity!.Name,
                     m_nestID = weev.m_nest.m_id,
                     m_lastUpdate = weev.m_nest.m_lastUpdated,
                     m_weevilXp = weev.m_xp,
@@ -247,7 +248,7 @@ namespace BinWeevils.Server.Controllers
                     loc = new NestConfig.Loc();
                 }
                 
-                loc.m_id = (uint)room.m_type;
+                loc.m_id = dto.m_isMine ? (int)room.m_type : -(int)room.m_type;
                 loc.m_instanceID = room.m_id;
                 loc.m_color = room.m_color;
                 
