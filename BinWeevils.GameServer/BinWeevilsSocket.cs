@@ -39,7 +39,7 @@ namespace BinWeevils.GameServer
                 InputStr(input);
             } else
             {
-                Close();
+                throw new InvalidDataException("message wasn't xml or str");
             }
         }
         
@@ -55,17 +55,13 @@ namespace BinWeevils.GameServer
             XmlReadBuffer.ReadIntoStatic(input, ref preRead);
             if (preRead.m_bodySpan.Length == 0)
             {
-                // todo: log
-                Close();
-                return;
+                throw new InvalidDataException($"couldn't find xml message body");
             }
             Console.Out.WriteLine(preRead.m_bodySpan.ToString());
             
             if (preRead.m_messageType is not "sys")
             {
-                // todo: log
-                Close();
-                return;
+                throw new InvalidDataException($"client sent an xml message with a type other than \"sys\": {preRead.m_messageType}");
             }
             
             var preReadBody = new MsgBodyPreRead();
@@ -74,9 +70,7 @@ namespace BinWeevils.GameServer
             
             if (preReadBody.m_action.Length == 0 || preReadBody.m_action.IsWhiteSpace())
             {
-                // todo: log
-                Close();
-                return;
+                throw new InvalidDataException($"couldn't find xml message action");
             }
 
             switch (preReadBody.m_action)
@@ -217,8 +211,7 @@ namespace BinWeevils.GameServer
             
             if (handler is not "xt")
             {
-                Close();
-                return;
+                throw new InvalidDataException($"client sent a str message with a type other than \"xt\": {handler}");
             }
 
             var message = new XtClientMessage();
@@ -226,8 +219,7 @@ namespace BinWeevils.GameServer
             
             if (message.m_extension is not "login")
             {
-                Close();
-                return;
+                throw new InvalidDataException($"client sent a str message to an extension other than \"xt\": {handler}");
             }
             
             var module = message.m_command;

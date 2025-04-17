@@ -67,9 +67,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    Console.Out.WriteLine($"unknown command (diner): {message.m_command}");
-                    Close();
-                    break;
+                    throw new InvalidDataException($"unknown command (diner): \"{message.m_command}\"");
                 }
             }
         }

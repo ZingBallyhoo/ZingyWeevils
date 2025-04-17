@@ -14,10 +14,7 @@ namespace BinWeevils.GameServer
             {
                 case Modules.CHAT_YOURSELF: // 1#1
                 {
-                    // client doesn't send this
-                    // todo: log
-                    Close();
-                    break;
+                    throw new InvalidDataException("client sent CHAT_YOURSELF which is not expected");
                 }
                 case Modules.CHAT_CHANGE_STATE: // 1#2
                 {
@@ -29,9 +26,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    Console.Out.WriteLine($"unknown command (chat): {message.m_command}");
-                    Close();
-                    break;
+                    throw new InvalidDataException($"unknown command (chat): {message.m_command}");
                 }
             }
         }

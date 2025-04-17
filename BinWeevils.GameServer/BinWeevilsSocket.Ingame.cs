@@ -52,9 +52,7 @@ namespace BinWeevils.GameServer
                     
                     if (!Enum.IsDefined(typeof(EWeevilExpression), expression.m_expressionID))
                     {
-                        // todo: log
-                        Close();
-                        return;
+                        throw new InvalidDataException($"invalid expression {expression.m_expressionID}");
                     }
                     
                     m_taskQueue.Enqueue(async () =>
@@ -215,16 +213,12 @@ namespace BinWeevils.GameServer
             
             if (!Enum.IsDefined(typeof(EWeevilAction), action.m_actionID))
             {
-                // todo: log
-                Close();
-                return;
+                throw new InvalidDataException($"invalid action id: {action.m_endPoseID}");
             }
                     
             if (action.m_endPoseID != -1 && !Enum.IsDefined(typeof(EWeevilAction), action.m_endPoseID))
             {
-                // todo: log
-                Close();
-                return;
+                throw new InvalidDataException($"invalid end pose id: {action.m_endPoseID}");
             }
                     
             m_taskQueue.Enqueue(async () => { await HandleInGameCommand_Action_Async(action); });
