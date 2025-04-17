@@ -1,5 +1,7 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Rooms;
+using BinWeevils.Protocol;
+using BinWeevils.Protocol.Str;
 using Proto;
 
 namespace BinWeevils.GameServer
@@ -9,6 +11,7 @@ namespace BinWeevils.GameServer
         public required User m_user;
         
         public record CreateNest();
+        public record KickFromNest(string userName);
         
         public async Task ReceiveAsync(IContext context)
         {
@@ -17,6 +20,26 @@ namespace BinWeevils.GameServer
                 case CreateNest:
                 {
                     await CreateNestNow(context);
+                    break;
+                }
+                case KickFromNest kickFromNest:
+                {
+                    if (kickFromNest.userName == m_user.m_name)
+                    {
+                        // something has gone horribly wrong
+                        context.Stop(context.Self);
+                        return;
+                    }
+                    
+                    await m_user.BroadcastXtStr(Modules.NEST_DENY_NEST_INVITE, new NestInvite
+                    {
+                        m_userName = kickFromNest.userName
+                    });
+                    await m_user.BroadcastXtStr(Modules.NEST_RETURN_TO_NEST, new NestInvite
+                    {
+                        m_userName = kickFromNest.userName
+                    });
+                    context.Respond(null!);
                     break;
                 }
                 case Stopping:
@@ -42,6 +65,7 @@ namespace BinWeevils.GameServer
                 m_isTemporary = true,
                 m_data = new NestRoom
                 {
+                    m_ownerName = m_user.m_name,
                     m_nest = nestActor
                 }
             };

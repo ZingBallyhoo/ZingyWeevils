@@ -5,6 +5,7 @@ using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
+using Proto;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -99,18 +100,10 @@ namespace BinWeevils.GameServer
                         weevil.m_locID.SetValue(joinRoomRequest.m_locID);
                         weevil.m_doorID.SetValue(joinRoomRequest.m_entryDoorID);
                         
-                        var newRoom = await user.m_zone.GetRoom(joinRoomRequest.m_roomName);
-                        if (newRoom.GetDataAs<NestRoom>() is {} nestRoom)
+                        var newRoom = await TryJoinRoom(joinRoomRequest.m_roomName);
+                        if (newRoom == null)
                         {
-                            var system = m_services.GetActorSystem();
-                            var joinSuccess = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(user, newRoom), CancellationToken.None);
-                            if (!joinSuccess)
-                            {
-                                return;
-                            }
-                        } else
-                        {
-                            await user.MoveTo(newRoom);
+                            return;
                         }
                         
                         // todo: should we have a callback from inside the join lock?
@@ -166,6 +159,53 @@ namespace BinWeevils.GameServer
                     break;
                 }
             }
+        }
+        
+        private async Task<Room?> TryJoinRoom(string roomName)
+        {
+            var user = GetUser();
+                        
+            var newRoom = await user.m_zone.GetRoom(roomName);
+            if (roomName.StartsWith("nest_"))
+            {
+                var system = m_services.GetActorSystem();
+
+                var nestUser = roomName.Substring("nest_".Length);
+                if (!await TryJoinNestRoom(system, user, newRoom))
+                {
+                     // attempt to salvage the situation
+                    await system.Root.RequestAsync<object>(user.GetUserData<WeevilData>().m_userActor, new SocketActor.KickFromNest(nestUser));
+                    return null;
+                }
+                
+                return newRoom;
+            }
+
+            if (newRoom == null)
+            {
+                Close();
+                return null;
+            }
+            await user.MoveTo(newRoom);
+            return newRoom;
+        }
+        
+        private async Task<bool> TryJoinNestRoom(ActorSystem system, User user, Room? newRoom)
+        {
+            if (newRoom?.GetDataAs<NestRoom>() is not {} nestRoom)
+            {
+                return false;
+            }
+                
+            bool success;
+            try
+            {
+                success = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(user, newRoom));
+            } catch (DeadLetterException)
+            {
+                success = false;
+            }
+            return success;
         }
 
         private void HandleInGameCommand_Action(ref StrReader reader)

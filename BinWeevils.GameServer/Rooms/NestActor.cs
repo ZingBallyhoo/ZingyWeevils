@@ -66,7 +66,14 @@ namespace BinWeevils.GameServer.Rooms
                 return false;
             }
 
-            await request.user.MoveTo(request.room);
+            try
+            {
+                await request.user.MoveTo(request.room);
+            } catch (Exception e)
+            {
+                // todo: log
+                return false;
+            }
             return true;
         }
         
@@ -113,17 +120,7 @@ namespace BinWeevils.GameServer.Rooms
             }
             context.Unwatch(userActor);
             
-            var otherUser = await m_us.m_zone.GetUser(name);
-            if (otherUser == null) return;
-            
-            await otherUser.BroadcastXtStr(Modules.NEST_DENY_NEST_INVITE, new NestInvite
-            {
-                m_userName = m_us.m_name
-            });
-            await otherUser.BroadcastXtStr(Modules.NEST_RETURN_TO_NEST, new NestInvite
-            {
-                m_userName = m_us.m_name
-            });
+            context.Send(userActor, new SocketActor.KickFromNest(m_us.m_name));
             
             // todo: remove from room..?
         }
@@ -140,6 +137,7 @@ namespace BinWeevils.GameServer.Rooms
     
     public class NestRoom : StatelessRoom
     {
-        public PID m_nest;
+        public required string m_ownerName;
+        public required PID m_nest;
     }
 }
