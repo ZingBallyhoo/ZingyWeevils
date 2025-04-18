@@ -52,7 +52,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public SiteConfig GetConfig()
         {
-            const string baseUrl = "http://localhost:80/";
+            var referrer = new Uri(HttpContext.Request.Headers.Referer!);
+            var baseUrl = $"{referrer.Scheme}://{referrer.Host}/";
+            
             return new SiteConfig
             {
                 m_domain = $"{baseUrl}",
