@@ -20,6 +20,8 @@ class Program
         var client = new SftpClient(new PrivateKeyConnectionInfo(host, username, new PrivateKeyFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh", "id_rsa"))));
         await client.ConnectAsync(CancellationToken.None);
         
+        // todo: this has to be run multiple times as it fails to recreate directories recursively..
+        
         SyncDir(client, "");
         foreach (var directory in Directory.EnumerateDirectories(s_sourceRoot, "*", SearchOption.AllDirectories))
         {
@@ -36,6 +38,7 @@ class Program
             if (testDirectory.StartsWith(Path.Combine("externalUIs", "comps"))) continue;
             if (testDirectory.StartsWith(Path.Combine("externalUIs", "campaigns"))) continue;
             if (testDirectory.StartsWith(Path.Combine("fixedCam", "adCampaigns"))) continue;
+            if (testDirectory.StartsWith(Path.Combine("fixedCam", "campaigns"))) continue;
             if (testDirectory.StartsWith("blog")) continue;
             if (testDirectory.StartsWith("downloads")) continue;
             if (testDirectory.StartsWith("loaderContent")) continue;
@@ -56,7 +59,7 @@ class Program
     private static void SyncDir(SftpClient client, string relativePath)
     {
         var sourceDir = Path.Combine(s_sourceRoot, relativePath);
-        var destDir = $"{DEST_DIR}/{relativePath}";
+        var destDir = Path.Combine(DEST_DIR, relativePath).Replace('\\', '/');
         
         try
         {
