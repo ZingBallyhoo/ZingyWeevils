@@ -19,6 +19,9 @@
         }
         body {
             margin-bottom: 70px !important; /* Margin bottom by footer height */
+            background-image: linear-gradient(rgb(0 0 0 / 80%), rgb(0 0 0 / 90%)), url('images/bg.jpg');
+            background-position: center top;
+            background-size: cover;
         }
         .header {
             justify-content: center;
@@ -46,7 +49,7 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/darkly/bootstrap.min.css" integrity="sha512-A/WvCV75maYUI3F3yjeSqYg0dUIepPRx14Qw8EZjJ/udG5/s3uDWLHnm1FSbYzrJg4RLdAdEm/f6+1V6AxCBJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body style="background-color: #004666;">
+<body>
 <div>
     <div class="align-items-center row poggers-row header">
         <div class="col text-right"><img src="images/logo.svg" alt="Bin Weevils Logo" width="95" height="95" asp-append-version="true"></div>
@@ -60,13 +63,13 @@
     <div class="row-auto text-center p-5" style="font-size: 1.25rem">
         There is no account system, simply choose a username. All data is discarded after you log out.
     </div>
-    <div class="row poggers-row justify-content-center p-5">
+    <div class="row no-gutters justify-content-center p-5">
         <form class="col-auto" method="post" asp-antiforgery="false" autocomplete="off">
             <div class="form-row">
-                <input type="text" class="form-control mb-2" name="username" placeholder="fairriver5">
+                <input type="text" class="form-control form-control-lg mb-2" name="username" placeholder="fairriver5">
             </div>
-            <div class="form-row justify-content-center">
-                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            <div class="form-row">
+                <button type="submit" class="btn btn-block btn-primary mb-2">Play</button>
             </div>
         </form>
     </div>
