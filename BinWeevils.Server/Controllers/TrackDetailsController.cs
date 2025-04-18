@@ -13,12 +13,9 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly Dictionary<int, TrackArchiveJson> m_tracks;
         
-        public TrackDetailsController(IConfiguration configuration)
+        public TrackDetailsController()
         {
-            var archivePath = configuration["ArchivePath"];
-            
-            // todo: well, this wont work in production
-            var tracksPath = Path.Combine(archivePath, "..", "other", "tracks.json");
+            var tracksPath = Path.Combine("Data", "tracks.json");
             m_tracks = JsonSerializer.Deserialize<Dictionary<int, TrackArchiveJson>>(System.IO.File.ReadAllText(tracksPath))!;
         }
         

@@ -126,7 +126,7 @@ internal static class Program
             await context.Database.EnsureDeletedAsync(); // reset
             await context.Database.EnsureCreatedAsync();
             
-            var sql = await File.ReadAllTextAsync(Path.Combine(archivePath, "..", "other", "itemType.sql"));
+            var sql = await File.ReadAllTextAsync(Path.Combine("Data", "itemType.sql"));
             await context.Database.ExecuteSqlRawAsync(sql);
         }
 
