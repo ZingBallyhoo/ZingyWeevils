@@ -1,8 +1,8 @@
 /* CSS Document */
 
 body{
-    margin:0px;
-    padding:0px;
+    margin:0;
+    padding:0;
     position:relative;
     font-family:Arial, Helvetica, sans-serif;
     font-size:12px;
@@ -21,6 +21,11 @@ a{
     color:#008A00;
 }
 
+img{
+    pointer-events: none;
+    user-select: none;
+}
+
 #container{
     position:relative;
     margin-left:auto;
@@ -32,9 +37,8 @@ a{
 #logo{
     position:absolute;
     left:2px;
-    top:0px;
+    top:0;
     z-index:0;
-    height:66px;
     overflow:hidden;
 }
 
@@ -46,11 +50,7 @@ a{
 #nav{
     position:absolute;
     left:140px;
-    top:0px;
-    height:66px;
-    width:820px;
-    /*background-color:#FFFFCC;*/
-    text-align:center; /* just centered for the comment to look better ! */
+    top:0;
     z-index:5;
 }
 
@@ -58,14 +58,6 @@ a{
     position:absolute;
     top:66px;
     left:20px;
-    height:560px;
-    width:940px;
     /*border:1px solid #FF0000;*/
     z-index:999;
-}
-
-#footer{
-    margin-left:120px;
-    text-align:center;
-    padding-top:20px;
 }
