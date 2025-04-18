@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Tests", "BinWeev
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Tools.CoreDiff", "BinWeevils.Tools.CoreDiff\BinWeevils.Tools.CoreDiff.csproj", "{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Tools.CdnUpload", "BinWeevils.Tools.CdnUpload\BinWeevils.Tools.CdnUpload.csproj", "{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -344,6 +346,18 @@ Global
 		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x64.Build.0 = Release|Any CPU
 		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x86.ActiveCfg = Release|Any CPU
 		{4EE465CB-9DBD-4801-ACDE-4A5F4B90DF48}.Release|x86.Build.0 = Release|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Debug|x64.Build.0 = Debug|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Debug|x86.Build.0 = Debug|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Release|x64.ActiveCfg = Release|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Release|x64.Build.0 = Release|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Release|x86.ActiveCfg = Release|Any CPU
+		{B18699AF-6757-41FE-A5CC-3BCAA4BA610D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C9D86D65-5042-4B53-A136-44423B5DD562} = {DFAD127F-3562-4335-B371-2E3E5CA03767}
