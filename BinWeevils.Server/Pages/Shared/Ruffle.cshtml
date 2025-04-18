@@ -12,7 +12,9 @@
             {
                 host: "127.0.0.1",
                 port: 9339,
-                proxyUrl: "ws://" + location.host + "/ws"
+                proxyUrl: window.location.protocol === "https" ? 
+                    "wss://" + location.host + "/ws" :
+                    "ws://" + location.host + "/ws"
             }
         ]
     }
