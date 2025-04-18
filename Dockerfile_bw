@@ -1,0 +1,32 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["BinWeevils.Server/BinWeevils.Server.csproj", "BinWeevils.Server/"]
+COPY ["ArcticFox/ArcticFox.PolyType.Amf/ArcticFox.PolyType.Amf.csproj", "ArcticFox/ArcticFox.PolyType.Amf/"]
+COPY ["ArcticFox/ArcticFox.Codec/ArcticFox.Codec.csproj", "ArcticFox/ArcticFox.Codec/"]
+COPY ["ArcticFox/ArcticFox.RPC.AmfGateway/ArcticFox.RPC.AmfGateway.csproj", "ArcticFox/ArcticFox.RPC.AmfGateway/"]
+COPY ["BinWeevils.Database/BinWeevils.Database.csproj", "BinWeevils.Database/"]
+COPY ["BinWeevils.Protocol/BinWeevils.Protocol.csproj", "BinWeevils.Protocol/"]
+COPY ["StackXML/StackXML/StackXML.csproj", "StackXML/StackXML/"]
+COPY ["StackXML/StackXML.Generator/StackXML.Generator.csproj", "StackXML/StackXML.Generator/"]
+COPY ["BinWeevils.GameServer/BinWeevils.GameServer.csproj", "BinWeevils.GameServer/"]
+COPY ["ArcticFox/ArcticFox.SmartFoxServer/ArcticFox.SmartFoxServer.csproj", "ArcticFox/ArcticFox.SmartFoxServer/"]
+COPY ["ArcticFox/ArcticFox.Net/ArcticFox.Net.csproj", "ArcticFox/ArcticFox.Net/"]
+RUN dotnet restore "BinWeevils.Server/BinWeevils.Server.csproj"
+COPY . .
+WORKDIR "/src/BinWeevils.Server"
+RUN dotnet build "./BinWeevils.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./BinWeevils.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "BinWeevils.Server.dll"]
