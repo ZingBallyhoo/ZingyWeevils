@@ -1,0 +1,1988 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<locationDefinitions version='121'>
+
+
+    <location id='104' name='ShoppingMall' type='2' boundType='rect' boundary='-185,0,351,177' camPos='258,219,-271' camAim='-62,20,284' entryPos='0,80' weevilScale='0.28'>
+        <!--<roomBG path='fixedCam/shoppingMall_dynamAds_videoPod.swf'/>-->
+        <roomBG path='fixedCam/shoppingMallFred.swf'/>
+        <object name='fredLogo' x='-50' y='0' z='99'/>
+        <cta id='1' extUIData='path:externalUIs/tycoonBusinesses.swf' x='99' z='120'/>
+        <door id='1' toLoc='101' toDoor='2' x1='-32' z1='13' x2='-32' z2='-90' entryDir='180'/>
+        <door id='2' toLoc='103' toDoor='2' x1='170' z1='171' x2='235' z2='50' entryDir='180'/>
+        <door id='3' toLoc='105' toDoor='1' x1='-29' z1='163' x2='-5' z2='300' entryDir='10'/>
+        <door id='4' toLoc='129' toDoor='5' x1='-61' z1='118' x2='-125' z2='114' entryDir='90'/>
+        <door id='5' toLoc='179' toDoor='1' x1='-60' z1='10' x2='-110' z2='20' entryDir='-45'/>
+        <object name='remoteDoorOverlay' x='-50' y='0' z='30'/>
+        <object name='remoteBack' x='-50' y='0' z='100'/>
+        <object name='door5_mc' x='-50' y='0' z='99'/>
+        <interactive type="door" path='door5_mc' actRect='-70,0,30,20'/>
+        <interactive type="door" path='door3_mc.slidingDoors_mc' actRect='-69,135,85,200'/>
+        <object name='pin1' x='18' y='0' z='135'/>
+        <object name='pin2' x='-62' y='0' z='135'/>
+        <object name='paperStand' x='28' y='0' z='141'/>
+        <object name='cta1_btn' x='64' y='0' z='141'/>
+        <object name='door3_mc' x='-31' y='0' z='199'/>
+        <object name='safetyRope' x='205' y='0' z='50'/>
+        <!--<object name='adBoard_left_mc' x='-128' y='0' z='48'/>-->
+        <object name='adBoard_right_mc' x='170' y='0' z='190'/>
+        <object name='door4_mc' x='-74' y='0' z='104'/>
+        <object name='pipeFront' x='-76' y='0' z='112'/>
+        <object name='pipeBack' x='-103' y='0' z='144'/>
+
+        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:0' boundary='type:rad,r:20' x='180' y='26' z='70' scale='0.20' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='180' y='0' z='70' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+    </location>
+
+
+
+
+    <location id='105' name='ShoppingMallInside' type='2' boundType='rect' boundary='-10,65,240,205' camPos='250,157,-106' camAim='-20,24,357' entryPos='60,118' entryDir='180' weevilScale='0.2' maintainY='yes'>
+        <roomBG path='fixedCam/shoppingMall_inside2.swf'/>
+        <door id='1' toLoc='104' toDoor='3' x1='10' z1='125' x2='10' z2='0' entryDir='180'/>
+        <door id='2' extUIData="locName:FurnitureShop,path:externalUIs/FurnitureShop.swf"  x1='-12' z1='140' x2='-100' z2='170' entryDir='0'/>
+        <door id='3' extUIData="locName:GadgetShop,path:externalUIs/GadgetShop.swf"  x1='-15' z1='235' x2='-100' z2='275' entryDir='0'/>
+        <door id='4' extUIData="locName:BathroomAndKitchenShop,path:externalUIs/BathroomAndKitchenShop.swf"  x1='145' z1='280' x2='145' z2='360' entryDir='0'/>
+
+        <door id='5' toLoc='134' toDoor='1' x1='102' z1='375' x2='78' z2='460' y='80' entryDir='0'/>
+        <door id='6' extUIData="locName:PropertyShop,path:externalUIs/RiggsProperties.swf"  x1='-45' z1='375' x2='-45' z2='460' y='80' entryDir='0'/>
+        <door id='7' extUIData="locName:WallpaperShop,path:externalUIs/WallpaperShop.swf"  x1='-110' z1='330' x2='-180' z2='370' y='80' entryDir='0'/>
+
+        <door id='8' extUIData="locName:GardeningShop,path:externalUIs/GardeningShop2.swf"  x1='50' z1='280' x2='50' z2='360' entryDir='0'/>
+
+        <interactive type="door" path='door2_mc.door_mc' actRect='-120,120,120,80'/>
+        <interactive type="door" path='door3_mc.door_mc' actRect='-120,210,120,100'/>
+        <interactive type="door" path='door8_mc.door_mc' actRect='20,260,60,140'/>
+        <interactive type="door" path='kitchenShopLeftOverlay.door_mc' actRect='115,260,60,140'/>
+
+        <interactive type="door" path='door5_mc.door_mc' actRect='50,330,90,170'/>
+        <interactive type="door" path='door6_mc.door_mc' actRect='-70,330,60,170'/>
+        <interactive type="door" path='door7_mc.door_mc' actRect='-300,300,220,100'/>
+
+        <object name='tube' x='240' y='0' z='290'/>
+        <object name='tubeTop' x='240' y='80' z='306'/>
+        <object name='kitchenSign' x='240' y='80' z='305'/>
+        <object name='gardenShopSign' x='60' y='80' z='310'/>
+        <object name='awning' x='60' y='0' z='309'/>
+        <object name='flyTrap' x='82' y='0' z='275'/>
+        <object name='kitchenShopLeftOverlay' x='120' y='0' z='300'/>
+        <object name='gardenShopRightOverlay' x='60' y='0' z='318'/>
+        <object name='door4_mc' x='170' y='0' z='310'/>
+        <object name='door5_mc' x='90' y='80' z='400'/>
+        <object name='door6_mc' x='-40' y='80' z='400'/>
+        <object name='door7_mc' x='-130' y='80' z='360'/>
+        <object name='door2_mc' x='-35' y='0' z='140'/>
+        <object name='door3_mc' x='-40' y='0' z='250'/>
+        <object name='chair' x='-22' y='0' z='114'/>
+        <object name='cupboard' x='-22' y='0' z='92'/>
+    </location>
+
+
+
+
+    <location id='134' name='BinPetsShop' type='2' boundType='rect' boundary='-141,20,281,270' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/BinPetsShop.swf'/>
+        <cta id='1' extUIData='path:externalUIs/petBuilder.swf' x='0' z='300'/>
+        <cta id='2' extUIData='path:externalUIs/BinPetGuideBook.swf' x='-150' z='60'/>
+        <door id='1' toLoc='105' toDoor='5' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <noGoArea type='rect' x='20' z='0' w='100' h='160'/>
+        <object name='wallSide_mc' x='30' y='0' z='165'/>
+        <object name='wallBack_mc' x='30' y='0' z='165'/>
+    </location>
+
+
+    <location id='154' name='Diner' type='2' boundType='rect' boundary='-220,20,520,380' camPos='0,190,-330' camAim='0,90,260' entryPos='0,266' entryDir='-15' weevilScale='0.32' roomEvents='yes'>
+        <roomBG path='fixedCam/diner.swf'/>
+        <door id='1' toLoc='129' toDoor='4' x1='-220' z1='260' x2='-290' z2='320' entryDir='-90'/>
+        <interactive type="door" path='slidingDoorAnim' actRect='-350,245,150,100'/>
+        <object name='door1_mc' x='30' y='0' z='200'/>
+        <object name='leftWallOverlay' x='30' y='0' z='260'/>
+        <object name='slidingDoorAnim' x='30' y='0' z='300'/>
+        <object name='table1_mc' x='-90' y='30' z='198'/>
+        <object name='stool1' x='-145' y='0' z='182'/>
+        <object name='stool2' x='-94' y='0' z='262'/>
+        <object name='stool3' x='-39' y='0' z='186'/>
+        <object name='table2_mc' x='99' y='30' z='224'/>
+        <object name='stool4' x='45' y='0' z='212'/>
+        <object name='stool5' x='101' y='0' z='286'/>
+        <object name='stool6' x='146' y='0' z='196'/>
+        <object name='table3_mc' x='-115' y='30' z='20'/>
+        <object name='stool7' x='-167' y='0' z='46'/>
+        <object name='stool8' x='-122' y='0' z='75'/>
+        <object name='stool9' x='-67' y='0' z='41'/>
+        <object name='table4_mc' x='23' y='30' z='28'/>
+        <object name='stool10' x='-30' y='0' z='20'/>
+        <object name='stool11' x='13' y='0' z='80'/>
+        <object name='stool12' x='72' y='0' z='45'/>
+
+        <object name='cashDesk' x='240' y='0' z='395'/>
+        <object name='bar_mc' x='120' y='0' z='36'/>
+        <object name='chefSeat' x='169' y='0' z='27'/>
+
+        <object name='makeFoodPanel_mc' x='0' y='0' z='-10'/>
+        <object name='menu_mc' x='0' y='0' z='-8'/>
+    </location>
+
+
+
+
+    <location id='111' name='Palladium' type='2' boundType='rect' boundary='-250,-8,394,269' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.26'>
+        <roomBG path='fixedCam/RiggsPalladium.swf'/>
+        <cta id='1' extUIData='path:externalUIs/tycoonRevenue.swf' x='128' z='78'/>
+        <door id='1' toLoc='112' toDoor='5' x1='5' z1='255' x2='5' z2='445' entryDir='0'/>
+        <door id='2' toLoc='110' toDoor='1' x1='-150' z1='82' x2='-270' z2='82' entryDir='-90'/>
+        <door id='3' toLoc='120' toDoor='1' x1='148' z1='19' x2='230' z2='19' entryDir='90'/>
+        <door id='4' toLoc='156' toDoor='1' x1='160' z1='210' x2='320' z2='210' entryDir='90'/>
+        <object name='FG' x='-100' y='0' z='-20'/>
+        <object name='popcorn' x='-177' y='0' z='167'/>
+        <object name='weevilPostFront' x='150' y='0' z='7'/>
+        <object name='weevilPostBack' x='160' y='0' z='135'/>
+        <object name='cta1_btn' x='160' y='0' z='130'/>
+        <object name='facade' x='5' y='0' z='300'/>
+        <object name='door2_mc' x='-140' y='0' z='130'/>
+        <object name='door3_mc' x='-100' y='0' z='-35'/>
+    </location>
+
+
+
+
+    <!--
+    <location id='111' name='Palladium' type='2' boundType='rect' boundary='-250,-8,394,269' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.26' timerID='12'>
+        <roomBG path='fixedCam/adCampaigns/BandSlam/RiggsPalladium_bandslam.swf'/>
+        <door id='1' toLoc='112' toDoor='5' x1='5' z1='255' x2='5' z2='445' entryDir='0'/>
+        <door id='2' toLoc='110' toDoor='1' x1='-150' z1='82' x2='-270' z2='82' entryDir='-90'/>
+        <door id='3' toLoc='120' toDoor='1' x1='148' z1='19' x2='230' z2='19' entryDir='90'/>
+        <door id='4' toLoc='156' toDoor='1' x1='160' z1='210' x2='320' z2='210' entryDir='90'/>
+        <interactive path='punt.cam' actRect='-15,65,30,30'/>
+        <interactive path='cam_tink' actRect='-10,240,30,30'/>
+        <object name='FG' x='-100' y='0' z='-20'/>
+        <object name='weevilPostFront' x='150' y='0' z='7'/>
+        <object name='weevilPostBack' x='160' y='0' z='135'/>
+        <object name='facade' x='5' y='0' z='300'/>
+        <object name='door1_mc' x='0' y='0' z='290'/>
+        <object name='door2_mc' x='-140' y='0' z='130'/>
+        <object name='door3_mc' x='-100' y='0' z='-35'/>
+        <object name='door4_mc' x='-100' y='0' z='-30'/>
+        <object name='punt' x='-66' y='0' z='219'/>
+        <object name='tink' x='80' y='0' z='184'/>
+        <object name='cam_tink' x='80' y='0' z='182'/>
+        <object name='cam1' x='-197' y='0' z='191'/>
+        <object name='cam2' x='-139' y='0' z='193'/>
+        <object name='cam3' x='-157' y='0' z='261'/>
+        <object name='p1' x='-47' y='0' z='66'/>
+        <object name='p2' x='64' y='0' z='87'/>
+        <object name='p3' x='-49' y='0' z='108'/>
+        <object name='p4' x='61' y='0' z='139'/>
+        <object name='p5' x='-49' y='0' z='108'/>
+        <object name='p6' x='64' y='0' z='195'/>
+        <object name='p7' x='-48' y='0' z='196'/>
+        <object name='p8' x='133' y='0' z='230'/>
+    </location>
+    -->
+
+    <location id='112' name='PalladiumLobbyG' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' maintainY='yes'>
+        <roomBG path='fixedCam/palladiumLobbyG_outOfOrder.swf'/>
+        <door id='5' toLoc='111' toDoor='1' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='1' extUIData="locName:in Rigg's Palladium Screen 1,path:externalUIs/cinema.swf,area:cinema,screenNum:1,screenLabel:SCREEN 1" type='vid' x1='-182' z1='137' x2='-240' z2='137' entryDir='90'/>
+        <door id='4' extUIData="locName:in Rigg's Palladium Screen 4,path:externalUIs/cinema.swf,area:cinema,screenNum:4,screenLabel:SCREEN 4" type='vid' x1='182' z1='137' x2='240' z2='137' entryDir='-90'/>
+        <door id='2' extUIData="locName:in Rigg's Palladium Screen 2,path:externalUIs/cinema.swf,area:cinema,screenNum:2,screenLabel:SCREEN 2" type='vid' x1='-116' z1='390' x2='-108' z2='500' entryDir='-180'/>
+        <door id='3' extUIData="locName:in Rigg's Palladium Screen 3,path:externalUIs/cinema.swf,area:cinema,screenNum:3,screenLabel:SCREEN 3" type='vid' x1='116' z1='390' x2='108' z2='500' entryDir='-180'/>
+        <door id='6' toLoc='151' toDoor='5' x1='-37 ' z1='360' x2='-37' z2='460' entryDir='180'/>
+        <door id='7' toLoc='151' toDoor='6' x1='37 ' z1='360' x2='37' z2='460' entryDir='180'/>
+        <interactive type="door" path='door6_mc' actRect='-60,404,50,100'/>
+        <interactive type="door" path='door7_mc' actRect='10,350,50,50'/>
+        <object name='wallLights' x='0' y='0' z='110'/>
+        <object name='doors1_4_overlay' x='0' y='0' z='112'/>
+        <object name='doors2_3_liftOverlay' x='0' y='0' z='400'/>
+        <object name='outOfOrder' x='0' y='0' z='399'/>
+        <object name='door5_mc' x='0' y='0' z='401'/>
+        <object name='door6_mc' x='0' y='0' z='402'/>
+        <noGoArea type='rect' x='150' z='250' w='50' h='80'/>
+    </location>
+
+
+    <location id='151' name='PalladiumLobby1' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' maintainY='yes'>
+        <roomBG path='fixedCam/palladiumLobby1_newColour.swf'/>
+        <door id='1' extUIData="locName:in Rigg's Palladium Screen 5,path:externalUIs/cinema.swf,area:cinema,screenNum:5,screenLabel:SCREEN 5" type='vid' x1='-182' z1='137' x2='-240' z2='137' entryDir='90'/>
+        <door id='4' extUIData="locName:in Rigg's Palladium Screen 8,path:externalUIs/cinema.swf,area:cinema,screenNum:8,screenLabel:SCREEN 8" type='vid' x1='182' z1='137' x2='240' z2='137' entryDir='-90'/>
+        <door id='2' extUIData="locName:in Rigg's Palladium Screen 6,path:externalUIs/cinema.swf,area:cinema,screenNum:6,screenLabel:SCREEN 6" type='vid' x1='-116' z1='390' x2='-108' z2='500' entryDir='-180'/>
+        <door id='3' extUIData="locName:in Rigg's Palladium Screen 7,path:externalUIs/cinema.swf,area:cinema,screenNum:7,screenLabel:SCREEN 7" type='vid' x1='116' z1='390' x2='108' z2='500' entryDir='-180'/>
+        <door id='5' toLoc='112' toDoor='6' x1='-37 ' z1='360' x2='-37' z2='460' entryDir='180'/>
+        <door id='6' toLoc='112' toDoor='7' x1='37 ' z1='360' x2='37' z2='460' entryDir='180'/>
+        <interactive type="door" path='door5_mc' actRect='-60,350,50,50'/>
+        <interactive type="door" path='door6_mc' actRect='10,404,50,100'/>
+        <!--<object name='wallLights' x='0' y='0' z='110'/>-->
+        <object name='doors1_4_overlay' x='0' y='0' z='112'/>
+        <object name='doors2_3_liftOverlay' x='0' y='0' z='400'/>
+        <object name='door5_mc' x='0' y='0' z='401'/>
+        <object name='door6_mc' x='0' y='0' z='402'/>
+        <noGoArea type='rect' x='-200' z='250' w='50' h='80'/>
+    </location>
+
+
+
+    <location id='156' name='FiggsCafeTerrace' type='2' boundType='rect' boundary='-230,-24,560,404' camPos='-276,240,-246' camAim='10,32,174' entryPos='32,174' weevilScale='0.4' roomEvents='yes'>
+        <roomBG path='fixedCam/FiggsCafe_terrace.swf'/>
+        <door id='1' toLoc='111' toDoor='4' x1='-168' z1='224' x2='-255' z2='224' entryDir='0'/>
+        <door id='2' toLoc='109' toDoor='6' x1='335' z1='285' x2='710' z2='285' entryDir='0'/>
+        <object name='frontVerge' x='-47' y='0' z='-32'/>
+        <object name='menuBoard' x='287' y='0' z='333'/>
+        <object name='bench' x='355' y='0' z='220'/>
+        <object name='icecreamMachine' x='-163' y='0' z='358'/>
+        <object name='table1_mc' x='-41' y='30' z='172'/>
+        <object name='stool1' x='-94' y='0' z='203'/>
+        <object name='stool2' x='27' y='0' z='230'/>
+        <object name='stool3' x='-31' y='0' z='106'/>
+        <object name='table2_mc' x='129' y='30' z='96'/>
+        <object name='stool4' x='89' y='0' z='141'/>
+        <object name='stool5' x='225' y='0' z='146'/>
+        <object name='stool6' x='121' y='0' z='30'/>
+        <object name='table3_mc' x='-182' y='30' z='83'/>
+        <object name='stool7' x='-228' y='0' z='84'/>
+        <object name='stool8' x='-162' y='0' z='150'/>
+        <object name='stool9' x='-145' y='0' z='43'/>
+        <object name='table4_mc' x='-38' y='30' z='13'/>
+        <object name='stool10' x='-94' y='0' z='5'/>
+        <object name='stool11' x='1' y='0' z='69'/>
+        <object name='stool12' x='7' y='0' z='-22'/>
+        <object name='makeFoodPanel_mc' x='-160' y='0' z='-50'/>
+        <object name='menu_mc' x='-160' y='0' z='-48'/>
+    </location>
+
+
+
+    <!--Origional Weevil Post-->
+    <location id='120' name='WeevilPost' type='2' boundType='rect' boundary='-150,20,300,310' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.34'>
+        <roomBG path='fixedCam/weevilPost.swf'/>
+        <!--<cta id='1' extUIData='path:externalUIs/ecard.swf' x='-150' z='69'/>-->
+        <!--<cta id='2' extUIData='path:externalUIs/poll.swf' x='-20' z='320'/>-->
+        <!--<cta id='2' extUIData='path:externalUIs/surveyNew.swf' x='-20' z='320'/>-->
+        <door id='1' toLoc='111' toDoor='3' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' extUIData="locName:in Weevil Post, getting a mulch-tastic ticket for the next mulch give-away,path:externalUIs/lotto.swf" x1='160 ' z1='150' x2='230' z2='150' entryDir='-90'/>
+        <object name='door2_mc' x='200' y='0' z='120'/>
+    </location>
+
+
+    <location id='110' name='InksOrange' type='1' boundType='rect' boundary='-150,188,450,440' xWall='0' zWall='0' camPos='-42,197,-37' camAim='-66,15,436' camBounds='-90,35,-150,525,240,530' entryPos='-93,320' entryDir='-180' weevilScale='0.18'>
+        <floor path='floors/inks.jpg'/>
+        <noGoArea type='rad' x='74' z='270' r='35'/>
+        <door id='1' toLoc='111' toDoor='2' x1='-180' z1='424' x2='-360' z2='424' entryDir='90'/>
+        <door id='2' toLoc='109' toDoor='1' x1='60' z1='630' x2='60' z2='800' entryDir='0'/>
+        <door id='3' toLoc='121' toDoor='2' x1='250' z1='606' x2='310' z2='606' entryDir='-90'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='-210' y='0' z='424' scale='0.13' ry='90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='2' x='60' y='0' z='700' scale='0.13' ry='0' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='3' x='221' y='0' z='611' scale='0.13' ry='-90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/orangeSegment.swf' path1='assets3D/orangeSegment_1.swf' depthOffset='-32' x='-200' y='0' z='290' scale='0.4' ry='270' rxMin='6' rxMax='38' ryMin='90' ryMax='270' framesY='46' symAxes='1' rIncr='2'/>
+        <preRend3D path='assets3D/orangeSegment.swf' path1='assets3D/orangeSegment_2.swf' x='230' y='0' z='700' scale='0.4' ry='180' rxMin='6' rxMax='38' ryMin='90' ryMax='270' framesY='46' symAxes='1' rIncr='2'/>
+        <preRend3D path='assets3D/orangePeel.swf' path1='assets3D/orangePeel_1.swf' depthOffset='-128' x='-162' y='0' z='640' scale='0.84' ry='225' rxMin='6' rxMax='38' ryMin='141' ryMax='219' framesY='21' symAxes='1' rIncr='2'/>
+        <sign path='assets3D/pinSign.swf' txt="Message Board" extUIData='path:externalUIs/messageBoard_2.swf' x='85' y='0' z='625' scale='0.5' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/cottonReel.swf' path1='assets3D/cottonReel_1.swf' x='74' y='0' z='270' scale='0.8' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/needle.swf' path1='assets3D/orangeBlob.swf' x='315' y='0' z='175' scale='0.36' ry='-40' rxMin='9' rxMax='51' ryMin='0' ryMax='360' framesY='31' symAxes='2' rIncr='3'/>
+
+        <preRend3D path='assets3D/orangeBlob.swf' x='37' y='0' z='266' scale='0.05' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='39' y='0' z='250' scale='0.06' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='43' y='0' z='247' scale='0.03' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='52' y='0' z='300' scale='0.03' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='43' y='0' z='248' scale='0.02' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='45' y='0' z='284' scale='0.05' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='43' y='0' z='279' scale='0.04' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='66' y='0' z='240' scale='0.03' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='45' y='0' z='284' scale='0.04' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='45' y='0' z='284' scale='0.04' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='24' y='0' z='287' scale='0.05' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='15' y='0' z='279' scale='0.037' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/orangeBlob.swf' x='58' y='0' z='240' scale='0.08' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='1' arrivalPoints='25,400,95,400' playerPositions='60,374,60,375,58,360,60,426,60,425,62,440' x='60' y='0' z='400' scale='0.19' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='2' arrivalPoints='85,520,155,520' playerPositions='120,494,120,495,118,480,120,546,120,545,122,560' x='120' y='0' z='520' scale='0.19' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+
+        <gameSlot path='assets3D/flipMulch.swf' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='6' arrivalPoints='155,500,225,500' playerPositions='190,474,190,475,188,460,190,526,190,525,192,540' x='190' y='0' z='500' scale='0.19' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <gameSlot path='assets3D/poolTable.swf' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='4' arrivalPoints='-53,562,-50,483' playerPositions='-84,511,-83,511,-102,532,-18,511,-19,511,-15,472' x='-51' y='0' z='513' scale='0.19' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='0' arrivalPoints='-168,519,-98,519'playerPositions='-133,493,-133,494,-135,479,-133,545,-133,544,-135,559' x='-133' y='0' z='519' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+
+
+        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:1' boundary='type:rad,r:20' x='87' y='30' z='312' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='0' y='0' z='312' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/bubble_caesar.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:3' boundary='type:rad,r:20' x='105' y='20' z='575' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='105' y='0' z='575' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:0' boundary='type:rad,r:20' x='125' y='20' z='555' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='125' y='0' z='555' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+    </location>
+
+
+    <location id='109' name='GrottoClub' type='1' boundType='rect' boundary='-150,353,270,265' xWall='0' zWall='0' camPos='-373,187,274' camAim='-35,15,495' camBounds='-375,35,100,57,200,560' entryPos='-22,354' entryDir='-180' weevilScale='0.13'>
+        <floor path='floors/grottoClub.jpg'/>
+        <door id='1' toLoc='110' toDoor='2' x1='-18' z1='335' x2='-18' z2='145' entryDir='180'/>
+        <door id='2' toLoc='121' toDoor='3' x1='170' z1='630' x2='270' z2='640' entryDir='90'/>
+        <door id='3' toLoc='155' toDoor='1' x1='125' z1='515' x2='195' z2='515' entryDir='90'/>
+        <door id='4' toLoc='161' toDoor='1' x1='22' z1='622' x2='22' z2='722' entryDir='0'/>
+        <door id='5' toLoc='107' toDoor='3' x1='-100 ' z1='390' x2='-200' z2='145' y2='1500' entryDir='0'/>
+        <door id='6' toLoc='156' toDoor='2' x1='-160 ' z1='480' x2='-260' z2='480' entryDir='0'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='-18' y='0' z='308' scale='0.07' ry='180' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='2' x='226' y='0' z='640' scale='0.07' ry='-90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='3' x='155' y='0' z='515' scale='0.08' ry='-90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='4' x='22' y='0' z='660' scale='0.08' ry='0' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='6' x='-175' y='0' z='480' scale='0.08' ry='90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/grotto.swf' path1='assets3D/grotto_1.swf' x='25' y='0' z='770' scale='0.4' ry='180' rxMin='6' rxMax='30' ryMin='118' ryMax='242' framesY='43' symAxes='1' rIncr='1.5'/>
+        <preRend3D path='assets3D/disco.swf' path1='assets3D/disco_1.swf' x='270' y='0' z='520' scale='0.4' ry='90' rxMin='6' rxMax='30' ryMin='118' ryMax='242' framesY='43' symAxes='1' rIncr='1.5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_1.swf' x='155' y='0' z='710' scale='0.31' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick2.swf' path1='assets3D/mouldOnStick2_1.swf' x='212' y='0' z='660' scale='0.24' ry='30' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_2.swf' x='250' y='0' z='760' scale='0.3' ry='-80' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick2.swf' path1='assets3D/mouldOnStick2_2.swf' x='-79' y='0' z='664' scale='0.3' ry='100' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_3.swf' x='157' y='0' z='425' scale='0.29' ry='160' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_4.swf' x='61' y='0' z='300' scale='0.29' ry='90' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick2.swf' path1='assets3D/mouldOnStick2_3.swf' x='30' y='0' z='250' scale='0.29' ry='100' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick2.swf' path1='assets3D/mouldOnStick2_4.swf' x='-195' y='0' z='552' scale='0.29' ry='160' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_5.swf' x='-183' y='0' z='425' scale='0.24' ry='100' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_6.swf' x='-62' y='0' z='321' scale='0.34' ry='20' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_7.swf' x='393' y='0' z='412' scale='0.29' ry='-60' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_8.swf' x='-113' y='0' z='839' scale='0.34' ry='300' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mouldOnStick.swf' path1='assets3D/mouldOnStick_9.swf' x='-258' y='0' z='518' scale='0.20' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mould2.swf' path1='assets3D/mould2_5.swf' x='-200' y='0' z='330' scale='0.22' ry='120' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+
+        <preRend3D path='assets3D/drawingPin.swf' x='-123' y='0' z='379' doorID='5' scale='0.19' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/drawingPin.swf' x='-121' y='0' z='433' scale='0.19' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/drawingPin.swf' x='-68' y='0' z='375' scale='0.19' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/drawingPin.swf' x='-57' y='0' z='438' scale='0.19' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/drawingPin.swf' x='-78' y='0' z='504' scale='0.19' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/drawingPin.swf' x='3' y='0' z='412' scale='0.19' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/discoBallPost.swf' x='145' y='0' z='555' scale='0.24' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+
+        <preRend3D path='assets3D/discoBallPost.swf' x='145' y='0' z='485' scale='0.24' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+
+        <preRend3D path='assets3D/balloonC.swf' x='180' y='0' z='605' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonL.swf' x='180' y='0' z='585' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonU.swf' x='180' y='0' z='565' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonB.swf' x='180' y='0' z='545' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+
+        <preRend3D path='assets3D/balloonF.swf' x='180' y='0' z='500' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonL.swf' x='180' y='0' z='480' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonI.swf' x='180' y='0' z='460' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonN.swf' x='180' y='0' z='440' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+        <preRend3D path='assets3D/balloonG.swf' x='180' y='0' z='420' scale='0.29' ry='0' rxMin='5' rxMax='50' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='5'/>
+
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Connect-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='3' arrivalPoints='10,470,10,530' playerPositions='-10,500,-9,500,-20,500,30,500,29,500,40,500' x='10' y='0' z='500' scale='0.18' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/poolTable.swf' lbl='Play 2 Ball!' gamePath='multiplayerGames/ballGame/BallGame2Ball.swf' slot='5' arrivalPoints='-130,540,-52,606' playerPositions='-65,570,-67,570,-63,570,-125,568,-123,568,-127,568' x='-93' y='0' z='568' scale='0.15' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+
+        <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='1' arrivalPoints='27,420,30,420' playerPositions='50,420,51,420,40,420,90,420,89,420,100,420' x='70' y='0' z='420' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+
+
+
+    </location>
+
+
+    <location id='155' name='ClubFling' type='2' boundType='rect' boundary='-200,-100,438,420' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.28' maintainY='yes' hasAudio='yes' playList='30,31,32'>
+        <roomBG path='fixedCam/ClubFling.swf'/>
+        <door id='1' toLoc='109' toDoor='3' x1='12' z1='-18' x2='12' z2='-110' entryDir='180'/>
+        <object name='DJstand' x='-137' y='0' z='44'/>
+        <object name='starLights1' x='-137' y='0' z='46'/>
+        <object name='starLights2' x='-137' y='0' z='45'/>
+        <object name='discoBall_mc' x='-137' y='0' z='39'/>
+    </location>
+
+
+    <location id='161' name='PoolHall' type='2' boundType='rect' boundary='-240,-90,490,872' camPos='-276,240,-246' camAim='10,32,174' entryPos='-9,-34' entryDir='180' weevilScale='0.34' roomEvents='yes'>
+        <roomBG path='fixedCam/poolHall.swf'/>
+
+        <door id='1' toLoc='109' toDoor='4' x1='12' z1='-18' x2='12' z2='-110' entryDir='180'/>
+
+        <object name='table1' x='-131' y='0' z='34' type='gameSlot' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='9' arrivalPoints='-95,-10,-90,112' playerPositions='-177,43,-175,43,-198,60,-26,43,-28,43,-24,25'/>
+        <object name='table2' x='39' y='0' z='30' type='gameSlot' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='10' arrivalPoints='74,-10,50,103' playerPositions='0,43,2,43,-7,-9,187,43,185,43,200,-9'/>
+
+        <object name='table3' x='-134' y='0' z='164' type='gameSlot' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='11' arrivalPoints='-127,119,-136,247' playerPositions='-177,180,-175,180,-215,127,-26,180,-28,180,-24,135'/>
+        <object name='table4' x='39' y='0' z='170' type='gameSlot' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='12' arrivalPoints='84,133,39,245' playerPositions='0,180,2,180,-7,135,187,180,185,180,200,135'/>
+
+        <object name='table5' x='-137' y='0' z='319' type='gameSlot' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='13' arrivalPoints='-87,278,-148,407' playerPositions='-177,335,-175,335,-190,300,-26,335,-28,335,-15,290'/>
+        <object name='table6' x='38' y='0' z='327' type='gameSlot' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='14' arrivalPoints='69,285,31,408' playerPositions='0,335,2,335,-7,290,187,335,185,335,200,290'/>
+
+        <object name='table7' x='-128' y='0' z='510' type='gameSlot' lbl='Play 12 Ball!' gamePath='multiplayerGames/ballGame/BallGame12Ball.swf' slot='15' arrivalPoints='-127,442,-30,641' playerPositions='-177,510,-175,510,-193,457,-26,510,-28,510,17,699'/>
+        <object name='table8' x='35' y='0' z='492' type='gameSlot' lbl='Play 12 Ball!' gamePath='multiplayerGames/ballGame/BallGame12Ball.swf' slot='16' arrivalPoints='60,453,40,629' playerPositions='0,510,2,510,62,684,187,510,185,510,230,640'/>
+
+        <object name='howToPlay_mc' x='-230' y='0' z='-200'/>
+        <object name='topTen_mc' x='-230' y='0' z='-198'/>
+
+        <object name='t1_L1' x='-147' y='0' z='75'/>
+        <object name='t1_L2' x='-56' y='0' z='19'/>
+        <object name='t2_L1' x='30' y='0' z='74'/>
+        <object name='t2_L2' x='140' y='0' z='20'/>
+        <object name='t3_L1' x='-142' y='0' z='225'/>
+        <object name='t3_L2' x='-63' y='0' z='165'/>
+        <object name='t4_L1' x='31' y='0' z='221'/>
+        <object name='t4_L2' x='136' y='0' z='166'/>
+        <object name='t5_L1' x='-141' y='0' z='390'/>
+        <object name='t5_L2' x='-70' y='0' z='319'/>
+        <object name='t6_L1' x='34' y='0' z='400'/>
+        <object name='t7_L1' x='-133' y='0' z='590'/>
+        <object name='t8_L1' x='30' y='0' z='578'/>
+    </location>
+
+
+
+    <location id='102' name='DoshPalace' type='2' boundType='rect' boundary='-170,105,340,205' camPos='0,145,-115' camAim='0,15,500' entryPos='0,210' weevilScale='0.19' entryDir='180' noZoom='yes'>
+        <roomBG path='fixedCam/doshsPalace.swf'/>
+        <door id='1' toLoc='169' toDoor='1' x1='0 ' z1='320' x2='0' z2='430' entryDir='0'/>
+        <door id='2' extUIData='path:externalUIs/mulchShoot.swf' x1='-132' z1='312' x2='-300' z2='398' entryDir='180'/>
+        <door id='3' toLoc='101' toDoor='1' x1='132 ' z1='310' x2='400' z2='460' entryDir='0'/>
+        <interactive type="door" path='palaceDoors' actRect='-40,300,80,200'/>
+        <object name='door1_mc' x='0' y='0' z='374'/>
+        <object name='palaceDoors' x='0' y='0' z='375'/>
+        <object name='waterFalls' x='0' y='0' z='275'/>
+
+        <object name='shroom1' x='0' y='0' z='145'/>
+        <object name='shroom2' x='0' y='0' z='100'/>
+        <object name='shroom3' x='0' y='0' z='115'/>
+        <object name='shroom4' x='0' y='0' z='102'/>
+        <object name='shroom5' x='0' y='0' z='94'/>
+
+        <object name='connectMulch' x='0' y='0' z='113' type='gameSlot' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='10' arrivalPoints='-135,150,-50,135' playerPositions='-103,162,-103,160,-103,178,-103,96,-103,98,-103,85'/>
+        <object name='flipMulch' x='0' y='0' z='240' type='gameSlot' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='7' arrivalPoints='-38,230,-115,228' playerPositions='-77,255,-77,253,-77,265,-77,191,-77,193,-77,180'/>
+        <object name='squares' x='0' y='0' z='218' type='gameSlot' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='5' arrivalPoints='48,190,122,192' playerPositions='82,224,82,222,82,232,82,158,82,160,82,150'/>
+    </location>
+
+    <location id='169' name='DoshPalaceInside' type='2' boundType='rect' boundary='-240,100,440,200' camPos='0,145,-115' camAim='0,15,500' entryPos='-60,160' weevilScale='0.2' entryDir='180' roomEvents='yes' noZoom='yes'>
+        <roomBG path='fixedCam/doshsPalace_inside3.swf'/>
+        <door id='1' toLoc='102' toDoor='1' x1='0 ' z1='140' x2='0' z2='10' entryDir='180'/>
+        <door id='2' extUIData="locName:wevMod,path:externalUIs/Register.swf" x1='130' z1='145' x2='200' z2='160' entryDir='90'/>
+        <door id='3' extUIData="locName:wevMod,path:externalUIs/ChangeWeevil5.swf" x1='0' z1='195' x2='200' z2='50' y2='600' entryDir='90'/>
+        <!--<door id='4' extUIData="locName:wevMod,path:externalUIs/weevilModifier.swf" x1='-130' z1='145' x2='-200' z2='160' entryDir='90'/>-->
+        <interactive type="door" path='regDoor' actRect='110,80,120,100'/>
+        <interactive path='WCpad' actRect='-10,185,20,20'/>
+        <object name='door2_mc' x='0' y='0' z='120'/>
+        <object name='door4_mc' x='0' y='0' z='121'/>
+        <object name='door3_mc' x='0' y='0' z='185'/>
+        <object name='tubeBack' x='0' y='0' z='205'/>
+        <object name='signs' x='0' y='0' z='145'/>
+        <object name='monitors' x='0' y='0' z='100'/>
+
+        <object name='money1' x='0' y='0' z='196'/>
+        <object name='money2' x='0' y='0' z='210'/>
+        <!--<object name='money3' x='0' y='0' z='240'/>-->
+        <object name='money4' x='0' y='0' z='220'/>
+        <object name='money5' x='0' y='0' z='153'/>
+        <object name='money6' x='0' y='0' z='221'/>
+        <object name='money7' x='0' y='0' z='236'/>
+
+        <object name='notes_mc' x='0' y='0' z='-50'/>
+    </location>
+
+
+    <location id='101' name='PeelPark' type='1' boundType='rect' boundary='-27,425,390,360' xWall='1' zWall='1' camPos='-206,212,222' camAim='142,20,576' camBounds='-210,35,190,475,260,965' entryPos='-55,609' entryDir='-90' weevilScale='0.22'>
+        <floor path='floors/peelPark.swf'/>
+        <noGoArea type='rect' x='184' z='555' w='100' h='95'/>
+        <door id='1' toLoc='102' toDoor='1' x1='-45' z1='609' x2='-100' z2='609' entryDir='-90'/>
+        <door id='2' toLoc='104' toDoor='1' x1='235' z1='410' x2='235' z2='270' entryDir='180'/>
+        <door id='3' extUIData='path:externalUIs/whackAweevil.swf' x1='272' z1='500' x2='277' z2='500' entryDir='180'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='-68' y='0' z='609' scale='0.15' ry='90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='2' x='235' y='0' z='370' scale='0.15' ry='180' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/pinSign_whackaweevil.swf' doorID='3' x='277' y='0' z='500' scale='0.45' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/bentNail.swf' path1='assets3D/bentNail_1.swf' x='-55' y='0' z='557' scale='0.25' ry='-40' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/bentNail.swf' path1='assets3D/bentNail_2.swf' x='-55' y='0' z='660' scale='0.25' ry='80' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/chocWeevil.swf' path1='assets3D/chocWeevil_1.swf' x='232' y='0' z='605' scale='0.54' ry='-90' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/button.swf' path1='assets3D/button_1.swf' x='350' y='0' z='828' scale='0.58' ry='-35' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <preRend3D path='assets3D/stain3.swf' bg='true' x='512' y='90' z='770' scale='0.28' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='512' y='130' z='880' scale='0.28' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain2.swf' bg='true' x='512' y='120' z='610' scale='0.54' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain1.swf' bg='true' x='512' y='60' z='510' scale='0.45' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='512' y='100' z='270' scale='0.5' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='512' y='170' z='80' scale='0.45' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='512' y='30' z='-180' scale='0.45' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain3.swf' bg='true' x='40' y='90' z='1024' scale='0.23' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain2.swf' bg='true' x='220' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='455' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain1.swf' bg='true' x='365' y='40' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='-210' y='130' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='-440' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='-620' y='10' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mould2.swf' path1='assets3D/mould2_1.swf' x='-135' y='0' z='665' scale='0.21' ry='120' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_1.swf' x='-135' y='0' z='550' scale='0.17' ry='30' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_2.swf' x='-210' y='0' z='665' scale='0.16' ry='60' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+        <preRend3D path='assets3D/mould2.swf' path1='assets3D/mould2_2.swf' x='-210' y='0' z='550' scale='0.25' ry='15' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_3.swf' x='-60' y='0' z='465' scale='0.21' ry='30' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_4.swf' x='-60' y='0' z='727' scale='0.23' ry='110' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_5.swf' x='30' y='0' z='388' scale='0.22' ry='50' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+        <preRend3D path='assets3D/mould2.swf' path1='assets3D/mould2_3.swf' x='136' y='0' z='385' scale='0.3' ry='-40' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_6.swf' x='330' y='0' z='388' scale='0.24' ry='-30' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+
+        <preRend3D path='assets3D/mould2.swf' path1='assets3D/mould2_4.swf' x='55' y='0' z='832' scale='0.3' ry='15' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/mould1.swf' path1='assets3D/mould1_7.swf' x='190' y='0' z='832' scale='0.25' ry='-30' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='10' symAxes='3' rIncr='5'/>
+
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='8' arrivalPoints='-25,475,45,475' playerPositions='10,444,10,445,28,430,10,506,10,505,0,525' x='10' y='0' z='475' scale='0.19' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='9' arrivalPoints='75,475,145,475' playerPositions='110,444,110,445,128,430,110,506,110,505,100,525' x='110' y='0' z='475' scale='0.19' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/poolTable.swf' lbl='Play 2 Ball!' gamePath='multiplayerGames/ballGame/BallGame2Ball.swf' slot='6' arrivalPoints='26,670,119,665' playerPositions='19,697,21,697,17,697,107,697,105,697,109,697' x='67' y='0' z='700' scale='0.24' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <library id='1' path='asset_library1.swf'>
+            <pin x1='374' y1='52' z1='730' x2='373' y2='0' z2='728' scale='0.7'/>
+            <pin x1='378' y1='46' z1='649' x2='372' y2='0' z2='644' scale='0.7'/>
+            <pin x1='372' y1='48' z1='552' x2='373' y2='0' z2='555' scale='0.7'/>
+            <pin x1='375' y1='50' z1='470' x2='371' y2='0' z2='472' scale='0.7'/>
+        </library>
+        <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='3' arrivalPoints='156,706,249,701' playerPositions='149,733,151,733,147,733,237,733,235,733,239,733' x='197' y='0' z='736' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+
+        <preRend3D path='assets3D/bubble_gladiator.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:0' boundary='type:rad,r:20' x='292' y='30' z='590' scale='0.24' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='292' y='0' z='590' scale='0.24' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+    </location>
+
+
+    <location id='103' name='GongsPipenest' type='2' boundType='rad' boundary='0,280,130' camPos='0,261,-231' camAim='0,32,144' entryPos='-10,190' entryDir='-160' weevilScale='0.26'>
+        <roomBG path='fixedCam/pipeNest_haggleHut.swf'/>
+        <door id='1' toLoc='102' toDoor='2' x1='-165' z1='272' x2='-340' z2='359' entryDir='-90'/>
+        <door id='2' toLoc='104' toDoor='2' x1='165' z1='272' x2='340' z2='359' entryDir='90'/>
+        <!--<door id='3' extUIData="locName:in Competitions,path:externalUIs/comps/comps_301110.swf" x1='93' z1='380' x2='170' z2='426' entryDir='110'/>-->
+        <door id='3' extUIData="locName:in Competitions,path:externalUIs/comps/comps_031210.swf" x1='93' z1='380' x2='170' z2='426' entryDir='110'/>
+        <door id='4' extUIData="locName:HaggleHut,path:externalUIs/HaggleHut.swf" x1='10' z1='390' x2='-30' z2='490' entryDir='-90'/>
+        <object name='overlay' x='0' y='0' z='0'/>
+        <object name='hutOverlay' x='0' y='0' z='400'/>
+        <object name='ad_mc' x='42' y='0' z='-400'/>
+        <object name='door3_mc' x='130' y='0' z='358'/>
+        <object name='tube1Front' x='-130' y='0' z='369'/>
+        <object name='tube3Front' x='130' y='0' z='369'/>
+
+        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:2' boundary='type:rad,r:20' x='110' y='26' z='200' scale='0.20' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='110' y='0' z='200' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:1' boundary='type:rad,r:20' x='-90' y='26' z='200' scale='0.20' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='-90' y='0' z='200' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+    </location>
+
+
+
+
+    <location id='107' name='Scrapyard' type='1' boundType='rect' boundary='-128,369,465,451' xWall='1' zWall='1' camPos='-329,340,179' camAim='103,20,604' camBounds='-500,35,0,320,325,800' entryPos='55,390' entryDir='-110' weevilScale='0.22'>
+        <floor path='floors/scrapyard.swf'/>
+        <noGoArea type='rad' x='100' z='600' r='95'/>
+        <door id='1' toLoc='129' toDoor='2' x1='124' z1='395' x2='124' z2='269' entryDir='-90'/>
+
+        <door id='2' toLoc='113' toDoor='1' x1='-175' z1='593' x2='-300' z2='593' entryDir='-90'/>
+        <door id='3' toLoc='109' toDoor='5' x1='419' z1='780' x2='419' z2='900' entryDir='-90'/>
+        <door id='4' extUIData='path:externalUIs/whackAweevil.swf' x1='360' z1='640' x2='360' z2='645' entryDir='-90'/>
+
+        <preRend3D path='assets3D/pinSign_whackaweevil.swf' doorID='4' x='360' y='0' z='645' scale='0.6' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='2' x='-188' y='0' z='593' scale='0.12' ry='90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='124' y='0' z='395' scale='0.12' ry='180' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/pipe_overlay.swf' path1='assets3D/pipe_overlay_1.swf' depthOffset='64' x='415' y='0' z='850' scale='0.5' ry='135' rxMin='6' rxMax='39' ryMin='135' ryMax='225' framesY='31' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pipe_underlay.swf' path1='assets3D/pipe_underlay_1.swf' depthOffset='-64' doorID='3' x='415' y='0' z='850' scale='0.5' ry='135' rxMin='6' rxMax='39' ryMin='135' ryMax='225' framesY='31' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/nut.swf' path1='assets3D/nut.swf' x='100' y='0' z='600' scale='0.6' ry='22.5' rxMin='6' rxMax='58.5' ryMin='0' ryMax='360' framesY='16' symAxes='8' rIncr='1.5'/>
+        <!--<preRend3D path='assets3D/bentNail.swf' path1='assets3D/bentNail_3.swf' x='453' y='0' z='680' scale='0.54' ry='-40' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>-->
+        <preRend3D path='assets3D/needle.swf' path1='assets3D/needle_2.swf' x='453' y='0' z='580' scale='0.48' ry='-40' rxMin='9' rxMax='51' ryMin='0' ryMax='360' framesY='31' symAxes='2' rIncr='3'/>
+        <preRend3D path='assets3D/button.swf' path1='assets3D/button_2.swf' x='-71' y='0' z='181' scale='0.64' ry='-45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <preRend3D path='assets3D/mapPin.swf' path1='assets3D/mapPin_1.swf' x='-175' y='0' z='641' scale='0.5' ry='0' rxMin='6' rxMax='60' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin.swf' path1='assets3D/mapPin_2.swf' x='-175' y='0' z='546' scale='0.5' ry='0' rxMin='6' rxMax='60' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin.swf' path1='assets3D/mapPin_2.swf' x='50' y='0' z='313' scale='0.5' ry='0' rxMin='6' rxMax='60' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin.swf' path1='assets3D/mapPin_3.swf' x='162' y='0' z='313' scale='0.5' ry='0' rxMin='6' rxMax='60' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_1.swf' x='-175' y='0' z='860' scale='0.36' ry='40' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/rock1.swf' path1='assets3D/rock1_1.swf' x='20' y='0' z='860' scale='0.29' ry='-10' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock1.swf' path1='assets3D/rock1_2.swf' x='200' y='0' z='860' scale='0.27' ry='120' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_1.swf' x='-175' y='0' z='736' scale='0.18' ry='0' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock1.swf' path1='assets3D/rock1_2.swf' x='-175' y='0' z='435' scale='0.21' ry='-50' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock1_2.swf' x='-175' y='0' z='313' scale='0.34' ry='-80' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock1.swf' path1='assets3D/rock1_2.swf' x='330' y='0' z='314' scale='0.4' ry='-140' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/stain3.swf' bg='true' x='512' y='90' z='770' scale='0.28' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='512' y='130' z='880' scale='0.28' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain2.swf' bg='true' x='512' y='120' z='610' scale='0.54' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain1.swf' bg='true' x='512' y='60' z='510' scale='0.45' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='512' y='100' z='270' scale='0.5' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='512' y='170' z='80' scale='0.45' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='512' y='30' z='-180' scale='0.45' ry='180' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain3.swf' bg='true' x='40' y='90' z='1024' scale='0.23' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain2.swf' bg='true' x='220' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='455' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain1.swf' bg='true' x='365' y='40' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='-210' y='130' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='-490' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='-720' y='10' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/poolTable.swf' lbl='Play 2 Ball!' gamePath='multiplayerGames/ballGame/BallGame2Ball.swf' slot='7' arrivalPoints='247,490,253,419' playerPositions='288,488,288,486,288,490,297,407,297,409,297,405' x='295' y='0' z='447' scale='0.24' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <gameSlot path='assets3D/poolTable.swf' lbl='Play 2 Ball!' gamePath='multiplayerGames/ballGame/BallGame2Ball.swf' slot='8' arrivalPoints='-16,789,-35,692' playerPositions='-66,784,-66,782,-66,786,-66,693,-66,695,-66,691' x='-64' y='0' z='739' scale='0.24' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+
+        <preRend3D path='assets3D/bubble_caveman.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:4' boundary='type:rad,r:20' x='-19' y='15' z='615' scale='0.22' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='-19' y='0' z='615' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:2' boundary='type:rad,r:20' x='122' y='40' z='369' scale='0.18' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='122' y='0' z='369' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+    </location>
+
+
+    <!--
+    <location id='113' name='CastleGam' type='1' boundType='rect' boundary='-114,373,281,220' xWall='0' zWall='1' camPos='-274,235,152' camAim='42,15,583' camBounds='-500,35,80,500,360,620' entryPos='28,360' entryDir='-180' weevilScale='0.16'>
+        <floor path='floors/castleGam.swf'/>
+
+        <door id='1' toLoc='107' toDoor='2' x1='192' z1='513' x2='300' z2='513' entryDir='90'/>
+        <door id='2' toLoc='114' toDoor='1' x1='28' z1='599' x2='28' z2='800' entryDir='0'/>
+        <door id='3' toLoc='125' toDoor='1' x1='28' z1='340' x2='28' z2='250' entryDir='0'/>
+        <door id='4' extUIData='path:externalUIs/mulchShoot.swf' x1='-214' z1='505' x2='-220' z2='505' entryDir='0'/>
+
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='205' y='0' z='513' scale='0.12' ry='-90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='2' x='28' y='0' z='648' scale='0.12' ry='0' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='3' x='28' y='0' z='340' scale='0.12' ry='180' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        
+        <preRend3D path='assets3D/pinSign_muclshoot.swf' doorID='4' x='-220' y='0' z='505' scale='0.35' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+    
+        <preRend3D path='assets3D/castle.swf' path1='assets3D/castle_1.swf' depthOffset='64' x='28' y='0' z='888' scale='1.6' ry='180' rxMin='6' rxMax='30' ryMin='108' ryMax='252' framesY='49' symAxes='1' rIncr='1.5'/>
+        <preRend3D path='assets3D/rock1.swf' path1='assets3D/rock1_3.swf' x='80' y='0' z='700' scale='0.12' ry='10' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_2.swf' x='-25' y='0' z='700' scale='0.15' ry='110' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_3.swf' x='80' y='0' z='640' scale='0.13' ry='-30' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock1.swf' path1='assets3D/rock1_4.swf' x='-25' y='0' z='640' scale='0.14' ry='-70' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_4.swf' x='-134' y='0' z='620' scale='0.26' ry='-20' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_5.swf' x='192' y='0' z='620' scale='0.26' ry='20' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_6.swf' x='-134' y='0' z='344' scale='0.26' ry='130' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+        <preRend3D path='assets3D/rock2.swf' path1='assets3D/rock2_7.swf' x='192' y='0' z='344' scale='0.26' ry='-70' rxMin='6' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_1.swf' x='-25' y='0' z='599' scale='0.56' ry='-90' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_2.swf' x='80' y='0' z='599' scale='0.56' ry='-90' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_3.swf' x='194' y='0' z='464' scale='0.3' ry='-20' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_4.swf' x='194' y='0' z='562' scale='0.3' ry='-25' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_5.swf' x='284' y='0' z='464' scale='0.3' ry='-28' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_6.swf' x='284' y='0' z='562' scale='0.3' ry='-12' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_7.swf' x='374' y='0' z='464' scale='0.3' ry='-28' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/pinFlag.swf' path1='assets3D/pinFlag_8.swf' x='374' y='0' z='562' scale='0.3' ry='-8' rxMin='6' rxMax='42' ryMin='0' ryMax='360' framesY='121' symAxes='0' rIncr='3'/>
+
+        <preRend3D path='assets3D/stain3.swf' bg='true' x='40' y='190' z='1024' scale='0.3' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain2.swf' bg='true' x='220' y='120' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='455' y='100' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain1.swf' bg='true' x='365' y='60' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='-210' y='130' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain4.swf' bg='true' x='-440' y='110' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='-640' y='18' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>	
+        <preRend3D path='assets3D/stain3.swf' bg='true' x='-840' y='110' z='1024' scale='0.32' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <preRend3D path='assets3D/stain5.swf' bg='true' x='780' y='50' z='1024' scale='0.3' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+
+        <library id='1' path='asset_library1.swf'>
+            <lightning/>
+        </library>
+
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Connect-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='4' arrivalPoints='100,360,100,420' playerPositions='77,390,78,390,65,388,120,390,119,390,135,392' x='100' y='0' z='390' scale='0.19' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/connectMulch.swf' lbl='Play Connect-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='5' arrivalPoints='100,440,100,500' playerPositions='77,470,78,470,65,468,120,470,119,470,135,472' x='100' y='0' z='470' scale='0.19' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
+        <gameSlot path='assets3D/flipMulch.swf' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='1' arrivalPoints='-100,520,-100,580' playerPositions='-77,550,-78,550,-65,548,-120,550,-119,550,-135,552' x='-100' y='0' z='550' scale='0.15' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <gameSlot path='assets3D/flipMulch.swf' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='2' arrivalPoints='-100,440,-100,500' playerPositions='-77,470,-78,470,-65,468,-120,470,-119,470,-135,472' x='-100' y='0' z='470' scale='0.15' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+        <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='2' arrivalPoints='110,550,110,610' playerPositions='133,580,132,580,145,578,85,578,90,579,75,582' x='110' y='0' z='580' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
+
+<preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:3' boundary='type:rad,r:20' x='-114' y='30' z='373' scale='0.2' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
+<preRend3D path='assets3D/shadow.swf' x='-114' y='0' z='373' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        </location>
+
+
+    <location id='114' name='CastleGamInside' type='2' boundType='rect' boundary='-180,20,360,300' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/castleGam_entranceHall.swf'/>
+        <door id='1' toLoc='113' toDoor='2' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' extUIData="locName:in Castle Gam video game cinema,path:externalUIs/cinema.swf,area:games,screenNum:9,screenLabel:GAMES" x1='-182' z1='150' x2='-240' z2='150' entryDir='90'/>
+        <door id='3' toLoc='146' toDoor='1' x1='122 ' z1='360' x2='122' z2='490' entryDir='0'/>
+        <interactive type="door" path='backWallOverlay_mc.barsRight_mc' actRect='80,321,85,200'/>
+        <object name='sideDoorOverlay' x='-200' y='0' z='116'/>
+        <object name='door3_mc' x='0' y='0' z='399'/>
+        <object name='backWallOverlay_mc' x='0' y='0' z='400'/>
+    </location>
+    -->
+
+    <location id='113' name='CastleGam' type='2' boundType='rect' boundary='-140,10,340,190' camPos='-104,140,-102' camAim='10,32,174' entryPos='-10,100' entryDir='180' weevilScale='0.14' roomEvents='yes' noZoom='yes'>
+        <roomBG path='fixedCam/castleGam3.swf'/>
+        <door id='1' toLoc='107' toDoor='2' x1='150' z1='70' x2='165' z2='20' entryDir='90'/>
+        <door id='2' toLoc='114' toDoor='1' x1='130' z1='205' x2='110' z2='270' entryDir='0'/>
+        <door id='3' toLoc='125' toDoor='1' x1='-25' z1='75' x2='-50' z2='0' entryDir='0'/>
+        <door id='4' extUIData='path:externalUIs/mulchShoot.swf' x1='-130' z1='175' x2='-210' z2='195' entryDir='0'/>
+
+        <anim path='cloud'/>
+        <anim path='cave.bats'/>
+        <anim path='rocks'/>
+        <anim path='rocks'/>
+        <anim path='rocks'/>
+        <anim path='rocks'/>
+
+        <object name='door2_mc' x='100' y='0' z='220'/>
+        <object name='door1_mc' x='168' y='0' z='86'/>
+        <object name='rocks' x='40' y='0' z='83'/>
+        <object name='floorCrackOverlay' x='180' y='0' z='120'/>
+
+        <object name='money1' x='-88' y='0' z='190'/>
+        <object name='money2' x='-20' y='0' z='120'/>
+        <object name='money4' x='-17' y='0' z='145'/>
+        <object name='money5' x='30' y='0' z='85'/>
+        <object name='money6' x='90' y='0' z='195'/>
+        <object name='money7' x='180' y='0' z='150'/>
+        <object name='coins_mc' x='0' y='0' z='-50'/>
+
+        <object name='connectMulch1' x='-80' y='0' z='80' type='gameSlot' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='4' arrivalPoints='-72,100,-72,80' playerPositions='-114,76,-113,78,-110,69,-99,112,-100,110,-90,130'/>
+
+        <object name='connectMulch2' x='-80' y='0' z='81' type='gameSlot' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='5' arrivalPoints='40,60,30,50' playerPositions='48,8,50,10,35,2,62,42,61,40,82,52'/>
+
+        <object name='flipMulch' x='40' y='0' z='150' type='gameSlot' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='1' arrivalPoints='30,140,90,123' playerPositions='71,157,70,155,72,170,49,110,50,112,50,100'/>
+
+        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:3' boundary='type:rad,r:20' x='190' y='20' z='85' scale='0.16' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
+        <preRend3D path='assets3D/shadow.swf' x='190' y='0' z='85' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+        <!--<preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:3' boundary='type:rad,r:20' x='165' y='30' z='85' scale='0.2' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
+                <preRend3D path='assets3D/shadow.swf' x='114' y='0' z='373' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>-->
+
+    </location>
+
+
+    <location id='114' name='CastleGamInside' type='2' boundType='rect' boundary='-99,20,280,300' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/castleGam_entranceHall2.swf'/>
+        <door id='1' toLoc='113' toDoor='2' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='149' toDoor='1' x1='-120' z1='150' x2='-240' z2='150' entryDir='90'/>
+        <door id='3' toLoc='146' toDoor='1' x1='122 ' z1='360' x2='122' z2='490' entryDir='0'/>
+        <interactive type="door" path='backWallOverlay_mc.barsRight_mc' actRect='80,321,85,200'/>
+        <interactive type="door" path='SWSdoorAnim' actRect='-250,80,150,160'/>
+        <interactive path='door2_mc.CCTV' actRect='-110,80,30,120'/>
+        <interactive path='CCTV2' actRect='-50,0,100,150'/>
+        <object name='door2_mc' x='-200' y='0' z='116'/>
+        <object name='SWSdoorAnim' x='-200' y='0' z='203'/>
+        <object name='door3_mc' x='0' y='0' z='399'/>
+        <object name='backWallOverlay_mc' x='0' y='0' z='400'/>
+    </location>
+
+    <location id='149' name='SWShq' type='2' boundType='rect' boundary='-180,40,450,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/SWS_hq.swf'/>
+        <door id='1' toLoc='114' toDoor='2' x1='180' z1='380' x2='300' z2='390' entryDir='90'/>
+        <door id='2' extUIData="locName:in a secret location',path:externalUIs/missionsIndex.swf" x1='190' z1='190' x2='290' z2='190' entryDir='0'/>
+        <noGoArea type='rect' x='204' z='280' w='200' h='57'/>
+        <interactive type="anim" path='door2_mc.lights_mc' actRect='210,360,160,80'/>
+        <object name='door2_mc' x='0' y='0' z='342'/>
+        <object name='largeScreen' x='0' y='0' z='355'/>
+        <object name='securityCam' x='0' y='0' z='1'/>
+        <object name='table' x='0' y='0' z='100'/>
+        <object name='chair1' x='0' y='0' z='80'/>
+        <object name='chair2' x='0' y='0' z='200'/>
+        <object name='chair3' x='0' y='0' z='288'/>
+        <object name='chair4' x='0' y='0' z='282'/>
+        <object name='chair5' x='0' y='0' z='240'/>
+        <object name='chair6' x='0' y='0' z='110'/>
+    </location>
+
+
+
+    <location id='146' name='CastleGamCode' type='2' boundType='rect' boundary='-180,20,320,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/quests/silverKnight/castleGam_codeRoom.swf'/>
+        <door id='1' toLoc='114' toDoor='3' x1='-140 ' z1='118' x2='-140' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='147' toDoor='1' x1='165' z1='150' x2='240' z2='150' entryDir='0'/>
+        <interactive type="door" path='doorAnim_mc' actRect='150,90,200,110'/>
+        <object name='lectern' x='0' y='0' z='140'/>
+        <object name='doorOverlay' x='0' y='0' z='110'/>
+        <object name='cypher_mc' x='0' y='0' z='-1'/>
+        <object name='bookCloseUp_mc' x='0' y='0' z='-2'/>
+    </location>
+
+    <location id='147' name='CastleGamSlidePuzzle' type='2' boundType='rect' boundary='-180,20,360,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/quests/silverKnight/castleGam_slidePuzzle.swf'/>
+        <door id='1' toLoc='146' toDoor='2' x1='-182' z1='150' x2='-240' z2='150' entryDir='90'/>
+        <door id='2' toLoc='148' toDoor='1' x1='122 ' z1='360' x2='122' z2='490' entryDir='0'/>
+        <interactive type="door" path='backWallOverlay_mc.barsRight_mc' actRect='80,321,85,200'/>
+        <object name='sideDoorOverlay' x='-200' y='0' z='116'/>
+        <object name='door2_mc' x='0' y='0' z='399'/>
+        <object name='backWallOverlay_mc' x='0' y='0' z='400'/>
+    </location>
+
+    <location id='148' name='CastleGamBells' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/quests/silverKnight/castleGam_bells2.swf'/>
+        <door id='1' toLoc='147' toDoor='2' x1='140 ' z1='125' x2='140' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='150' toDoor='1' x1='-165' z1='150' x2='-240' z2='150' entryDir='0'/>
+        <interactive type="door" path='doorAnim_mc' actRect='-350,90,200,110'/>
+        <object name='doorOverlay' x='0' y='0' z='110'/>
+        <object name='banger_mc' x='0' y='0' z='-1'/>
+    </location>
+
+    <location id='150' name='CastleGamSilverKnight' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/quests/silverKnight/castleGam_silverKnight.swf'/>
+        <door id='1' toLoc='148' toDoor='2' x1='174' z1='150' x2='240' z2='150' entryDir='0'/>
+        <noGoArea type='rad' x='0' z='280' r='80'/>
+        <object name='doorOverlay' x='0' y='0' z='110'/>
+    </location>
+
+
+
+    <location id='121' name='DirtValley1' type='2' boundType='rect' boundary='-170,40,370,265' camPos='-276,240,-246' camAim='10,32,174' entryPos='109,225' weevilScale='0.15'>
+        <roomBG path='fixedCam/DirtValley1_dynamAds.swf'/>
+
+        <door id='1' toLoc='800' toDoor='1' x1='203' z1='26' x2='203' z2='-30' entryDir='180'/>
+        <door id='2' toLoc='110' toDoor='3' x1='-154' z1='309' x2='-210' z2='429' entryDir='0'/>
+        <door id='3' toLoc='109' toDoor='2' x1='210' z1='304' x2='220' z2='377' entryDir='0'/>
+        <door id='4' toLoc='123' toDoor='2' x1='248' z1='316' x2='320' z2='320' entryDir='90'/>
+        <door id='5' toLoc='124' toDoor='3' x1='248' z1='316' x2='320' z2='320' entryDir='90'/>
+        <!--<cta id='1' extUIData='path:externalUIs/multiplayerGames/weevilKart/help.swf,mode:inst' x='-168' z='277'/>
+        <object name='signPost' x='-178' y='0' z='289'/>-->
+        <object name='adHolder' x='195' y='0' z='319'/>
+        <object name='edgeOfBuilding' x='196' y='0' z='320'/>
+        <object name='trackMap' x='268' y='0' z='291'/>
+
+        <kart id='1' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='255,200,200' numPlayers='4' playerID='0' x='-221' y='0' z='195' scale='0.11' ry='120' arrivalPos='-204,218' exitDest='-283,153'/>
+        <kart id='2' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='255,180,0' numPlayers='4' playerID='1' x='-214' y='0' z='134' scale='0.105' ry='125' arrivalPos='-190,141' exitDest='-264,94'/>
+        <kart id='3' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='80,255,80' numPlayers='4' playerID='2' x='-183' y='0' z='86' scale='0.105' ry='138' arrivalPos='-162,106' exitDest='-227,24'/>
+        <kart id='4' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='180,0,255' numPlayers='4' playerID='3' x='-143' y='0' z='64' scale='0.105' ry='143' arrivalPos='-119,78' exitDest='-190,-3'/>
+
+        <kart id='5' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='255,80,80' numPlayers='3' playerID='0' x='-100' y='0' z='29' scale='0.105' ry='146' arrivalPos='-82,57' exitDest='-143,-40'/>
+        <kart id='6' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='80,255,80' numPlayers='3' playerID='1' x='-62' y='0' z='2' scale='0.105' ry='154' arrivalPos='-55,31' exitDest='-104,-69'/>
+        <kart id='7' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='0,255,255' numPlayers='3' playerID='2' x='-16' y='0' z='-17' scale='0.105' ry='160' arrivalPos='-10,14' exitDest='-48,-93'/>
+
+        <kart id='8' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='255,240,0' numPlayers='2' playerID='0' x='43' y='0' z='-45' scale='0.105' ry='167' arrivalPos='26,-24' exitDest='19,-135'/>
+        <kart id='9' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' clr='100,100,255' numPlayers='2' playerID='1' x='111' y='0' z='-36' scale='0.105' ry='180' arrivalPos='95,-16' exitDest='106,-102'/>
+
+        <timeTrial id='0' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' doorID='1'/>
+
+        <preRend3D path='assets3D/bubble_pirate.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:2' boundary='type:rad,r:20' x='-45' y='10' z='305' scale='0.25' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='-94' y='0' z='0' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+    </location>
+
+
+    <location id='123' name='DirtValley2' type='2' boundType='rect' boundary='-170,40,370,265' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.15' roomEvents='yes'>
+        <roomBG path='fixedCam/DirtValley2_trophy.swf'/>
+
+        <door id='1' toLoc='800' toDoor='1' x1='203' z1='26' x2='203' z2='-30' entryDir='180'/>
+        <door id='2' toLoc='121' toDoor='4' x1='-180' z1='317' x2='-225' z2='317' entryDir='-90'/>
+        <door id='3' toLoc='124' toDoor='2' x1='-76' z1='328' x2='-82' z2='415' entryDir='0'/>
+
+        <object name='topTen_mc' x='0' y='0' z='-120'/>
+        <object name='edgeOfBlue' x='-90' y='0' z='367'/>
+        <object name='trophy' x='-130' y='0' z='214'/>
+        <object name='trophyInfo' x='0' y='0' z='-121'/>
+
+        <kart id='1' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='80,255,80' numPlayers='4' playerID='0' x='-221' y='0' z='195' scale='0.11' ry='120' arrivalPos='-204,218' exitDest='-283,153'/>
+        <kart id='2' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='255,255,255' numPlayers='4' playerID='1' x='-214' y='0' z='134' scale='0.105' ry='125' arrivalPos='-190,141' exitDest='-264,94'/>
+        <kart id='3' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='255,80,80' numPlayers='4' playerID='2' x='-183' y='0' z='86' scale='0.105' ry='138' arrivalPos='-162,106' exitDest='-227,24'/>
+        <kart id='4' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='84,84,255' numPlayers='4' playerID='3' x='-143' y='0' z='64' scale='0.105' ry='143' arrivalPos='-119,78' exitDest='-190,-3'/>
+
+        <kart id='5' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='255,180,0' numPlayers='3' playerID='0' x='-100' y='0' z='29' scale='0.105' ry='146' arrivalPos='-82,57' exitDest='-143,-40'/>
+        <kart id='6' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='80,255,80' numPlayers='3' playerID='1' x='-62' y='0' z='2' scale='0.105' ry='154' arrivalPos='-55,31' exitDest='-104,-69'/>
+        <kart id='7' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='120,120,255' numPlayers='3' playerID='2' x='-16' y='0' z='-17' scale='0.105' ry='160' arrivalPos='-10,14' exitDest='-48,-93'/>
+
+        <kart id='8' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='255,80,80' numPlayers='2' playerID='0' x='43' y='0' z='-45' scale='0.105' ry='167' arrivalPos='26,-24' exitDest='19,-135'/>
+        <kart id='9' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' clr='255,240,0' numPlayers='2' playerID='1' x='111' y='0' z='-36' scale='0.105' ry='180' arrivalPos='95,-16' exitDest='106,-102'/>
+
+        <timeTrial id='0' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_2' doorID='1'/>
+    </location>
+
+
+    <location id='124' name='DirtValley3' type='2' boundType='rect' boundary='-170,40,370,265' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.15' roomEvents='yes'>
+        <roomBG path='fixedCam/DirtValley3_trophy.swf'/>
+        <door id='1' toLoc='800' toDoor='1' x1='203' z1='26' x2='203' z2='-30' entryDir='180'/>
+        <door id='2' toLoc='123' toDoor='3' x1='-180' z1='317' x2='-225' z2='317' entryDir='-90'/>
+        <door id='3' toLoc='121' toDoor='5' x1='-76' z1='328' x2='-82' z2='415' entryDir='0'/>
+
+        <object name='topTen_mc' x='0' y='0' z='-120'/>
+        <object name='edgeOfDice' x='-90' y='0' z='367'/>
+        <object name='trophy' x='-132' y='0' z='211'/>
+        <object name='trophyInfo' x='0' y='0' z='-121'/>
+
+        <kart id='1' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='255,240,0' numPlayers='4' playerID='0' x='-221' y='0' z='195' scale='0.11' ry='120' arrivalPos='-204,218' exitDest='-283,153'/>
+        <kart id='2' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='0,245,245' numPlayers='4' playerID='1' x='-214' y='0' z='134' scale='0.105' ry='125' arrivalPos='-190,141' exitDest='-264,94'/>
+        <kart id='3' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='255,160,0' numPlayers='4' playerID='2' x='-183' y='0' z='86' scale='0.105' ry='138' arrivalPos='-162,106' exitDest='-227,24'/>
+        <kart id='4' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='100,100,255' numPlayers='4' playerID='3' x='-143' y='0' z='64' scale='0.105' ry='143' arrivalPos='-119,78' exitDest='-190,-3'/>
+
+        <kart id='5' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='180,0,255' numPlayers='3' playerID='0' x='-100' y='0' z='29' scale='0.105' ry='146' arrivalPos='-82,57' exitDest='-143,-40'/>
+        <kart id='6' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='255,240,0' numPlayers='3' playerID='1' x='-62' y='0' z='2' scale='0.105' ry='154' arrivalPos='-55,31' exitDest='-104,-69'/>
+        <kart id='7' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='255,60,60' numPlayers='3' playerID='2' x='-16' y='0' z='-17' scale='0.105' ry='160' arrivalPos='-10,14' exitDest='-48,-93'/>
+
+        <kart id='8' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='80,255,80' numPlayers='2' playerID='0' x='43' y='0' z='-45' scale='0.105' ry='167' arrivalPos='26,-24' exitDest='19,-135'/>
+        <kart id='9' hatch='yes' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' clr='180,0,255' numPlayers='2' playerID='1' x='111' y='0' z='-36' scale='0.105' ry='180' arrivalPos='95,-16' exitDest='106,-102'/>
+
+        <timeTrial id='0' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_3' doorID='1'/>
+    </location>
+
+
+
+    <location id='125' name='FlemManor' type='2' boundType='rect' boundary='-280,125,600,495' camPos='0,190,-330' camAim='0,90,260' entryPos='-3,330' entryDir='180' weevilScale='0.24'>
+        <!--<roomBG path='fixedCam/adCampaigns/legendGuardian/FlemManor_dynamAds_legendGuardian.swf'/>-->
+        <!--<roomBG path='fixedCam/FlemManor_dynamAds.swf'/>-->
+        <!--<roomBG path='fixedCam/FlemManor_mulchMeter.swf'/> -->
+        <!--
+        <anim path='flemDrip1'/>
+        <anim path='flemDrip2'/>
+        <anim path='flemDrip3'/>
+        <anim path='flemDrip4'/>
+        <anim path='flemDrip5'/>
+        <anim path='flemDrip6'/> 
+        -->
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/FlemManor_dynamAds_rabbids.swf'/>
+
+        <door id='1' toLoc='113' toDoor='3' x1='-104' z1='77' x2='-300' z2='77' entryDir='0'/>
+        <door id='2' toLoc='127' toDoor='1' x1='104' z1='77' x2='300' z2='77' entryDir='0'/>
+        <door id='3' toLoc='144' toDoor='1' x1='10' z1='670' x2='42' z2='790' entryDir='0'/>
+        <door id='4' extUIData="locName:playing Spot the Difference at Flem Manor,path:externalUIs/spotDifference.swf,area:Flem Manor" x1='-94' z1='239' x2='-180' z2='242' entryDir='90'/>
+
+        <!--<door id='5' toLoc='131' toDoor='1' x1='320' z1='670' x2='320' z2='790' entryDir='0'/>-->
+        <!--<door id='5' toLoc='10186' toDoor='1' x1='180' z1='240' x2='240' z2='300' entryDir='0'/>-->
+
+
+        <interactive type="door" path='door3_mc' actRect='-20,655,80,200'/>
+        <object name='door1_mc' x='-184' y='0' z='120'/>
+        <object name='door2_mc' x='184' y='0' z='120'/>
+        <object name='door3_mc' x='0' y='0' z='700'/>
+
+        <object name='door4_mc' x='-120' y='0' z='222'/>
+        <object name='tent_mc' x='-107' y='0' z='310'/>
+        <object name='tentSide_mc' x='-120' y='0' z='226'/>
+        <object name='tentPost1_mc' x='-100' y='0' z='180'/>
+        <object name='tentPost2_mc' x='-53' y='0' z='276'/>
+
+        <!--	<object name='door5_mc' x='110' y='0' z='264'/>
+            <object name='tree' x='120' y='0' z='265'/>
+            <object name='treeOverlay' x='125' y='0' z='264'/>
+            <object name='treeBack1' x='120' y='0' z='270'/>
+            <object name='treeBack2' x='120' y='0' z='301'/>
+    -->
+        <door id='5' toLoc='10001' toDoor='1' x1='40' z1='240' x2='160' z2='200' entryDir='0'/>
+        <object name='door5_mc' x='120' y='0' z='180'/>
+
+        <preRend3D path='assets3D/bubble_pharoah.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:1' boundary='type:rad,r:20' x='53' y='40' z='159' scale='0.25' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+        <preRend3D path='assets3D/shadow.swf' x='53' y='0' z='159' scale='0.21' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+
+
+    </location>
+
+    <!--
+    <location id='10186' name='UnderScrapyard' type='2' boundType='rect' boundary='-210,-10,500,490' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.22' noZoom='yes' timerID='32'>
+          <roomBG path='fixedCam/adCampaigns/legendGuardian/LOG_room2.swf'/>
+          <door id='1' toLoc='125' toDoor='5' x1='0' z1='120' x2='0' z2='0' y='0' entryDir='0'/>
+         </location>
+    -->
+
+
+
+    <location id='127' name='PartyBox' type='2' boundType='rect' boundary='-180,20,600,280' camPos='-276,240,-246' camAim='10,32,174' entryPos='53,3' weevilScale='0.22'>
+        <roomBG path='fixedCam/partyBoxClosed_dynamAds.swf'/>
+        <door id='1' toLoc='125' toDoor='2' x1='-56' z1='-15' x2='-160' z2='-35' entryDir='0'/>
+        <door id='2' toLoc='129' toDoor='1' x1='134' z1='1' x2='261' z2='-26' entryDir='0'/>
+        <door id='3' extUIData="locName:at Slam's Party Box, getting a mulch-tastic ticket for the next mulch give-away,path:externalUIs/lotto.swf" x1='270' z1='136' x2='270' z2='175' entryDir='0'/>
+        <object name='door1_mc' x='-69' y='0' z='-1'/>
+        <object name='door2_mc' x='186' y='53' z='-1'/>
+        <object name='door3_mc' x='250' y='0' z='150'/>
+        <object name='mulchtasticBooth' x='238' y='0' z='219'/>
+        <object name='adBoard_mc' x='-153' y='0' z='98'/>
+    </location>
+
+
+
+
+    <location id='128' name='PartyBoxInside' type='2' boundType='rect' boundary='-220,10,420,310' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20'  noZoom='yes' playList='38,39,40'>
+        <roomBG path='fixedCam/partyBox/halloween/halloween_entrance.swf'/>
+        <door id='1' toLoc='127' toDoor='4' x1='0' z1='110' x2='0' z2='0' y='0' entryDir='0'/>
+        <door id='2' toLoc='130' toDoor='1' x1='-180' z1='230' x2='-200' z2='230' y='0' entryDir='0'/>
+        <door id='3' toLoc='131' toDoor='1' x1='180' z1='230' x2='200' z2='230' y='0' entryDir='0'/>
+        <object name='doorOverlay1' x='-200' y='0' z='0'/>
+        <object name='doorOverlay2' x='200' y='0' z='0'/>
+        <object name='seatBacks' x='0' y='0' z='0'/>
+        <!--<object name='bedFront' x='0' y='0' z='129'/>
+        <noGoArea type='rect' x='-90' z='130' w='180' h='270'/>
+        <object name='bed_btn' x='0' y='16' z='0'/>-->
+    </location>
+
+
+    <location id='130' name='PartyBoxInside2' type='2' boundType='rect' boundary='-220,10,440,310' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20'  noZoom='yes' playList='39,40,38'>
+        <roomBG path='fixedCam/partyBox/halloween/halloween_bedroom.swf'/>
+        <door id='1' toLoc='128' toDoor='2' x1='130' z1='230' x2='200' z2='230' y='0' entryDir='0'/>
+        <object name='bedFront' x='0' y='0' z='129'/>
+        <noGoArea type='rect' x='-90' z='130' w='180' h='270'/>
+        <!--<object name='bedding' x='0' y='0' z='130'/>
+        <object name='pillows' x='0' y='0' z='130'/>-->
+        <object name='bed_btn' x='0' y='16' z='0'/>
+        <object name='doorOverlay' x='200' y='0' z='0'/>
+        <object name='lightAnim' x='0' y='10' z='0'/>
+    </location>
+
+
+    <location id='131' name='PartyBoxInside3' type='2' boundType='rect' boundary='-200,-10,400,400' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.15' noZoom='yes' playList='40,38,39'>
+        <roomBG path='fixedCam/partyBox/halloween/halloween_banquetRoom.swf'/>
+        <door id='1' toLoc='128' toDoor='3' x1='-180' z1='230' x2='-200' z2='230' y='0' entryDir='0'/>
+        <object name='ing1' x='0' y='0' z='136'/>
+        <object name='ing2' x='0' y='0' z='136'/>
+        <object name='ing3' x='0' y='0' z='136'/>
+        <object name='ing4' x='0' y='0' z='136'/>
+        <object name='ing5' x='0' y='0' z='136'/>
+        <object name='ing6' x='0' y='0' z='136'/>
+        <object name='ing7' x='0' y='0' z='136'/>
+        <object name='ing8' x='0' y='0' z='136'/>
+        <object name='ing9' x='0' y='0' z='136'/>
+        <object name='ing10' x='0' y='0' z='136'/>
+        <object name='ing11' x='0' y='0' z='136'/>
+        <object name='ing12' x='0' y='0' z='136'/>
+        <object name='ing13' x='0' y='0' z='136'/>
+        <object name='ing14' x='0' y='0' z='136'/>
+        <object name='ing15' x='0' y='0' z='136'/>
+        <object name='ing16' x='0' y='0' z='136'/>
+        <object name='menu' x='0' y='0' z='139'/>
+        <object name='table_mc' x='0' y='0' z='140'/>
+        <object name='stools_mc' x='0' y='0' z='125'/>
+        <object name='everythingOnTable' x='0' y='0' z='137'/>
+        <object name='seat1' x='0' y='0' z='0'/>
+        <object name='seat2' x='0' y='0' z='0'/>
+        <object name='seat3' x='0' y='0' z='0'/>
+        <object name='seat4' x='0' y='0' z='0'/>
+        <object name='seat5' x='0' y='0' z='0'/>
+        <object name='seat6' x='0' y='0' z='0'/>
+        <object name='seat7' x='0' y='0' z='0'/>
+        <object name='plate' x='0' y='0' z='137'/>
+        <object name='ghostDelivering' x='0' y='0' z='0'/>
+    </location>
+
+    <location id='144' name='FlemManorLobby' type='2' boundType='rect' boundary='-170,80,340,250' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.22' maintainY='yes'>
+        <roomBG path='fixedCam/FlemManor_lobby.swf'/>
+        <door id='1' toLoc='125' toDoor='3' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='145' toDoor='1' x1='-170' z1='102' x2='-240' z2='102' entryDir='180'/>
+        <door id='3' toLoc='149' toDoor='1' x1='-137' z1='253' x2='-112' z2='253' entryDir='90'/>
+        <door id='4' toLoc='152' toDoor='1' x1='-205' z1='440' x2='-255' z2='448' y='155' entryDir='0'/>
+        <door id='5' toLoc='167' toDoor='1' x1='170' z1='80' x2='240' z2='80' entryDir='0'/>
+        <door id='6' toLoc='168' toDoor='1' x1='205' z1='440' x2='255' z2='448' y='155' entryDir='0'/>
+        <interactive type="door" path='door4Anim' actRect='-280,330,100,200'/>
+        <interactive type="door" path='door6Anim' actRect='180,330,100,200'/>
+        <noGoArea type='rect' x='-74' z='200' w='148' h='130'/>
+        <object name='door2_mc' x='0' y='0' z='91'/>
+        <object name='overlayLowerL' x='0' y='0' z='92'/>
+        <object name='overlayLowerR' x='0' y='0' z='25'/>
+        <object name='door4_mc' x='0' y='0' z='173'/>
+        <object name='door6_mc' x='0' y='0' z='174'/>
+        <object name='overlayUpper' x='0' y='155' z='430'/>
+        <object name='stairPosts_Lower' x='0' y='0' z='206'/>
+        <object name='backRail' x='0' y='0' z='100'/>
+        <object name='sideRails' x='0' y='0' z='-155'/>
+        <object name='step1' x='0' y='0' z='250'/>
+        <object name='step2' x='0' y='0' z='270'/>
+        <object name='step3' x='0' y='0' z='290'/>
+        <object name='step4' x='0' y='0' z='310'/>
+        <object name='statues' x='0' y='0' z='240'/>
+        <object name='door3_mc' x='0' y='0' z='0'/>
+    </location>
+
+    <location id='145' name='FlemManorRoom2' type='2' boundType='rect' boundary='-170,80,340,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.24' playList='33'>
+        <roomBG path='fixedCam/FlemManor_room2.swf'/>
+        <door id='1' toLoc='144' toDoor='2' x1='150' z1='140' x2='140' z2='-40' entryDir='180'/>
+        <door id='2' extUIData="locName:doing a wordsearch at Flem Manor,path:externalUIs/puzzleIndex2.swf,typeID:1" x1='190' z1='160' x2='250' z2='160' entryDir='0'/>
+        <door id='3' extUIData="locName:doing a crossword at Flem Manor,path:externalUIs/puzzleIndex.swf,typeID:2" x1='190' z1='265' x2='250' z2='265' entryDir='0'/>
+        <noGoArea type='rect' x='-60' z='345' w='120' h='100'/>
+        <object name='door2_mc' x='0' y='0' z='92'/>
+        <object name='door3_mc' x='0' y='0' z='242'/>
+        <object name='table' x='0' y='0' z='130'/>
+        <object name='fireGuard' x='0' y='0' z='332'/>
+    </location>
+
+    <location id='152' name='FlemManorGallery1' type='2' boundType='rect' boundary='-170,80,340,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.24'>
+        <roomBG path='fixedCam/FlemManor_gallery1.swf'/>
+        <door id='1' toLoc='144' toDoor='4' x1='150' z1='140' x2='140' z2='-40' entryDir='180'/>
+        <door id='2' toLoc='153' toDoor='1' x1='-190' z1='105' x2='-250' z2='105' entryDir='0'/>
+        <object name='doorOverlay' x='0' y='0' z='78'/>
+    </location>
+
+    <location id='153' name='FlemManorGallery2' type='2' boundType='rect' boundary='-170,80,340,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.24'>
+        <roomBG path='fixedCam/FlemManor_gallery2.swf'/>
+        <door id='1' toLoc='152' toDoor='2' x1='190' z1='105' x2='250' z2='105' entryDir='0'/>
+        <object name='doorOverlay' x='0' y='0' z='78'/>
+        <object name='easel' x='0' y='0' z='116'/>
+    </location>
+
+    <location id='167' name='editorsRoom' type='2' boundType='rect' boundary='-130,80,300,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.32'>
+        <roomBG path='fixedCam/editorsRoom.swf'/>
+        <door id='1' toLoc='144' toDoor='5' x1='10' z1='140' x2='10' z2='-40' entryDir='180'/>
+        <noGoArea type='rect' x='132' z='300' w='90' h='100'/>
+        <anim path='desk.stuff.lamp'/>
+        <anim path='desk2.stuff.lamp'/>
+        <object name='chair1' x='0' y='0' z='112'/>
+        <object name='bin1' x='0' y='0' z='210'/>
+        <object name='desk' x='0' y='0' z='240'/>
+        <object name='safeDoor' x='0' y='0' z='308'/>
+    </location>
+
+    <location id='168' name='FlemManorLibrary' type='2' boundType='rect' boundary='-170,80,340,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.24' maintainY='yes'>
+        <!--<roomBG path='fixedCam/FlemManor_library_no_book.swf'/>-->
+        <roomBG path='fixedCam/FlemManor_library_book_14.09.10.swf'/>
+        <door id='1' toLoc='144' toDoor='6' x1='-58' z1='140' x2='-58' z2='-40' entryDir='180'/>
+        <noGoArea type='rect' x='-160' z='80' w='40' h='190'/>
+        <noGoArea type='rect' x='120' z='80' w='40' h='190'/>
+        <object name='seatL_btn' x='0' y='0' z='268'/>
+        <object name='seatR_btn' x='0' y='0' z='269'/>
+        <object name='sofas' x='0' y='0' z='270'/>
+        <object name='table' x='0' y='0' z='132'/>
+        <object name='fireGuard' x='0' y='0' z='332'/>
+        <object name='book_btn' x='3' y='0' z='124'/>
+    </location>
+
+
+
+    <location id='129' name='RumsCove' type='2' boundType='rect' boundary='-240,60,680,90' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.18'>
+        <!--<roomBG path='fixedCam/RumsAirport_dynamAds_videoPodv2.swf'/>-->
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/RumsAirport_dynamAds.swf'/>
+        <door id='8' toLoc='10005' toDoor='1' x1='115' z1='110' x2='115' z2='150' entryDir='-30'/>
+        <object name='door8_mc' x='' y='0' z='145'/>
+
+        <door id='1' toLoc='107' toDoor='1' x1='-190 ' z1='125' x2='-260' z2='125' entryDir='180'/>
+        <door id='2' toLoc='103' toDoor='1' x1='180' z1='92' x2='250' z2='92' entryDir='180'/>
+        <door id='3' toLoc='132' toDoor='1' x1='15 ' z1='155' x2='15' z2='260' entryDir='0'/>
+        <door id='4' toLoc='154' toDoor='1' x1='-179 ' z1='155' x2='-179' z2='260' entryDir='0'/>
+        <door id='5' toLoc='104' toDoor='4' x1='100 ' z1='130' x2='326' z2='132' y2='1500' entryDir='0'/>
+        <door id='6' extUIData="locName:at Rum's Cove, getting a mulch-tastic ticket for the next mulch give-away,path:externalUIs/lotto.swf" x1='175 ' z1='125' x2='210' z2='142' entryDir='0'/>
+        <door id='7' toLoc='178' toDoor='1' x1='-40' z1='90' x2='-55' z2='120' entryDir='-30'/>
+        <object name='remoteDoorOverlay' x='-70' y='0' z='100'/>
+        <object name='remoteBack' x='-70' y='0' z='120'/>
+        <object name='door7_mc' x='-30' y='0' z='99'/>
+        <interactive type="door" path='door7_mc' actRect='-60,80,30,60'/>
+        <interactive type="door" path='buildings.airport.slidingDoors_mc' actRect='-20,140,60,200'/>
+        <interactive type="door" path='buildings.diner.slidingDoors_mc' actRect='-200,140,50,200'/>
+        <object name='door6_mc' x='137' y='0' z='115'/>
+        <object name='mulchtasticBooth' x='80' y='0' z='150'/>
+        <object name='buildings' x='-150' y='0' z='198'/>
+        <object name='fence' x='0' y='0' z='160'/>
+        <object name='door3_mc' x='0' y='0' z='190'/>
+        <object name='door4_mc' x='0' y='0' z='191'/>
+        <object name='door5_mc' x='0' y='0' z='0'/>
+        <anim path='plane1'/>
+        <anim path='plane2'/>
+    </location>
+
+
+
+
+
+    <location id='132' name='RumsCoveInterior' type='2' boundType='rect' boundary='-170,70,320,150' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/RumsAirport_interior2.swf'/>
+        <door id='1' toLoc='129' toDoor='3' x1='0' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' type='vid' x1='-150' z1='222' x2='-240' z2='242' entryDir='90'/>
+        <door id='3' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/aeroplane.swf'/>
+        <door id='4' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/adCampaigns/trainDragon/aeroplane_trainDragon.swf'/>
+
+        <object name='arrivalsMask_mc' x='-154' y='0' z='222'/>
+        <object name='departuresMask_mc' x='250' y='0' z='222'/>
+        <cta id='1' extUIData='locName:Rums Cove Interia,path:externalUIs/aeroplaneTicket.swf' x='0' z='220'/>
+    </location>
+    <!--	
+    <location id='132' name='RumsCoveInterior' type='2' boundType='rect' boundary='-170,70,320,150' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
+        <roomBG path='fixedCam/RumsAirport_interior_RBA.swf'/>
+        <door id='1' toLoc='129' toDoor='3' x1='0' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' type='vid' x1='-150' z1='222' x2='-240' z2='242' entryDir='90'/>		
+        <door id='3' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/aeroplane.swf'/>
+        <door id='4' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/aeroplane_RBA.swf'/>
+            
+        <object name='arrivalsMask_mc' x='-154' y='0' z='222'/>
+        <object name='departuresMask_mc' x='250' y='0' z='222'/>
+        <cta id='1' extUIData='locName:Rums Cove Interia,path:externalUIs/aeroplaneTicket.swf' x='0' z='220'/>
+        <cta id='2' extUIData='locName:Rums Cove Interia,path:externalUIs/aeroplaneTicket_RBA.swf' x='0' z='220'/>
+    </location>	
+    -->
+
+    <location id='140' name='SameDifferenceIsland' type='2' boundType='rect' boundary='-270,0,754,675' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' noZoom='yes' hasAudio='yes' playList='35' timerID='29'>
+        <roomBG path='fixedCam/adCampaigns/rba/mulchIsland_RBA.swf'/>
+        <door id='1' toLoc='132' toDoor='2' x1='-300' z1='266' x2='-320' z2='340' entryDir='0'/>
+        <door id='2' extUIData="locName:Trailer page at RBA MulchIsland,path:externalUIs/adCampaigns/rba/RBA_trailer.swf" x1='160' z1='80' x2='190' z2='60' y='0' entryDir='90'/>
+        <door id='3' extUIData="locName:Fan page at RBA MulchIsland,path:externalUIs/adCampaigns/rba/becomeAfan.swf" x1='-100' z1='130' x2='-90' z2='160' y='0' entryDir='45'/>
+        <door id='4' extUIData="locName:RBA wordsearch at RBA MulchIsland,path:externalUIs/adCampaigns/rba/wordsearch_standalone.swf,typeID:1" x1='-10' z1='30' x2='10' z2='20' y='0' entryDir='45'/>
+        <object name='door1_mc' x='0' y='0' z='545'/>
+        <object name='door2_mc' x='0' y='0' z='50'/>
+        <object name='QnA' x='0' y='0' z='15'/>
+        <object name='linkSign' x='0' y='0' z='220'/>
+        <object name='door3_mc' x='0' y='0' z='145'/>
+        <object name='door4_mc' x='0' y='0' z='15'/>
+    </location>
+
+
+    <!--<location id='140' name='SameDifferenceIsland' type='2' boundType='rect' boundary='-240,75,680,400' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' timerID='20'>
+        <roomBG path='fixedCam/adCampaigns/dinoDiscovery/mulchIslandDinoDiscovery.swf'/>	
+        <door id='1' toLoc='132' toDoor='2' x1='-200' z1='200' x2='-180' z2='244' entryDir='180'/>	
+        <door id='2' toLoc='141' toDoor='1' x1='42' z1='550' x2='150' z2='720' entryDir='60'/>
+        <object name='door2_mc' x='166' y='0' z='80'/>	
+        <object name='doorMask' x='166' y='0' z='81'/>	
+    </location>-->
+
+    <location id='141' name='SameDifferenceIslandVideo' type='2' boundType='rect' boundary='-160,75,320,110' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' timerID='20'>
+        <roomBG path='fixedCam/adCampaigns/dinoDiscovery/museum.swf'/>
+        <door id='1' toLoc='140' toDoor='2' x1='0' z1='130' x2='0' z2='75' entryDir='180'/>
+        <object name='subscribeNow' x='0' y='0' z='100'/>
+        <object name='bone_btn' x='0' y='0' z='120'/>
+        <cta id='1' extUIData='locName:SameDifferenceIslandVideo,path:externalUIs/adCampaigns/dinoDiscovery/huntInfo.swf' x='0' z='200'/>
+    </location>
+
+
+    <!--<location id='133' name='MulchIsland' type='2' boundType='rect' boundary='-226,75,710,600' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' playList='35' timerID='27'>
+      <roomBG path='fixedCam/mulchIsland_hub_deadly60.swf'/>
+      <door id='1' toLoc='132' toDoor='2' x1='-240' z1='266' x2='-256' z2='317' entryDir='0'/> 
+      <door id='2' toLoc='137' toDoor='1' x1='119' z1='105' x2='180' z2='20' entryDir='180'/>
+      <door id='3' extUIData="locName:playing Tink's Blocks at Mulch Island,path:externalUIs/TinksBlocks.swf,area:Mulch Island" x1='394' z1='670' x2='402' z2='780' entryDir='90'/>
+      <door id='4' toLoc='142' toDoor='1' x1='320' z1='437' x2='470' z2='437' entryDir='90'/>
+      <object name='door1_mc' x='0' y='0' z='545'/>
+      <object name='door2_mc' x='166' y='0' z='90'/> 
+      <object name='door3_mc' x='290' y='0' z='370'/>
+      <object name='whiteTop' x='32' y='0' z='96'/> 
+      <object name='redTop' x='71' y='0' z='115'/> 
+      <object name='spider' x='120' y='0' z='-1'/> 
+      <object name='scorpion' x='-160' y='0' z='-2'/>
+      <object name='deadly_SW_btn' x='-120' y='0' z='-1'/>
+      <object name='deadly_NW_btn' x='-120' y='0' z='-1'/> 
+      <object name='jungleForeground' x='-40' y='0' z='0'/>
+     </location>-->
+
+
+
+    <location id='133' name='MulchIsland' type='2' boundType='rect' boundary='-226,75,710,600' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' playList='35'>
+        <roomBG path='fixedCam/mulchIsland_hub.swf'/>
+        <door id='1' toLoc='132' toDoor='2' x1='-240' z1='266' x2='-256' z2='317' entryDir='0'/>
+        <door id='2' toLoc='137' toDoor='1' x1='119' z1='105' x2='180' z2='20' entryDir='180'/>
+        <door id='3' extUIData="locName:playing Tink's Blocks at Mulch Island,path:externalUIs/TinksBlocks.swf,area:Mulch Island" x1='394' z1='670' x2='402' z2='780' entryDir='90'/>
+        <door id='4' toLoc='142' toDoor='1' x1='320' z1='437' x2='470' z2='437' entryDir='90'/>
+        <object name='door1_mc' x='0' y='0' z='545'/>
+        <object name='door2_mc' x='166' y='0' z='90'/>
+        <object name='door3_mc' x='290' y='0' z='700'/>
+        <anim path='redTop.crab'/>
+        <anim path='whiteTop.crab'/>
+        <object name='whiteTop' x='32' y='0' z='96'/>
+        <object name='redTop' x='71' y='0' z='115'/>
+    </location>
+
+
+
+
+    <location id='142' name='WormPoint' type='2'  boundType='rect' boundary='-250,-80,450,630' camPos='-276,240,-246' camAim='10,32,174' entryPos='32,174' weevilScale='0.28' maintainY='yes' playList='35'>
+        <roomBG path='fixedCam/mulchIsland_iceCream2.swf'/>
+        <door id='1' toLoc='133' toDoor='4' x1='-190' z1='320' x2='-260' z2='320' entryDir='0'/>
+        <door id='2' toLoc='180' toDoor='1' x1='70' z1='50' x2='100' z2='-50' entryDir='0'/>
+        <anim path='fish_mc'/>
+        <object name='para1' x='-209' y='0' z='212'/>
+        <object name='para2' x='-129' y='0' z='187'/>
+        <object name='para3' x='-194' y='0' z='117'/>
+        <object name='para4' x='-128' y='0' z='50'/>
+        <object name='rock1' x='-131' y='0' z='437'/>
+        <object name='icecreamMachine' x='250' y='0' z='368'/>
+        <object name='door2_mc' x='250' y='0' z='-200'/>
+        <object name='aztecPipe_mc' x='250' y='0' z='-190'/>
+    </location>
+
+
+    <location id='137' name='MulchIslandMazePit' type='2' boundType='rect' boundary='-480,75,950,730' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.34' hasAudio='yes' playList='34'>
+        <roomBG path='fixedCam/mulchIslandMazePit.swf'/>
+
+        <door id='1' toLoc='133' toDoor='2' x1='-109' z1='805' x2='-225' z2='1050' entryDir='180'/>
+        <door id='2' toLoc='157' toDoor='1' x1='265' z1='320' x2='350' z2='250' entryDir='180'/>
+        <door id='3' extUIData="locName:playing Catch it! Bin it! Kill it! at Mulch Island,path:externalUIs/catchBinKill.swf,area:Flem Manor" x1='-193' z1='563' x2='-300' z2='570' entryDir='90'/>
+
+        <object name='door3_mc' x='-120' y='0' z='440'/>
+        <object name='tent_mc' x='-243' y='0' z='695'/>
+        <object name='tentSide_mc' x='-246' y='0' z='527'/>
+        <object name='tentPost1_mc' x='-181' y='0' z='460'/>
+        <object name='tentPost2_mc' x='-174' y='0' z='641'/>
+
+        <object name='doorMask_mc' x='-189' y='0' z='810'/>
+        <object name='bug1_mc' x='0' y='0' z='52'/>
+        <object name='bug3_mc' x='0' y='0' z='52'/>
+        <object name='foreground_right_mc' x='180' y='0' z='50'/>
+        <object name='foreground_lefta_mc' x='-138' y='0' z='50'/>
+        <object name='foreground_leftb_mc' x='-210' y='0' z='50'/>
+        <object name='foreground_leftc_mc' x='-250' y='0' z='50'/>
+
+        <object name='mush1_mc' x='-143' y='0' z='219'/>
+        <object name='mush6_mc' x='-193' y='0' z='297'/>
+        <object name='mush2_mc' x='-173' y='0' z='170'/>
+
+        <object name='mush4_mc' x='-235' y='0' z='220'/>
+        <object name='mush3_mc' x='-218' y='0' z='219'/>
+        <object name='mush5_mc' x='-312' y='0' z='501'/>
+
+        <object name='flower3_mc' x='184' y='0' z='725'/>
+        <object name='flower4_mc' x='263' y='0' z='688'/>
+        <object name='flower5_mc' x='273' y='0' z='594'/>
+        <object name='flower6_mc' x='333' y='0' z='481'/>
+        <object name='flower7_mc' x='378' y='0' z='453'/>
+
+        <anim path='bug1_mc'/>
+        <anim path='bug2_mc'/>
+        <anim path='bug3_mc'/>
+        <anim path='milli_mc'/>
+    </location>
+
+
+    <location id='157' name='MulchIslandGorge' type='2' boundType='rect' boundary='-170,60,3100,11000' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.42'>
+        <roomBG path='fixedCam/quests/blueDiamond1/mulchIsland_gorge.swf'/>
+        <door id='1' toLoc='137' toDoor='2' x1='-145' z1='150' x2='-200' z2='20' entryDir='180'/>
+        <door id='2' toLoc='158' toDoor='1' x1='205' z1='1182' x2='295' z2='1310' entryDir='180'/>
+        <noGoArea type='rect' x='-200' z='270' w='400' h='335'/>
+        <interactive type="door" path='doorAnim' actRect='190,1150,150,200'/>
+        <object name='keyAnim_mc' x='0' y='0' z='-40'/>
+        <object name='fireScroll_mc' x='0' y='0' z='-30'/>
+        <object name='plants' x='0' y='0' z='-20'/>
+        <object name='handle' x='0' y='0' z='-19'/>
+        <object name='spadeDigging_mc' x='0' y='0' z='-10'/>
+        <object name='battery_mc' x='0' y='0' z='-8'/>
+        <object name='metalDet_mc' x='0' y='0' z='-7'/>
+        <object name='buildingOverlay' x='266' y='0' z='1185'/>
+        <object name='door2_mc' x='200' y='0' z='1194'/>
+        <object name='doorAnim' x='266' y='0' z='1195'/>
+    </location>
+
+    <location id='158' name='BlueDiamond1_1' type='2' boundType='rect' boundary='-180,20,360,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.3'>
+        <roomBG path='fixedCam/quests/blueDiamond1/blueDiamond1_1.swf'/>
+        <door id='1' toLoc='157' toDoor='2' x1='0 ' z1='118' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='159' toDoor='1' x1='122 ' z1='360' x2='122' z2='520' entryDir='0'/>
+        <interactive type="door" path='doorAnim' actRect='80,321,85,250'/>
+        <object name='backWallOverlay' x='0' y='0' z='400'/>
+        <object name='door2_mc' x='0' y='0' z='405'/>
+        <object name='doorAnim' x='0' y='0' z='460'/>
+    </location>
+
+    <location id='159' name='BlueDiamond1_2' type='2' boundType='rect' boundary='-59,60,199,200' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.3'>
+        <roomBG path='fixedCam/quests/blueDiamond1/blueDiamond1_2.swf'/>
+        <door id='1' toLoc='158' toDoor='2' x1='80' z1='118' x2='80' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='160' toDoor='1' x1='165' z1='150' x2='270' z2='150' entryDir='0'/>
+        <interactive type="door" path='doorAnim' actRect='150,90,200,110'/>
+        <object name='weightDrag_mc' x='0' y='0' z='-40'/>
+        <object name='corkDrag_spr' x='0' y='0' z='-30'/>
+        <object name='kindlingDrag_spr' x='0' y='0' z='-20'/>
+        <object name='bowDrag_spr' x='0' y='0' z='-19'/>
+        <object name='ballDrag_spr' x='0' y='0' z='-10'/>
+        <object name='cubeDrag_spr' x='0' y='0' z='-8'/>
+        <object name='triangleDrag_spr' x='0' y='0' z='-7'/>
+        <object name='cup_mc' x='266' y='0' z='1'/>
+        <object name='barrel' x='266' y='0' z='2'/>
+        <object name='bottle2' x='266' y='0' z='65'/>
+        <object name='wallOverlay' x='266' y='0' z='89'/>
+        <object name='door2_mc' x='200' y='0' z='90'/>
+        <object name='doorAnim' x='266' y='0' z='130'/>
+    </location>
+
+    <location id='160' name='BlueDiamond1_3' type='2' boundType='rect' boundary='-180,20,360,350' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.3'>
+        <roomBG path='fixedCam/quests/blueDiamond1/blueDiamond1_3.swf'/>
+        <door id='1' toLoc='159' toDoor='2' x1='-160' z1='150' x2='-270' z2='150' entryDir='0'/>
+        <interactive type="door" path='doorAnim' actRect='-350,90,200,110'/>
+        <object name='wallOverlay' x='0' y='0' z='89'/>
+        <object name='door1_mc' x='0' y='0' z='90'/>
+        <object name='doorAnim' x='0' y='0' z='130'/>
+    </location>
+
+
+    <location id='162' name='BlueDiamond2_1' type='1' boundType='rect' boundary='-512,0,1024,1024' xWall='0' zWall='0' camPos='-42,197,-37' camAim='-66,15,436' camBounds='-800,35,-300,800,240,1300' entryPos='0,512' entryDir='-180' weevilScale='0.13' camMode='2'>
+        <floor path='floors/BlueDiamond2_1.swf'/>
+        <logic path='freeCamLocLogic/BlueDiamond2_1_logic.swf'/>
+        <colMap path='floors/BlueDiamond2_1_cMap.swf'/>
+
+        <backdrop path='backdrops/toiletBrushes.swf' x='550' y='0' z='1600'/>
+        <backdrop path='backdrops/mulchMounds.swf' x='1400' y='0' z='200'/>
+        <backdrop path='backdrops/mulchMounds.swf' x='-1400' y='0' z='900'/>
+        <backdrop path='backdrops/drinkCan.swf' x='500' y='0' z='-700'/>
+
+        <door id='1' toLoc='166' toDoor='1' x1='-472' z1='512' x2='-572' z2='512' entryDir='180'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='-512' y='0' z='512' scale='0.08' ry='90' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/mapPin2.swf' clr='255,0,0' x='-31' y='0' z='15' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin2.swf' clr='255,0,0' x='31' y='0' z='15' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/mapPin2.swf' clr='255,255,0' x='-1' y='0' z='1010' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin2.swf' clr='255,255,0' x='62' y='0' z='1010' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/mapPin2.swf' clr='0,0,255' x='-600' y='0' z='480' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin2.swf' clr='0,0,255' x='-600' y='0' z='542' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/mapPin2.swf' clr='255,0,255' x='497' y='0' z='480' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin2.swf' clr='255,0,255' x='497' y='0' z='542' scale='0.5' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <teleporter x='-64' y='0' z='575' scale='0.18' destLocID='160'/>
+        <teleporter x='0' y='0' z='-12' scale='0.21' destLocID='163'/>
+        <teleporter x='525' y='0' z='512' scale='0.21' destLocID='164'/>
+        <teleporter x='31' y='0' z='1036' scale='0.21' destLocID='165'/>
+
+        <teleporter x='-435' y='0' z='78' scale='0.24' dest='455,0,48'/>
+        <teleporter logicID='1' x='435' y='0' z='78' scale='0.24' dest='455,0,972'/>
+        <teleporter logicID='2' x='435' y='0' z='935' scale='0.24' dest='-462,0,973'/>
+        <teleporter logicID='3' x='-435' y='0' z='935' scale='0.24' dest='-435,0,509'/>
+    </location>
+
+
+    <location id='163' name='BlueDiamond2_2' type='1' boundType='rect' boundary='-512,0,1024,1024' xWall='0' zWall='0' camPos='-42,197,-37' camAim='-66,15,436' camBounds='-800,35,-300,800,240,1300' entryPos='35,547' entryDir='-180' weevilScale='0.14' camMode='2' clickAnywhere='yes'>
+        <floor path='floors/BlueDiamond2_2.swf'/>
+        <logic path='freeCamLocLogic/BlueDiamond2_2_logic.swf'/>
+        <teleporter x='265' y='0' z='250' scale='0.21' destLocID='162'/>
+
+        <preRend3D path='assets3D/pawn.swf' clr='246,240,200' x='-174' y='0' z='479' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='100,70,20' x='-103' y='0' z='269' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='246,240,200' x='107' y='0' z='549' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='100,70,20' x='39' y='0' z='409' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/bishop.swf' clr='100,70,20' x='-243' y='0' z='409' scale='0.39' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D logicID='9' path='assets3D/marker.swf' bg='true' x='-243' y='0' z='409' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/rook.swf' clr='346,340,300' x='-245' y='0' z='761' scale='0.39' ry='0' rxMin='2' rxMax='18' ryMin='0' ryMax='360' framesY='18' symAxes='7' rIncr='1.5'/>
+        <preRend3D logicID='10' path='assets3D/marker.swf' bg='true' x='-245' y='0' z='761' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/knight.swf' clr='200,170,120' x='-480' y='0' z='50' scale='0.75' ry='0' rxMin='2' rxMax='8' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D logicID='1' path='assets3D/marker.swf' bg='true' x='-480' y='0' z='50' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/knight.swf' clr='346,340,300' x='475' y='0' z='129' scale='0.75' ry='0' rxMin='2' rxMax='8' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D logicID='2' path='assets3D/marker.swf' bg='true' x='475' y='0' z='129' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/bishop.swf' clr='246,240,200' x='-490' y='0' z='160' scale='0.39' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D logicID='3' path='assets3D/marker.swf' bg='true' x='-490' y='0' z='160' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/rook.swf' clr='200,170,120'  x='-394' y='0' z='573' scale='0.39' ry='0' rxMin='2' rxMax='18' ryMin='0' ryMax='360' framesY='18' symAxes='7' rIncr='1.5'/>
+        <preRend3D logicID='4' path='assets3D/marker.swf' bg='true' x='-394' y='0' z='573' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/rook.swf' clr='346,340,300'  x='445' y='0' z='331' scale='0.39' ry='0' rxMin='2' rxMax='18' ryMin='0' ryMax='360' framesY='18' symAxes='7' rIncr='1.5'/>
+        <preRend3D logicID='5' path='assets3D/marker.swf' bg='true' x='445' y='0' z='331' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/bishop.swf' clr='100,70,20' x='375' y='0' z='901' scale='0.39' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D logicID='6' path='assets3D/marker.swf' bg='true' x='375' y='0' z='901' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/bishop.swf' clr='246,240,200' x='419' y='0' z='503' scale='0.39' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D logicID='7' path='assets3D/marker.swf' bg='true' x='419' y='0' z='503' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/rook.swf' clr='200,170,120'  x='125' y='0' z='113' scale='0.39' ry='0' rxMin='2' rxMax='18' ryMin='0' ryMax='360' framesY='18' symAxes='7' rIncr='1.5'/>
+        <preRend3D logicID='8' path='assets3D/marker.swf' bg='true' x='125' y='0' z='113' scale='0.38' ry='0' rxMin='2' rxMax='28' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/pawn.swf' clr='246,240,200' x='-231' y='0' z='975' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='100,70,20' x='-150' y='0' z='885' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='100,70,20' x='67' y='0' z='934' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='246,240,200' x='375' y='0' z='573' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/pawn.swf' clr='100,70,20' x='255' y='0' z='70' scale='0.3' ry='0' rxMin='2' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+    </location>
+
+
+    <location id='164' name='BlueDiamond2_3' type='1' boundType='rect' boundary='-512,0,1024,1024' xWall='0' zWall='0' camPos='0,197,1300' camAim='0,15,436' camBounds='-800,35,-300,800,240,1300' entryPos='0,960' entryDir='0' weevilScale='0.11' camMode='2'>
+        <floor path='floors/BlueDiamond2_3.swf'/>
+        <colMap path='floors/BlueDiamond2_3_cMap.swf'/>
+
+        <backdrop path='backdrops/mulch1.swf' x='350' y='0' z='1700'/>
+        <backdrop path='backdrops/mulch2.swf' x='1400' y='0' z='400'/>
+        <backdrop path='backdrops/mulch3.swf' x='-1400' y='0' z='400'/>
+        <backdrop path='backdrops/mulch4.swf' x='500' y='0' z='-700'/>
+        <backdrop path='backdrops/mulch5.swf' x='-100' y='0' z='1700'/>
+        <backdrop path='backdrops/mulch6.swf' x='-1200' y='0' z='800'/>
+
+        <teleporter x='0' y='0' z='940' scale='0.18' destLocID='162'/>
+        <spinner x='0' y='0' z='512' scale='0.7'/>
+
+        <preRend3D path='assets3D/cottonReel.swf' x='0' y='0' z='912' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='138.6' y='0' z='136.1' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='346.4' y='0' z='311.9' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='393.9' y='0' z='581.4' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='257.1' y='0' z='818.2' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='-257.1' y='0' z='818.4' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='-393.9' y='0' z='581.3' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='-346.4' y='0' z='311.9' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/cottonReel.swf' x='-136.8' y='0' z='135.9' scale='0.34' ry='0' rxMin='9' rxMax='45' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+    </location>
+
+
+    <location id='165' name='BlueDiamond2_4' type='1' boundType='rect' boundary='-512,0,1024,1024' xWall='0' zWall='0' camPos='-42,197,-37' camAim='-66,15,436' camBounds='-800,35,-300,800,240,1300' entryPos='60,632' entryDir='-180' weevilScale='0.13' camMode='2'>
+        <floor path='floors/BlueDiamond2_4.swf'/>
+        <colMap path='floors/BlueDiamond2_4_cMap.swf'/>
+
+        <backdrop path='backdrops/mulch1.swf' x='450' y='0' z='1100'/>
+        <backdrop path='backdrops/mulch2.swf' x='1000' y='0' z='400'/>
+        <backdrop path='backdrops/mulch3.swf' x='-1000' y='0' z='400'/>
+        <backdrop path='backdrops/mulch4.swf' x='500' y='0' z='-300'/>
+        <backdrop path='backdrops/mulch5.swf' x='-100' y='0' z='1100'/>
+        <backdrop path='backdrops/mulch6.swf' x='-900' y='0' z='800'/>
+
+        <teleporter x='90' y='0' z='601' scale='0.18' destLocID='162'/>
+        <spinner x='-36' y='0' z='357' scale='0.32'/>
+        <spinner x='335' y='0' z='238' scale='0.32'/>
+        <spinner x='90' y='0' z='730' scale='0.32'/>
+        <spinner x='34' y='0' z='478' scale='0.32'/>
+    </location>
+
+
+    <location id='166' name='BlueDiamond2_5' type='1' boundType='rect' boundary='-512,0,1024,1024' xWall='0' zWall='0' camPos='0,197,-400' camAim='0,0,512' camBounds='-800,35,-500,800,240,1300' entryPos='0,0' entryDir='-180' weevilScale='0.12' camMode='2'>
+        <floor path='floors/BlueDiamond2_5.swf'/>
+        <colMap path='floors/BlueDiamond2_5_cMap.swf'/>
+
+        <backdrop path='backdrops/mulch1.swf' x='350' y='0' z='1700'/>
+        <backdrop path='backdrops/mulch2.swf' x='1400' y='0' z='400'/>
+        <backdrop path='backdrops/mulch3.swf' x='-1400' y='0' z='400'/>
+        <backdrop path='backdrops/mulch4.swf' x='500' y='0' z='-700'/>
+        <backdrop path='backdrops/mulch5.swf' x='-100' y='0' z='1700'/>
+        <backdrop path='backdrops/mulch6.swf' x='-1200' y='0' z='800'/>
+
+        <door id='1' toLoc='162' toDoor='1' x1='0' z1='42' x2='0' z2='-70' entryDir='0'/>
+        <preRend3D path='assets3D/arrow.swf' bg='true' doorID='1' x='0' y='0' z='-10' scale='0.12' ry='180' rxMin='9' rxMax='39' ryMin='0' ryMax='360' framesY='61' symAxes='1' rIncr='3'/>
+
+        <preRend3D path='assets3D/mapPin2.swf' clr='0,0,255' x='-41' y='0' z='-75' scale='0.35' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+        <preRend3D path='assets3D/mapPin2.swf' clr='0,0,255' x='41' y='0' z='-75' scale='0.35' ry='0' rxMin='6' rxMax='21' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='1.5'/>
+
+        <preRend3D path='assets3D/blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:6,taskID:45' clr='240,240,255' x='0' y='0' z='522.5' scale='0.5' ry='15' rxMin='6' rxMax='15' ryMin='0' ryMax='360' framesY='31' symAxes='4' rIncr='1.5'/>
+    </location>
+
+
+
+    <location id='143' name='PipeRoom1' type='2' boundType='rect' boundary='-280,125,600,495' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.28' timerID='25' noZoom='yes'>
+        <!--<location id='143' name='PipeRoom1' type='2' boundType='rect' boundary='-180,20,220,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' playList='18,19,20' timerID='15'>-->
+        <roomBG path='fixedCam/adCampaigns/catsNDogs/catsNdogs.swf'/>
+        <door id='1' toLoc='103' toDoor='4' x1='0 ' z1='145' x2='0' z2='-50' entryDir='180'/>
+        <cta id='1' extUIData='path:externalUIs/adCampaigns/catsNDogs/catsAndDogs.swf,section:1' x='-100' z='100'/>
+        <cta id='2' extUIData='path:externalUIs/adCampaigns/catsNDogs/catsAndDogs.swf,section:2' x='80' z='105'/>
+        <cta id='3' extUIData='path:externalUIs/adCampaigns/catsNDogs/catsAndDogs.swf,section:3' x='-100' z='106'/>
+        <cta id='4' extUIData='path:externalUIs/adCampaigns/catsNDogs/catsAndDogs.swf,section:4' x='-100' z='106'/>
+        <object name='signs' x='0' y='0' z='150'/>
+        <object name='cta1_btn' x='0' y='0' z='94'/>
+        <object name='cta2_btn' x='0' y='0' z='93'/>
+        <object name='cta3_btn' x='0' y='0' z='92'/>
+        <object name='cta4_btn' x='0' y='0' z='91'/>
+        <object name='competition_btn' x='0' y='0' z='90'/>
+    </location>
+
+    <location id='170' name='DinosaurTraining1' type='2' boundType='rect' boundary='-200,20,440,400' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' timerID='21'>
+        <roomBG path='fixedCam/adCampaigns/trainDragon/muchIsland_trainDragon1.swf'/>
+        <door id='1' toLoc='132' toDoor='2' x1='-200' z1='200' x2='-235' z2='280' entryDir='0'/>
+        <door id='2' toLoc='171' toDoor='1' x1='150' z1='80' x2='200' z2='80' entryDir='90'/>
+        <object name='char1' x='250' y='0' z='0'/>
+        <object name='char2' x='250' y='0' z='190'/>
+        <object name='char3' x='250' y='0' z='280'/>
+        <object name='char4' x='250' y='0' z='110'/>
+        <preRend3D path='assets3D/bubble_dragon_5.swf' extUIData='path:externalUIs/adCampaigns/trainDragon/hunt.swf,compID:17,itemID:4' boundary='type:rad,r:20' x='-100' y='30' z='100' scale='0.2' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
+        <preRend3D path='assets3D/shadow.swf' x='-100' y='0' z='100' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+    </location>
+
+    <location id='171' name='DinosaurTraining2' type='2' boundType='rect' boundary='-200,20,280,140' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' timerID='21'>
+        <roomBG path='fixedCam/adCampaigns/trainDragon/mulchIsland_trainDragon2.swf'/>
+        <door id='1' toLoc='170' toDoor='2' x1='-160' z1='120' x2='-200' z2='120' entryDir='-90'/>
+        <preRend3D path='assets3D/bubble_dragon_6.swf' extUIData='path:externalUIs/adCampaigns/trainDragon/hunt.swf,compID:17,itemID:5' boundary='type:rad,r:20' x='50' y='30' z='150' scale='0.2' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
+        <preRend3D path='assets3D/shadow.swf' x='50' y='0' z='150' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
+    </location>
+
+
+    <location id='172' name='LabsLab' type='2' boundType='rect' boundary='-240,100,440,200' camPos='0,145,-115' camAim='0,15,500' entryPos='-60,160' weevilScale='0.23' entryDir='180' noZoom='yes'>
+        <!--<roomBG path='fixedCam/LabsLab_videoPod.swf'/>-->
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/LabsLab_videoPod.swf'/>
+        <door id='1' extUIData="locName:LabsLab,path:externalUIs/brainStrain.swf" x1='-48 ' z1='300' x2='-40' z2='480' entryDir='180'/>
+        <door id='2' toLoc='177' toDoor='1' x1='120 ' z1='140' x2='145' z2='150' entryDir='45'/>
+        <object name='remoteDoorOverlay' x='140' y='0' z='130'/>
+        <interactive type="door" path='door2_mc' actRect='100,0,50,150'/>
+        <object name='entranceOverlay' x='0' y='0' z='360'/>
+        <object name='mushrooms' x='0' y='0' z='270'/>
+        <object name='door1_mc' x='0' y='0' z='255'/>
+        <door id='3' toLoc='10006' toDoor='1' x1='-90 ' z1='160' x2='-170' z2='210' entryDir='45'/>
+        <object name='door3_mc' x='0' y='0' z='269'/>
+
+    </location>
+
+
+
+    <location id='173' name='TycoonIslandHeliport' type='2' boundType='rad' boundary='0,200,180' camPos='0,145,-115' camAim='0,15,500' entryPos='5,182' entryDir='50' weevilScale='0.22' noZoom='yes'>
+        <roomBG path='fixedCam/tycoonIslandHeliport2.swf'/>
+        <door id='1' toLoc='174' toDoor='1' x1='-105' z1='146' x2='-145' z2='143' entryDir='180'/>
+        <door id='2' toLoc='175' toDoor='1' x1='105' z1='146' x2='145' z2='143' entryDir='180'/>
+        <door id='3' toLoc='300' toDoor='1' x1='-60' z1='300' x2='-110' z2='350' entryDir='280'/>
+        <object name='door1_mc' x='-140' y='0' z='138'/>
+        <object name='door1Back' x='-140' y='0' z='148'/>
+        <object name='door2_mc' x='140' y='0' z='137'/>
+        <object name='door2Back' x='-140' y='0' z='147'/>
+        <object name='door3_mc' x='0' y='0' z='300'/>
+        <object name='sign_mc' x='0' y='0' z='290'/>
+        <object name='door3Back_mc' x='0' y='0' z='350'/>
+        <object name='helicopter_mc' x='0' y='0' z='200'/>
+        <object name='foliage_mc' x='0' y='0' z='170'/>
+        <anim path='bank_mc'/>
+        <anim path='hotel_mc'/>
+        <anim path='flatRoof_mc.umbrella_mc.parasolPr_mc.canopy_mc'/>
+        <anim path='rest_mc'/>
+        <anim path='cafe_mc'/>
+        <anim path='hpFloor_mc.floorlights_mc'/>
+        <anim path='hpFloor_mc.landinglight_mc'/>
+        <anim path='smallHelicopter_mc'/>
+    </location>
+
+
+
+    <location id='174' name='TycoonIslandSlides' type='2' boundType='rect' boundary='-120,100,300,250' camPos='0,145,-115' camAim='0,15,500' entryPos='0,140' weevilScale='0.21' maintainY='yes' noZoom='yes'>
+        <roomBG path='fixedCam/tycoonIsland_slimePool.swf'/>
+        <door id='1' toLoc='173' toDoor='1' x1='-105' z1='102' x2='-150' z2='102' entryDir='180'/>
+        <door id='2' toLoc='176' toDoor='1' x1='262' z1='502' x2='253' z2='512' y='180' entryDir='0'/>
+        <anim path='tubeRedFront'/>
+        <anim path='tubeBlueFront'/>
+        <anim path='tubeYellowFront'/>
+        <object name='ropeBridge' x='0' y='180' z='495'/>
+        <object name='slideEntrance' x='0' y='180' z='505'/>
+        <object name='slideEntrance_btn' x='0' y='180' z='504'/>
+        <object name='tikiTotem' x='0' y='0' z='128'/>
+        <object name='slideSign' x='0' y='0' z='214'/>
+        <object name='palmsRight' x='0' y='0' z='334'/>
+        <object name='door1_mc' x='0' y='0' z='-1'/>
+        <object name='door1_front' x='0' y='0' z='0'/>
+        <object name='door1_back' x='0' y='0' z='110'/>
+        <object name='tubeRedFront' x='0' y='0' z='180'/>
+        <object name='tubeRedBack' x='0' y='0' z='190'/>
+        <object name='tubeBlueFront' x='0' y='0' z='350'/>
+        <object name='tubeYellowFront' x='0' y='0' z='400'/>
+    </location>
+
+    <location id='175' name='TycoonIslandShops' type='2' boundType='rad' boundary='0,200,180' camPos='0,145,-115' camAim='0,15,500' entryPos='0,140' weevilScale='0.22' noZoom='yes'>
+        <roomBG path='fixedCam/tycoonIslandShops_2.swf'/>
+        <door id='1' toLoc='173' toDoor='2' x1='-90' z1='90' x2='-150' z2='90' entryDir='180'/>
+        <object name='palmL' x='0' y='0' z='78'/>
+        <object name='door1_mc' x='0' y='0' z='70'/>
+        <object name='door2_mc' x='0' y='0' z='275'/>
+        <object name='door3_mc' x='0' y='0' z='382'/>
+        <object name='door4_mc' x='0' y='0' z='382'/>
+        <object name='door5_mc' x='0' y='0' z='382'/>
+        <!--<object name='door6_mc' x='0' y='0' z='80'/>-->
+        <object name='tube_mc' x='0' y='0' z='85'/>
+        <object name='tubeBack_mc' x='0' y='0' z='96'/>
+        <object name='statue_mc' x='0' y='0' z='180'/>
+        <object name='fountain1' x='0' y='0' z='140'/>
+        <object name='fountain2' x='0' y='0' z='240'/>
+        <object name='piller_mc' x='0' y='0' z='210'/>
+        <object name='sideBit_mc' x='0' y='0' z='50'/>
+        <anim path='statue_mc.statue.dosh.twinkle1'/>
+        <anim path='statue_mc.statue.dosh.twinkle2'/>
+        <anim path='statue_mc.bass.twinkle1'/>
+        <anim path='statue_mc.bass.twinkle2'/>
+        <anim path='statue_mc.bass.twinkle3'/>
+        <anim path='door4_mc.twinkle1'/>
+        <anim path='door4_mc.twinkle2'/>
+        <door id='2' extUIData="locName:PhotoStudioShop,path:externalUIs/Photoshop.swf"  x1='-160' z1='240' x2='-210' z2='280' entryDir='20'/>
+        <door id='3' extUIData="locName:NightClubShop,path:externalUIs/NightClubShop.swf"  x1='30' z1='320' x2='55' z2='435' entryDir='20'/>
+        <door id='4' extUIData="locName:GardenPlotsShop,path:externalUIs/ClottsGardenPlots.swf"  x1='115' z1='320' x2='150' z2='394' entryDir='20'/>
+        <door id='5' extUIData="locName:Hem's Hats,path:externalUIs/HatShop.swf"  x1='-100' z1='320' x2='-140' z2='435' entryDir='20'/>
+        <door id='6' extUIData="locName:TycoonShop,path:externalUIs/TycoonShop2.swf" x1='170' z1='220' x2='220' z2='240' entryDir='20'/>
+        <interactive type="door" path='door2_mc.doorAnim_mc' actRect='-360,190,250,130'/>
+        <interactive type="door" path='door3_mc.door_mc' actRect='0,290,100,200'/>
+        <interactive type="door" path='door4_mc.door_mc' actRect='80,280,200,200'/>
+        <interactive type="door" path='door5_mc.door_mc' actRect='-160,300,100,200'/>
+        <interactive type="door" path='door6_mc.door_mc' actRect='150,150,200,200'/>
+    </location>
+
+    <location id='176' name='TycoonIslandSmoothieBar' type='2' boundType='rect' boundary='-200,100,400,200' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes' roomEvents='yes'>
+        <roomBG path='fixedCam/tycoonIslandSmoothieBar.swf'/>
+        <door id='1' toLoc='174' toDoor='2' x1='140' z1='120' x2='220' z2='80' entryDir='180'/>
+        <object name='shack' x='0' y='0' z='208'/>
+        <object name='shackBack_mc' x='0' y='0' z='250'/>
+        <object name='jamStand_mc' x='140' y='0' z='358'/>
+        <object name='seat1' x='0' y='35' z='160'/>
+        <object name='seat2' x='0' y='35' z='154'/>
+        <object name='seat3' x='0' y='35' z='154'/>
+        <object name='seat4' x='0' y='35' z='166'/>
+        <object name='seat5' x='0' y='35' z='240'/>
+        <object name='totumMiddle' x='0' y='0' z='230'/>
+        <object name='door1_mc' x='0' y='0' z='136'/>
+        <object name='door1Sign_mc' x='0' y='0' z='143'/>
+        <object name='makeFoodPanel_mc' x='0' y='0' z='0'/>
+        <object name='menuBoard_mc' x='0' y='0' z='1'/>
+        <anim path='totumLeft'/>
+        <anim path='totumMiddle'/>
+        <anim path='totumRight.head_mc'/>
+    </location>
+
+    <location id='177' name='VideoPod1' type='2' boundType='rect' boundary='-200,100,400,300' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes'>
+        <roomBG path='fixedCam/tvPod1.swf'/>
+        <!-- to labs lab -->
+        <door id='1' toLoc='172' toDoor='2' x1='0' z1='180' x2='0' z2='0' entryDir='180'/>
+        <object name='sofaL' x='0' y='0' z='70'/>
+        <object name='sofaR' x='0' y='0' z='71'/>
+        <object name='seat1_btn' x='0' y='40' z='10'/>
+        <object name='seat2_btn' x='0' y='40' z='11'/>
+        <object name='seat3_btn' x='0' y='40' z='12'/>
+        <object name='seat4_btn' x='0' y='40' z='13'/>
+        <object name='tableRight' x='0' y='0' z='260'/>
+        <object name='tableLeft' x='0' y='0' z='360'/>
+        <object name='vendingMachine' x='0' y='0' z='320'/>
+        <object name='chairRight' x='0' y='0' z='369'/>
+        <object name='chairLeft' x='0' y='0' z='370'/>
+    </location>
+
+    <location id='178' name='VideoPod2' type='2' boundType='rect' boundary='-200,100,400,300' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes'>
+        <roomBG path='fixedCam/tvPod2.swf'/>
+        <!-- to rums airport -->
+        <door id='1' toLoc='129' toDoor='7' x1='0' z1='180' x2='0' z2='0' entryDir='180'/>
+        <object name='sofaL' x='0' y='0' z='70'/>
+        <object name='sofaR' x='0' y='0' z='71'/>
+        <object name='seat1_btn' x='0' y='40' z='10'/>
+        <object name='seat2_btn' x='0' y='40' z='11'/>
+        <object name='seat3_btn' x='0' y='40' z='12'/>
+        <object name='seat4_btn' x='0' y='40' z='13'/>
+        <object name='fridge' x='0' y='0' z='320'/>
+    </location>
+
+    <location id='179' name='VideoPod3' type='2' boundType='rect' boundary='-200,100,400,300' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes' timerID='35'>
+        <!--<roomBG path='fixedCam/tvPod1.swf'/>-->
+        <roomBG path='fixedCam/adCampaigns/fred/VODPod1Fred_v6.swf'/>
+        <object name='menu_mc' x='0' y='0' z='0'/>  <!-- only change from standard pod -->
+        <!-- to shopping mall -->
+        <door id='1' toLoc='104' toDoor='5' x1='0' z1='180' x2='0' z2='0' entryDir='180'/>
+        <object name='sofaL' x='0' y='0' z='70'/>
+        <object name='sofaR' x='0' y='0' z='71'/>
+        <object name='seat1_btn' x='0' y='40' z='10'/>
+        <object name='seat2_btn' x='0' y='40' z='11'/>
+        <object name='seat3_btn' x='0' y='40' z='12'/>
+        <object name='seat4_btn' x='0' y='40' z='13'/>
+        <object name='tableRight' x='0' y='0' z='260'/>
+        <object name='tableLeft' x='0' y='0' z='360'/>
+        <object name='vendingMachine' x='0' y='0' z='320'/>
+        <object name='chairRight' x='0' y='0' z='369'/>
+        <object name='chairLeft' x='0' y='0' z='370'/>
+    </location>
+
+    <location id='180' name='AztecMainHall' type='2' boundType='rect' boundary='-180,20,360,60' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' noZoom='yes'>
+        <roomBG path='fixedCam/quests/aztec/AztecMainHall.swf'/>
+        <door id='1' toLoc='142' toDoor='2' x1='0' z1='0' x2='0' z2='0' y2='1500' entryDir='180'/>
+        <door id='2' toLoc='181' toDoor='1' x1='-200' z1='56' x2='-290' z2='56' entryDir='180'/>
+        <door id='3' toLoc='182' toDoor='1' x1='195' z1='70' x2='290' z2='70' entryDir='180'/>
+        <door id='4' toLoc='183' toDoor='1' x1='0' z1='150' x2='0' z2='150' y2='-300' entryDir='180'/>
+
+        <object name='arrows_mc' x='0' y='0' z='-100'/>
+        <object name='door1Front_mc' x='0' y='0' z='-20'/>
+        <object name='door2Front_mc' x='0' y='0' z='-20'/>
+        <object name='leftWallClone_mc' x='0' y='0' z='-19'/>
+        <object name='rightWallClone_mc' x='0' y='0' z='-19'/>
+        <object name='doorCover_mc' x='0' y='0' z='-19'/>
+        <object name='backDark_mc' x='0' y='0' z='-21'/>
+        <object name='leftDark_mc' x='0' y='0' z='-22'/>
+        <object name='rightDark_mc' x='0' y='0' z='-22'/>
+        <object name='floorFront_mc' x='0' y='0' z='100'/>
+    </location>
+
+    <location id='181' name='AztecRoomWest' type='2' boundType='rect' boundary='-180,20,360,200' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' noZoom='yes'>
+        <roomBG path='fixedCam/quests/aztec/AztecRoomWest.swf'/>
+        <door id='1' toLoc='180' toDoor='2' x1='200' z1='75' x2='270' z2='75' entryDir='180'/>
+
+        <object name='arrows_mc' x='0' y='0' z='-100'/>
+        <object name='rightWallClone_mc' x='0' y='0' z='-19'/>
+        <object name='door1Front_mc' x='0' y='0' z='-20'/>
+    </location>
+
+    <location id='182' name='AztecRoomEast' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' noZoom='yes'>
+        <roomBG path='fixedCam/quests/aztec/AztecRoomEast.swf'/>
+        <door id='1' toLoc='180' toDoor='3' x1='-200' z1='60' x2='-270' z2='60' entryDir='180' />
+
+        <object name='arrows_mc' x='0' y='0' z='-100'/>
+        <object name='door1Front_mc' x='0' y='0' z='-20'/>
+        <object name='leftWallClone_mc' x='0' y='0' z='-19'/>
+    </location>
+
+    <location id='183' name='AztecRoomFinal' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' noZoom='yes'>
+        <roomBG path='fixedCam/quests/aztec/AztecRoomFinal.swf'/>
+        <door id='1' toLoc='180' toDoor='4' x1='0' z1='0' x2='0' z2='0' y2='1500'entryDir='0'/>
+        <door id='2' toLoc='142' toDoor='2' x1='-180' z1='40' x2='-200' z2='-40' entryDir='180'/>
+
+        <object name='arrows_mc' x='0' y='0' z='-100'/>
+        <object name='doorCover_mc' x='0' y='0' z='-100'/>
+        <object name='aztecPipe_mc' x='0' y='0' z='-98'/>
+        <object name='door2_mc' x='0' y='0' z='-99'/>
+    </location>
+
+    <location id='184' name='GiantClouds' type='2' boundType='rect' boundary='-50,-50,200,100' camPos='0,120,-246' camAim='0,32,174' entryPos='0,80' weevilScale='0.20' noZoom='yes' maintainY='yes'>
+        <roomBG path='fixedCam/quests/giant/Clouds.swf'/>
+        <door id='1' toLoc='20' toDoor='2' x1='-7' z1='-10' x2='-7' z2='-40' entryDir='0'/>
+        <door id='2' toLoc='185' toDoor='1' x1='-70' z1='660' x2='-55' z2='730' y="88" entryDir='0'/>
+        <object name='plant_mc' x='0' y='0' z='20'/>
+        <object name='cloud0_mc' x='0' y='0' z='55'/>
+        <object name='blueStar_mc' x='0' y='0' z='-1'/>
+        <object name='cloud1_mc' x='0' y='30' z='155'/>
+        <object name='cloud1Front_mc' x='0' y='30' z='149'/>
+        <object name='cloud1Shade_mc' x='0' y='30' z='148'/>
+        <object name='cloud2_mc' x='0' y='60' z='206'/>
+        <object name='cloud2Front_mc' x='0' y='60' z='199'/>
+        <object name='cloud2Shade_mc' x='0' y='60' z='198'/>
+        <object name='cloud3_mc' x='0' y='90' z='302'/>
+        <object name='cloud3Front_mc' x='0' y='90' z='298'/>
+        <object name='cloud4_mc' x='0' y='130' z='373'/>
+        <object name='cloud4Front_mc' x='0' y='130' z='368'/>
+        <object name='cloud4Shade_mc' x='0' y='130' z='367'/>
+        <object name='cloud5_mc' x='0' y='163' z='375'/>
+        <object name='cloud5Front_mc' x='0' y='163' z='336'/>
+        <object name='cloud5Shade_mc' x='0' y='163' z='335'/>
+        <object name='cloud6_mc' x='0' y='175' z='378'/>
+        <object name='cloud6Front_mc' x='0' y='175' z='334'/>
+        <object name='cloud6Shade_mc' x='0' y='175' z='333'/>
+        <object name='greenStar_mc' x='0' y='175' z='377'/>
+        <object name='cloud7_mc' x='0' y='86' z='244'/>
+        <object name='cloud7Front_mc' x='0' y='86' z='240'/>
+        <object name='cloud7Shade_mc' x='0' y='86' z='239'/>
+        <object name='cloud8_mc' x='0' y='59' z='224'/>
+        <object name='cloud8Front_mc' x='0' y='59' z='222'/>
+        <object name='cloud8Shade_mc' x='0' y='59' z='221'/>
+        <object name='cloud9_mc' x='0' y='34' z='211'/>
+        <object name='cloud9Front_mc' x='0' y='34' z='209'/>
+        <object name='cloud9Shade_mc' x='0' y='34' z='208'/>
+        <object name='cloud10_mc' x='0' y='12' z='203'/>
+        <object name='cloud10Front_mc' x='0' y='12' z='168'/>
+        <object name='orangeStar_mc' x='0' y='12' z='202'/>
+        <object name='cloud13_mc' x='0' y='27' z='251'/>
+        <object name='cloud13Front_mc' x='0' y='27' z='247'/>
+        <object name='cloud13Shade_mc' x='0' y='27' z='246'/>
+        <object name='cloud14_mc' x='0' y='65' z='282'/>
+        <object name='cloud14Front_mc' x='0' y='65' z='275'/>
+        <object name='cloud14Shade_mc' x='0' y='65' z='274'/>
+        <object name='yellowStar_mc' x='0' y='65' z='281'/>
+        <object name='cloud15_mc' x='0' y='0' z='132'/>
+        <object name='cloud15Front_mc' x='0' y='0' z='116'/>
+        <object name='cloud15Shade_mc' x='0' y='0' z='115'/>
+        <object name='purpleStar_mc' x='0' y='0' z='131'/>
+        <object name='sign_mc' x='0' y='0' z='-121'/>
+        <object name='cloud16_mc' x='0' y='0' z='30'/>
+        <object name='cloud17_mc' x='0' y='0' z='31'/>
+        <object name='cloud18_mc' x='0' y='0' z='77'/>
+        <object name='redStar_mc' x='0' y='0' z='76'/>
+        <object name='teleport_mc' x='0' y='0' z='75'/>
+        <object name='L_redStar_mc' x='0' y='0' z='74'/>
+        <object name='L_orangeStar_mc' x='0' y='0' z='73'/>
+        <object name='L_yellowStar_mc' x='0' y='0' z='72'/>
+        <object name='L_greenStar_mc' x='0' y='0' z='71'/>
+        <object name='L_blueStar_mc' x='0' y='0' z='70'/>
+        <object name='L_purpleStar_mc' x='0' y='0' z='69'/>
+        <object name='floor' x='0' y='0' z='-100'/>
+        <object name='step1_btn' x='0' y='0' z='-101'/>
+        <object name='step2_btn' x='0' y='0' z='-102'/>
+        <object name='step3_btn' x='0' y='0' z='-103'/>
+        <object name='step4_btn' x='0' y='0' z='-104'/>
+        <object name='step5_btn' x='0' y='0' z='-105'/>
+        <object name='step6_btn' x='0' y='0' z='-106'/>
+        <object name='step7_btn' x='0' y='0' z='-107'/>
+        <object name='step8_btn' x='0' y='0' z='-108'/>
+        <object name='step9_btn' x='0' y='0' z='-109'/>
+        <object name='step10_btn' x='0' y='0' z='-110'/>
+        <object name='step11_btn' x='0' y='0' z='-111'/>
+        <object name='step12_btn' x='0' y='0' z='-112'/>
+        <object name='step13_btn' x='0' y='0' z='-113'/>
+        <object name='step14_btn' x='0' y='0' z='-114'/>
+        <object name='step15_btn' x='0' y='0' z='-115'/>
+        <object name='step16_btn' x='0' y='0' z='-116'/>
+        <object name='step17_btn' x='0' y='0' z='-117'/>
+        <object name='step18_btn' x='0' y='0' z='-118'/>
+        <object name='step19_btn' x='0' y='0' z='-119'/>
+        <object name='door1_mc' x='0' y='0' z='-120'/>
+    </location>
+
+    <location id='185' name='GiantEntrance' type='2' boundType='rect' boundary='-180,-80,360,100' camPos='0,190,-330' camAim='0,32,174' entryPos='0,80' weevilScale='0.12' noZoom='yes' maintainY='yes'>
+        <roomBG path='fixedCam/quests/giant/Entrance.swf'/>
+        <door id='1' toLoc='184' toDoor='2' x1='0' z1='-50' x2='0' z2='-100' entryDir='0'/>
+        <door id='2' toLoc='186' toDoor='1' x1='-30' z1='50' x2='-30' z2='110' y='30' entryDir='0'/>
+        <interactive type="door" path='door2Anim_mc' actRect='-40,45,30,100'/>
+    </location>
+
+    <location id='186' name='GiantCogs' type='2' boundType='rect' boundary='-200,-80,300,200' camPos='0,120,-246' camAim='0,32,174' entryPos='0,80' weevilScale='0.08' noZoom='yes' maintainY='yes'>
+        <roomBG path='fixedCam/quests/giant/CogRoom.swf'/>
+        <door id='1' toLoc='185' toDoor='2' x1='0' z1='-30' x2='0' z2='-100' entryDir='0'/>
+        <door id='2' toLoc='187' toDoor='1' x1='140' z1='80' x2='160' z2='80' y='86' entryDir='0'/>
+        <object name='frontWall_mc' x='0' y='86' z='77'/>
+    </location>
+
+    <location id='187' name='GiantTower' type='2' boundType='rect' boundary='-50,-50,200,100' camPos='0,120,-246' camAim='0,32,174' entryPos='0,80' weevilScale='0.16' noZoom='yes'>
+        <roomBG path='fixedCam/quests/giant/Tower.swf'/>
+        <door id='1' toLoc='186' toDoor='2' x1='0' z1='-20' x2='0' z2='-100' entryDir='0'/>
+    </location>
+
+    <location id='300' name='TVTowers' type='2' boundType='rect' boundary='-240,-80,500,310' camPos='-300,261,-100' camAim='0,32,200' entryPos='0,80' weevilScale='0.16'>
+        <roomBG path='fixedCam/TycoonTVtowers_outside_Nick_CN.swf'/>
+        <door id='1' toLoc='173' toDoor='3' x1='200' z1='64' x2='280' z2='64' entryDir='0'/>
+        <door id='2' toLoc='301' toDoor='1' x1='100' z1='240' x2='100' z2='320' entryDir='0'/>
+        <object name='table1_mc' x='-110' y='0' z='145'/>
+        <object name='table2_mc' x='-20' y='0' z='150'/>
+        <object name='table3_mc' x='-42' y='0' z='70'/>
+        <object name='hotdogstand_mc' x='-120' y='0' z='170'/>
+        <object name='door2_mc' x='-80' y='0' z='280'/>
+        <object name='pipeFront_mc' x='200' y='0' z='40'/>
+    </location>
+
+    <location id='301' name='TVTowersInside' type='2' boundType='rect' boundary='-200,-50,650,380' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.20' noZoom='yes' maintainY='yes'>
+        <!--<roomBG path='fixedCam/TycoonTVTowers12.swf'/>-->
+        <roomBG path='fixedCam/seasons/christmas/TycoonTVTowers_xmas.swf'/>
+        <door id='1' toLoc='300' toDoor='2' x1='0' z1='90' x2='0' z2='-80' entryDir='0'/>
+        <object name='seats1_mc' x='0' y='0' z='20'/>
+        <object name='table1_mc' x='0' y='0' z='42'/>
+        <object name='seats2_mc' x='0' y='0' z='50'/>
+        <object name='table2_mc' x='0' y='0' z='65'/>
+        <object name='seats3_mc' x='0' y='0' z='180'/>
+        <object name='seats4_mc' x='0' y='0' z='225'/>
+        <object name='seats5_mc' x='0' y='0' z='240'/>
+        <object name='seats6_mc' x='0' y='0' z='275'/>
+        <object name='box_mc' x='0' y='0' z='0'/>
+        <!-- xmas menu -->
+        <object name='menu_mc' x='0' y='0' z='-5'/>
+    </location>
+
+
+
+    <location id='10001' name='Campaign1' type='2' boundType='rect' boundary='-180,0,360,110'  camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.30' noZoom='yes'>
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsMainRoom.swf'/>
+        <door id='1' toLoc='125' toDoor='5' x1='0' z1='10' x2='0' z2='-30' entryDir='0'/>
+        <door id='2' extUIData="locName:RabbidShootMission,path:externalUIs/adCampaigns/rabbidsTravel/rabbidsShoot.swf" x1='-100' z1='110' x2='-130' z2='215' entryDir='0'/>
+        <door id='3' toLoc='10002' toDoor='1' x1='-30' z1='110' x2='-50' z2='215' entryDir='0'/>
+        <door id='4' toLoc='10003' toDoor='1' x1='30' z1='110' x2='50' z2='215' entryDir='0'/>
+        <door id='5' toLoc='10004' toDoor='1' x1='100' z1='110' x2='130' z2='215' entryDir='0'/>
+        <object name='fake8_mc' x='' y='0' z='220'/>
+        <object name='fake7_mc' x='' y='0' z='195'/>
+        <object name='fake6_mc' x='' y='0' z='185'/>
+        <object name='fake5_mc' x='' y='0' z='175'/>
+        <object name='fake4_mc' x='' y='0' z='165'/>
+        <object name='fake3_mc' x='' y='0' z='145'/>
+        <object name='fake2_mc' x='' y='0' z='135'/>
+        <object name='fake1_mc' x='' y='0' z='125'/>
+        <object name='text_mc' x='' y='0' z='124'/>
+        <object name='skate_mc' x='' y='0' z='118'/>
+        <object name='door2_mc' x='' y='0' z='122'/>
+        <object name='door3_mc' x='' y='0' z='121'/>
+        <object name='door4_mc' x='' y='0' z='120'/>
+        <object name='door5_mc' x='' y='0' z='119'/>
+        <object name='sign_mc' x='' y='0' z='90'/>
+    </location>
+
+    <location id='10002' name='Campaign2' type='2' boundType='rect' boundary='-160,10,310,290' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20' noZoom='yes'>
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbids_code_mission.swf'/>
+        <door id='1' toLoc='10001' toDoor='3' x1='40' z1='120' x2='130' z2='180' y='0' entryDir='0'/>
+        <object name='WMoverlay' x='80' y='0' z='130'/>
+        <interactive type="door" path='door1_mc' actRect='0,300,10,300'/>
+        <object name='lectern' x='0' y='0' z='160'/>
+        <object name='cypher_mc' x='0' y='0' z='-1'/>
+        <object name='bookCloseUp_mc' x='0' y='0' z='-2'/>
+        <!--<noGoArea type='rect' x='50' z='0' w='150' h='180'/>-->
+    </location>
+
+
+    <location id='10003' name='Campaign3' type='2' boundType='rect' boundary='-160,10,310,290' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20' noZoom='yes'>
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbids_puzzle_mission.swf'/>
+        <door id='1' toLoc='10001' toDoor='4' x1='40' z1='120' x2='120' z2='170' y='0' entryDir='0'/>
+        <object name='WMoverlay' x='80' y='0' z='130'/>
+        <interactive type="door" path='door1_mc' actRect='0,300,10,300'/>
+        <object name='log' x='0' y='0' z='160'/>
+        <object name='ignite_btn' x='0' y='0' z='-1'/>
+    </location>
+
+    <location id='10004' name='Campaign4' type='2' boundType='rect' boundary='-50,-50,200,100' camPos='0,120,-246' camAim='0,32,174' entryPos='0,80' weevilScale='0.16' noZoom='yes'>
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsTower.swf'/>
+        <door id='1' toLoc='10001' toDoor='5' x1='-40' z1='0' x2='-70' z2='84' entryDir='0'/>
+        <object name='door1Clip_mc' x='' y='0' z='50'/>
+        <object name='false1_mc' x='' y='0' z='49'/>
+        <object name='false2_mc' x='' y='0' z='48'/>
+        <object name='foreground_mc' x='' y='0' z='47'/>
+        <object name='false3_mc' x='' y='0' z='46'/>
+        <object name='floor_mc' x='' y='0' z='45'/>
+        <object name='false4_mc' x='' y='0' z='43'/>
+        <object name='false5_mc' x='' y='0' z='41'/>
+        <object name='pully_mc' x='' y='0' z='-7'/>
+        <object name='arm_mc' x='' y='0' z='43'/>
+        <object name='pully2Hook_mc' x='' y='0' z='-1'/>
+        <object name='rock2_mc' x='' y='0' z='-2'/>
+        <object name='rock4_mc' x='' y='0' z='-3'/>
+        <object name='rock3_mc' x='' y='0' z='-5'/>
+        <object name='rock1_mc' x='' y='0' z='-4'/>
+        <object name='swing_mc' x='' y='0' z='-6'/>
+        <object name='arrows_mc' x='' y='0' z='-8'/>
+        <object name='door1_mc' x='' y='0' z='1'/>
+        <object name='floorClickArea_btn' x='' y='0' z='0'/>
+    </location>
+
+
+    <location id='10005' name='Campaign5' type='2' boundType='rect' boundary='-60,50,120,210' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20' timerID='36'>
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsIsland_Egypt.swf'/>
+        <door id='1' toLoc='129' toDoor='8' x1='-60' z1='160' x2='-160' z2='310' y='0' entryDir='0'/><!--update the toLoc here to WM-->
+        <door id='2' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/rabbids_Fan.swf" x1='60' z1='195' x2='130' z2='195' y='0' entryDir='0'/>
+        <door id='3' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/ravingRabbids_Synopsis.swf" x1='-60' z1='250' x2='-60' z2='255' y='0' entryDir='0'/>
+        <door id='4' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/TrailerPage.swf" x1='60' z1='200' x2='120' z2='220' y='0' entryDir='0'/>
+        <object name='WMoverlay' x='0' y='0' z='180'/>
+        <interactive type="door" path='door1_mc' actRect='-200,80,270,200'/>
+    </location>
+
+    <location id='10006' name='Campaign6' type='2' boundType='rect' boundary='-220,10,420,210' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20'  noZoom='yes' timerID='36'>
+        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsIsland_Medieval.swf'/>
+        <door id='1' toLoc='172' toDoor='3' x1='140' z1='230' x2='185' z2='310' y='0' entryDir='0'/><!--update the toLoc here to WM-->
+        <door id='2' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/downloads.swf" x1='-110' z1='220' x2='-130' z2='280' y='0' entryDir='0'/>
+        <object name='rabbidMC' x='0' y='0' z='120'/>
+        <object name='WMoverlay' x='0' y='0' z='180'/>
+        <interactive type="door" path='door1_mc' actRect='100,60,270,200'/>
+    </location>
+
+</locationDefinitions>
