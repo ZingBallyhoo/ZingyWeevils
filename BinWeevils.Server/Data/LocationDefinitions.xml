@@ -509,16 +509,13 @@
 
 
     <location id='103' name='GongsPipenest' type='2' boundType='rad' boundary='0,280,130' camPos='0,261,-231' camAim='0,32,144' entryPos='-10,190' entryDir='-160' weevilScale='0.26'>
-        <roomBG path='fixedCam/pipeNest_haggleHut.swf'/>
+        <roomBG path='fixedCam/pipeNest_noComps.swf'/>
         <door id='1' toLoc='102' toDoor='2' x1='-165' z1='272' x2='-340' z2='359' entryDir='-90'/>
         <door id='2' toLoc='104' toDoor='2' x1='165' z1='272' x2='340' z2='359' entryDir='90'/>
-        <!--<door id='3' extUIData="locName:in Competitions,path:externalUIs/comps/comps_301110.swf" x1='93' z1='380' x2='170' z2='426' entryDir='110'/>-->
-        <door id='3' extUIData="locName:in Competitions,path:externalUIs/comps/comps_031210.swf" x1='93' z1='380' x2='170' z2='426' entryDir='110'/>
         <door id='4' extUIData="locName:HaggleHut,path:externalUIs/HaggleHut.swf" x1='10' z1='390' x2='-30' z2='490' entryDir='-90'/>
         <object name='overlay' x='0' y='0' z='0'/>
         <object name='hutOverlay' x='0' y='0' z='400'/>
         <object name='ad_mc' x='42' y='0' z='-400'/>
-        <object name='door3_mc' x='130' y='0' z='358'/>
         <object name='tube1Front' x='-130' y='0' z='369'/>
         <object name='tube3Front' x='130' y='0' z='369'/>
 
