@@ -36,16 +36,22 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/getAdPaths.php")]
         [StructuredFormPost("binConfig/{cluster}/getAdPaths.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public AdPathsResponse GetAdPaths([FromBody] AdPathsRequest request)
+        public object GetAdPaths([FromBody] AdPathsRequest request)
         {
-            //if (request.m_area == AdPathsArea.LOADER)
-            //{
-            //    return new AdPathsResponse
-            //    {
-            //        m_paths = ["1", "2"]
-            //    };
-            //}
-            return new AdPathsResponse();
+            if (request.m_area == AdPathsArea.LOADER)
+            {
+                return new LoaderAdPathsResponse
+                {
+                    m_paths = ["Uni.swf", "Panko.swf", "Hired.swf"]
+                };
+            }
+            if (request.m_area == AdPathsArea.OUTSIDE_SHOPPING_MALL)
+            {
+                // left(us) = ad1
+                // right = ad2
+                return new TwoAdPathsResponse();
+            }
+            return new LoaderAdPathsResponse();
         }
         
         [HttpGet("binConfig/config.xml")]
