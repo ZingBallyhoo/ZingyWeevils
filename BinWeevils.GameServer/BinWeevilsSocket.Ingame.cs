@@ -428,6 +428,13 @@ namespace BinWeevils.GameServer
             
             if (extraParamsReader.HasRemaining())
             {
+                if (action.m_actionID == (int)EWeevilAction.SQUAT)
+                {
+                    // invalid action sent by halloween_bedroom
+                    // idk what its trying to do... sit on the bed?
+                    return;
+                }
+                
                 throw new Exception($"didn't fully parse action: {(EWeevilAction)action.m_actionID}");
             }
             

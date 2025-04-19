@@ -42,7 +42,7 @@ namespace BinWeevils.Server.Controllers
             {
                 return new LoaderAdPathsResponse
                 {
-                    m_paths = ["Uni.swf", "Panko.swf", "Hired.swf"]
+                    m_paths = ["Uni.swf", "Panko.swf", "Hired.swf", "Stapler.swf"]
                 };
             }
             if (request.m_area == AdPathsArea.OUTSIDE_SHOPPING_MALL)

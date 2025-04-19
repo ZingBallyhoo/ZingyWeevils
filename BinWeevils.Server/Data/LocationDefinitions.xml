@@ -898,15 +898,17 @@
 
 
     <location id='127' name='PartyBox' type='2' boundType='rect' boundary='-180,20,600,280' camPos='-276,240,-246' camAim='10,32,174' entryPos='53,3' weevilScale='0.22'>
-        <roomBG path='fixedCam/partyBoxClosed_dynamAds.swf'/>
+        <roomBG path='fixedCam/partyBox_open_halloween.swf'/>
         <door id='1' toLoc='125' toDoor='2' x1='-56' z1='-15' x2='-160' z2='-35' entryDir='0'/>
         <door id='2' toLoc='129' toDoor='1' x1='134' z1='1' x2='261' z2='-26' entryDir='0'/>
         <door id='3' extUIData="locName:at Slam's Party Box, getting a mulch-tastic ticket for the next mulch give-away,path:externalUIs/lotto.swf" x1='270' z1='136' x2='270' z2='175' entryDir='0'/>
+        <door id='4' toLoc='128' toDoor='1' x1='140' z1='260' x2='190' z2='390' y='0' entryDir='0'/>
         <object name='door1_mc' x='-69' y='0' z='-1'/>
         <object name='door2_mc' x='186' y='53' z='-1'/>
         <object name='door3_mc' x='250' y='0' z='150'/>
+        <interactive type="door" path='door4_mc' actRect='120,250,80,150'/>
         <object name='mulchtasticBooth' x='238' y='0' z='219'/>
-        <object name='adBoard_mc' x='-153' y='0' z='98'/>
+
     </location>
 
 
