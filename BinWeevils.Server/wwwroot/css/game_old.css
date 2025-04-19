@@ -12,9 +12,11 @@ body{
     background-image:url(../images/bgTile.jpg);
     background-repeat:repeat-x;*/
     
-    background: linear-gradient(rgb(146, 186, 231) 12.918px, rgb(164, 217, 157) 645.9px);
+    background: linear-gradient(rgb(146, 186, 231) 2.0343%, rgb(164, 217, 157) 101.7165%);
     background-repeat: no-repeat;
     background-color: rgb(164, 217, 157);
+    
+    overflow: hidden; /* sometimes we get an extra pixel on y.. */
 }
 
 a{
@@ -30,13 +32,15 @@ img{
     position:relative;
     margin-left:auto;
     margin-right:auto;
-    width:960px;
+    /* https://stackoverflow.com/questions/60391447/css-fit-a-div-inside-viewport-while-keeping-aspect-ratio */
+    width: min(100vw, 151.1811vh);
+    height: min(100vh, 66.1458vw);
     /*border:1px solid #000000;*/
 }
 
 #logo{
     position:absolute;
-    left:2px;
+    left:0.2083%;
     top:0;
     z-index:0;
     overflow:hidden;
@@ -49,15 +53,15 @@ img{
 
 #nav{
     position:absolute;
-    left:140px;
+    left:14.5833%;
     top:0;
     z-index:5;
 }
 
 #flash{
     position:absolute;
-    top:66px;
-    left:20px;
+    top:10.3937%;
+    left:2.0833%;
     /*border:1px solid #FF0000;*/
     z-index:999;
 }
