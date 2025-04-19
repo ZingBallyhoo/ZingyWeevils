@@ -106,6 +106,8 @@ internal static class Program
             // overwritten with incompatible versions...
             .AddRewrite("^externalUIs/petBuilder\\.swf", "cdn/play/externalUIs/petBuilder.swf", true)
             .AddRewrite("^overlayUIs/introGuide\\.swf", "cdn/play/overlayUIs/introGuide.swf", true)
+            .AddRewrite("^fixedCam/shoppingMall_dynamAds\\.swf", "cdn/play/fixedCam/shoppingMall_dynamAds.swf", true) // bugged...
+            .AddRewrite("^fixedCam/LabsLab\\.swf", "cdn/play/fixedCam/LabsLab.swf", true) // overwritten with videoPod
         );
         
         var archivePath = app.Configuration["ArchivePath"]!;

@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <locationDefinitions version='121'>
-
+    <!-- based off locationDefinitions03_12_10.xml -->
 
     <location id='104' name='ShoppingMall' type='2' boundType='rect' boundary='-185,0,351,177' camPos='258,219,-271' camAim='-62,20,284' entryPos='0,80' weevilScale='0.28'>
-        <!--<roomBG path='fixedCam/shoppingMall_dynamAds_videoPod.swf'/>-->
-        <roomBG path='fixedCam/shoppingMallFred.swf'/>
-        <object name='fredLogo' x='-50' y='0' z='99'/>
+        <roomBG path='fixedCam/shoppingMall_dynamAds.swf'/>
         <cta id='1' extUIData='path:externalUIs/tycoonBusinesses.swf' x='99' z='120'/>
         <door id='1' toLoc='101' toDoor='2' x1='-32' z1='13' x2='-32' z2='-90' entryDir='180'/>
         <door id='2' toLoc='103' toDoor='2' x1='170' z1='171' x2='235' z2='50' entryDir='180'/>
         <door id='3' toLoc='105' toDoor='1' x1='-29' z1='163' x2='-5' z2='300' entryDir='10'/>
         <door id='4' toLoc='129' toDoor='5' x1='-61' z1='118' x2='-125' z2='114' entryDir='90'/>
-        <door id='5' toLoc='179' toDoor='1' x1='-60' z1='10' x2='-110' z2='20' entryDir='-45'/>
-        <object name='remoteDoorOverlay' x='-50' y='0' z='30'/>
-        <object name='remoteBack' x='-50' y='0' z='100'/>
-        <object name='door5_mc' x='-50' y='0' z='99'/>
-        <interactive type="door" path='door5_mc' actRect='-70,0,30,20'/>
         <interactive type="door" path='door3_mc.slidingDoors_mc' actRect='-69,135,85,200'/>
         <object name='pin1' x='18' y='0' z='135'/>
         <object name='pin2' x='-62' y='0' z='135'/>
@@ -23,14 +16,11 @@
         <object name='cta1_btn' x='64' y='0' z='141'/>
         <object name='door3_mc' x='-31' y='0' z='199'/>
         <object name='safetyRope' x='205' y='0' z='50'/>
-        <!--<object name='adBoard_left_mc' x='-128' y='0' z='48'/>-->
+        <object name='adBoard_left_mc' x='-128' y='0' z='48'/>
         <object name='adBoard_right_mc' x='170' y='0' z='190'/>
         <object name='door4_mc' x='-74' y='0' z='104'/>
         <object name='pipeFront' x='-76' y='0' z='112'/>
         <object name='pipeBack' x='-103' y='0' z='144'/>
-
-        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:0' boundary='type:rad,r:20' x='180' y='26' z='70' scale='0.20' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='180' y='0' z='70' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
 
     </location>
 
@@ -300,16 +290,6 @@
         <gameSlot path='assets3D/poolTable.swf' lbl='Play 6 Ball!' gamePath='multiplayerGames/ballGame/BallGame6Ball.swf' slot='4' arrivalPoints='-53,562,-50,483' playerPositions='-84,511,-83,511,-102,532,-18,511,-19,511,-15,472' x='-51' y='0' z='513' scale='0.19' ry='90' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
         <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='0' arrivalPoints='-168,519,-98,519'playerPositions='-133,493,-133,494,-135,479,-133,545,-133,544,-135,559' x='-133' y='0' z='519' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
 
-
-        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:1' boundary='type:rad,r:20' x='87' y='30' z='312' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='0' y='0' z='312' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
-        <preRend3D path='assets3D/bubble_caesar.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:3' boundary='type:rad,r:20' x='105' y='20' z='575' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='105' y='0' z='575' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
-        <preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:0' boundary='type:rad,r:20' x='125' y='20' z='555' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='125' y='0' z='555' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
     </location>
 
 
@@ -525,9 +505,6 @@
         </library>
         <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='3' arrivalPoints='156,706,249,701' playerPositions='149,733,151,733,147,733,237,733,235,733,239,733' x='197' y='0' z='736' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
 
-        <preRend3D path='assets3D/bubble_gladiator.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:0' boundary='type:rad,r:20' x='292' y='30' z='590' scale='0.24' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='292' y='0' z='590' scale='0.24' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
     </location>
 
 
@@ -544,12 +521,6 @@
         <object name='door3_mc' x='130' y='0' z='358'/>
         <object name='tube1Front' x='-130' y='0' z='369'/>
         <object name='tube3Front' x='130' y='0' z='369'/>
-
-        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:2' boundary='type:rad,r:20' x='110' y='26' z='200' scale='0.20' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='110' y='0' z='200' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
-        <preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:1' boundary='type:rad,r:20' x='-90' y='26' z='200' scale='0.20' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='-90' y='0' z='200' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
 
     </location>
 
@@ -606,12 +577,6 @@
         <preRend3D path='assets3D/stain5.swf' bg='true' x='-720' y='10' z='1024' scale='0.44' ry='90' rxMin='0' rxMax='0' ryMin='0' ryMax='360' framesY='37' symAxes='1' rIncr='5'/>
         <gameSlot path='assets3D/poolTable.swf' lbl='Play 2 Ball!' gamePath='multiplayerGames/ballGame/BallGame2Ball.swf' slot='7' arrivalPoints='247,490,253,419' playerPositions='288,488,288,486,288,490,297,407,297,409,297,405' x='295' y='0' z='447' scale='0.24' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
         <gameSlot path='assets3D/poolTable.swf' lbl='Play 2 Ball!' gamePath='multiplayerGames/ballGame/BallGame2Ball.swf' slot='8' arrivalPoints='-16,789,-35,692' playerPositions='-66,784,-66,782,-66,786,-66,693,-66,695,-66,691' x='-64' y='0' z='739' scale='0.24' ry='0' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
-
-        <preRend3D path='assets3D/bubble_caveman.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:4' boundary='type:rad,r:20' x='-19' y='15' z='615' scale='0.22' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='-19' y='0' z='615' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
-        <preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:2' boundary='type:rad,r:20' x='122' y='40' z='369' scale='0.18' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='122' y='0' z='369' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
 
     </location>
 
@@ -672,9 +637,6 @@
         <gameSlot path='assets3D/flipMulch.swf' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='2' arrivalPoints='-100,440,-100,500' playerPositions='-77,470,-78,470,-65,468,-120,470,-119,470,-135,472' x='-100' y='0' z='470' scale='0.15' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
         <gameSlot path='assets3D/squares.swf' lbl='Play Squares!' gamePath='multiplayerGames/squares.swf' slot='2' arrivalPoints='110,550,110,610' playerPositions='133,580,132,580,145,578,85,578,90,579,75,582' x='110' y='0' z='580' scale='0.14' ry='45' rxMin='10' rxMax='40' ryMin='0' ryMax='360' framesY='19' symAxes='2' rIncr='5'/>
 
-<preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:3' boundary='type:rad,r:20' x='-114' y='30' z='373' scale='0.2' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
-<preRend3D path='assets3D/shadow.swf' x='-114' y='0' z='373' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
         </location>
 
 
@@ -722,12 +684,6 @@
         <object name='connectMulch2' x='-80' y='0' z='81' type='gameSlot' lbl='Play Konnekt-Mulch!' gamePath='multiplayerGames/mulch4.swf' slot='5' arrivalPoints='40,60,30,50' playerPositions='48,8,50,10,35,2,62,42,61,40,82,52'/>
 
         <object name='flipMulch' x='40' y='0' z='150' type='gameSlot' lbl='Play Flip-Mulch!' gamePath='multiplayerGames/reversi.swf' slot='1' arrivalPoints='30,140,90,123' playerPositions='71,157,70,155,72,170,49,110,50,112,50,100'/>
-
-        <preRend3D path='assets3D/bubble_pacMan.swf' extUIData='path:externalUIs/adCampaigns/pacman/pacmanHunt_Found.swf,compID:34,itemID:3' boundary='type:rad,r:20' x='190' y='20' z='85' scale='0.16' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
-        <preRend3D path='assets3D/shadow.swf' x='190' y='0' z='85' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
-        <!--<preRend3D path='assets3D/bubble_megamind.swf' extUIData='path:externalUIs/adCampaigns/Megamind/Hunt_megaMind_Found.swf,compID:37,itemID:3' boundary='type:rad,r:20' x='165' y='30' z='85' scale='0.2' ry='0' rxMin='10' rxMax='50' ryMin='0' ryMax='360' framesY='7' symAxes='6' rIncr='5'/>
-                <preRend3D path='assets3D/shadow.swf' x='114' y='0' z='373' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>-->
 
     </location>
 
@@ -834,9 +790,6 @@
 
         <timeTrial id='0' path='assets3D/kart.swf' gamePath='multiplayerGames/weevilKart/weevilWheelsLoader_4.swf' track='dirtValley_1' doorID='1'/>
 
-        <preRend3D path='assets3D/bubble_pirate.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:2' boundary='type:rad,r:20' x='-45' y='10' z='305' scale='0.25' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='-94' y='0' z='0' scale='0.16' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
     </location>
 
 
@@ -898,7 +851,7 @@
 
     <location id='125' name='FlemManor' type='2' boundType='rect' boundary='-280,125,600,495' camPos='0,190,-330' camAim='0,90,260' entryPos='-3,330' entryDir='180' weevilScale='0.24'>
         <!--<roomBG path='fixedCam/adCampaigns/legendGuardian/FlemManor_dynamAds_legendGuardian.swf'/>-->
-        <!--<roomBG path='fixedCam/FlemManor_dynamAds.swf'/>-->
+        <roomBG path='fixedCam/FlemManor_dynamAds.swf'/>
         <!--<roomBG path='fixedCam/FlemManor_mulchMeter.swf'/> -->
         <!--
         <anim path='flemDrip1'/>
@@ -908,7 +861,6 @@
         <anim path='flemDrip5'/>
         <anim path='flemDrip6'/> 
         -->
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/FlemManor_dynamAds_rabbids.swf'/>
 
         <door id='1' toLoc='113' toDoor='3' x1='-104' z1='77' x2='-300' z2='77' entryDir='0'/>
         <door id='2' toLoc='127' toDoor='1' x1='104' z1='77' x2='300' z2='77' entryDir='0'/>
@@ -936,12 +888,6 @@
             <object name='treeBack1' x='120' y='0' z='270'/>
             <object name='treeBack2' x='120' y='0' z='301'/>
     -->
-        <door id='5' toLoc='10001' toDoor='1' x1='40' z1='240' x2='160' z2='200' entryDir='0'/>
-        <object name='door5_mc' x='120' y='0' z='180'/>
-
-        <preRend3D path='assets3D/bubble_pharoah.swf' extUIData='path:externalUIs/adCampaigns/rabbidsTravel/Hunt_rabbidFound.swf,compID:36,itemID:1' boundary='type:rad,r:20' x='53' y='40' z='159' scale='0.25' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-        <preRend3D path='assets3D/shadow.swf' x='53' y='0' z='159' scale='0.21' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>
-
 
     </location>
 
@@ -1097,8 +1043,7 @@
     </location>
 
     <location id='168' name='FlemManorLibrary' type='2' boundType='rect' boundary='-170,80,340,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.24' maintainY='yes'>
-        <!--<roomBG path='fixedCam/FlemManor_library_no_book.swf'/>-->
-        <roomBG path='fixedCam/FlemManor_library_book_14.09.10.swf'/>
+        <roomBG path='fixedCam/FlemManor_library_no_book.swf'/>
         <door id='1' toLoc='144' toDoor='6' x1='-58' z1='140' x2='-58' z2='-40' entryDir='180'/>
         <noGoArea type='rect' x='-160' z='80' w='40' h='190'/>
         <noGoArea type='rect' x='120' z='80' w='40' h='190'/>
@@ -1113,22 +1058,13 @@
 
 
     <location id='129' name='RumsCove' type='2' boundType='rect' boundary='-240,60,680,90' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.18'>
-        <!--<roomBG path='fixedCam/RumsAirport_dynamAds_videoPodv2.swf'/>-->
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/RumsAirport_dynamAds.swf'/>
-        <door id='8' toLoc='10005' toDoor='1' x1='115' z1='110' x2='115' z2='150' entryDir='-30'/>
-        <object name='door8_mc' x='' y='0' z='145'/>
-
+        <roomBG path='fixedCam/RumsAirport_dynamAds_291210.swf'/>
         <door id='1' toLoc='107' toDoor='1' x1='-190 ' z1='125' x2='-260' z2='125' entryDir='180'/>
         <door id='2' toLoc='103' toDoor='1' x1='180' z1='92' x2='250' z2='92' entryDir='180'/>
         <door id='3' toLoc='132' toDoor='1' x1='15 ' z1='155' x2='15' z2='260' entryDir='0'/>
         <door id='4' toLoc='154' toDoor='1' x1='-179 ' z1='155' x2='-179' z2='260' entryDir='0'/>
         <door id='5' toLoc='104' toDoor='4' x1='100 ' z1='130' x2='326' z2='132' y2='1500' entryDir='0'/>
         <door id='6' extUIData="locName:at Rum's Cove, getting a mulch-tastic ticket for the next mulch give-away,path:externalUIs/lotto.swf" x1='175 ' z1='125' x2='210' z2='142' entryDir='0'/>
-        <door id='7' toLoc='178' toDoor='1' x1='-40' z1='90' x2='-55' z2='120' entryDir='-30'/>
-        <object name='remoteDoorOverlay' x='-70' y='0' z='100'/>
-        <object name='remoteBack' x='-70' y='0' z='120'/>
-        <object name='door7_mc' x='-30' y='0' z='99'/>
-        <interactive type="door" path='door7_mc' actRect='-60,80,30,60'/>
         <interactive type="door" path='buildings.airport.slidingDoors_mc' actRect='-20,140,60,200'/>
         <interactive type="door" path='buildings.diner.slidingDoors_mc' actRect='-200,140,50,200'/>
         <object name='door6_mc' x='137' y='0' z='115'/>
@@ -1151,77 +1087,11 @@
         <door id='1' toLoc='129' toDoor='3' x1='0' z1='125' x2='0' z2='-50' entryDir='180'/>
         <door id='2' type='vid' x1='-150' z1='222' x2='-240' z2='242' entryDir='90'/>
         <door id='3' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/aeroplane.swf'/>
-        <door id='4' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/adCampaigns/trainDragon/aeroplane_trainDragon.swf'/>
 
         <object name='arrivalsMask_mc' x='-154' y='0' z='222'/>
         <object name='departuresMask_mc' x='250' y='0' z='222'/>
         <cta id='1' extUIData='locName:Rums Cove Interia,path:externalUIs/aeroplaneTicket.swf' x='0' z='220'/>
     </location>
-    <!--	
-    <location id='132' name='RumsCoveInterior' type='2' boundType='rect' boundary='-170,70,320,150' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28'>
-        <roomBG path='fixedCam/RumsAirport_interior_RBA.swf'/>
-        <door id='1' toLoc='129' toDoor='3' x1='0' z1='125' x2='0' z2='-50' entryDir='180'/>
-        <door id='2' type='vid' x1='-150' z1='222' x2='-240' z2='242' entryDir='90'/>		
-        <door id='3' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/aeroplane.swf'/>
-        <door id='4' x1='150' z1='222' x2='250' z2='242' entryDir='90' extUIData='locName:in aeroplane,path:externalUIs/aeroplane_RBA.swf'/>
-            
-        <object name='arrivalsMask_mc' x='-154' y='0' z='222'/>
-        <object name='departuresMask_mc' x='250' y='0' z='222'/>
-        <cta id='1' extUIData='locName:Rums Cove Interia,path:externalUIs/aeroplaneTicket.swf' x='0' z='220'/>
-        <cta id='2' extUIData='locName:Rums Cove Interia,path:externalUIs/aeroplaneTicket_RBA.swf' x='0' z='220'/>
-    </location>	
-    -->
-
-    <location id='140' name='SameDifferenceIsland' type='2' boundType='rect' boundary='-270,0,754,675' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' noZoom='yes' hasAudio='yes' playList='35' timerID='29'>
-        <roomBG path='fixedCam/adCampaigns/rba/mulchIsland_RBA.swf'/>
-        <door id='1' toLoc='132' toDoor='2' x1='-300' z1='266' x2='-320' z2='340' entryDir='0'/>
-        <door id='2' extUIData="locName:Trailer page at RBA MulchIsland,path:externalUIs/adCampaigns/rba/RBA_trailer.swf" x1='160' z1='80' x2='190' z2='60' y='0' entryDir='90'/>
-        <door id='3' extUIData="locName:Fan page at RBA MulchIsland,path:externalUIs/adCampaigns/rba/becomeAfan.swf" x1='-100' z1='130' x2='-90' z2='160' y='0' entryDir='45'/>
-        <door id='4' extUIData="locName:RBA wordsearch at RBA MulchIsland,path:externalUIs/adCampaigns/rba/wordsearch_standalone.swf,typeID:1" x1='-10' z1='30' x2='10' z2='20' y='0' entryDir='45'/>
-        <object name='door1_mc' x='0' y='0' z='545'/>
-        <object name='door2_mc' x='0' y='0' z='50'/>
-        <object name='QnA' x='0' y='0' z='15'/>
-        <object name='linkSign' x='0' y='0' z='220'/>
-        <object name='door3_mc' x='0' y='0' z='145'/>
-        <object name='door4_mc' x='0' y='0' z='15'/>
-    </location>
-
-
-    <!--<location id='140' name='SameDifferenceIsland' type='2' boundType='rect' boundary='-240,75,680,400' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' timerID='20'>
-        <roomBG path='fixedCam/adCampaigns/dinoDiscovery/mulchIslandDinoDiscovery.swf'/>	
-        <door id='1' toLoc='132' toDoor='2' x1='-200' z1='200' x2='-180' z2='244' entryDir='180'/>	
-        <door id='2' toLoc='141' toDoor='1' x1='42' z1='550' x2='150' z2='720' entryDir='60'/>
-        <object name='door2_mc' x='166' y='0' z='80'/>	
-        <object name='doorMask' x='166' y='0' z='81'/>	
-    </location>-->
-
-    <location id='141' name='SameDifferenceIslandVideo' type='2' boundType='rect' boundary='-160,75,320,110' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' timerID='20'>
-        <roomBG path='fixedCam/adCampaigns/dinoDiscovery/museum.swf'/>
-        <door id='1' toLoc='140' toDoor='2' x1='0' z1='130' x2='0' z2='75' entryDir='180'/>
-        <object name='subscribeNow' x='0' y='0' z='100'/>
-        <object name='bone_btn' x='0' y='0' z='120'/>
-        <cta id='1' extUIData='locName:SameDifferenceIslandVideo,path:externalUIs/adCampaigns/dinoDiscovery/huntInfo.swf' x='0' z='200'/>
-    </location>
-
-
-    <!--<location id='133' name='MulchIsland' type='2' boundType='rect' boundary='-226,75,710,600' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' playList='35' timerID='27'>
-      <roomBG path='fixedCam/mulchIsland_hub_deadly60.swf'/>
-      <door id='1' toLoc='132' toDoor='2' x1='-240' z1='266' x2='-256' z2='317' entryDir='0'/> 
-      <door id='2' toLoc='137' toDoor='1' x1='119' z1='105' x2='180' z2='20' entryDir='180'/>
-      <door id='3' extUIData="locName:playing Tink's Blocks at Mulch Island,path:externalUIs/TinksBlocks.swf,area:Mulch Island" x1='394' z1='670' x2='402' z2='780' entryDir='90'/>
-      <door id='4' toLoc='142' toDoor='1' x1='320' z1='437' x2='470' z2='437' entryDir='90'/>
-      <object name='door1_mc' x='0' y='0' z='545'/>
-      <object name='door2_mc' x='166' y='0' z='90'/> 
-      <object name='door3_mc' x='290' y='0' z='370'/>
-      <object name='whiteTop' x='32' y='0' z='96'/> 
-      <object name='redTop' x='71' y='0' z='115'/> 
-      <object name='spider' x='120' y='0' z='-1'/> 
-      <object name='scorpion' x='-160' y='0' z='-2'/>
-      <object name='deadly_SW_btn' x='-120' y='0' z='-1'/>
-      <object name='deadly_NW_btn' x='-120' y='0' z='-1'/> 
-      <object name='jungleForeground' x='-40' y='0' z='0'/>
-     </location>-->
-
 
 
     <location id='133' name='MulchIsland' type='2' boundType='rect' boundary='-226,75,710,600' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' playList='35'>
@@ -1545,18 +1415,11 @@
 
 
     <location id='172' name='LabsLab' type='2' boundType='rect' boundary='-240,100,440,200' camPos='0,145,-115' camAim='0,15,500' entryPos='-60,160' weevilScale='0.23' entryDir='180' noZoom='yes'>
-        <!--<roomBG path='fixedCam/LabsLab_videoPod.swf'/>-->
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/LabsLab_videoPod.swf'/>
+        <roomBG path='fixedCam/LabsLab.swf'/>
         <door id='1' extUIData="locName:LabsLab,path:externalUIs/brainStrain.swf" x1='-48 ' z1='300' x2='-40' z2='480' entryDir='180'/>
-        <door id='2' toLoc='177' toDoor='1' x1='120 ' z1='140' x2='145' z2='150' entryDir='45'/>
-        <object name='remoteDoorOverlay' x='140' y='0' z='130'/>
-        <interactive type="door" path='door2_mc' actRect='100,0,50,150'/>
         <object name='entranceOverlay' x='0' y='0' z='360'/>
         <object name='mushrooms' x='0' y='0' z='270'/>
         <object name='door1_mc' x='0' y='0' z='255'/>
-        <door id='3' toLoc='10006' toDoor='1' x1='-90 ' z1='160' x2='-170' z2='210' entryDir='45'/>
-        <object name='door3_mc' x='0' y='0' z='269'/>
-
     </location>
 
 
@@ -1696,10 +1559,8 @@
         <object name='fridge' x='0' y='0' z='320'/>
     </location>
 
-    <location id='179' name='VideoPod3' type='2' boundType='rect' boundary='-200,100,400,300' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes' timerID='35'>
-        <!--<roomBG path='fixedCam/tvPod1.swf'/>-->
-        <roomBG path='fixedCam/adCampaigns/fred/VODPod1Fred_v6.swf'/>
-        <object name='menu_mc' x='0' y='0' z='0'/>  <!-- only change from standard pod -->
+    <location id='179' name='VideoPod3' type='2' boundType='rect' boundary='-200,100,400,300' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes'>
+        <roomBG path='fixedCam/tvPod1.swf'/>
         <!-- to shopping mall -->
         <door id='1' toLoc='104' toDoor='5' x1='0' z1='180' x2='0' z2='0' entryDir='180'/>
         <object name='sofaL' x='0' y='0' z='70'/>
@@ -1892,97 +1753,6 @@
         <object name='box_mc' x='0' y='0' z='0'/>
         <!-- xmas menu -->
         <object name='menu_mc' x='0' y='0' z='-5'/>
-    </location>
-
-
-
-    <location id='10001' name='Campaign1' type='2' boundType='rect' boundary='-180,0,360,110'  camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.30' noZoom='yes'>
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsMainRoom.swf'/>
-        <door id='1' toLoc='125' toDoor='5' x1='0' z1='10' x2='0' z2='-30' entryDir='0'/>
-        <door id='2' extUIData="locName:RabbidShootMission,path:externalUIs/adCampaigns/rabbidsTravel/rabbidsShoot.swf" x1='-100' z1='110' x2='-130' z2='215' entryDir='0'/>
-        <door id='3' toLoc='10002' toDoor='1' x1='-30' z1='110' x2='-50' z2='215' entryDir='0'/>
-        <door id='4' toLoc='10003' toDoor='1' x1='30' z1='110' x2='50' z2='215' entryDir='0'/>
-        <door id='5' toLoc='10004' toDoor='1' x1='100' z1='110' x2='130' z2='215' entryDir='0'/>
-        <object name='fake8_mc' x='' y='0' z='220'/>
-        <object name='fake7_mc' x='' y='0' z='195'/>
-        <object name='fake6_mc' x='' y='0' z='185'/>
-        <object name='fake5_mc' x='' y='0' z='175'/>
-        <object name='fake4_mc' x='' y='0' z='165'/>
-        <object name='fake3_mc' x='' y='0' z='145'/>
-        <object name='fake2_mc' x='' y='0' z='135'/>
-        <object name='fake1_mc' x='' y='0' z='125'/>
-        <object name='text_mc' x='' y='0' z='124'/>
-        <object name='skate_mc' x='' y='0' z='118'/>
-        <object name='door2_mc' x='' y='0' z='122'/>
-        <object name='door3_mc' x='' y='0' z='121'/>
-        <object name='door4_mc' x='' y='0' z='120'/>
-        <object name='door5_mc' x='' y='0' z='119'/>
-        <object name='sign_mc' x='' y='0' z='90'/>
-    </location>
-
-    <location id='10002' name='Campaign2' type='2' boundType='rect' boundary='-160,10,310,290' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20' noZoom='yes'>
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbids_code_mission.swf'/>
-        <door id='1' toLoc='10001' toDoor='3' x1='40' z1='120' x2='130' z2='180' y='0' entryDir='0'/>
-        <object name='WMoverlay' x='80' y='0' z='130'/>
-        <interactive type="door" path='door1_mc' actRect='0,300,10,300'/>
-        <object name='lectern' x='0' y='0' z='160'/>
-        <object name='cypher_mc' x='0' y='0' z='-1'/>
-        <object name='bookCloseUp_mc' x='0' y='0' z='-2'/>
-        <!--<noGoArea type='rect' x='50' z='0' w='150' h='180'/>-->
-    </location>
-
-
-    <location id='10003' name='Campaign3' type='2' boundType='rect' boundary='-160,10,310,290' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20' noZoom='yes'>
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbids_puzzle_mission.swf'/>
-        <door id='1' toLoc='10001' toDoor='4' x1='40' z1='120' x2='120' z2='170' y='0' entryDir='0'/>
-        <object name='WMoverlay' x='80' y='0' z='130'/>
-        <interactive type="door" path='door1_mc' actRect='0,300,10,300'/>
-        <object name='log' x='0' y='0' z='160'/>
-        <object name='ignite_btn' x='0' y='0' z='-1'/>
-    </location>
-
-    <location id='10004' name='Campaign4' type='2' boundType='rect' boundary='-50,-50,200,100' camPos='0,120,-246' camAim='0,32,174' entryPos='0,80' weevilScale='0.16' noZoom='yes'>
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsTower.swf'/>
-        <door id='1' toLoc='10001' toDoor='5' x1='-40' z1='0' x2='-70' z2='84' entryDir='0'/>
-        <object name='door1Clip_mc' x='' y='0' z='50'/>
-        <object name='false1_mc' x='' y='0' z='49'/>
-        <object name='false2_mc' x='' y='0' z='48'/>
-        <object name='foreground_mc' x='' y='0' z='47'/>
-        <object name='false3_mc' x='' y='0' z='46'/>
-        <object name='floor_mc' x='' y='0' z='45'/>
-        <object name='false4_mc' x='' y='0' z='43'/>
-        <object name='false5_mc' x='' y='0' z='41'/>
-        <object name='pully_mc' x='' y='0' z='-7'/>
-        <object name='arm_mc' x='' y='0' z='43'/>
-        <object name='pully2Hook_mc' x='' y='0' z='-1'/>
-        <object name='rock2_mc' x='' y='0' z='-2'/>
-        <object name='rock4_mc' x='' y='0' z='-3'/>
-        <object name='rock3_mc' x='' y='0' z='-5'/>
-        <object name='rock1_mc' x='' y='0' z='-4'/>
-        <object name='swing_mc' x='' y='0' z='-6'/>
-        <object name='arrows_mc' x='' y='0' z='-8'/>
-        <object name='door1_mc' x='' y='0' z='1'/>
-        <object name='floorClickArea_btn' x='' y='0' z='0'/>
-    </location>
-
-
-    <location id='10005' name='Campaign5' type='2' boundType='rect' boundary='-60,50,120,210' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20' timerID='36'>
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsIsland_Egypt.swf'/>
-        <door id='1' toLoc='129' toDoor='8' x1='-60' z1='160' x2='-160' z2='310' y='0' entryDir='0'/><!--update the toLoc here to WM-->
-        <door id='2' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/rabbids_Fan.swf" x1='60' z1='195' x2='130' z2='195' y='0' entryDir='0'/>
-        <door id='3' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/ravingRabbids_Synopsis.swf" x1='-60' z1='250' x2='-60' z2='255' y='0' entryDir='0'/>
-        <door id='4' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/TrailerPage.swf" x1='60' z1='200' x2='120' z2='220' y='0' entryDir='0'/>
-        <object name='WMoverlay' x='0' y='0' z='180'/>
-        <interactive type="door" path='door1_mc' actRect='-200,80,270,200'/>
-    </location>
-
-    <location id='10006' name='Campaign6' type='2' boundType='rect' boundary='-220,10,420,210' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20'  noZoom='yes' timerID='36'>
-        <roomBG path='fixedCam/adCampaigns/rabbidsTravel/rabbidsIsland_Medieval.swf'/>
-        <door id='1' toLoc='172' toDoor='3' x1='140' z1='230' x2='185' z2='310' y='0' entryDir='0'/><!--update the toLoc here to WM-->
-        <door id='2' extUIData="locName:at RabbidsIsland_Medieval, download interface,path:externalUIs/adCampaigns/rabbidsTravel/downloads.swf" x1='-110' z1='220' x2='-130' z2='280' y='0' entryDir='0'/>
-        <object name='rabbidMC' x='0' y='0' z='120'/>
-        <object name='WMoverlay' x='0' y='0' z='180'/>
-        <interactive type="door" path='door1_mc' actRect='100,60,270,200'/>
     </location>
 
 </locationDefinitions>

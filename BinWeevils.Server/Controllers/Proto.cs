@@ -51,7 +51,7 @@ namespace BinWeevils.Server.Controllers
                 // right = ad2
                 return new TwoAdPathsResponse();
             }
-            return new LoaderAdPathsResponse();
+            return new TwoAdPathsResponse();
         }
         
         [HttpGet("binConfig/config.xml")]
@@ -95,7 +95,7 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public IResult GetLocationDefinitions()
         {
-            return Results.File(m_configuration["LocationDefinitions"]!);
+            return Results.File(Path.GetFullPath(m_configuration["LocationDefinitions"]!));
         }
         
         [HttpGet("binConfig/getFile/0/nestLocDefs.xml")]
