@@ -1051,7 +1051,7 @@
         <object name='sofas' x='0' y='0' z='270'/>
         <object name='table' x='0' y='0' z='132'/>
         <object name='fireGuard' x='0' y='0' z='332'/>
-        <object name='book_btn' x='3' y='0' z='124'/>
+        <!--<object name='book_btn' x='3' y='0' z='129'/>-->
     </location>
 
 

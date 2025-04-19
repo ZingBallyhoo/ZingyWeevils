@@ -102,6 +102,7 @@ internal static class Program
             .AddRewrite("^cinema/cinema\\.xml", "cdn/externalUIs/cinema/cinema.xml", true) // riggs
             .AddRedirect("^cinema/(.+).flv", "cdn/ads/binweevils/binTycoonTour2.flv") // riggs
             .AddRewrite("^nestNews/xml/uk/nestNews\\.xml", "nestNews/xml/nestNews.xml", true)
+            .AddRewrite("^sounds/nestSounds/firePlace\\.mp3", "bintunes/flemManor/firePlace.mp3", true) // library_no_book
         
             // overwritten with incompatible versions...
             .AddRewrite("^externalUIs/petBuilder\\.swf", "cdn/play/externalUIs/petBuilder.swf", true)

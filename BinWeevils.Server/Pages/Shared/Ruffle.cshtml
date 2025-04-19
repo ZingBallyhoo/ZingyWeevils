@@ -32,7 +32,7 @@
             if (requestUrl !== undefined) {
                 let parsedUrl = new URL(requestUrl);
                 
-                if (parsedUrl.host === "play.binweevils.com") {
+                if (parsedUrl.host === "play.binweevils.com" || parsedUrl.host === "media1.binweevils.com") {
                     parsedUrl.host = window.location.host;
                     request = new Request(parsedUrl.toString(), request);
                 }
