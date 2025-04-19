@@ -117,7 +117,7 @@
 
 
     <location id='111' name='Palladium' type='2' boundType='rect' boundary='-250,-8,394,269' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.26'>
-        <roomBG path='fixedCam/RiggsPalladium.swf'/>
+        <roomBG path='fixedCam/RiggsPalladium_delete.swf'/>
         <cta id='1' extUIData='path:externalUIs/tycoonRevenue.swf' x='128' z='78'/>
         <door id='1' toLoc='112' toDoor='5' x1='5' z1='255' x2='5' z2='445' entryDir='0'/>
         <door id='2' toLoc='110' toDoor='1' x1='-150' z1='82' x2='-270' z2='82' entryDir='-90'/>
