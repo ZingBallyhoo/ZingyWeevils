@@ -14,12 +14,12 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Proto;
 using StackXML;
 using Stl.DependencyInjection;
+using WeevilWorld.Server;
 
 internal static class Program
 {
@@ -78,7 +78,10 @@ internal static class Program
         app.MapStaticAssets();
         app.MapControllers();
         app.MapRazorPages().WithStaticAssets();
-        app.UseWebSockets();
+        app.UseWebSockets(new WebSocketOptions
+        {
+            KeepAliveInterval = TimeSpan.FromSeconds(15)
+        });
         
         var amfOptions = new AmfOptions();
         amfOptions.AddTypedObject<GetLoginDetailsResponse>();
@@ -159,7 +162,11 @@ internal static class Program
             FileProvider = fileProvider,
             RequestPath = requestPath,
             
-            DefaultContentType = "application/octet-stream"
+            DefaultContentType = "application/octet-stream",
+            OnPrepareResponse = ctx =>
+            {
+                ctx.CacheResponse(TimeSpan.FromDays(365));
+            }
         };
         return options;
     }

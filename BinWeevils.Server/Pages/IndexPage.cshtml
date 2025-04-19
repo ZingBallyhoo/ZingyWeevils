@@ -1,4 +1,5 @@
 @page "/"
+@using WeevilWorld.Server
 @attribute [ResponseCache(Duration = 60*60*60)]
 
 <!DOCTYPE html>
@@ -9,7 +10,7 @@
     <link rel="shortcut icon" href="favicon.ico" asp-append-version="true">
     <meta property="og:title" content="Weevil World" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="images/logo.jpg" />
+    <meta property="og:image" content="@HttpContext.AddFileVersionToPath("images/logo.jpg")"  />
     <meta property="og:description" content="Bin Weevils by Zingy" />
     <meta name="description" content="Bin Weevils by Zingy">
     <style>

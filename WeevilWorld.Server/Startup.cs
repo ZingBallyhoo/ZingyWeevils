@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 using ArcticFox.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 
 namespace WeevilWorld.Server
 {
@@ -70,14 +68,7 @@ namespace WeevilWorld.Server
                 ServeUnknownFileTypes = true,
                 OnPrepareResponse = ctx =>
                 {
-                    var cacheDuration = TimeSpan.FromDays(365);
-                    var typedHeaders = ctx.Context.Response.GetTypedHeaders();
-                    typedHeaders.CacheControl = new CacheControlHeaderValue
-                    {
-                        Public = true,
-                        MaxAge = cacheDuration
-                    };
-                    typedHeaders.Expires = new DateTimeOffset(DateTime.UtcNow).Add(cacheDuration);
+                    ctx.CacheResponse(TimeSpan.FromDays(365));
                 }
             });
 

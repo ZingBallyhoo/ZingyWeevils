@@ -25,4 +25,10 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="..\WeevilWorld.Server\HttpContextExtensions.cs">
+        <Link>HttpContextExtensions.cs</Link>
+      </Compile>
+    </ItemGroup>
+
 </Project>
