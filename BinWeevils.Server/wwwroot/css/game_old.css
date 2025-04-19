@@ -35,8 +35,8 @@ img{
     /* https://stackoverflow.com/questions/60391447/css-fit-a-div-inside-viewport-while-keeping-aspect-ratio */
     width: min(100vw, 151.1811vh); /* fallback for old browsers with no dyn) */
     height: min(100vh, 66.1458vw); /* fallback for old browsers with no dyn) */
-    width: min(100dvw, 151.1811vh);
-    height: min(100dvh, 66.1458vw);
+    width: min(100dvw, 151.1811dvh);
+    height: min(100dvh, 66.1458dvw);
     /*border:1px solid #000000;*/
 }
 
