@@ -8,6 +8,10 @@ namespace BinWeevils.Database
     public class WeevilDBContext : IdentityDbContext<WeevilAccount>
     {
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
+        public DbSet<WeevilCompletedTask> m_completedTasks { get; set; }
+        public DbSet<WeevilRewardedTask> m_rewardedTasks { get; set; }
+        //public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
+
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestRoomDB> m_nestRooms { get; set; }

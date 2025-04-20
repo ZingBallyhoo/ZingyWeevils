@@ -46,6 +46,7 @@ internal static class Program
         builder.Services.AddSingleton<NestLocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<NestLocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["NestLocationDefinitions"]!)));
         builder.Services.AddSingleton<ItemConfigRepository>();
+        builder.Services.AddSingleton<QuestRepository>();
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
             options.UseSqlite("Filename=db.sqlite"));

@@ -1,0 +1,199 @@
+using System.Net.Mime;
+using BinWeevils.Database;
+using BinWeevils.Protocol.Form;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace BinWeevils.Server.Controllers
+{
+    [Authorize]
+    [ApiController]
+    [Route("api")]
+    public class QuestController : Controller
+    {
+        private readonly WeevilDBContext m_dbContext;
+        private readonly QuestRepository m_questRepository;
+        
+        public QuestController(WeevilDBContext dbContext, QuestRepository repository)
+        {
+            m_dbContext = dbContext;
+            m_questRepository = repository;
+        }
+        
+        [StructuredFormPost("php/taskCompleted.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<TaskCompletedResponse> TaskCompleted([FromBody] TaskCompletedRequest request)
+        {
+            if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new InvalidDataException("sending TaskCompleted for wrong user");
+            }
+            
+            if (!m_questRepository.TryGetTask(request.m_taskID, out var task))
+            {
+                return new TaskCompletedResponse
+                {
+                    m_responseCode = TaskCompletedResponse.RESPONSE_NOT_FOUND
+                };
+            }
+            
+            var weevilID = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_userName)
+                .Select(x => x.m_idx)
+                .SingleAsync();
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            await m_dbContext.m_completedTasks.AddAsync(new WeevilCompletedTask
+            {
+                m_weevilID = weevilID,
+                m_taskID = request.m_taskID
+            });
+            
+            var response = new TaskCompletedResponse
+            {
+                m_responseCode = TaskCompletedResponse.RESPONSE_OK,
+                m_result = task.m_isMissionComplete ? 
+                    TaskCompletedResponse.RES_QUEST_COMPLETE : 
+                    TaskCompletedResponse.RES_TASK_COMPLETE,
+            };
+            
+            try
+            {
+                await m_dbContext.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                var overrideResponse = await TaskCompleted_AlreadyCompleted(weevilID, task, response);
+                if (overrideResponse != null)
+                {
+                    return overrideResponse;
+                }
+                
+                // we can't reward anything so don't try :)
+                await AddCommonCompletedData(weevilID, response);
+                return response;
+            }
+
+            await TryReward(weevilID, task, response);
+            await AddCommonCompletedData(weevilID, response);
+            
+            await transaction.CommitAsync();
+            return response;
+        }
+        
+        private async Task TryReward(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response) 
+        {
+            await m_dbContext.m_rewardedTasks.AddAsync(new WeevilRewardedTask
+            {
+                m_weevilID = weevilIdx,
+                m_taskID = task.m_scrapedData.m_id
+            });
+            try
+            {
+                await m_dbContext.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                // already rewarded
+                return;
+            }
+            
+            await m_dbContext.m_weevilDBs
+                .Where(x => x.m_idx == weevilIdx)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch + task.m_scrapedData.m_rewardMulch)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + task.m_scrapedData.m_rewardXp)
+                );
+
+            if (task.m_scrapedData.m_rewardItems != null)
+            {
+                // todo: or garden...
+                await RewardItems(weevilIdx, task, response);
+            }
+            
+            await m_dbContext.SaveChangesAsync();
+        }
+        
+        private async Task RewardItems(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
+        {
+            var nest = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_idx == weevilIdx)
+                .Select(x => x.m_nest)
+                .SingleAsync();
+            
+            if (task.m_scrapedData.m_rewardItems != null)
+            {
+                foreach (var rewardItem in task.m_scrapedData.m_rewardItems)
+                {
+                    for (var i = 0; i < rewardItem.m_count; i++)
+                    {
+                        // todo: wasteful query
+                        var itemType = await m_dbContext.m_itemTypes.SingleAsync(x => x.m_configLocation == rewardItem.m_configName);
+                        nest.m_items.Add(new NestItemDB
+                        {
+                            m_itemType =itemType 
+                        });
+                        response.m_itemName.Add(itemType.m_name);
+                    }
+                }
+            }
+        }
+        
+        private async Task AddCommonCompletedData(uint weevilIdx, TaskCompletedResponse resp)
+        {
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_idx == weevilIdx)
+                .Select(x => new
+                {
+                    x.m_mulch,
+                    x.m_xp,
+                })
+                .SingleAsync();
+            
+            resp.m_mulch = dto.m_mulch;
+            resp.m_xp = dto.m_xp;
+        }
+        
+        private async Task<TaskCompletedResponse?> TaskCompleted_AlreadyCompleted(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
+        {
+            if (task.m_scrapedData.m_questID.HasValue && task.m_scrapedData.m_nonRestartable)
+            {
+                if (!await IsMissionComplete(weevilIdx, task.m_scrapedData.m_questID.Value))
+                {
+                    return new TaskCompletedResponse
+                    {
+                        m_responseCode = TaskCompletedResponse.RESPONSE_MISSION_ALREADY_ACTIVE
+                    };
+                }
+            }
+            
+            foreach (var deletedTask in task.m_scrapedData.m_deletedTasks)
+            {
+                if (await TryRestartTask(weevilIdx, deletedTask)) 
+                {
+                    response.m_deletedTasks.Add(deletedTask);
+                }
+            }
+            return null;
+        }
+        
+        private async Task<bool> IsMissionComplete(uint weevilIdx, int questID)
+        {
+            var quest = m_questRepository.GetQuest(questID);
+            if (quest.m_completeTask == null) return false;
+            
+            return await m_dbContext.m_completedTasks.AnyAsync(x => 
+                x.m_weevilID == weevilIdx && 
+                x.m_taskID == quest.m_completeTask);
+        }
+        
+        private async Task<bool> TryRestartTask(uint weevilIdx, int taskID)
+        {
+            var rowsDeleted = await m_dbContext.m_completedTasks
+                .Where(x => x.m_weevilID == weevilIdx)
+                .Where(x => x.m_taskID == taskID)
+                .ExecuteDeleteAsync();
+            
+            return rowsDeleted != 0;
+        }
+    }
+}
