@@ -112,12 +112,6 @@ namespace BinWeevils.Server.Controllers
             return "responseCode=2&failed=0";
         }
         
-        [HttpGet("api/php/getQuestData.php")] // old
-        public string GetQuestData()
-        {
-            return "tasks=&itemList=&b=r&responseCode=1";
-        }
-        
         [HttpPost("api/pets/defs")]
         public string GetPetDefs()
         {
@@ -174,9 +168,10 @@ namespace BinWeevils.Server.Controllers
         // todo: (the code intends to use POST but fp behaviour falls back to GET when no body)
         [HttpPost("api/php/getMissionList.php")]
         [HttpGet("api/php/getMissionList.php")]
-        public string GetMissionList()
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public MissionList GetMissionList()
         {
-            var list = new MissionList
+            return new MissionList
             {
                 m_responseCode = 1,
                 m_ids = "1|2|3|4|5|6|7|8|9|10|11|12|13|14|16|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|37|37|38|39|40|41|43|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59|60|61|62|63|64|65|67|68|69|72|73|74|75|76|77", 
@@ -193,12 +188,6 @@ namespace BinWeevils.Server.Controllers
                 scorePlatinum = "0|0|0|0|0|0|0|0|24|24|0|24|18|34|0|0|70|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0", 
                 highScore = "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
             };
-            
-            return FormUrlEncodedSerializer.Serialize(list, new SerializeOptions
-            {
-                // -_-
-                EncodeSpaceAsPlus = false
-            });
         }
         
         [HttpPost("api/garden/get-plant-configs")]

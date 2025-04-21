@@ -21,6 +21,50 @@ namespace BinWeevils.Server.Controllers
             m_questRepository = repository;
         }
         
+        [HttpGet("php/getQuestData.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetQuestDataResponse> GetQuestData()
+        {
+            var tasks = await m_dbContext.m_completedTasks
+                .Where(x => x.m_weevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => x.m_taskID)
+                .ToListAsync();
+            
+            // exactly whose idea was it that the server should control this...
+            var items = new List<string>();
+            if (IsMissionSectionInProgress(tasks, 16, 17))
+            {
+                // silverKnight
+                items.Add("<preRend3D locID='113' path='assets3D/key1.swf' extUIData='path:externalUIs/quests/silverKnight.swf,section:3' boundary='type:rad,r:40' x='189' y='0' z='120' scale='0.14' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>");
+            }
+            foreach (var blueDiamondItem in m_questRepository.m_blueDiamondItems)
+            {
+                if (IsMissionSectionInProgress(tasks, 29, blueDiamondItem.m_collectedTaskID))
+                {
+                    items.Add(blueDiamondItem.m_text);
+                }
+            }
+            
+            var response = new GetQuestDataResponse
+            {
+                m_responseCode = 1,
+                m_tasks = tasks,
+                m_itemList = string.Join("", items)
+            };
+            return response;
+        }
+        
+        private bool IsMissionSectionInProgress(List<int> completedTasks, int startTask, int endTask)
+        {
+            // todo: lookups here aren't efficient...
+            
+            var sectionStarted = completedTasks.Any(x => x == startTask);
+            if (!sectionStarted) return false;
+            
+            var sectionEnded = completedTasks.Any(x => x == endTask);
+            return !sectionEnded;
+        }
+        
         [StructuredFormPost("php/taskCompleted.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<TaskCompletedResponse> TaskCompleted([FromBody] TaskCompletedRequest request)
@@ -130,7 +174,7 @@ namespace BinWeevils.Server.Controllers
                         var itemType = await m_dbContext.m_itemTypes.SingleAsync(x => x.m_configLocation == rewardItem.m_configName);
                         nest.m_items.Add(new NestItemDB
                         {
-                            m_itemType =itemType 
+                            m_itemType = itemType 
                         });
                         response.m_itemName.Add(itemType.m_name);
                     }

@@ -17,7 +17,10 @@ namespace BinWeevils.Server
         
         public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            var encoded = FormUrlEncodedSerializer.Serialize(context.Object);
+            var encoded = FormUrlEncodedSerializer.Serialize(context.Object, new SerializeOptions
+            {
+                EncodeSpaceAsPlus = false
+            });
             return context.HttpContext.Response.WriteAsync(encoded, selectedEncoding);
         }
     }

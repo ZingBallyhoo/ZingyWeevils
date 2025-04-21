@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Json;
+using BinWeevils.Protocol.Xml;
+using StackXML;
 
 namespace BinWeevils.Server
 {
@@ -10,6 +12,42 @@ namespace BinWeevils.Server
     {
         private readonly Dictionary<int, QuestRuntimeData> m_quests = new Dictionary<int, QuestRuntimeData>();
         private readonly Dictionary<int, TaskRuntimeData> m_tasks = new Dictionary<int, TaskRuntimeData>();
+        
+        public readonly BlueDiamondItem[] m_blueDiamondItems = [
+            new BlueDiamondItem(163, "<preRend3D logicID='31' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:31' x='-246' y='18' z='269' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(163, "<preRend3D logicID='32' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:32' x='107' y='18' z='341' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(163, "<preRend3D logicID='33' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:33' x='-245' y='18' z='479' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(163, "<preRend3D logicID='34' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:34' x='-103' y='18' z='689' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(163, "<preRend3D logicID='35' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:35' x='247' y='18' z='761' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='36' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:36' x='146.3' y='18' z='109.1' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='37' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:37' x='370.6' y='18' z='297.3' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='38' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:38' x='421.4' y='18' z='585.5' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='39' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:39' x='275.1' y='18' z='838.9' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='40' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:40' x='-275.1' y='18' z='839.1' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='41' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:41' x='421.5' y='18' z='585.5' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='42' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:42' x='-421.5' y='18' z='585.5' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(164, "<preRend3D logicID='43' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:43' x='-146.3' y='18' z='108.8' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>"),
+            new BlueDiamondItem(165, "<preRend3D logicID='44' path='assets3D/bubble_blueDiamond.swf' extUIData='path:externalUIs/quests/blueDiamond2.swf,section:5,taskID:44' x='212' y='18' z='722' scale='0.07' ry='0' rxMin='6' rxMax='46' ryMin='0' ryMax='1' framesY='1' symAxes='0' rIncr='3'/>")
+        ];
+        
+        public class BlueDiamondItem 
+        {
+            public readonly string m_text;
+            public readonly int m_collectedTaskID;
+            
+            public BlueDiamondItem(int loc, string text)
+            {
+                m_text = text;
+                
+                var preRend3D = XmlReadBuffer.ReadStatic<LocationPreRend3D>(text);
+                m_collectedTaskID = preRend3D.m_logicID;
+                Debug.Assert(text.Contains($"taskID:{m_collectedTaskID}'"));
+                
+                const string prefix = "<preRend3D ";
+                Debug.Assert(text.StartsWith(prefix));
+                m_text = m_text.Insert(prefix.Length, $"locID='{loc}' ");
+            }
+        } 
         
         public QuestRepository()
         {
@@ -97,7 +135,7 @@ namespace BinWeevils.Server
                 {
                     completeTask = questPair.Key switch
                     {
-                        1 => 15,
+                        1 => 10,
                         _ => questPair.Value.m_tasks.Last()
                     };
                 }
@@ -234,14 +272,14 @@ namespace BinWeevils.Server
             public bool m_isMissionComplete;
         }
         
-        public bool TryGetTask(int id, [MaybeNullWhen(false)] out TaskRuntimeData task)
-        {
-            return m_tasks.TryGetValue(id, out task);
-        }
-
         public QuestRuntimeData GetQuest(int questId)
         {
             return m_quests[questId];
+        }
+        
+        public bool TryGetTask(int id, [MaybeNullWhen(false)] out TaskRuntimeData task)
+        {
+            return m_tasks.TryGetValue(id, out task);
         }
     }
 }
