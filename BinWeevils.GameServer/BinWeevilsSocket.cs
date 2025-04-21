@@ -219,7 +219,7 @@ namespace BinWeevils.GameServer
             
             if (message.m_extension is not "login")
             {
-                throw new InvalidDataException($"client sent a str message to an extension other than \"xt\": {handler}");
+                throw new InvalidDataException($"client sent a str message to an extension other than \"login\": {handler}");
             }
             
             var module = message.m_command;
@@ -255,6 +255,11 @@ namespace BinWeevils.GameServer
                 case Modules.TURN_BASED:
                 {
                     HandleTurnBasedCommand(message, ref reader);
+                    return;
+                }
+                case Modules.KART:
+                {
+                    HandleKartCommand(message, ref reader);
                     return;
                 }
             }

@@ -42,5 +42,10 @@ namespace BinWeevils.Protocol
         public const string DINER_DROP_TRAY = $"{DINER}#2";
         public const string DINER_CHEF_START = $"{DINER}#3";
         public const string DINER_CHEF_QUIT = $"{DINER}#4";
+        
+        public const string KART = "b";
+        public const string KART_JOIN_GAME = "joinGame";
+        public const string KART_JOINED_NOTIFICATION = "playerJoinGame";
+        public const string KART_FORCE_DISCONNECT = "forceDisconnect";
     }
 }

@@ -357,7 +357,14 @@ namespace BinWeevils.GameServer
                     break;
                 }
                 // todo: SIT_IN_CAR (validate only)
-                // todo: EXIT_CAR (validate only)
+                case EWeevilAction.EXIT_CAR:
+                {
+                    var exitCar = new ExitCarAction();
+                    exitCar.Deserialize(ref extraParamsReader);
+                    // todo: validate
+                    
+                    break;
+                }
                 // todo: THROW (validate only)
                 case EWeevilAction.SPIN1:
                 case EWeevilAction.SPIN2:
