@@ -149,7 +149,10 @@ internal static class Program
                 "ruffle.exe",
                 $"{host}/main.swf",
                 "--tcp-connections allow",
-                "--dummy-external-interface"
+                "--dummy-external-interface",
+                "-Pcluster=h",
+                "--cookie",
+                "username=desktop"
             ]));
         }
         
