@@ -8,9 +8,9 @@ namespace BinWeevils.Database
     public class WeevilDBContext : IdentityDbContext<WeevilAccount>
     {
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
+        public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<WeevilCompletedTask> m_completedTasks { get; set; }
         public DbSet<WeevilRewardedTask> m_rewardedTasks { get; set; }
-        //public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
 
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<NestDB> m_nests { get; set; }
@@ -103,11 +103,11 @@ namespace BinWeevils.Database
                 m_food = 75,
                 m_fitness = 50,
                 m_happiness = 75,
-                m_xp = 0,
-                m_lastAcknowledgedLevel = 1,
-                m_mulch = 2000,
+                m_lastAcknowledgedLevel = 28,
+                m_mulch = 20000,
                 m_dosh = 0
             };
+            dbWeevil.m_xp = WeevilLevels.GetXpForLevel(dbWeevil.m_lastAcknowledgedLevel);
             
             NestDB nest;
             if (createParams.m_nestDef != null)

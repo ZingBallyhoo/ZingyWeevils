@@ -95,6 +95,16 @@ namespace BinWeevils.GameServer
                     HandleSfsPubMsg(preRead.m_bodySpan);
                     break;
                 }
+                case "addB":
+                {
+                    HandleSfsAddBuddy(preRead.m_bodySpan);
+                    break;
+                }
+                case "bPrm":
+                {
+                    HandleSfsBuddyPermission(preRead.m_bodySpan);
+                    break;
+                }
                 default:
                 {
                     Console.Out.WriteLine($"unknown action: {preReadBody.m_action}");
@@ -137,6 +147,7 @@ namespace BinWeevils.GameServer
                 var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
                 var userProps = Props.FromProducer(() => new SocketActor
                 {
+                    m_services = m_services,
                     m_user = user
                 });
                 var userActor = actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");

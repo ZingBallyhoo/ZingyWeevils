@@ -104,6 +104,30 @@ namespace BinWeevils.GameServer
         {
             return m_rootProvider.GetRequiredService<ActorSystem>();
         }
+        
+        public async Task<bool> AddBuddy(string weevil1, string weevil2)
+        {
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            var weevil1ID = await context.m_weevilDBs.Where(x => x.m_name == weevil1).Select(x => x.m_idx).SingleAsync();
+            var weevil2ID = await context.m_weevilDBs.Where(x => x.m_name == weevil2).Select(x => x.m_idx).SingleAsync();
+            
+            await context.m_buddyRecords.AddAsync(new BuddyRecordDB
+            {
+                m_weevil1ID = weevil1ID,
+                m_weevil2ID = weevil2ID
+            });
+            try
+            {
+                await context.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                // lost a race
+                return false;
+            }
+            return true;
+        }
     }
     
     public class LoginDto
