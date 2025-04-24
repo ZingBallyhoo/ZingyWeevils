@@ -1,5 +1,9 @@
 using System;
+using System.Linq;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +30,12 @@ namespace WeevilWorld.Server
                 MaxAge = duration
             };
             typedHeaders.Expires = new DateTimeOffset(DateTime.UtcNow).Add(duration);
+        }
+        
+        public static string? GetLocalHostingAddress(this IServer server)
+        {
+            var addressFeature = server.Features.GetRequiredFeature<IServerAddressesFeature>();
+            return addressFeature.Addresses.SingleOrDefault();
         }
     }
 }

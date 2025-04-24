@@ -142,8 +142,7 @@ internal static class Program
         if (app.Environment.IsDevelopment())
         {
             var server = app.Services.GetRequiredService<IServer>();
-            var addressFeature = server.Features.GetRequiredFeature<IServerAddressesFeature>();
-            var host = addressFeature.Addresses.SingleOrDefault() ?? "unknown";
+            var host = server.GetLocalHostingAddress() ?? "unknown";
             
             app.Logger.LogInformation("Ruffle Desktop CLI: {Cli}", string.Join(" ", [
                 "ruffle.exe",

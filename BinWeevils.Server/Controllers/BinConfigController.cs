@@ -1,7 +1,9 @@
 using System.Net.Mime;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Xml;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
+using WeevilWorld.Server;
 
 namespace BinWeevils.Server.Controllers
 {
@@ -10,10 +12,15 @@ namespace BinWeevils.Server.Controllers
     public class BinConfigController : Controller
     {
         private readonly IConfiguration m_configuration;
+        private readonly string? m_localUrl;
         
-        public BinConfigController(IConfiguration configuration)
+        public BinConfigController(IConfiguration configuration, IWebHostEnvironment environment, IServer kestrel)
         {
             m_configuration = configuration;
+            if (environment.IsDevelopment())
+            {
+                m_localUrl = kestrel.GetLocalHostingAddress();
+            }
         }
         
         [StructuredFormPost("binConfig/{cluster}/checkVersion.php")]
@@ -36,7 +43,7 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public SiteConfig GetConfig()
         {
-            var referrerUrl = (string?)HttpContext.Request.Headers.Host ?? throw new InvalidDataException("no host header");
+            var referrerUrl = (string?)HttpContext.Request.Headers.Referer ?? m_localUrl ?? throw new InvalidDataException("no referer header");
             var referrer = new Uri(referrerUrl);
             var baseUrl = $"{referrer.Scheme}://{referrer.Host}/";
             
