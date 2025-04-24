@@ -17,7 +17,14 @@ namespace BinWeevils.GameServer
         
         public record CreateNest();
         public record KickFromNest(string userName);
-        private record BuddyConfirmed(PID pid);
+        
+        private enum BuddyState
+        {
+            Add,
+            Online,
+            Offline
+        }
+        private record BuddyUpdate(PID pid, BuddyState state);
         
         public async Task ReceiveAsync(IContext context)
         {
@@ -63,9 +70,17 @@ namespace BinWeevils.GameServer
                     await HandleBuddyPermissionResponse(context, buddyPermissionResponse);
                     break;
                 }
-                case BuddyConfirmed buddyConfirmed:
+                case BuddyUpdate buddyConfirmed:
                 {
-                    await HandleBuddyConfirmed(context, buddyConfirmed);
+                    await HandleBuddyUpdate(context, buddyConfirmed.pid, buddyConfirmed.state);
+                    break;
+                }
+                case Terminated buddyTerminated:
+                {
+                    if (m_buddies.Contains(buddyTerminated.Who.Id))
+                    {
+                        await HandleBuddyUpdate(context, buddyTerminated.Who, BuddyState.Offline);
+                    }
                     break;
                 }
                 case Stopping:
@@ -184,29 +199,37 @@ namespace BinWeevils.GameServer
             }
             
             var buddyAddress = PID.FromAddress(context.Self.Address, otherWeevilName);
-            context.Send(context.Self, new BuddyConfirmed(buddyAddress));
-            context.Send(buddyAddress, new BuddyConfirmed(context.Self));
+            context.Send(context.Self, new BuddyUpdate(buddyAddress, BuddyState.Add));
+            context.Send(buddyAddress, new BuddyUpdate(context.Self, BuddyState.Add));
         }
         
-        private async Task HandleBuddyConfirmed(IContext context, BuddyConfirmed data)
+        private async Task HandleBuddyUpdate(IContext context, PID buddyPid, BuddyState userState)
         {
-            var otherUserName = data.pid.Id;
-            var otherUser = await m_user.m_zone.GetUser(otherUserName);
-            await m_user.BroadcastSys(new BuddyUpdateNotification
+            var buddyUserName = buddyPid.Id;
+            User? buddyUser = null;
+            if (userState != BuddyState.Offline)
             {
-                m_action = "bAdd",
-                m_record = CreateBuddyUpdateForUser(otherUser, otherUserName)
-            });
-            
-            if (otherUser != null)
-            {
-                // watch for log out
-                context.Watch(data.pid);
+                buddyUser = await m_user.m_zone.GetUser(buddyUserName);
             }
             
-            m_buddies.Add(otherUserName);
-            m_receivedBuddyRequests.Remove(otherUserName);
-            m_sentBuddyRequests.Remove(otherUserName);
+            await m_user.BroadcastSys(new BuddyUpdateNotification
+            {
+                m_action = userState == BuddyState.Add ? "bAdd" : "bUpd",
+                m_record = CreateBuddyUpdateForUser(buddyUser, buddyUserName)
+            });
+            
+            if (buddyUser != null)
+            {
+                // watch for log out
+                context.Watch(buddyPid);
+            }
+            
+            if (userState == BuddyState.Add)
+            {
+                m_buddies.Add(buddyUserName);
+                m_receivedBuddyRequests.Remove(buddyUserName);
+                m_sentBuddyRequests.Remove(buddyUserName);
+            }
         }
         
         private static BuddyUpdateRecord CreateBuddyUpdateForUser(User? user, string name)
