@@ -105,6 +105,11 @@ namespace BinWeevils.GameServer
                     HandleSfsBuddyPermission(preRead.m_bodySpan);
                     break;
                 }
+                case "remB":
+                {
+                    HandleSfsRemoveBuddy(preRead.m_bodySpan);
+                    break;
+                }
                 default:
                 {
                     Console.Out.WriteLine($"unknown action: {preReadBody.m_action}");

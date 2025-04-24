@@ -16,5 +16,11 @@ namespace BinWeevils.GameServer
             var buddyPermission = XmlReadBuffer.ReadStatic<BuddyPermissionResponse>(body, CDataMode.Off);
             m_services.GetActorSystem().Root.Send(GetUser().GetUserData<WeevilData>().m_userActor, buddyPermission);
         }
+        
+        private void HandleSfsRemoveBuddy(ReadOnlySpan<char> body)
+        {
+            var removeBuddy = XmlReadBuffer.ReadStatic<RemoveBuddyBody>(body, CDataMode.Off);
+            m_services.GetActorSystem().Root.Send(GetUser().GetUserData<WeevilData>().m_userActor, removeBuddy);
+        }
     }
 }

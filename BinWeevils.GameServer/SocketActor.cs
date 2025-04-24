@@ -25,6 +25,7 @@ namespace BinWeevils.GameServer
             Offline
         }
         private record BuddyUpdate(PID pid, BuddyState state);
+        private record BuddyRemovedNotification(PID pid);
         
         public async Task ReceiveAsync(IContext context)
         {
@@ -73,6 +74,16 @@ namespace BinWeevils.GameServer
                 case BuddyUpdate buddyConfirmed:
                 {
                     await HandleBuddyUpdate(context, buddyConfirmed.pid, buddyConfirmed.state);
+                    break;
+                }
+                case RemoveBuddyBody removeBuddyRequest:
+                {
+                    await HandleRemoveBuddyRequest(context, removeBuddyRequest);
+                    break;
+                }
+                case BuddyRemovedNotification buddyRemoved:
+                {
+                    await HandleBuddyRemoved(context, buddyRemoved);
                     break;
                 }
                 case Terminated buddyTerminated:
@@ -206,6 +217,19 @@ namespace BinWeevils.GameServer
         private async Task HandleBuddyUpdate(IContext context, PID buddyPid, BuddyState userState)
         {
             var buddyUserName = buddyPid.Id;
+            if (userState == BuddyState.Add)
+            {
+                m_receivedBuddyRequests.Remove(buddyUserName);
+                m_sentBuddyRequests.Remove(buddyUserName);
+                if (!m_buddies.Add(buddyUserName))
+                {
+                    return;
+                }
+            } else if (!m_buddies.Contains(buddyUserName))
+            {
+                return;
+            }
+            
             User? buddyUser = null;
             if (userState != BuddyState.Offline)
             {
@@ -223,13 +247,6 @@ namespace BinWeevils.GameServer
                 // watch for log out
                 context.Watch(buddyPid);
             }
-            
-            if (userState == BuddyState.Add)
-            {
-                m_buddies.Add(buddyUserName);
-                m_receivedBuddyRequests.Remove(buddyUserName);
-                m_sentBuddyRequests.Remove(buddyUserName);
-            }
         }
         
         private static BuddyUpdateRecord CreateBuddyUpdateForUser(User? user, string name)
@@ -242,6 +259,40 @@ namespace BinWeevils.GameServer
                 m_userID = user != null ? checked((int)user.m_id) : -1,
                 m_varList = new BuddyVarList()
             };
+        }
+        
+        private async Task HandleRemoveBuddyRequest(IContext context, RemoveBuddyBody request)
+        {
+            if (!m_buddies.Remove(request.m_buddyName))
+            {
+                return;
+            }
+            
+            if (!await m_services.RemoveBuddy(m_user.m_name, request.m_buddyName))
+            {
+                // lost a race
+                return;
+            }
+            
+            var buddyAddress = PID.FromAddress(context.Self.Address, request.m_buddyName);
+            context.Unwatch(buddyAddress);
+            context.Send(buddyAddress, new BuddyRemovedNotification(context.Self));
+        }
+        
+        private async Task HandleBuddyRemoved(IContext context, BuddyRemovedNotification buddyRemoved)
+        {
+            var buddyName = buddyRemoved.pid.Id;
+            if (!m_buddies.Remove(buddyName))
+            {
+                return;
+            }
+            
+            await m_user.BroadcastSys(new RemoveBuddyBody
+            {
+                m_action = "remB",
+                m_buddyName = buddyName
+            });
+            context.Unwatch(buddyRemoved.pid);
         }
     }
 }
