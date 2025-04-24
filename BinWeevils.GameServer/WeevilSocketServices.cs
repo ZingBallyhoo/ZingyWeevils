@@ -137,9 +137,10 @@ namespace BinWeevils.GameServer
             var weevil1ID = await context.m_weevilDBs.Where(x => x.m_name == weevil1).Select(x => x.m_idx).SingleAsync();
             var weevil2ID = await context.m_weevilDBs.Where(x => x.m_name == weevil2).Select(x => x.m_idx).SingleAsync();
             
-            // order of keys doesn't matter
             var rowsUpdated = await context.m_buddyRecords
-                .Where(x => x.m_weevil1ID == weevil1ID && x.m_weevil2ID == weevil2ID)
+                .Where(x => 
+                    x.m_weevil1ID == weevil1ID && x.m_weevil2ID == weevil2ID ||
+                    x.m_weevil2ID == weevil1ID && x.m_weevil1ID == weevil2ID)
                 .ExecuteDeleteAsync();
             return rowsUpdated != 0;
         }

@@ -12,7 +12,6 @@ namespace BinWeevils.GameServer
         public required WeevilSocketServices m_services;
         public required User m_user;
         private readonly HashSet<string> m_buddies = [];
-        private readonly HashSet<string> m_sentBuddyRequests = [];
         private readonly HashSet<string> m_receivedBuddyRequests = [];
         
         public record CreateNest();
@@ -142,10 +141,6 @@ namespace BinWeevils.GameServer
             var weevilData = otherUser?.GetUserDataAs<WeevilData>();
             if (weevilData == null) return;
             
-            m_sentBuddyRequests.Add(request.m_targetName);
-            // note: we don't want to check the result of this...
-            // the other user can deny our request and we can try again in the future
-            
             if (m_receivedBuddyRequests.Contains(request.m_targetName))
             {
                 await ConfirmAddBuddy(context, request.m_targetName);
@@ -166,11 +161,9 @@ namespace BinWeevils.GameServer
                 return;
             }
             
-            if (m_sentBuddyRequests.Contains(request.m_sender))
-            {
-                await ConfirmAddBuddy(context, request.m_sender);
-                return;
-            }
+            // we don't need to eagerly confirm here, let the client do it instead
+            // otherwise we have to track denying requests... not great
+            
             if (!m_receivedBuddyRequests.Add(request.m_sender))
             {
                 return;
@@ -220,7 +213,6 @@ namespace BinWeevils.GameServer
             if (userState == BuddyState.Add)
             {
                 m_receivedBuddyRequests.Remove(buddyUserName);
-                m_sentBuddyRequests.Remove(buddyUserName);
                 if (!m_buddies.Add(buddyUserName))
                 {
                     return;
