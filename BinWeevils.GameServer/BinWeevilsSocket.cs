@@ -110,6 +110,11 @@ namespace BinWeevils.GameServer
                     HandleSfsBuddyPermission(preRead.m_bodySpan);
                     break;
                 }
+                case "roomB":
+                {
+                    HandleSfsFindBuddy(preRead.m_bodySpan);
+                    break;
+                }
                 case "remB":
                 {
                     HandleSfsRemoveBuddy(preRead.m_bodySpan);

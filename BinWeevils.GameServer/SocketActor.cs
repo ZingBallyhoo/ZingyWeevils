@@ -105,6 +105,11 @@ namespace BinWeevils.GameServer
                     }
                     break;
                 }
+                case FindBuddyRequest findBuddyRequest:
+                {
+                    await HandleFindBuddy(findBuddyRequest);
+                    break;
+                }
                 case Stopping:
                 {
                     m_user.m_socket?.Close();
@@ -335,6 +340,29 @@ namespace BinWeevils.GameServer
                 m_buddyName = buddyName
             });
             context.Unwatch(buddyRemoved.pid);
+        }
+        
+        private async Task HandleFindBuddy(FindBuddyRequest findBuddyRequest)
+        {
+            var buddyUser = await m_user.m_zone.GetUser(findBuddyRequest.m_record.m_id);
+            if (buddyUser == null)
+            {
+                return;
+            }
+            if (!m_buddies.Contains(buddyUser.m_name))
+            {
+                return;
+            }
+                    
+            var buddyRoom = await buddyUser.GetRoomOrNull();
+            await m_user.BroadcastSys(new BuddyRoomResponse
+            {
+                m_action = "roomB",
+                m_list = new BuddyRoomList
+                {
+                    m_rooms = buddyRoom != null ? [buddyRoom.m_id] : []
+                }
+            });
         }
     }
 }
