@@ -128,7 +128,7 @@ namespace BinWeevils.GameServer
                 m_isTemporary = true,
                 m_data = new NestRoom
                 {
-                    m_ownerName = m_user.m_name,
+                    m_owner = m_user,
                     m_nest = nestActor
                 }
             };

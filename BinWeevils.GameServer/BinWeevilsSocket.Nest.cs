@@ -75,19 +75,11 @@ namespace BinWeevils.GameServer
                     var guestJoined = new NestGuestJoined();
                     guestJoined.Deserialize(ref reader);
                     
-                    m_taskQueue.Enqueue(async () =>
-                    {
-                        var us = GetUser();
-                        if (us.m_name == guestJoined.m_name) throw new InvalidDataException("trying to be a guest in own nest");
-                        
-                        var nestOwner = await us.m_zone.GetUser(guestJoined.m_name!);
-                        if (nestOwner == null) return;
-                        
-                        await nestOwner.BroadcastXtStr(Modules.NEST_GUEST_JOINED_NEST, guestJoined with
-                        {
-                            m_name = us.m_name
-                        });
-                    });
+                    var us = GetUser();
+                    if (us.m_name == guestJoined.m_name) throw new InvalidDataException("trying to be a guest in own nest");
+                    
+                    // we don't actually need to do anything.
+                    // the actor handles enter/leave events
                     break;
                 }
                 case Modules.NEST_DENY_NEST_INVITE: // 5#6

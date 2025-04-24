@@ -135,9 +135,32 @@ namespace BinWeevils.GameServer.Rooms
         }
     }
     
-    public class NestRoom : StatelessRoom
+    public class NestRoom : StatelessRoom, IRoomEventHandler
     {
-        public required string m_ownerName;
         public required PID m_nest;
+        public required User m_owner;
+        private string m_ownerName => m_owner.m_name;
+
+        public async ValueTask UserJoinedRoom(Room room, User user)
+        {
+            if (user.m_name == m_ownerName) return;
+
+            await m_owner.BroadcastXtStr(Modules.NEST_GUEST_JOINED_NEST, new NestGuestJoined
+            {
+                m_name = user.m_name,
+                m_joined = 1
+            });
+        }
+
+        public async ValueTask UserLeftRoom(Room room, User user)
+        {
+            if (user.m_name == m_ownerName) return;
+
+            await m_owner.BroadcastXtStr(Modules.NEST_GUEST_JOINED_NEST, new NestGuestJoined
+            {
+                m_name = user.m_name,
+                m_joined = 0
+            });
+        }
     }
 }
