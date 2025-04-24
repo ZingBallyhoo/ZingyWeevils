@@ -17,6 +17,8 @@ namespace BinWeevils.GameServer
         public record CreateNest();
         public record KickFromNest(string userName);
         
+        public record InitBuddies();
+        public record LoadBuddyListRequest();
         private enum BuddyState
         {
             Add,
@@ -53,6 +55,16 @@ namespace BinWeevils.GameServer
                         m_userName = kickFromNest.userName
                     });
                     context.Respond(null!);
+                    break;
+                }
+                case InitBuddies:
+                {
+                    await HandleInitBuddies(context);
+                    break;
+                }
+                case LoadBuddyListRequest:
+                {
+                    await HandleBuddyListRequest();
                     break;
                 }
                 case AddBuddyRequest addBuddy:
@@ -123,6 +135,44 @@ namespace BinWeevils.GameServer
             await m_user.m_zone.CreateRoom(nestDesc);
             
             context.Respond(nestActor);
+        }
+        
+        private async Task HandleInitBuddies(IContext context)
+        {
+            var idx = m_user.GetUserData<WeevilData>().m_idx.GetValue();
+            
+            await foreach (var buddyName in m_services.GetBuddies(idx))
+            {
+                m_buddies.Add(buddyName);
+                var buddyUser = await m_user.m_zone.GetUser(buddyName);
+                if (buddyUser == null)
+                {
+                    // don't watch offline buddies...
+                    // we would instantly get notified
+                    continue;
+                }
+                
+                var buddyPID = new PID(context.Self.Address, buddyName);
+                context.Watch(buddyPID);
+                context.Send(buddyPID, new BuddyUpdate(context.Self, BuddyState.Online));
+            }
+        }
+        
+        private async Task HandleBuddyListRequest()
+        {
+            var buddyList = new BuddyList();
+            
+            foreach (var buddyName in m_buddies)
+            {
+                var buddyUser = await m_user.m_zone.GetUser(buddyName);
+                buddyList.m_buddies.Add(CreateBuddyUpdateForUser(buddyUser, buddyName));
+            }
+            
+            await m_user.BroadcastSys(new BuddyListResponse
+            {
+                m_action = "bList",
+                m_list = buddyList
+            });
         }
         
         private async Task HandleAddBuddyRequest(IContext context, AddBuddyRequest request)

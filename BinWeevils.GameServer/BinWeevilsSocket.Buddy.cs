@@ -5,6 +5,11 @@ namespace BinWeevils.GameServer
 {
     public partial class BinWeevilsSocket
     {
+        private void HandleSfsLoadBuddyList(ReadOnlySpan<char> body)
+        {
+            m_services.GetActorSystem().Root.Send(GetUser().GetUserData<WeevilData>().m_userActor, new SocketActor.LoadBuddyListRequest());
+        }
+        
         private void HandleSfsAddBuddy(ReadOnlySpan<char> body)
         {
             var addBuddy = XmlReadBuffer.ReadStatic<AddBuddyRequest>(body, CDataMode.Off);

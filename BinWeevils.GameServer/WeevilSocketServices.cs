@@ -105,6 +105,24 @@ namespace BinWeevils.GameServer
             return m_rootProvider.GetRequiredService<ActorSystem>();
         }
         
+        public async IAsyncEnumerable<string> GetBuddies(uint idx)
+        {
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            var results1 = context.m_buddyRecords
+                .Where(x => x.m_weevil1ID == idx)
+                .Select(x => x.m_weevil2.m_name);
+            var results2 = context.m_buddyRecords
+                .Where(x => x.m_weevil2ID == idx)
+                .Select(x => x.m_weevil1.m_name);
+            
+            await foreach (var buddyName in results1.Concat(results2).AsAsyncEnumerable())
+            {
+                yield return buddyName;
+            }
+        }
+        
         public async Task<bool> AddBuddy(string weevil1, string weevil2)
         {
             await using var scope = m_rootProvider.CreateAsyncScope();

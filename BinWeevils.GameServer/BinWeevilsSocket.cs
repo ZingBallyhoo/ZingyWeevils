@@ -95,6 +95,11 @@ namespace BinWeevils.GameServer
                     HandleSfsPubMsg(preRead.m_bodySpan);
                     break;
                 }
+                case "loadB":
+                {
+                    HandleSfsLoadBuddyList(preRead.m_bodySpan);
+                    break;
+                }
                 case "addB":
                 {
                     HandleSfsAddBuddy(preRead.m_bodySpan);
@@ -178,6 +183,8 @@ namespace BinWeevils.GameServer
                     }
                 };
                 await this.BroadcastXtRes(loginResponse);
+                
+                actorSystem.Root.Send(userActor, new SocketActor.InitBuddies());
             });
         }
         
