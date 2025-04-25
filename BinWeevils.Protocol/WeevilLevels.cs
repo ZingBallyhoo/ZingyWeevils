@@ -119,5 +119,10 @@ namespace BinWeevils.Protocol
                 upperThreshold = s_thresholds[levelIdx + 1];
             }
         }
+        
+        public static uint GetXpForLevel(int level)
+        {
+            return (uint)s_thresholds[level - 1];
+        }
     }
 }

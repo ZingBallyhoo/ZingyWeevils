@@ -103,7 +103,7 @@ namespace BinWeevils.Database
                 m_food = 75,
                 m_fitness = 50,
                 m_happiness = 75,
-                m_lastAcknowledgedLevel = 28,
+                m_lastAcknowledgedLevel = 1,
                 m_mulch = 20000,
                 m_dosh = 0
             };
