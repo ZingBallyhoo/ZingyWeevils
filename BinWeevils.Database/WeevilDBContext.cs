@@ -14,6 +14,7 @@ namespace BinWeevils.Database
 
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<NestDB> m_nests { get; set; }
+        public DbSet<NestItemDB> m_nestItems { get; set; }
         public DbSet<NestRoomDB> m_nestRooms { get; set; }
         public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
         public DbSet<BusinessDB> m_businesses { get; set; }
@@ -47,6 +48,8 @@ namespace BinWeevils.Database
             
             modelBuilder.Entity<NestItemDB>(b =>
             {
+                b.ToTable("NestItemDB");
+                
                 b.HasOne(x => x.m_placedItem)
                  .WithOne(x => x.m_item)
                  .IsRequired(false);
@@ -135,8 +138,7 @@ namespace BinWeevils.Database
             });
             dbWeevil.m_nest.m_items.Add(new NestItemDB
             {
-                m_itemType = await m_itemTypes
-                    .SingleAsync(x => x.m_configLocation == "o_egg")
+                m_itemTypeID = (await FindItemByConfigName("o_egg"))!.Value
             });
             await SaveChangesAsync();
             
@@ -148,19 +150,13 @@ namespace BinWeevils.Database
             throw new NotImplementedException();
         }
         
-        /*public async Task<bool> TakeMulch(IQueryable<WeevilDB> weevil, int amount)
+        public async Task<uint?> FindItemByConfigName(string configName)
         {
-            if (amount <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount));
-            }
-            
-            var rowsUpdated = await weevil
-                .Where(x => x.m_mulch >= amount)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch - amount));
-            return rowsUpdated == 1;
-        }*/
+            return await m_itemTypes
+                .Where(x => x.m_configLocation == configName)
+                .Select(x => x.m_itemTypeID)
+                .SingleOrDefaultAsync();
+        }
     }
     
     public class WeevilCreateParams

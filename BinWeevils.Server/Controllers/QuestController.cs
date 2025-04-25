@@ -168,10 +168,11 @@ namespace BinWeevils.Server.Controllers
             {
                 foreach (var rewardItem in task.m_scrapedData.m_rewardItems)
                 {
+                    // todo: wasteful query
+                    var itemType = await m_dbContext.m_itemTypes.SingleAsync(x => x.m_configLocation == rewardItem.m_configName);
+                    
                     for (var i = 0; i < rewardItem.m_count; i++)
                     {
-                        // todo: wasteful query
-                        var itemType = await m_dbContext.m_itemTypes.SingleAsync(x => x.m_configLocation == rewardItem.m_configName);
                         nest.m_items.Add(new NestItemDB
                         {
                             m_itemType = itemType 

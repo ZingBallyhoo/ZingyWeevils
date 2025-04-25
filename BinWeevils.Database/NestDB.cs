@@ -78,7 +78,11 @@ namespace BinWeevils.Database
         [Key] public uint m_id { get; set; }
         // todo: color...
         
-        [Required] public virtual ItemType m_itemType { get; set; }
+        [Required] public uint m_itemTypeID { get; set; }
+        [Required, ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
+        
+        [Required] public uint m_nestID { get; set; }
+        [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
         
         public virtual NestPlacedItemDB? m_placedItem { get; set; }
 

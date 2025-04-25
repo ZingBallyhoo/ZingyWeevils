@@ -87,7 +87,8 @@ namespace BinWeevils.Server.Controllers
                 .Select(x => new
                 {
                     x.m_xp,
-                    x.m_lastAcknowledgedLevel
+                    x.m_lastAcknowledgedLevel,
+                    m_nestID = x.m_nest.m_id,
                 })
                 .SingleAsync();
             
@@ -97,6 +98,7 @@ namespace BinWeevils.Server.Controllers
                 return new LevelUpResponse();
             }
             
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_lastAcknowledgedLevel == checkDto.m_lastAcknowledgedLevel)
@@ -106,6 +108,18 @@ namespace BinWeevils.Server.Controllers
             {
                 return new LevelUpResponse();
             }
+            
+            var trophyItemTypeID = await m_dbContext.FindItemByConfigName($"o_levelTrophy{checkDto.m_lastAcknowledgedLevel+1}");
+            if (trophyItemTypeID != null)
+            {
+                await m_dbContext.m_nestItems.AddAsync(new NestItemDB 
+                {
+                    m_nestID = checkDto.m_nestID,
+                    m_itemTypeID = trophyItemTypeID.Value
+                });
+            }
+            await m_dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
             
             var responseDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
