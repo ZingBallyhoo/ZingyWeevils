@@ -18,6 +18,12 @@
                     "wss://" + location.host + "/ws" :
                     "ws://" + location.host + "/ws"
             }
+        ],
+        fontSources: [
+            // silverKnight has one EditText that is set to use device font
+            // (even though the font is embedded also)
+            // maybe we could force ruffle to use it, but it won't work universally
+            "fonts/Ocraext.ttf"
         ]
     }
     window.fetch = new Proxy(window.fetch, {
