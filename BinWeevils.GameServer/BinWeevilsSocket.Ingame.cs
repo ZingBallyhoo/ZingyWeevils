@@ -135,7 +135,7 @@ namespace BinWeevils.GameServer
                     });
                     break;
                 }
-                case Modules.INGAME_ROOM_EVENT:
+                case Modules.INGAME_ROOM_EVENT: // 2#5
                 {
                     var clientEvent = new ClientRoomEvent();
                     clientEvent.Deserialize(ref reader);
@@ -149,6 +149,30 @@ namespace BinWeevils.GameServer
                         var roomData = room.GetDataAs<IWeevilRoomEventHandler>();
                         if (roomData == null) return;
                         await roomData.ClientSentRoomEvent(user, clientEvent);
+                    });
+                    break;
+                }
+                case Modules.INGAME_CHANGE_WEEVIL_DEF: // 2#10
+                {
+                    var changeWeevilDef = new ChangeWeevilDef();
+                    changeWeevilDef.Deserialize(ref reader);
+                    
+                    var normalizedDef = new WeevilDef(changeWeevilDef.m_weevilDef);
+                    var normalizedDefNum = normalizedDef.AsNumber();
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var user = GetUser();
+                        var weevilData = user.GetUserDataAs<WeevilData>();
+                        
+                        var dbDef = await m_services.GetWeevilDef(weevilData!.m_idx.GetValue());
+                        if (dbDef != normalizedDefNum)
+                        {
+                            throw new InvalidDataException($"sent different def in ChangeWeevilDef than what is stored in db. db:{dbDef}, socket:{normalizedDefNum}");
+                        }
+                        
+                        // there is no need to sync anything as this is sent before re-joining any room
+                        weevilData.m_weevilDef.SetValue(dbDef);
                     });
                     break;
                 }

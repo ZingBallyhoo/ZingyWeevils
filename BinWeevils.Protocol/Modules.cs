@@ -18,6 +18,8 @@ namespace BinWeevils.Protocol
         public const string INGAME_GET_ZONE_TIME = $"{INGAME}#6";
         public const string INGAME_ADD_APPAREL = $"{INGAME}#7";
         public const string INGAME_REMOVE_APPAREL = $"{INGAME}#8";
+        public const string INGAME_CHECK_MESSAGE = $"{INGAME}#9";
+        public const string INGAME_CHANGE_WEEVIL_DEF = $"{INGAME}#10";
         
         // todo: not to be confused with the actual turn based module? (4)
         // although it seems unused

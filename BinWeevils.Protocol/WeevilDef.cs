@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace BinWeevils.Protocol
 {
@@ -90,7 +91,8 @@ namespace BinWeevils.Protocol
         public const int COLOR_COUNT = 52;
         public const int EYE_COLOR_COUNT = 58;
         
-        public const int LEGACY_COLOR_COUNT = 23;
+        // todo: there are actually 23 but the def changer only allows up to 22
+        public const int LEGACY_COLOR_COUNT = 22;
         public const int LEGACY_EYE_COLOR_COUNT = 12;
 
         public const string DEFAULT = "101101406100171700"; // pea/cabbage
@@ -116,15 +118,23 @@ namespace BinWeevils.Protocol
             m_antennaColorIdx = byte.Parse(span.Slice(12, 2));
             
             m_legColorIdx = byte.Parse(span.Slice(14, 2));
-            if (span.Length >= 18)
+            switch (span.Length)
             {
-                m_legType = (LegType)byte.Parse(span.Slice(16, 2));
-            } else if (span.Length >= 17)
-            {
-                m_legType = (LegType)byte.Parse(span.Slice(16, 1));
-            } else
-            {
-                m_legType = LegType.Normal;
+                case 16:
+                {
+                    m_legType = LegType.Normal;
+                    break;
+                }
+                case 17:
+                case 18:
+                {
+                    m_legType = (LegType)byte.Parse(span.Slice(16, span.Length-16));
+                    break;
+                }
+                default:
+                {
+                    throw new InvalidDataException($"weevildef with wrong string length: \"{span}\" ({span.Length})");
+                }
             }
         }
 
@@ -136,18 +146,41 @@ namespace BinWeevils.Protocol
                    $"{(byte)m_antennaType:D2}{m_antennaColorIdx:D2}" +
                    $"{m_legColorIdx:D2}{(byte)m_legType:D2}";
         }
+        
+        public ulong AsNumber()
+        {
+            return ulong.Parse(AsString());
+        }
 
         private bool ValidateEnums =>
             Enum.IsDefined(m_headType) && Enum.IsDefined(m_bodyType) && Enum.IsDefined(m_eyeType) &&
             Enum.IsDefined(m_antennaType) && Enum.IsDefined(m_legType);
         
         private bool ValidateColors =>
-            m_headColorIdx < COLOR_COUNT && m_bodyColorIdx < COLOR_COUNT && m_antennaColorIdx < COLOR_COUNT && m_legColorIdx < COLOR_COUNT &&
+            m_headColorIdx < COLOR_COUNT && 
+            m_bodyColorIdx < COLOR_COUNT && 
+            m_antennaColorIdx < COLOR_COUNT && 
+            m_legColorIdx < COLOR_COUNT &&
             m_eyeColorIdx < EYE_COLOR_COUNT;
+        
+        private bool ValidateLegacyColors =>
+            m_headColorIdx < LEGACY_COLOR_COUNT && 
+            m_bodyColorIdx < LEGACY_COLOR_COUNT && 
+            m_antennaColorIdx < LEGACY_COLOR_COUNT && 
+            m_legColorIdx < LEGACY_COLOR_COUNT &&
+            m_eyeColorIdx < LEGACY_EYE_COLOR_COUNT;
 
         public bool Validate()
         {
             return ValidateEnums && ValidateColors;
+        }
+        
+        public bool ValidateLegacy()
+        {
+            return ValidateEnums && 
+                   ValidateLegacyColors &&
+                   m_legType == LegType.Normal &&
+                   m_antennaType <= AntennaType.SuperOriginal;
         }
 
         public bool HasSuperAntenna()

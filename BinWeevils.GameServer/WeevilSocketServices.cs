@@ -99,6 +99,17 @@ namespace BinWeevils.GameServer
                     m_weevilDef = x.m_weevilDef,
                 }).SingleAsync();;
         }
+
+        public async Task<ulong> GetWeevilDef(uint weevilIdx)
+        {
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            return await context.m_weevilDBs
+                .Where(x => x.m_idx == weevilIdx)
+                .Select(x => x.m_weevilDef)
+                .SingleAsync();
+        }
         
         public ActorSystem GetActorSystem()
         {

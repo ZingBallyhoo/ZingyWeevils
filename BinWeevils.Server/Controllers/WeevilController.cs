@@ -138,5 +138,38 @@ namespace BinWeevils.Server.Controllers
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_introProgress, encodedProgress.m_bits));
         }
+        
+        [StructuredFormPost("change-definition")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<ChangeWeevilDefResponse> ChangeDefinition([FromBody] ChangeWeevilDefRequest request)
+        {
+            var def = new WeevilDef($"{request.m_weevilDef}");
+            if (!def.ValidateLegacy())
+            {
+                throw new InvalidDataException($"ChangeDefinition: invalid weevil def: \"{request.m_weevilDef}\"");
+            }
+            
+            const int cost = 2500;
+            var defNum = def.AsNumber();
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_mulch >= cost)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - cost)
+                    .SetProperty(x => x.m_weevilDef, defNum));
+            
+            if (rowsUpdated == 0)
+            {
+                return new ChangeWeevilDefResponse
+                {
+                    m_error = ChangeWeevilDefResponse.ERR_NOT_ENOUGH_MONEY
+                };
+            }
+            return new ChangeWeevilDefResponse
+            {
+                m_error = ChangeWeevilDefResponse.ERR_OK
+            };
+        }
     }
 }
