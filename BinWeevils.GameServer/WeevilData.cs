@@ -25,6 +25,8 @@ namespace BinWeevils.GameServer
         public TypedVar<double> m_z;
         public TypedVar<int> m_r;
         
+        public string m_buddyLocName = "";
+        
         // todo: king, but unused...
         
         // todo: petDef

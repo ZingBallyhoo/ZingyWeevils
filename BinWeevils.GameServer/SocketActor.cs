@@ -23,6 +23,7 @@ namespace BinWeevils.GameServer
         {
             Add,
             Online,
+            Update,
             Offline
         }
         private record BuddyUpdate(PID pid, BuddyState state);
@@ -110,21 +111,27 @@ namespace BinWeevils.GameServer
                     await HandleFindBuddy(findBuddyRequest);
                     break;
                 }
+                case SetBuddyVarsRequest setBuddyVarsRequest:
+                {
+                    await HandleSetBuddyVars(context, setBuddyVarsRequest);
+                    break;
+                }
                 case Stopping:
                 {
+                    // note: this code triggers for any child!
                     m_user.m_socket?.Close();
                     break;
                 }
             }
         }
-        
+
         private async Task CreateNestNow(IContext context)
         {
             var nestProps = Props.FromProducer(() => new NestActor
             {
                 m_us = m_user
             });
-            var nestActor = context.SpawnNamed(nestProps, $"nest/{m_user.m_name}");
+            var nestActor = context.SpawnNamed(nestProps, $"nest");
             
             var nestDesc = new WeevilRoomDescription($"nest_{m_user.m_name}")
             {
@@ -298,13 +305,25 @@ namespace BinWeevils.GameServer
         
         private static BuddyUpdateRecord CreateBuddyUpdateForUser(User? user, string name)
         {
+            var varList = new BuddyUpdateRecord.VarList();
+            
+            var weevilData = user?.GetUserDataAs<WeevilData>();
+            if (weevilData != null)
+            {
+                varList.m_buddyVars.Add(new BuddyUpdateRecord.Var
+                {
+                    m_name = "locName",
+                    m_value = weevilData.m_buddyLocName
+                });
+            }
+            
             return new BuddyUpdateRecord
             {
                 m_name = name,
                 m_isBlocked = false,
                 m_isOnline = user != null,
                 m_userID = user != null ? checked((int)user.m_id) : -1,
-                m_varList = new BuddyVarList()
+                m_varList = varList
             };
         }
         
@@ -363,6 +382,26 @@ namespace BinWeevils.GameServer
                     m_rooms = buddyRoom != null ? [buddyRoom.m_id] : []
                 }
             });
+        }
+        
+        private async Task HandleSetBuddyVars(IContext context, SetBuddyVarsRequest request)
+        {
+            var locNameVar = request.m_varList.m_buddyVars.SingleOrDefault(x => x.m_name == "locName");
+            if (locNameVar == null) return;
+            
+            var weevilData = m_user.GetUserData<WeevilData>();
+            var mappedName = await m_services.GetLocNameMapper().MapName(locNameVar.m_value);
+            if (mappedName == weevilData.m_buddyLocName)
+            {
+                return;
+            }
+            
+            weevilData.m_buddyLocName = mappedName;
+            foreach (var buddyName in m_buddies)
+            {
+                var buddyPID = new PID(context.Self.Address, buddyName);
+                context.Send(buddyPID, new BuddyUpdate(context.Self, BuddyState.Update));
+            }
         }
     }
 }

@@ -110,6 +110,11 @@ namespace BinWeevils.GameServer
                     HandleSfsBuddyPermission(preRead.m_bodySpan);
                     break;
                 }
+                case "setBvars":
+                {
+                    HandleSfsSetBuddyVars(preRead.m_bodySpan);
+                    break;
+                }
                 case "roomB":
                 {
                     HandleSfsFindBuddy(preRead.m_bodySpan);
@@ -160,12 +165,17 @@ namespace BinWeevils.GameServer
                 var actorSystem = m_services.GetActorSystem();
                 
                 var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
+                
+                var guardian = new AlwaysStopStrategy();
                 var userProps = Props.FromProducer(() => new SocketActor
                 {
                     m_services = m_services,
                     m_user = user
-                });
+                }).WithGuardianSupervisorStrategy(guardian)
+                  .WithChildSupervisorStrategy(guardian);
                 var userActor = actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");
+                guardian.m_ownerPID = userActor;
+                
                 var nestActor = await actorSystem.Root.RequestAsync<PID>(userActor, new SocketActor.CreateNest());
                 
                 var weevilData = new WeevilData(user, userActor, nestActor);

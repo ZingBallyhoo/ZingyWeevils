@@ -96,7 +96,7 @@ namespace BinWeevils.Protocol.Xml
     public partial class LocationCTA
     {
         [XmlField("id")] public int m_id;
-        [XmlField("extUIData")] public string m_extUIData;
+        [XmlField("extUIData")] public string? m_extUIData;
         [XmlField("x")] public int m_x;
         [XmlField("z")] public int m_z;
     }
@@ -107,7 +107,7 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("id")] public int m_id;
         [XmlField("type")] public string m_type; // "vid" for cinema
         
-        [XmlField("extUIData")] public string m_extUIData;
+        [XmlField("extUIData")] public string? m_extUIData;
         
         [XmlField("toLoc")] public int m_toLoc;
         [XmlField("toDoor")] public int m_toDoor;
@@ -179,7 +179,7 @@ namespace BinWeevils.Protocol.Xml
         
         [XmlField("logicID")] public int m_logicID;
         [XmlField("doorID")] public int m_doorID;
-        [XmlField("extUIData")] public string m_extUIData;
+        [XmlField("extUIData")] public string? m_extUIData;
         
         [XmlField("boundary")] public string m_boundary;
         [XmlField("clr")] public string m_clr;

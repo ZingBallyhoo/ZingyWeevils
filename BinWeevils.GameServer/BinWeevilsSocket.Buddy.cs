@@ -22,6 +22,12 @@ namespace BinWeevils.GameServer
             m_services.GetActorSystem().Root.Send(GetUser().GetUserData<WeevilData>().m_userActor, buddyPermission);
         }
         
+        private void HandleSfsSetBuddyVars(ReadOnlySpan<char> body)
+        {
+            var setBuddyVars = XmlReadBuffer.ReadStatic<SetBuddyVarsRequest>(body);
+            m_services.GetActorSystem().Root.Send(GetUser().GetUserData<WeevilData>().m_userActor, setBuddyVars);
+        }
+        
         private void HandleSfsFindBuddy(ReadOnlySpan<char> body)
         {
             var findBuddy = XmlReadBuffer.ReadStatic<FindBuddyRequest>(body);

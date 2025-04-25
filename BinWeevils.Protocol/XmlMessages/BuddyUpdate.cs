@@ -16,19 +16,19 @@ namespace BinWeevils.Protocol.XmlMessages
         [XmlField("x")] public bool m_isBlocked;
         
         [XmlBody("n")] public string m_name;
-        [XmlBody("vs")] public BuddyVarList m_varList;
-    }
+        [XmlBody("vs")] public VarList m_varList;
+        
+        [XmlCls("vs")]
+        public partial class VarList
+        {
+            [XmlBody] public List<Var> m_buddyVars;
+        }
     
-    [XmlCls("vs")]
-    public partial class BuddyVarList
-    {
-        [XmlBody] private List<BuddyVar> m_buddyVars;
-    }
-    
-    [XmlCls("v")]
-    public partial class BuddyVar
-    {
-        [XmlField("n")] public string m_name;
-        [XmlBody] public string m_value;
+        [XmlCls("v")]
+        public partial class Var
+        {
+            [XmlField("n")] public string m_name;
+            [XmlBody] public string m_value;
+        }
     }
 }

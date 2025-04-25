@@ -105,6 +105,11 @@ namespace BinWeevils.GameServer
             return m_rootProvider.GetRequiredService<ActorSystem>();
         }
         
+        public LocNameMapper GetLocNameMapper() 
+        {
+            return m_rootProvider.GetRequiredService<LocNameMapper>();
+        }
+        
         public async IAsyncEnumerable<string> GetBuddies(uint idx)
         {
             await using var scope = m_rootProvider.CreateAsyncScope();
