@@ -174,7 +174,8 @@ namespace BinWeevils.GameServer
                 {
                     m_services = m_services,
                     m_user = user
-                }).WithGuardianSupervisorStrategy(new AlwaysStopStrategy());
+                }).WithGuardianSupervisorStrategy(new AlwaysStopStrategy())
+                  .WithChildSupervisorStrategy(new CustomOneForOneStrategy(3, TimeSpan.FromSeconds(30)));
                 // we only forcibly stop the user on crash
                 // children (nest, buddy list) are safe to restart
                 actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");

@@ -10,7 +10,7 @@ namespace BinWeevils.GameServer.Actors
         public void HandleFailure(ISupervisor supervisor, PID child, RestartStatistics rs, Exception cause, object? message)
         {
             supervisor.StopChildren(child);
-            Logger.LogError("{Action} because {Owner} failed with {Reason}", SupervisorDirective.Stop, child, cause);
+            Logger.LogError(cause, "Stopping root actor {Actor}", child);
         }
     }
 }
