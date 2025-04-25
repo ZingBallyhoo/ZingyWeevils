@@ -25,11 +25,13 @@ namespace BinWeevils.GameServer.Actors
                 {
                     await CreateNestNow(context);
 
-                    m_buddyList = context.SpawnNamed(Props.FromProducer(() => new BuddyListActor
+                    var buddyListProps = Props.FromProducer(() => new BuddyListActor
                     {
                         m_services = m_services,
                         m_user = m_user
-                    }), "buddyList");
+                    }).WithStartDeadline(TimeSpan.FromSeconds(1));
+                    // locally this takes about 0.1 seconds to start which protoactor doesn't like...
+                    m_buddyList = context.SpawnNamed(buddyListProps, "buddyList");
                     break;
                 }
                 case KickFromNest kickFromNest:
