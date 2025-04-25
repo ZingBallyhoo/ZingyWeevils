@@ -173,7 +173,7 @@ namespace BinWeevils.GameServer
                 if (!await TryJoinNestRoom(system, user, newRoom))
                 {
                      // attempt to salvage the situation
-                    await system.Root.RequestAsync<object>(user.GetUserData<WeevilData>().GetUserAddress(), new SocketActor.KickFromNest(nestUser));
+                    system.Root.Send(user.GetUserData<WeevilData>().GetUserAddress(), new SocketActor.KickFromNest(nestUser));
                     return null;
                 }
                 
@@ -201,6 +201,9 @@ namespace BinWeevils.GameServer
             {
                 success = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(user, newRoom));
             } catch (DeadLetterException)
+            {
+                success = false;
+            } catch (TimeoutException)
             {
                 success = false;
             }

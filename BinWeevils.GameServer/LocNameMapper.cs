@@ -45,8 +45,6 @@ namespace BinWeevils.GameServer
                     AddExtUI(cta.m_extUIData);
                 }
             }
-            
-            Console.Out.WriteLine("h");
         }
         
         [GeneratedRegex("(?:,|^)locName:([^,]+)(?:,|$)")]

@@ -52,6 +52,11 @@ namespace BinWeevils.GameServer.Rooms
                     await KickAllGuests(context);
                     break;
                 }
+                case Restarting:
+                {
+                    await HandleRestarting(context);
+                    break;
+                }
             }
         }
         
@@ -131,6 +136,21 @@ namespace BinWeevils.GameServer.Rooms
             foreach (var userName in m_invitedUsers.Keys.ToArray())
             {
                 await KickGuest(context, userName);
+            }
+            m_invitedUsers.Clear();
+        }
+        
+        private async Task HandleRestarting(IContext context)
+        {
+            // clear our guest list
+            // and remove invites from others
+            foreach (var pair in m_invitedUsers)
+            {
+                await m_us.BroadcastXtStr(Modules.NEST_REMOVE_GUESTS, new NestInvite
+                {
+                    m_userName = pair.Key
+                });
+                context.Send(pair.Value, new SocketActor.KickFromNest(m_us.m_name));
             }
             m_invitedUsers.Clear();
         }

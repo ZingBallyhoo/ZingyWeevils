@@ -170,17 +170,14 @@ namespace BinWeevils.GameServer
                 weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
                 user.SetUserData(weevilData);
                 
-                var guardian = new AlwaysStopStrategy();
-                // todo: we don't really need to restart children?
-                // nests are fine to restart for example...
                 var userProps = Props.FromProducer(() => new SocketActor
                 {
                     m_services = m_services,
                     m_user = user
-                }).WithGuardianSupervisorStrategy(guardian)
-                  .WithChildSupervisorStrategy(guardian);
-                var userActor = actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");
-                guardian.m_ownerPID = userActor;
+                }).WithGuardianSupervisorStrategy(new AlwaysStopStrategy());
+                // we only forcibly stop the user on crash
+                // children (nest, buddy list) are safe to restart
+                actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");
                 
                 var loginResponse = new LoginResponse
                 {

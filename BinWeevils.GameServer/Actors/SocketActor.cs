@@ -49,7 +49,6 @@ namespace BinWeevils.GameServer.Actors
                     {
                         m_userName = kickFromNest.userName
                     });
-                    context.Respond(null!);
                     break;
                 }
                 case Stopping:
