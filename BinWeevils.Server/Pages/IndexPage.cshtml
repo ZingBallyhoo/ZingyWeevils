@@ -49,6 +49,20 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/darkly/bootstrap.min.css" integrity="sha512-A/WvCV75maYUI3F3yjeSqYg0dUIepPRx14Qw8EZjJ/udG5/s3uDWLHnm1FSbYzrJg4RLdAdEm/f6+1V6AxCBJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", (event) => {
+            // restore the input to whatever was set previously
+            const cookieValue = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("username="))
+                ?.split("=")[1];
+
+            if (cookieValue) {
+                let input = document.getElementById("username-input");
+                input.value = cookieValue;
+            }
+        });
+    </script>
 </head>
 <body>
 <div>
@@ -67,7 +81,7 @@
     <div class="row no-gutters justify-content-center p-5">
         <form class="col-auto" method="post" asp-antiforgery="false" autocomplete="off">
             <div class="form-row">
-                <input type="text" class="form-control form-control-lg mb-2" name="username" placeholder="fairriver5">
+                <input id="username-input" type="text" class="form-control form-control-lg mb-2" name="username" placeholder="fairriver5">
             </div>
             <div class="form-row">
                 <button type="submit" class="btn btn-block btn-primary mb-2">Play</button>
