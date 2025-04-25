@@ -88,7 +88,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleAsync();
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
-            await m_dbContext.m_completedTasks.AddAsync(new WeevilCompletedTask
+            await m_dbContext.m_completedTasks.AddAsync(new CompletedTaskDB
             {
                 m_weevilID = weevilID,
                 m_taskID = request.m_taskID
@@ -127,7 +127,7 @@ namespace BinWeevils.Server.Controllers
         
         private async Task TryReward(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response) 
         {
-            await m_dbContext.m_rewardedTasks.AddAsync(new WeevilRewardedTask
+            await m_dbContext.m_rewardedTasks.AddAsync(new RewardedTaskDB
             {
                 m_weevilID = weevilIdx,
                 m_taskID = task.m_scrapedData.m_id

@@ -9,11 +9,11 @@ namespace BinWeevils.Database
     {
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
-        public DbSet<WeevilCompletedTask> m_completedTasks { get; set; }
-        public DbSet<WeevilRewardedTask> m_rewardedTasks { get; set; }
+        public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
+        public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
 
         public DbSet<ItemType> m_itemTypes { get; set; }
-        public DbSet<NestDB> m_nests { get; set; }
+        // public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestItemDB> m_nestItems { get; set; }
         public DbSet<NestRoomDB> m_nestRooms { get; set; }
         public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
@@ -29,7 +29,27 @@ namespace BinWeevils.Database
             
             modelBuilder.Entity<WeevilDB>(b =>
             {
-                b.ToTable("Weevil");
+                b.ToTable("WeevilDB");
+                b.HasIndex(x => x.m_name);
+            });
+            
+            modelBuilder.Entity<BuddyRecordDB>(b =>
+            {
+                b.ToTable("BuddyRecordDB");
+            });
+            
+            modelBuilder.Entity<CompletedTaskDB>(b =>
+            {
+                b.ToTable("CompletedTaskDB");
+            });
+            modelBuilder.Entity<RewardedTaskDB>(b =>
+            {
+                b.ToTable("RewardedTaskDB");
+            });
+            
+            modelBuilder.Entity<ItemType>(b =>
+            {
+                b.HasIndex(x => x.m_configLocation);
             });
             
             modelBuilder.Entity<NestRoomDB>(b =>

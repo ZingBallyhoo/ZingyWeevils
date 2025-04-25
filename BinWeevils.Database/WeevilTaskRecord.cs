@@ -13,11 +13,11 @@ namespace BinWeevils.Database
         [Required, Key] public int m_taskID;
     }
     
-    public class WeevilCompletedTask : WeevilTaskRecord
+    public class CompletedTaskDB : WeevilTaskRecord
     {
     }
     
-    public class WeevilRewardedTask : WeevilTaskRecord
+    public class RewardedTaskDB : WeevilTaskRecord
     {
     }
 }
