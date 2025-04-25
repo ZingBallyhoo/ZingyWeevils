@@ -19,7 +19,10 @@ namespace BinWeevils.Server.Controllers
                 return Results.Redirect("/");
             }
             
-            Response.Cookies.Append("username", form.m_username);
+            Response.Cookies.Append("username", form.m_username, new CookieOptions
+            {
+                Expires = DateTime.MaxValue
+            });
             return Results.Redirect("/game.php");
         }
         
