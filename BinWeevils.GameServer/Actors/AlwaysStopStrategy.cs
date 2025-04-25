@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Proto;
 
-namespace BinWeevils.GameServer
+namespace BinWeevils.GameServer.Actors
 {
     public class AlwaysStopStrategy : ISupervisorStrategy
     {

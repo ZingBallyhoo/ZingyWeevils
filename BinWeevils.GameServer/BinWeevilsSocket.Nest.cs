@@ -44,7 +44,7 @@ namespace BinWeevils.GameServer
                         var us = GetUser();
                         if (us.m_name == outgoingInvite.m_userName) throw new InvalidDataException("trying to invite self");
                         
-                        var nest = us.GetUserData<WeevilData>().m_nestActor;
+                        var nest = us.GetUserData<WeevilData>().GetNestAddress();
                         m_services.GetActorSystem().Root.Send(nest, outgoingInvite);
                     });
                     break;
@@ -59,7 +59,7 @@ namespace BinWeevils.GameServer
                         var us = GetUser();
                         if (us.m_name == removeGuests.m_userName) throw new InvalidDataException("trying remove invite from self");
                         
-                        var nest = us.GetUserData<WeevilData>().m_nestActor;
+                        var nest = us.GetUserData<WeevilData>().GetNestAddress();
                         if (removeGuests.m_userName == NestInvite.ALL_GUESTS)
                         {
                             m_services.GetActorSystem().Root.Send(nest, new NestActor.RemoveAllGuests());
@@ -95,7 +95,7 @@ namespace BinWeevils.GameServer
                         var nestOwner = await us.m_zone.GetUser(deniedInvite.m_userName!);
                         if (nestOwner == null) return;
                         
-                        var nest = nestOwner.GetUserData<WeevilData>().m_nestActor;
+                        var nest = nestOwner.GetUserData<WeevilData>().GetNestAddress();
                         m_services.GetActorSystem().Root.Send(nest, new NestActor.DenyNestInvite(us.m_name));
                     });
                     break;

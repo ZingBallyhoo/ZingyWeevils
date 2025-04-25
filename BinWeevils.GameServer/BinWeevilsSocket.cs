@@ -3,7 +3,7 @@ using ArcticFox.Codec;
 using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
-using BinWeevils.GameServer.Rooms;
+using BinWeevils.GameServer.Actors;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
@@ -165,8 +165,14 @@ namespace BinWeevils.GameServer
                 var actorSystem = m_services.GetActorSystem();
                 
                 var user = await CreateUser(login.m_data.m_zone, login.m_data.m_nickname);
+                var weevilData = new WeevilData(user, actorSystem.Root);
+                weevilData.m_idx.SetValue(weevilIdx);
+                weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
+                user.SetUserData(weevilData);
                 
                 var guardian = new AlwaysStopStrategy();
+                // todo: we don't really need to restart children?
+                // nests are fine to restart for example...
                 var userProps = Props.FromProducer(() => new SocketActor
                 {
                     m_services = m_services,
@@ -175,13 +181,6 @@ namespace BinWeevils.GameServer
                   .WithChildSupervisorStrategy(guardian);
                 var userActor = actorSystem.Root.SpawnNamed(userProps, $"{user.m_name}");
                 guardian.m_ownerPID = userActor;
-                
-                var nestActor = await actorSystem.Root.RequestAsync<PID>(userActor, new SocketActor.CreateNest());
-                
-                var weevilData = new WeevilData(user, userActor, nestActor);
-                weevilData.m_idx.SetValue(weevilIdx);
-                weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
-                user.SetUserData(weevilData);
                 
                 var loginResponse = new LoginResponse
                 {
@@ -198,8 +197,6 @@ namespace BinWeevils.GameServer
                     }
                 };
                 await this.BroadcastXtRes(loginResponse);
-                
-                actorSystem.Root.Send(userActor, new SocketActor.InitBuddies());
             });
         }
         
@@ -310,7 +307,7 @@ namespace BinWeevils.GameServer
             var user = GetUser();
             if (user.GetUserDataAs<WeevilData>() is {} weevilData)
             {
-                m_services.GetActorSystem().Root.Stop(weevilData.m_userActor);
+                m_services.GetActorSystem().Root.Stop(weevilData.GetUserAddress());
             }
             return base.CleanupAsync();
         }

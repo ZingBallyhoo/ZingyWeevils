@@ -1,4 +1,5 @@
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Actors;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using Proto;
@@ -92,8 +93,8 @@ namespace BinWeevils.GameServer.Rooms
                 return;
             }
             
-            m_invitedUsers.Add(name, weevilData.m_userActor);
-            context.Watch(weevilData.m_userActor);
+            m_invitedUsers.Add(name, weevilData.GetUserAddress());
+            context.Watch(weevilData.GetUserAddress());
                     
             await otherUser.BroadcastXtStr(Modules.NEST_INVITE_TO_NEST, new NestInvite
             {

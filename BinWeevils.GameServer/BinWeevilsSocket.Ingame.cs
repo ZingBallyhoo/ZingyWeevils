@@ -1,5 +1,6 @@
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Actors;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
@@ -172,7 +173,7 @@ namespace BinWeevils.GameServer
                 if (!await TryJoinNestRoom(system, user, newRoom))
                 {
                      // attempt to salvage the situation
-                    await system.Root.RequestAsync<object>(user.GetUserData<WeevilData>().m_userActor, new SocketActor.KickFromNest(nestUser));
+                    await system.Root.RequestAsync<object>(user.GetUserData<WeevilData>().GetUserAddress(), new SocketActor.KickFromNest(nestUser));
                     return null;
                 }
                 

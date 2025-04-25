@@ -9,8 +9,7 @@ namespace BinWeevils.GameServer
     public class WeevilData : VarBag
     {
         public readonly User m_user;
-        public readonly PID m_userActor;
-        public readonly PID m_nestActor;
+        private readonly string m_contextAddress;
         
         public TypedVar<uint> m_idx;
         public TypedVar<ulong> m_weevilDef;
@@ -32,11 +31,10 @@ namespace BinWeevils.GameServer
         // todo: petDef
         // todo: petState
 
-        public WeevilData(User user, PID userActor, PID nestActor)
+        public WeevilData(User user, IRootContext context)
         {
             m_user = user;
-            m_userActor = userActor;
-            m_nestActor = nestActor;
+            m_contextAddress = context.System.Address;
             
             m_idx = new TypedVar<uint>(this, "idx", Var.TYPE_STRING); // ! intentionally string
             m_weevilDef = new TypedVar<ulong>(this, "weevilDef", Var.TYPE_STRING);
@@ -52,6 +50,16 @@ namespace BinWeevils.GameServer
             m_r = new TypedVar<int>(this, "r", Var.TYPE_NUMBER);
             
             m_weevilDef.SetValue(ulong.Parse(WeevilDef.DEFAULT));
+        }
+        
+        public PID GetUserAddress()
+        {
+            return new PID(m_contextAddress, m_user.m_name);
+        }
+        
+        public PID GetNestAddress()
+        {
+            return new PID(m_contextAddress, $"{m_user.m_name}/nest");
         }
     }
 }

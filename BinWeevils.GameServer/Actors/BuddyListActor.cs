@@ -1,23 +1,18 @@
+using System.Text.RegularExpressions;
 using ArcticFox.SmartFoxServer;
-using BinWeevils.GameServer.Rooms;
-using BinWeevils.Protocol;
-using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
 using Proto;
 
-namespace BinWeevils.GameServer
+namespace BinWeevils.GameServer.Actors
 {
-    public class SocketActor : IActor
+    public partial class BuddyListActor : IActor
     {
         public required WeevilSocketServices m_services;
         public required User m_user;
+        
         private readonly HashSet<string> m_buddies = [];
         private readonly HashSet<string> m_receivedBuddyRequests = [];
         
-        public record CreateNest();
-        public record KickFromNest(string userName);
-        
-        public record InitBuddies();
         public record LoadBuddyListRequest();
         private enum BuddyState
         {
@@ -26,41 +21,16 @@ namespace BinWeevils.GameServer
             Update,
             Offline
         }
-        private record BuddyUpdate(PID pid, BuddyState state);
-        private record BuddyRemovedNotification(PID pid);
+        private record BuddyUpdate(string name, BuddyState state);
+        private record BuddyRemovedNotification(string name);
         
         public async Task ReceiveAsync(IContext context)
         {
             switch (context.Message)
             {
-                case CreateNest:
+                case Started:
                 {
-                    await CreateNestNow(context);
-                    break;
-                }
-                case KickFromNest kickFromNest:
-                {
-                    if (kickFromNest.userName == m_user.m_name)
-                    {
-                        // something has gone horribly wrong
-                        context.Stop(context.Self);
-                        return;
-                    }
-                    
-                    await m_user.BroadcastXtStr(Modules.NEST_DENY_NEST_INVITE, new NestInvite
-                    {
-                        m_userName = kickFromNest.userName
-                    });
-                    await m_user.BroadcastXtStr(Modules.NEST_RETURN_TO_NEST, new NestInvite
-                    {
-                        m_userName = kickFromNest.userName
-                    });
-                    context.Respond(null!);
-                    break;
-                }
-                case InitBuddies:
-                {
-                    await HandleInitBuddies(context);
+                    await HandleStart(context);
                     break;
                 }
                 case LoadBuddyListRequest:
@@ -85,7 +55,7 @@ namespace BinWeevils.GameServer
                 }
                 case BuddyUpdate buddyConfirmed:
                 {
-                    await HandleBuddyUpdate(context, buddyConfirmed.pid, buddyConfirmed.state);
+                    await HandleBuddyUpdate(context, buddyConfirmed.name, buddyConfirmed.state);
                     break;
                 }
                 case RemoveBuddyBody removeBuddyRequest:
@@ -100,9 +70,10 @@ namespace BinWeevils.GameServer
                 }
                 case Terminated buddyTerminated:
                 {
-                    if (m_buddies.Contains(buddyTerminated.Who.Id))
+                    var match = BuddyListRegex.Match(buddyTerminated.Who.Id);
+                    if (match.Success)
                     {
-                        await HandleBuddyUpdate(context, buddyTerminated.Who, BuddyState.Offline);
+                        await HandleBuddyUpdate(context, match.Groups[1].Value, BuddyState.Offline);
                     }
                     break;
                 }
@@ -116,40 +87,18 @@ namespace BinWeevils.GameServer
                     await HandleSetBuddyVars(context, setBuddyVarsRequest);
                     break;
                 }
-                case Stopping:
-                {
-                    // note: this code triggers for any child!
-                    m_user.m_socket?.Close();
-                    break;
-                }
             }
         }
-
-        private async Task CreateNestNow(IContext context)
+        
+        [GeneratedRegex("^([^/]+)/buddyList$")]
+        private static partial Regex BuddyListRegex { get; }
+        
+        private static PID GetBuddyListAddress(IContext context, string name)
         {
-            var nestProps = Props.FromProducer(() => new NestActor
-            {
-                m_us = m_user
-            });
-            var nestActor = context.SpawnNamed(nestProps, $"nest");
-            
-            var nestDesc = new WeevilRoomDescription($"nest_{m_user.m_name}")
-            {
-                m_creator = m_user,
-                m_maxUsers = 20,
-                m_isTemporary = true,
-                m_data = new NestRoom
-                {
-                    m_owner = m_user,
-                    m_nest = nestActor
-                }
-            };
-            await m_user.m_zone.CreateRoom(nestDesc);
-            
-            context.Respond(nestActor);
+            return new PID(context.Self.Address, $"{name}/buddyList");
         }
         
-        private async Task HandleInitBuddies(IContext context)
+        private async Task HandleStart(IContext context)
         {
             var idx = m_user.GetUserData<WeevilData>().m_idx.GetValue();
             
@@ -164,9 +113,9 @@ namespace BinWeevils.GameServer
                     continue;
                 }
                 
-                var buddyPID = new PID(context.Self.Address, buddyName);
-                context.Watch(buddyPID);
-                context.Send(buddyPID, new BuddyUpdate(context.Self, BuddyState.Online));
+                var theirBuddyList = GetBuddyListAddress(context, buddyName);
+                context.Watch(theirBuddyList);
+                context.Send(theirBuddyList, new BuddyUpdate(m_user.m_name, BuddyState.Online));
             }
         }
         
@@ -199,17 +148,14 @@ namespace BinWeevils.GameServer
                 return;
             }
             
-            var otherUser = await m_user.m_zone.GetUser(request.m_targetName);
-            var weevilData = otherUser?.GetUserDataAs<WeevilData>();
-            if (weevilData == null) return;
-            
             if (m_receivedBuddyRequests.Contains(request.m_targetName))
             {
                 await ConfirmAddBuddy(context, request.m_targetName);
                 return;
             }
             
-            context.Send(weevilData.m_userActor, new BuddyPermissionRequest
+            var theirBuddyList = GetBuddyListAddress(context, request.m_targetName);
+            context.Send(theirBuddyList, new BuddyPermissionRequest
             {
                 m_action = "bPrm",
                 m_sender = m_user.m_name
@@ -264,14 +210,13 @@ namespace BinWeevils.GameServer
                 return;
             }
             
-            var buddyAddress = PID.FromAddress(context.Self.Address, otherWeevilName);
-            context.Send(context.Self, new BuddyUpdate(buddyAddress, BuddyState.Add));
-            context.Send(buddyAddress, new BuddyUpdate(context.Self, BuddyState.Add));
+            var theirBuddyList = GetBuddyListAddress(context, otherWeevilName);
+            context.Send(context.Self, new BuddyUpdate(otherWeevilName, BuddyState.Add));
+            context.Send(theirBuddyList, new BuddyUpdate(m_user.m_name, BuddyState.Add));
         }
         
-        private async Task HandleBuddyUpdate(IContext context, PID buddyPid, BuddyState userState)
+        private async Task HandleBuddyUpdate(IContext context, string buddyUserName, BuddyState userState)
         {
-            var buddyUserName = buddyPid.Id;
             if (userState == BuddyState.Add)
             {
                 m_receivedBuddyRequests.Remove(buddyUserName);
@@ -299,7 +244,8 @@ namespace BinWeevils.GameServer
             if (buddyUser != null)
             {
                 // watch for log out
-                context.Watch(buddyPid);
+                var theirBuddyList = GetBuddyListAddress(context, buddyUserName);
+                context.Watch(theirBuddyList);
             }
         }
         
@@ -340,14 +286,14 @@ namespace BinWeevils.GameServer
                 return;
             }
             
-            var buddyAddress = PID.FromAddress(context.Self.Address, request.m_buddyName);
-            context.Unwatch(buddyAddress);
-            context.Send(buddyAddress, new BuddyRemovedNotification(context.Self));
+            var theirBuddyList = GetBuddyListAddress(context, request.m_buddyName);
+            context.Unwatch(theirBuddyList);
+            context.Send(theirBuddyList, new BuddyRemovedNotification(m_user.m_name));
         }
         
         private async Task HandleBuddyRemoved(IContext context, BuddyRemovedNotification buddyRemoved)
         {
-            var buddyName = buddyRemoved.pid.Id;
+            var buddyName = buddyRemoved.name;
             if (!m_buddies.Remove(buddyName))
             {
                 return;
@@ -358,7 +304,9 @@ namespace BinWeevils.GameServer
                 m_action = "remB",
                 m_buddyName = buddyName
             });
-            context.Unwatch(buddyRemoved.pid);
+            
+            var theirBuddyList = GetBuddyListAddress(context, buddyName);
+            context.Unwatch(theirBuddyList);
         }
         
         private async Task HandleFindBuddy(FindBuddyRequest findBuddyRequest)
@@ -399,8 +347,8 @@ namespace BinWeevils.GameServer
             weevilData.m_buddyLocName = mappedName;
             foreach (var buddyName in m_buddies)
             {
-                var buddyPID = new PID(context.Self.Address, buddyName);
-                context.Send(buddyPID, new BuddyUpdate(context.Self, BuddyState.Update));
+                var theirBuddyList = GetBuddyListAddress(context, buddyName);
+                context.Send(theirBuddyList, new BuddyUpdate(m_user.m_name, BuddyState.Update));
             }
         }
     }
