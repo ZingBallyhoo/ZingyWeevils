@@ -3,6 +3,7 @@ using BinWeevils.GameServer.TurnBased;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.KeyValue;
 using BinWeevils.Protocol.Str;
+using Microsoft.Extensions.Logging;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -12,9 +13,9 @@ namespace BinWeevils.GameServer
         private void HandleTurnBasedCommand(in XtClientMessage message, ref StrReader reader)
         {
             var turnedBasedDataStr = reader.GetString();
-            Console.Out.WriteLine($"turn based: {turnedBasedDataStr}");
             
             var request = ParseTurnBasedRequest(turnedBasedDataStr);
+            m_services.GetLogger().LogDebug("TurnBased: {TurnBaseMessage}", request);
             
             m_taskQueue.Enqueue(async () =>
             {

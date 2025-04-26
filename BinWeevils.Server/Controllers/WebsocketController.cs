@@ -1,9 +1,11 @@
 using ArcticFox.Net.Sockets;
 using BinWeevils.GameServer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BinWeevils.Server.Controllers
 {
+    [Authorize]
     public class WebsocketController : Controller
     {
         private readonly BinWeevilsSocketHost m_socketHost;

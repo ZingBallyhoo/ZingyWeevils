@@ -29,6 +29,8 @@ namespace BinWeevils.GameServer
                         var room = await user.GetRoom();
                         if (room.IsLimbo()) return;
                         
+                        m_services.GetLogger().LogDebug("Ingame - Move: x:{X} y:{Z} r:{Dir}", move.m_x, move.m_z, move.m_dir);
+                        
                         var weevil = user.GetUserData<WeevilData>();
                         weevil.m_x.SetValue(move.m_x);
                         weevil.m_z.SetValue(move.m_z);
@@ -62,6 +64,8 @@ namespace BinWeevils.GameServer
                         var user = GetUser();
                         var room = await user.GetRoom();
                         if (room.IsLimbo()) return;
+                        
+                        m_services.GetLogger().LogDebug("Ingame - Expression: {Expression}", (EWeevilExpression)expression.m_expressionID);
                         
                         var weevil = user.GetUserData<WeevilData>();
                         weevil.m_expressionID.SetValue(expression.m_expressionID);
@@ -100,9 +104,12 @@ namespace BinWeevils.GameServer
                         weevil.m_locID.SetValue(joinRoomRequest.m_locID);
                         weevil.m_doorID.SetValue(joinRoomRequest.m_entryDoorID);
                         
+                        m_services.GetLogger().LogDebug("Ingame - JoinRoom: {RoomName}", joinRoomRequest.m_roomName);
+                        
                         var newRoom = await TryJoinRoom(joinRoomRequest.m_roomName);
                         if (newRoom == null)
                         {
+                            m_services.GetLogger().LogError("Failed to join room: {RoomName}", joinRoomRequest.m_roomName);
                             return;
                         }
                         
@@ -147,6 +154,8 @@ namespace BinWeevils.GameServer
                         var user = GetUser();
                         var room = await user.GetRoom();
                         
+                        m_services.GetLogger().LogDebug("Ingame - ClientRoomEvent: Para:{Params} State:{State}", clientEvent.m_eventParams, clientEvent.m_roomState);
+                        
                         var roomData = room.GetDataAs<IWeevilRoomEventHandler>();
                         if (roomData == null) return;
                         await roomData.ClientSentRoomEvent(user, clientEvent);
@@ -172,6 +181,8 @@ namespace BinWeevils.GameServer
                             throw new InvalidDataException($"sent different def in ChangeWeevilDef than what is stored in db. db:{dbDef}, socket:{normalizedDefNum}");
                         }
                         
+                        m_services.GetLogger().LogDebug("Ingame - ChangeWeevilDef: {Def}", dbDef);
+                        
                         // there is no need to sync anything as this is sent before re-joining any room
                         weevilData.m_weevilDef.SetValue(dbDef);
                     });
@@ -195,7 +206,7 @@ namespace BinWeevils.GameServer
                 var system = m_services.GetActorSystem();
 
                 var nestUser = roomName.Substring("nest_".Length);
-                if (!await TryJoinNestRoom(system, user, newRoom))
+                if (!await TryJoinNestRoom(system, newRoom))
                 {
                      // attempt to salvage the situation
                     system.Root.Send(user.GetUserData<WeevilData>().GetUserAddress(), new SocketActor.KickFromNest(nestUser));
@@ -213,7 +224,7 @@ namespace BinWeevils.GameServer
             return newRoom;
         }
         
-        private async Task<bool> TryJoinNestRoom(ActorSystem system, User user, Room? newRoom)
+        private async Task<bool> TryJoinNestRoom(ActorSystem system, Room? newRoom)
         {
             if (newRoom?.GetDataAs<NestRoom>() is not {} nestRoom)
             {
@@ -223,7 +234,7 @@ namespace BinWeevils.GameServer
             bool success;
             try
             {
-                success = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(user, newRoom));
+                success = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(GetUser(), newRoom));
             } catch (DeadLetterException)
             {
                 success = false;
@@ -273,7 +284,7 @@ namespace BinWeevils.GameServer
 
         private void HandleInGameCommand_Action_UpdateVars(ClientAction action, WeevilData weevil)
         {
-            m_services.GetLogger().LogDebug("Action: {Action} - {Args}", (EWeevilAction)action.m_actionID, action.m_extraParams);
+            m_services.GetLogger().LogDebug("Ingame - Action: {Action} - {Args}", (EWeevilAction)action.m_actionID, action.m_extraParams);
 
             var extraParamsReader = new StrReader(action.m_extraParams, ',');
             switch ((EWeevilAction)action.m_actionID)

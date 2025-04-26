@@ -40,15 +40,22 @@ namespace BinWeevils.GameServer
                 logger.LogTrace("{Packet}", input.ToString());
             }
             
-            if (input[0] == '<')
+            try
             {
-                InputXml(input);
-            } else if (input[0] == '%')
+                if (input[0] == '<')
+                {
+                    InputXml(input);
+                } else if (input[0] == '%')
+                {
+                    InputStr(input);
+                } else
+                {
+                    throw new InvalidDataException("message wasn't xml or str");
+                }
+            } catch (Exception)
             {
-                InputStr(input);
-            } else
-            {
-                throw new InvalidDataException("message wasn't xml or str");
+                logger.LogError("Error handling network input: {Input}", input.ToString());
+                throw;
             }
         }
         
@@ -143,6 +150,8 @@ namespace BinWeevils.GameServer
         private void HandleSfsVerCheck(ReadOnlySpan<char> body)
         {
             var verCheck = XmlReadBuffer.ReadStatic<VerCheckBody>(body);
+            m_services.GetLogger().LogDebug("Sfs - VerCheck: {Version}", verCheck.m_ver.m_ver);
+
             if (verCheck.m_ver.m_ver != 154)
             {
                 m_taskQueue.Enqueue(() => this.BroadcastSys(new MsgBody
@@ -163,6 +172,7 @@ namespace BinWeevils.GameServer
         private void HandleSfsLogin(ReadOnlySpan<char> body)
         {
             var login = XmlReadBuffer.ReadStatic<LoginBody>(body);
+            m_services.GetLogger().LogDebug("Sfs - Login: {Version}", login.m_data);
                     
             m_taskQueue.Enqueue(async () =>
             {
@@ -207,6 +217,8 @@ namespace BinWeevils.GameServer
         
         private void HandleSfsGetRoomList(ReadOnlySpan<char> body)
         {
+            m_services.GetLogger().LogDebug("Sfs - GetRoomList");
+
             m_taskQueue.Enqueue(async () =>
             {
                 var roomList = new RoomList();

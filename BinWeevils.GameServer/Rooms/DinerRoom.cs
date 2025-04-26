@@ -46,7 +46,7 @@ namespace BinWeevils.GameServer.Rooms
             }
         }
         
-        public async ValueTask TryStartChef(string userName)
+        public async ValueTask<bool> TryStartChef(string userName)
         {
             using var dataToken = await m_vars.Get();
             var data = dataToken.m_value;
@@ -54,13 +54,14 @@ namespace BinWeevils.GameServer.Rooms
             if (!string.IsNullOrEmpty(data.m_chef.GetValue()))
             {
                 // there is already a chef -_-
-                return;
+                return false;
             }
             
             await SetChef(data, userName);
+            return true;
         }
         
-        public async ValueTask TryQuitChef(string userName)
+        public async ValueTask<bool> TryQuitChef(string userName)
         {
             using var dataToken = await m_vars.Get();
             var data = dataToken.m_value;
@@ -68,10 +69,11 @@ namespace BinWeevils.GameServer.Rooms
             if (!string.Equals(data.m_chef.GetValue(), userName))
             {
                 // you can't quit as chef, you aren't one -_-
-                return;
+                return false;
             }
             
             await SetChef(data, null);
+            return true;
         }
         
         public async ValueTask TryGrabTray(int id, string userName)

@@ -6,7 +6,7 @@ namespace BinWeevils.Protocol.XmlMessages
     public partial class LoginBody : MsgBody
     {
         [XmlCls("login")]
-        public partial class Data
+        public partial record struct Data
         {
             [XmlField("z")] public string m_zone;
             [XmlBody("nick")] public string m_nickname;

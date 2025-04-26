@@ -4,6 +4,7 @@ using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
+using Microsoft.Extensions.Logging;
 using StackXML;
 using StackXML.Str;
 
@@ -21,10 +22,15 @@ namespace BinWeevils.GameServer
                 }
                 case Modules.CHAT_CHANGE_STATE: // 1#2
                 {
-                    m_taskQueue.Enqueue(() => this.BroadcastXtStr(Modules.CHAT_CHANGE_STATE, new ServerChatState
+                    m_taskQueue.Enqueue(() =>
                     {
-                        m_state = 1
-                    }));
+                        m_services.GetLogger().LogDebug("Chat - Change State");
+
+                        return this.BroadcastXtStr(Modules.CHAT_CHANGE_STATE, new ServerChatState
+                        {
+                            m_state = 1
+                        });
+                    });
                     break;
                 }
                 default:
@@ -44,6 +50,8 @@ namespace BinWeevils.GameServer
                 var room = await user.GetRoomOrNull();
                 if (room == null) return;
                 if (room.IsLimbo()) return;
+                
+                m_services.GetLogger().LogDebug("Chat - Send: {Message}", pubMsg.m_text);
                 
                 await room.BroadcastSys(new ServerPubMsgBody
                 {

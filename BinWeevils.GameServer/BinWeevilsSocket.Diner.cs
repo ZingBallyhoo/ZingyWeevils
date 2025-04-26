@@ -1,6 +1,7 @@
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
+using Microsoft.Extensions.Logging;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -21,6 +22,8 @@ namespace BinWeevils.GameServer
                         var user = GetUser();
                         var room = await user.GetRoom();
                         
+                        m_services.GetLogger().LogDebug("Diner: Grab Tray - {TrayID}", tray.m_trayId);
+                        
                         var dinerRoom = room.GetData<DinerRoom>();
                         await dinerRoom.TryGrabTray(tray.m_trayId, user.m_name);
                     });
@@ -36,6 +39,8 @@ namespace BinWeevils.GameServer
                         var user = GetUser();
                         var room = await user.GetRoom();
                         
+                        m_services.GetLogger().LogDebug("Diner: Drop Tray - {TrayID}", tray.m_trayId);
+                        
                         var dinerRoom = room.GetData<DinerRoom>();
                         await dinerRoom.TryDropTray(tray.m_trayId, user.m_name);
                     });
@@ -48,8 +53,13 @@ namespace BinWeevils.GameServer
                         var user = GetUser();
                         var room = await user.GetRoom();
                         
+                        m_services.GetLogger().LogDebug("Diner: Try Start Chef");
+                        
                         var dinerRoom = room.GetData<DinerRoom>();
-                        await dinerRoom.TryStartChef(user.m_name);
+                        if (!await dinerRoom.TryStartChef(user.m_name))
+                        {
+                            m_services.GetLogger().LogWarning("Diner: Start Chef Failed");
+                        }
                     });
                     break;
                 }
@@ -60,8 +70,13 @@ namespace BinWeevils.GameServer
                         var user = GetUser();
                         var room = await user.GetRoom();
                         
+                        m_services.GetLogger().LogDebug("Diner: Try Quit Chef");
+                        
                         var dinerRoom = room.GetData<DinerRoom>();
-                        await dinerRoom.TryQuitChef(user.m_name);
+                        if (!await dinerRoom.TryQuitChef(user.m_name))
+                        {
+                            m_services.GetLogger().LogError("Diner: Quit Chef Failed");
+                        }
                     });
                     break;
                 }
