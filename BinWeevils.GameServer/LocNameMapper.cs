@@ -14,6 +14,7 @@ namespace BinWeevils.GameServer
         {
             m_provider = provider;
             
+            m_allowedLocNames.Add("null"); // i had a client send this when broken...
             m_allowedLocNames.Add("at home");
             m_allowedLocNames.Add("in a secret location");
             m_allowedLocNames.Add("loyaltyCard");

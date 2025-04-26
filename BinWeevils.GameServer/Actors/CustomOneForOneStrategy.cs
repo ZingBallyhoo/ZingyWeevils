@@ -18,6 +18,13 @@ namespace BinWeevils.GameServer.Actors
         
         public void HandleFailure(ISupervisor supervisor, PID child, RestartStatistics rs, Exception cause, object? message)
         {
+            if (cause is InvalidDataException)
+            {
+                Logger.LogError(cause, "Escalating failure of {Actor} due to invalid data", child);
+                supervisor.EscalateFailure(cause, message);
+                return;
+            }
+            
             if (ShouldStop(rs))
             {
                 Logger.LogError(cause, "Escalating failure of {Actor} due too many exceptions", child);
