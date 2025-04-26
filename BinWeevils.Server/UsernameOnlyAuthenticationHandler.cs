@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
@@ -19,6 +20,11 @@ namespace BinWeevils.Server
                 var random = Random.Shared.Next(0, 9999999);
                 username = $"fairriver{random}";
                 Context.Response.Cookies.Append("username", username);
+            }
+            
+            if (Activity.Current is {} currentActivity)
+            {
+                currentActivity.SetTag("userName", username);
             }
             
             var principal = new ClaimsPrincipal(new ClaimsIdentity([

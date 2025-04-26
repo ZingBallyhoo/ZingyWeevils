@@ -12,6 +12,7 @@ using Grafana.OpenTelemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
@@ -101,9 +102,9 @@ internal static class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapStaticAssets();
+        app.MapStaticAssets().Finally(DisableTracing);
         app.MapControllers();
-        app.MapRazorPages().WithStaticAssets();
+        app.MapRazorPages().WithStaticAssets().Finally(DisableTracing);
         app.UseWebSockets(new WebSocketOptions
         {
             KeepAliveInterval = TimeSpan.FromSeconds(15)
@@ -183,6 +184,22 @@ internal static class Program
         await app.WaitForShutdownAsync();
     }
     
+    private static void DisableTracing(EndpointBuilder b)
+    {
+        var original = b.RequestDelegate!;
+        b.RequestDelegate = context =>
+        {
+            var activityFeature = context.Features.Get<IHttpActivityFeature>();
+            if (activityFeature?.Activity is {} activity)
+            {
+                // don't trace
+                activity.IsAllDataRequested = false;
+            }
+
+            return original(context);
+        };
+    }
+
     private static StaticFileOptions InitArchiveStaticFiles(string dir, string requestPath)
     {
         var fileProvider = new PhysicalFileProvider(dir);
@@ -197,10 +214,12 @@ internal static class Program
             OnPrepareResponse = ctx =>
             {
                 ctx.CacheResponse(TimeSpan.FromDays(365));
-                if (Activity.Current is {} currentActivity)
+
+                var activityFeature = ctx.Context.Features.Get<IHttpActivityFeature>();
+                if (activityFeature?.Activity is {} activity)
                 {
                     // don't trace
-                    currentActivity.IsAllDataRequested = false;
+                    activity.IsAllDataRequested = false;
                 }
             }
         };
