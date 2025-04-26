@@ -15,7 +15,7 @@ namespace BinWeevils.Protocol.XmlMessages
         }
     
         [XmlCls("var")]
-        public partial class Var
+        public partial record struct Var
         {
             [XmlField("n")] public string m_name;
             [XmlBody] public string m_value;
