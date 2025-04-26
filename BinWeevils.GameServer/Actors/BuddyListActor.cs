@@ -335,7 +335,7 @@ namespace BinWeevils.GameServer.Actors
         private async Task HandleSetBuddyVars(IContext context, SetBuddyVarsRequest request)
         {
             var locNameVar = request.m_varList.m_buddyVars.SingleOrDefault(x => x.m_name == "locName");
-            if (locNameVar == null) return;
+            if (locNameVar.m_value == null) return;
             
             var weevilData = m_user.GetUserData<WeevilData>();
             var mappedName = await m_services.GetLocNameMapper().MapName(locNameVar.m_value);
