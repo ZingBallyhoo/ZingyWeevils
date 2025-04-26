@@ -24,6 +24,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<WeevilDataResponse> GetData([FromBody] WeevilDataRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.GetData");
+            activity?.SetTag("name", request.m_name);
+            
             var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == request.m_name)
                 .Select(x => new
@@ -59,6 +62,10 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BuyFoodResponse> BuyFood([FromBody] BuyFoodRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.BuyFood");
+            activity?.SetTag("cost", request.m_cost);
+            activity?.SetTag("energyValue", request.m_energyValue);
+            
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_mulch >= request.m_cost)
@@ -94,6 +101,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<UpdateStatsResponse> UpdateStats([FromBody] UpdateStatsRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.UpdateStats");
+
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_food >= request.m_food) // can only decrease
@@ -113,6 +122,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetIntroProgressResponse> GetIntroProgress()
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.GetIntroProgress");
+
             var progress = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => x.m_introProgress)
@@ -128,6 +139,8 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("set-progress")]
         public async Task SetIntroProgress([FromBody] SetIntroProgressRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.SetIntroProgress");
+
             var encodedProgress = new EncodedIntroProgress(request.m_progress);
             
             // todo: validate that not progressing backwards?
@@ -143,6 +156,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<ChangeWeevilDefResponse> ChangeDefinition([FromBody] ChangeWeevilDefRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.ChangeDefinition");
+
             var def = new WeevilDef($"{request.m_weevilDef}");
             if (!def.ValidateLegacy())
             {

@@ -35,6 +35,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BuyPremisesResponse> BuyPremises([FromBody] BuyPremisesRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("BusinessController.BuyPremises");
+            activity?.SetTag("locTypeID", request.m_locTypeID);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             var locType = (ENestRoom)request.m_locTypeID;
@@ -110,6 +113,10 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<SubmitBusinessNameResponse> SubmitBusinessName([FromBody] SubmitBusinessNameRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("SubmitBusinessName");
+            activity?.SetTag("locID", request.m_locID);
+            activity?.SetTag("name", request.m_name);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             var nest = await m_dbContext.m_weevilDBs
@@ -120,6 +127,11 @@ namespace BinWeevils.Server.Controllers
             if (nest == null)
             {
                 throw new Exception("invalid change name request");
+            }
+            
+            if (request.m_name.Contains("h"))
+            {
+                throw new NotImplementedException("no h");
             }
             
             var rowsUpdated = await m_dbContext.m_businesses
@@ -147,6 +159,12 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task SaveBusinessState([FromBody] SaveBusinessStateRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("BusinessController.SaveBusinessState");
+            activity?.SetTag("locID", request.m_locID);
+            activity?.SetTag("signColor", request.m_signColor);
+            activity?.SetTag("signTextColor", request.m_signTextColor);
+            activity?.SetTag("busOpen", request.m_busOpen);
+            
             if (!s_allowedColors.Contains(request.m_signColor) || !s_allowedColors.Contains(request.m_signTextColor))
             {
                 throw new InvalidDataException("invalid color passed to saveTycoonBusinessState");

@@ -25,6 +25,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetQuestDataResponse> GetQuestData()
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.GetQuestData");
+            
             var tasks = await m_dbContext.m_completedTasks
                 .Where(x => x.m_weevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => x.m_taskID)
@@ -69,6 +71,11 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<TaskCompletedResponse> TaskCompleted([FromBody] TaskCompletedRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.TaskCompleted");
+            activity?.SetTag("userName", request.m_userName);
+            activity?.SetTag("questID", request.m_questID);
+            activity?.SetTag("taskID", request.m_taskID);
+            
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
             {
                 throw new InvalidDataException("sending TaskCompleted for wrong user");

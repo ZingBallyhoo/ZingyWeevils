@@ -82,6 +82,7 @@ internal static class Program
             {
                 tracing.AddAspNetCoreInstrumentation();
                 tracing.AddSource(GameServerObservability.s_source.Name);
+                tracing.AddSource(ApiServerObservability.s_source.Name);
                 tracing.UseGrafana();
             })
             .WithMetrics(metrics =>

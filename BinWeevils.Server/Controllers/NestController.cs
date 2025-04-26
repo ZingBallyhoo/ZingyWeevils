@@ -31,6 +31,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<WeevilStatsResponse> GetWeevilStats()
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.GetWeevilStats");
+            
             var weevil = await m_dbContext.m_weevilDBs
                 .SingleAsync(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name);
             
@@ -82,6 +84,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<LevelUpResponse> LevelUp()
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.LevelUp");
+
             var checkDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => new
@@ -162,6 +166,10 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<StoredItems> GetStoredItems([FromBody] GetStoredItemsRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.GetStoredItems");
+            activity?.SetTag("userID", request.m_userID);
+            activity?.SetTag("mine", request.m_mine);
+
             var actuallyMine = request.m_userID == ControllerContext.HttpContext.User.Identity!.Name;
             if (actuallyMine != request.m_mine) throw new InvalidDataException();
             
@@ -204,6 +212,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<NestConfig> GetNestConfig([FromBody] GetNestConfigRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.GetNestConfig");
+            activity?.SetTag("userName", request.m_userName);
+            
             var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == request.m_userName)
                 .Select(weev => new
@@ -292,6 +303,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetNestStateResponse> GetNestState([FromBody] GetNestStateRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.GetNestState");
+            activity?.SetTag("userName", request.m_userName);
+            
             var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == request.m_userName)
                 .Select(weev => new
@@ -321,6 +335,16 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/addItemToNest.php")]
         public async Task AddItemToNest([FromBody] AddItemToNestRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.AddItemToNest");
+            activity?.SetTag("userName", request.m_userName);
+            activity?.SetTag("nestID", request.m_nestID);
+            activity?.SetTag("locID", request.m_locationID);
+            activity?.SetTag("itemID", request.m_itemID);
+            activity?.SetTag("itemType", request.m_itemType);
+            activity?.SetTag("posAnimationFrame", request.m_posAnimationFrame);
+            activity?.SetTag("furnitureID", request.m_furnitureID);
+            activity?.SetTag("spot", request.m_spot);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
@@ -478,6 +502,15 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/updateItemPosition.php")]
         public async Task UpdateItemPosition([FromBody] UpdateNestItemPositionRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.UpdateItemPosition");
+            activity?.SetTag("userName", request.m_userName);
+            activity?.SetTag("nestID", request.m_nestID);
+            activity?.SetTag("itemID", request.m_itemID);
+            activity?.SetTag("itemType", request.m_itemType);
+            activity?.SetTag("posAnimationFrame", request.m_posAnimationFrame);
+            activity?.SetTag("furnitureID", request.m_furnitureID);
+            activity?.SetTag("spot", request.m_spot);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             var validCheck = await m_dbContext.m_weevilDBs
@@ -546,6 +579,11 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/removeItemFromNest.php")]
         public async Task RemoveItemFromNest([FromBody] RemoveItemFromNestRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.UpdateItemPosition");
+            activity?.SetTag("userName", request.m_userName);
+            activity?.SetTag("nestID", request.m_nestID);
+            activity?.SetTag("itemID", request.m_itemID);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
 
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
@@ -578,6 +616,11 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/setLocColour.php")]
         public async Task SetLocColor([FromBody] SetLocColorRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.SetLocColor");
+            activity?.SetTag("nestID", request.m_nestID);
+            activity?.SetTag("locID", request.m_locID);
+            activity?.SetTag("col", request.m_col);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
 
             var nest = await m_dbContext.m_weevilDBs

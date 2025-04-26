@@ -25,6 +25,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<Stock> GetStock(string shopType)
         {
+            using var activity = ApiServerObservability.StartActivity("ShopController.GetStock");
+            activity?.SetTag("shopType", shopType);
+
             IQueryable<ItemType> itemQuery = m_dbContext.m_itemTypes
                 .OrderBy(x => x.m_itemTypeID);
             
@@ -75,6 +78,11 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BuyItemResponse> BuyItem([FromBody] BuyItemRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("ShopController.BuyItem");
+            activity?.SetTag("id", request.m_id);
+            activity?.SetTag("itemColor", request.m_itemColor);
+            activity?.SetTag("shop", request.m_shop);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             var itemToBuy = await m_dbContext.m_itemTypes
