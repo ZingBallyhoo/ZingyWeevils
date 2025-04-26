@@ -8,6 +8,7 @@ using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
 using Microsoft.Extensions.Logging;
 using Proto;
+using StackXML;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -491,6 +492,30 @@ namespace BinWeevils.GameServer
             {
                 // don't override the current pose
                 // for example, waving while standing tall
+            }
+        }
+        
+        private void HandleSfsSetUserVars(ReadOnlySpan<char> body)
+        {
+            var setUvars = XmlReadBuffer.ReadStatic<SetUserVarsRequest>(body, CDataMode.On);
+            m_services.GetLogger().LogDebug("Sfs - SetUserVars: {Vars}", setUvars.m_vars.m_vars);
+            
+            // we need to handle y as the client uses it to get down from chairs and such
+            
+            var yVar = setUvars.m_vars.m_vars.SingleOrDefault(x => x.m_name == "y");
+            if (yVar.m_value != null && float.TryParse(yVar.m_value, out var newYValue))
+            {
+                var yValue = float.Parse(yVar.m_value);
+                
+                m_taskQueue.Enqueue(() =>
+                {
+                    var user = GetUser();
+                    var weevil = user.GetUserData<WeevilData>();
+                    
+                    weevil.m_y.SetValue(yValue);
+                    
+                    return ValueTask.CompletedTask;
+                });
             }
         }
     }

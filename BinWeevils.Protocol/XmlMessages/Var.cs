@@ -5,7 +5,7 @@ namespace BinWeevils.Protocol.XmlMessages
 {
     [XmlCls("var")]
     [DebuggerDisplay("Var: {m_name}: {m_value} ({m_type})")]
-    public partial struct Var
+    public partial record struct Var
     {
         [XmlField("n")] public string m_name;
         [XmlField("t")] public string m_type;

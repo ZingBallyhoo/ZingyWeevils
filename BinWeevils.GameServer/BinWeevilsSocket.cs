@@ -109,6 +109,11 @@ namespace BinWeevils.GameServer
                     HandleSfsPubMsg(preRead.m_bodySpan);
                     break;
                 }
+                case "setUvars":
+                {
+                    HandleSfsSetUserVars(preRead.m_bodySpan);
+                    break;
+                }
                 case "loadB":
                 {
                     HandleSfsLoadBuddyList(preRead.m_bodySpan);
@@ -141,7 +146,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    m_services.GetLogger().LogWarning("Unknown ingame action: {Action}", preReadBody.m_action.ToString());
+                    m_services.GetLogger().LogWarning("Unknown sfs action: {Action} - {Body}", preReadBody.m_action.ToString(), input.ToString());
                     break;
                 }
             }
