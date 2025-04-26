@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Threading.RateLimiting;
 using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
 using ArcticFox.SmartFoxServer;
@@ -77,6 +77,24 @@ internal static class Program
                 .AddAuthenticationSchemes("UsernameOnly")
                 .Build());
         
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.AddPolicy<string>("Standard", context => 
+            {
+                var name = context.User.Identity?.Name;
+                if (name == null) return RateLimitPartition.GetNoLimiter("no-auth");
+                
+                return RateLimitPartition.GetFixedWindowLimiter(name,
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        AutoReplenishment = true,
+                        PermitLimit = 2,
+                        Window = TimeSpan.FromSeconds(1),
+                        QueueLimit = 5
+                    });
+            });
+        });
+        
         builder.Services
             .AddOpenTelemetry()
             .WithTracing(tracing =>
@@ -101,9 +119,10 @@ internal static class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseRateLimiter();
 
         app.MapStaticAssets().Finally(DisableTracing);
-        app.MapControllers();
+        app.MapControllers().RequireRateLimiting("Standard");
         app.MapRazorPages().WithStaticAssets().Finally(DisableTracing);
         app.UseWebSockets(new WebSocketOptions
         {

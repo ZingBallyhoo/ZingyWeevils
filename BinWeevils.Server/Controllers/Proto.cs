@@ -2,10 +2,12 @@ using System.Net.Mime;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Xml;
 using ByteDev.FormUrlEncoded;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BinWeevils.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("")]
     public class Proto : Controller
