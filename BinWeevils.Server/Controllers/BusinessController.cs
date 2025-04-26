@@ -24,6 +24,8 @@ namespace BinWeevils.Server.Controllers
             0xEEEE00, 0xFF8484, 0x282828, 
             0x999999, 0xFFFFB9, 0xEE0000, 
             0x006600,
+            // the client sets the default text color to pitch black even though it isn't selectable
+            0x000000
         ];
         
         public BusinessController(WeevilDBContext dbContext)
