@@ -16,12 +16,15 @@ namespace BinWeevils.Server.Controllers
     [Route("api")]
     public class NestController : Controller
     {
+        private readonly ILogger<NestController> m_logger;
         private readonly WeevilDBContext m_dbContext;
         private readonly ItemConfigRepository m_configRepo;
         private readonly NestLocationDefinitions m_locations;
         
-        public NestController(WeevilDBContext dbContext, ItemConfigRepository configRepo, NestLocationDefinitions locations)
+        public NestController(ILogger<NestController> logger, WeevilDBContext dbContext, 
+            ItemConfigRepository configRepo, NestLocationDefinitions locations)
         {
+            m_logger = logger;
             m_dbContext = dbContext;
             m_configRepo = configRepo;
             m_locations = locations;
@@ -99,6 +102,7 @@ namespace BinWeevils.Server.Controllers
             var desiredLevel = WeevilLevels.DetermineLevel(checkDto.m_xp);
             if (desiredLevel <= checkDto.m_lastAcknowledgedLevel)
             {
+                m_logger.LogDebug("No level up required");
                 return new LevelUpResponse();
             }
             
@@ -110,12 +114,18 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_lastAcknowledgedLevel, x => x.m_lastAcknowledgedLevel + 1));
             if (rowsUpdated == 0)
             {
+                m_logger.LogError("Race while processing level up");
                 return new LevelUpResponse();
             }
             
-            var trophyItemTypeID = await m_dbContext.FindItemByConfigName($"o_levelTrophy{checkDto.m_lastAcknowledgedLevel+1}");
+            var newLevel = checkDto.m_lastAcknowledgedLevel+1;
+            m_logger.LogDebug("Levelled up from {From} to {To}", checkDto.m_lastAcknowledgedLevel, newLevel);
+            
+            var trophyItemName = $"o_levelTrophy{newLevel}";
+            var trophyItemTypeID = await m_dbContext.FindItemByConfigName(trophyItemName);
             if (trophyItemTypeID != null)
             {
+                m_logger.LogDebug("Granting level up trophy: {ItemName} ({ItemID})", trophyItemName, trophyItemTypeID);
                 await m_dbContext.m_nestItems.AddAsync(new NestItemDB 
                 {
                     m_nestID = checkDto.m_nestID,
@@ -176,7 +186,7 @@ namespace BinWeevils.Server.Controllers
             if (!request.m_mine)
             {
                 // for now.. why would this be needed
-                return new StoredItems();
+                throw new InvalidDataException("request for someone else's stored items");
             }
             
             var dto = await m_dbContext.m_weevilDBs

@@ -12,11 +12,13 @@ namespace BinWeevils.Server.Controllers
     [Route("api")]
     public class QuestController : Controller
     {
+        private readonly ILogger<QuestController> m_logger;
         private readonly WeevilDBContext m_dbContext;
         private readonly QuestRepository m_questRepository;
         
-        public QuestController(WeevilDBContext dbContext, QuestRepository repository)
+        public QuestController(ILogger<QuestController> logger, WeevilDBContext dbContext, QuestRepository repository)
         {
+            m_logger = logger;
             m_dbContext = dbContext;
             m_questRepository = repository;
         }
@@ -83,6 +85,7 @@ namespace BinWeevils.Server.Controllers
             
             if (!m_questRepository.TryGetTask(request.m_taskID, out var task))
             {
+                m_logger.LogWarning("Request for unknown task: {TaskID}", request.m_taskID);
                 return new TaskCompletedResponse
                 {
                     m_responseCode = TaskCompletedResponse.RESPONSE_NOT_FOUND
@@ -148,6 +151,8 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
+            m_logger.LogTrace("Granting rewards for task {TaskID}", task.m_scrapedData.m_id);
+            
             await m_dbContext.m_weevilDBs
                 .Where(x => x.m_idx == weevilIdx)
                 .ExecuteUpdateAsync(setters => setters
@@ -211,6 +216,7 @@ namespace BinWeevils.Server.Controllers
             {
                 if (!await IsMissionComplete(weevilIdx, task.m_scrapedData.m_questID.Value))
                 {
+                    m_logger.LogWarning("Trying to start a missing that is already active");
                     return new TaskCompletedResponse
                     {
                         m_responseCode = TaskCompletedResponse.RESPONSE_MISSION_ALREADY_ACTIVE
@@ -222,6 +228,7 @@ namespace BinWeevils.Server.Controllers
             {
                 if (await TryRestartTask(weevilIdx, deletedTask)) 
                 {
+                    m_logger.LogTrace("Restarted child task {TaskID}", deletedTask);
                     response.m_deletedTasks.Add(deletedTask);
                 }
             }

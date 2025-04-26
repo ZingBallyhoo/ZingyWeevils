@@ -13,10 +13,12 @@ namespace BinWeevils.Server.Controllers
     [Route("api/weevil")]
     public class WeevilController : Controller
     {
+        private readonly ILogger<WeevilController> m_logger;
         private readonly WeevilDBContext m_dbContext;
         
-        public WeevilController(WeevilDBContext dbContext)
+        public WeevilController(ILogger<WeevilController> logger, WeevilDBContext dbContext)
         {
+            m_logger = logger;
             m_dbContext = dbContext;
         }
         
@@ -40,6 +42,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (dto == null)
             {
+                m_logger.LogWarning("Tried to get data for unknown weevil: {Name}", request.m_name);
                 return new WeevilDataResponse
                 {
                     m_result = 0
@@ -74,6 +77,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_mulch, x => x.m_mulch - request.m_cost));
             if (rowsUpdated == 0)
             {
+                m_logger.LogError("Not enough money to buy food! Cost: {Cost}", request.m_cost);
                 return new BuyFoodResponse
                 {
                     m_success = 0
@@ -140,6 +144,7 @@ namespace BinWeevils.Server.Controllers
         public async Task SetIntroProgress([FromBody] SetIntroProgressRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("WeevilController.SetIntroProgress");
+            activity?.SetTag("progress", request.m_progress);
 
             var encodedProgress = new EncodedIntroProgress(request.m_progress);
             
@@ -157,6 +162,7 @@ namespace BinWeevils.Server.Controllers
         public async Task<ChangeWeevilDefResponse> ChangeDefinition([FromBody] ChangeWeevilDefRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("WeevilController.ChangeDefinition");
+            activity?.SetTag("weevilDef", request.m_weevilDef);
 
             var def = new WeevilDef($"{request.m_weevilDef}");
             if (!def.ValidateLegacy())

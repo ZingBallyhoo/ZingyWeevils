@@ -13,6 +13,7 @@ namespace BinWeevils.Server.Controllers
     [Route("api")]
     public class BusinessController : Controller
     {
+        private readonly ILogger<BusinessController> m_logger;
         private readonly WeevilDBContext m_dbContext;
         
         private static readonly HashSet<uint> s_allowedColors = [
@@ -28,8 +29,9 @@ namespace BinWeevils.Server.Controllers
             0x000000
         ];
         
-        public BusinessController(WeevilDBContext dbContext)
+        public BusinessController(ILogger<BusinessController> logger, WeevilDBContext dbContext)
         {
+            m_logger = logger;
             m_dbContext = dbContext;
         }
         
@@ -75,6 +77,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_mulch, x => x.m_mulch - cost));
             if (rowsUpdated == 0)
             {
+                m_logger.LogError("Not enouch mulch to buy {BusinessType} (cost: {Cost})", businessType, cost);
                 return new BuyPremisesResponse
                 {
                     m_result = BuyPremisesResponse.RESULT_POOR
@@ -129,11 +132,6 @@ namespace BinWeevils.Server.Controllers
             if (nest == null)
             {
                 throw new Exception("invalid change name request");
-            }
-            
-            if (request.m_name.Contains("h"))
-            {
-                throw new NotImplementedException("no h");
             }
             
             var rowsUpdated = await m_dbContext.m_businesses
