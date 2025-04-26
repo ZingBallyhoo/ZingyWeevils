@@ -6,6 +6,7 @@ using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
+using Microsoft.Extensions.Logging;
 using Proto;
 using StackXML.Str;
 
@@ -178,7 +179,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    Console.Out.WriteLine($"unknown command (ingame): {message.m_command}");
+                    m_services.GetLogger().LogWarning("Unknown ingame command: {Command} - {Args}", message.m_command.ToString(), string.Join(" ", reader.ReadToEnd()));
                     break;
                 }
             }
@@ -206,8 +207,7 @@ namespace BinWeevils.GameServer
 
             if (newRoom == null)
             {
-                Close();
-                return null;
+                throw new InvalidDataException($"trying to join a room that doesn't exist: {roomName}");
             }
             await user.MoveTo(newRoom);
             return newRoom;
@@ -271,9 +271,9 @@ namespace BinWeevils.GameServer
             });
         }
 
-        private static void HandleInGameCommand_Action_UpdateVars(ClientAction action, WeevilData weevil)
+        private void HandleInGameCommand_Action_UpdateVars(ClientAction action, WeevilData weevil)
         {
-            Console.Out.WriteLine($"{(EWeevilAction)action.m_actionID} {action.m_extraParams}");
+            m_services.GetLogger().LogDebug("Action: {Action} - {Args}", (EWeevilAction)action.m_actionID, action.m_extraParams);
 
             var extraParamsReader = new StrReader(action.m_extraParams, ',');
             switch ((EWeevilAction)action.m_actionID)

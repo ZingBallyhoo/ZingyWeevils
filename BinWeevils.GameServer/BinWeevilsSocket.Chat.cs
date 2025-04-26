@@ -1,5 +1,8 @@
+using ArcticFox.Net;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
+using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
 using StackXML;
 using StackXML.Str;
@@ -52,6 +55,27 @@ namespace BinWeevils.GameServer
                         m_id = checked((int)user.m_id)
                     }
                 }, CDataMode.OnEncoded);
+                
+                /*if (pubMsg.m_text == "h")
+                {
+                    var extraParamsWriter = new StrWriter(',');
+                    new TeleportOutAction
+                    {
+                        m_destLocID = 161 // pool
+                    }.Serialize(ref extraParamsWriter);
+                    
+                    var writer = SmartFoxStrMessage.MakeWriter();
+                    writer.PutString("xt");
+                    writer.PutString(Modules.INGAME_ACTION);
+                    writer.Put(room.m_id);
+                    new ServerAction
+                    {
+                        m_userID = checked((int)user.m_id),
+                        m_actionID = (int)EWeevilAction.TELEPORT_OUT,
+                        m_extraParams = extraParamsWriter.ToString()
+                    }.Serialize(ref writer);
+                    await room.BroadcastZeroTerminatedAscii(writer.ToString());
+                }*/
             });
         }
     }

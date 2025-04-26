@@ -1,28 +1,59 @@
+using System.Diagnostics;
 using BinWeevils.Database;
 using BinWeevils.Protocol;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Proto;
 
 namespace BinWeevils.GameServer
 {
-    public class WeevilSocketServices
+    public class WeevilSocketServices : IDisposable
     {
         private readonly IServiceProvider m_rootProvider;
+        private readonly ILogger<BinWeevilsSocket> m_logger;
+        private readonly Activity? m_activity;
         
         public WeevilSocketServices(IServiceProvider rootProvider)
         {
             m_rootProvider = rootProvider;
+            m_logger = m_rootProvider.GetRequiredService<ILogger<BinWeevilsSocket>>();
+            
+            m_activity = GameServerObservability.s_source.StartActivity("socket");
+        }
+        
+        public ActorSystem GetActorSystem()
+        {
+            return m_rootProvider.GetRequiredService<ActorSystem>();
+        }
+        
+        public LocNameMapper GetLocNameMapper() 
+        {
+            return m_rootProvider.GetRequiredService<LocNameMapper>();
+        }
+        
+        public ILogger<BinWeevilsSocket> GetLogger()
+        {
+            return m_logger;
+        }
+        
+        public Activity? GetActivity()
+        {
+            return m_activity;
         }
         
         public async Task<uint> CreateTempAccount(string name)
         {
+            using var loginActivity = GameServerObservability.s_source.StartActivity("Attempt Login");
+            loginActivity?.SetTag("userName", name);
+            
             await using var scope = m_rootProvider.CreateAsyncScope();
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
             var account = await identityManager.FindByNameAsync(name);
             if (account != null)
             {
+                LoginOkay(name);
                 return account.m_weevilIdx;
             }
             
@@ -84,11 +115,19 @@ namespace BinWeevils.GameServer
             if (account == null) throw new NullReferenceException(nameof(account));
             
             await transaction.CommitAsync();
+            LoginOkay(name);
             return account.m_weevilIdx;
+        }
+        
+        private void LoginOkay(string userName)
+        {
+            m_activity?.SetTag("userName", userName);
         }
         
         public async Task<LoginDto> GetLoginData(uint weevilIdx)
         {
+            using var activity = GameServerObservability.StartActivity("Get Login Data");
+
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             
@@ -102,6 +141,8 @@ namespace BinWeevils.GameServer
 
         public async Task<ulong> GetWeevilDef(uint weevilIdx)
         {
+            using var activity = GameServerObservability.StartActivity("Get Weevil Def");
+
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             
@@ -111,18 +152,10 @@ namespace BinWeevils.GameServer
                 .SingleAsync();
         }
         
-        public ActorSystem GetActorSystem()
-        {
-            return m_rootProvider.GetRequiredService<ActorSystem>();
-        }
-        
-        public LocNameMapper GetLocNameMapper() 
-        {
-            return m_rootProvider.GetRequiredService<LocNameMapper>();
-        }
-        
         public async IAsyncEnumerable<string> GetBuddies(uint idx)
         {
+            using var activity = GameServerObservability.StartActivity("Get Buddies");
+
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             
@@ -141,6 +174,8 @@ namespace BinWeevils.GameServer
         
         public async Task<bool> AddBuddy(string weevil1, string weevil2)
         {
+            using var activity = GameServerObservability.StartActivity("Add Buddy");
+
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             
@@ -165,6 +200,8 @@ namespace BinWeevils.GameServer
         
         public async Task<bool> RemoveBuddy(string weevil1, string weevil2)
         {
+            using var activity = GameServerObservability.StartActivity("Remove Buddy");
+
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             
@@ -177,6 +214,11 @@ namespace BinWeevils.GameServer
                     x.m_weevil2ID == weevil1ID && x.m_weevil1ID == weevil2ID)
                 .ExecuteDeleteAsync();
             return rowsUpdated != 0;
+        }
+
+        public void Dispose()
+        {
+            m_activity?.Dispose();
         }
     }
     

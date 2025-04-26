@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
 using ArcticFox.SmartFoxServer;
@@ -7,15 +8,15 @@ using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
 using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
+using Grafana.OpenTelemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using OpenTelemetry.Trace;
 using Proto;
 using StackXML;
 using Stl.DependencyInjection;
@@ -74,6 +75,24 @@ internal static class Program
                 .RequireAuthenticatedUser()
                 .AddAuthenticationSchemes("UsernameOnly")
                 .Build());
+        
+        builder.Services
+            .AddOpenTelemetry()
+            .WithTracing(tracing =>
+            {
+                tracing.AddAspNetCoreInstrumentation();
+                tracing.AddSource(GameServerObservability.s_source.Name);
+                tracing.UseGrafana();
+            })
+            .WithMetrics(metrics =>
+            {
+                metrics.UseGrafana();
+            });
+        builder.Logging
+            .AddOpenTelemetry(logging =>
+            {
+                logging.UseGrafana();
+            });
         
         var app = builder.Build();
 
@@ -177,6 +196,11 @@ internal static class Program
             OnPrepareResponse = ctx =>
             {
                 ctx.CacheResponse(TimeSpan.FromDays(365));
+                if (Activity.Current is {} currentActivity)
+                {
+                    // don't trace
+                    currentActivity.IsAllDataRequested = false;
+                }
             }
         };
         return options;

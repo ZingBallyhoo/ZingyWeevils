@@ -3,6 +3,7 @@ using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
+using Microsoft.Extensions.Logging;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -102,7 +103,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    Console.Out.WriteLine($"unknown command (nest): {message.m_command}");
+                    m_services.GetLogger().LogWarning("Unknown nest command: {Command} - {Args}", message.m_command.ToString(), string.Join(" ", reader.ReadToEnd()));
                     break;
                 }
             }

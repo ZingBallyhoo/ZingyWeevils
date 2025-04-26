@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text;
 using ArcticFox.Codec;
 using ArcticFox.Net;
@@ -9,6 +11,7 @@ using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.XmlMessages;
+using Microsoft.Extensions.Logging;
 using Proto;
 using StackXML;
 
@@ -31,6 +34,12 @@ namespace BinWeevils.GameServer
 
         public void Input(ReadOnlySpan<char> input, ref object? state)
         {
+            var logger = m_services.GetLogger();
+            if (logger.IsEnabled(LogLevel.Trace))
+            {
+                logger.LogTrace("{Packet}", input.ToString());
+            }
+            
             if (input[0] == '<')
             {
                 InputXml(input);
@@ -57,7 +66,6 @@ namespace BinWeevils.GameServer
             {
                 throw new InvalidDataException($"couldn't find xml message body");
             }
-            Console.Out.WriteLine(preRead.m_bodySpan.ToString());
             
             if (preRead.m_messageType is not "sys")
             {
@@ -66,7 +74,6 @@ namespace BinWeevils.GameServer
             
             var preReadBody = new MsgBodyPreRead();
             XmlReadBuffer.ReadIntoStatic(preRead.m_bodySpan, ref preReadBody);
-            Console.Out.WriteLine($"{preReadBody.m_action} {preReadBody.m_room}");
             
             if (preReadBody.m_action.Length == 0 || preReadBody.m_action.IsWhiteSpace())
             {
@@ -127,7 +134,7 @@ namespace BinWeevils.GameServer
                 }
                 default:
                 {
-                    Console.Out.WriteLine($"unknown action: {preReadBody.m_action}");
+                    m_services.GetLogger().LogWarning("Unknown ingame action: {Action}", preReadBody.m_action.ToString());
                     break;
                 }
             }
@@ -297,7 +304,7 @@ namespace BinWeevils.GameServer
                 }
             }
 
-            Console.Out.WriteLine($"unknown command: {message.m_command} {string.Join(" ", reader.ReadToEnd())}");
+            m_services.GetLogger().LogWarning("Unknown command: {Command} - {Args}", message.m_command.ToString(), string.Join(" ", reader.ReadToEnd()));
         }
 
         public override ValueTask CleanupAsync()
@@ -307,7 +314,18 @@ namespace BinWeevils.GameServer
             {
                 m_services.GetActorSystem().Root.Stop(weevilData.GetUserAddress());
             }
+            m_services.Dispose();
             return base.CleanupAsync();
+        }
+
+        public override void HandleException(Exception e)
+        {
+            if (e is SocketException)
+            {
+                return;
+            }
+            m_services.GetLogger().LogError(e, "Disconnecting due to exception");
+            m_services.GetActivity()?.SetStatus(ActivityStatusCode.Error);
         }
 
         public void Abort()
