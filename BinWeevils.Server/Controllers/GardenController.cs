@@ -1,5 +1,7 @@
+using System.Net.Mime;
 using BinWeevils.Database;
 using BinWeevils.Protocol.Form.Garden;
+using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,31 @@ namespace BinWeevils.Server.Controllers
         public GardenController(WeevilDBContext dbContext)
         {
             m_dbContext = dbContext;
+        }
+        
+        [StructuredFormPost("get-stored-items")]
+        [Produces(MediaTypeNames.Application.Xml)]
+        public async Task<StoredGardenItems> GetStoredItems([FromBody] GetStoredGardenItemsRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenController.GetStoredItems");
+            activity?.SetTag("userID", request.m_userID);
+            
+            var actuallyMine = request.m_userID == ControllerContext.HttpContext.User.Identity!.Name;
+            if (!actuallyMine)
+            {
+                // for now.. why would this be needed
+                throw new InvalidDataException("request for someone else's stored garden items");
+            }
+            
+            var items = new StoredGardenItems();
+            items.m_items.Add(new GardenInventoryItem
+            {
+                m_databaseID = 44,
+                m_category = 5,
+                m_fileName = "gardenTable1_darkGreen"
+            });
+            
+            return items;
         }
         
         [StructuredFormPost("move-item")]

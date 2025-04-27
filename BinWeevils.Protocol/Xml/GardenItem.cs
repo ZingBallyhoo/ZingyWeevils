@@ -7,6 +7,12 @@ namespace BinWeevils.Protocol.Xml
     {
         [XmlField("fName")] public string m_fileName;
     }
+    
+    [XmlCls("storedItem")]
+    public partial record GardenInventoryItem : GardenItemBase
+    {
+        [XmlField("dt")] public int m_deliveryTime; // seconds until available...
+    }
 
     [XmlCls("item")]
     public partial record GardenItem : GardenItemBase
