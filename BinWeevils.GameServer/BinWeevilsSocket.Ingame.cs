@@ -179,14 +179,53 @@ namespace BinWeevils.GameServer
                             return;
                         }
                         
+                        weevilData.m_apparel.SetValue($"|{addApparel.m_apparelID}:{addApparel.m_rgb}");
+                        
                         var room = await user.GetRoom();
                         if (room.IsLimbo()) return;
                         
-                        await room.BroadcastXtStr(Modules.INGAME_ADD_APPAREL, new ServerAddApparel
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.BroadcastXtStr(Modules.INGAME_ADD_APPAREL, new ServerAddApparel
                         {
                             m_userID = user.m_id,
                             m_apparelID = addApparel.m_apparelID,
                             m_rgb = addApparel.m_rgb
+                        });
+                    });
+                    
+                    break;
+                }
+                case Modules.INGAME_REMOVE_APPAREL: // 2#8
+                {
+                    var removeApparel = new ClientRemoveApparel();
+                    removeApparel.Deserialize(ref reader);
+                    
+                    if (removeApparel.m_apparelSlotID != 1)
+                    {
+                        throw new InvalidDataException($"invalid apparel slot id: {removeApparel.m_apparelSlotID}");
+                    }
+                    
+                    m_taskQueue.Enqueue(async () => 
+                    {
+                        var user = GetUser();
+                        var weevilData = user.GetUserDataAs<WeevilData>()!;
+                        
+                        var changed = await m_services.RemoveApparel(weevilData.m_idx);
+                        if (!changed)
+                        {
+                            return;
+                        }
+                        
+                        weevilData.m_apparel.SetValue(string.Empty);
+                        
+                        var room = await user.GetRoom();
+                        if (room.IsLimbo()) return;
+                        
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.BroadcastXtStr(Modules.INGAME_REMOVE_APPAREL, new ServerRemoveApparel
+                        {
+                            m_userID = user.m_id,
+                            m_apparelSlotID = removeApparel.m_apparelSlotID
                         });
                     });
                     
