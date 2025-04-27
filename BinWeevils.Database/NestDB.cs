@@ -34,7 +34,7 @@ namespace BinWeevils.Database
         {
             return new NestDB
             {
-                m_itemsLastUpdated = DateTime.Now,
+                m_itemsLastUpdated = DateTime.UtcNow,
                 m_rooms = [
                     new NestRoomDB
                     {

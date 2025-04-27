@@ -144,7 +144,7 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("business name change failed");
             }
             
-            nest.m_lastUpdated = DateTime.Now;
+            nest.m_lastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
             
             await transaction.CommitAsync();
@@ -194,7 +194,7 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("business save state failed");
             }
             
-            nest.m_lastUpdated = DateTime.Now;
+            nest.m_lastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
             
             await transaction.CommitAsync();

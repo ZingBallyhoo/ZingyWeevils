@@ -138,7 +138,7 @@ namespace BinWeevils.Database
         
         public async Task<WeevilDB> CreateWeevil(WeevilCreateParams createParams)
         {
-            var now = DateTime.Now;;
+            var now = DateTime.UtcNow;
             
             var dbWeevil = new WeevilDB
             {
@@ -182,6 +182,16 @@ namespace BinWeevils.Database
             dbWeevil.m_nest.m_items.Add(new NestItemDB
             {
                 m_itemTypeID = (await FindItemByConfigName("o_egg"))!.Value
+            });
+            dbWeevil.m_nest.m_gardenItems.Add(new NestGardenItemDB
+            {
+                m_itemTypeID = (await FindItemByConfigName("deckChairRed"))!.Value,
+                m_placedItem = new NestPlacedGardenItemDB
+                {
+                    m_x = -69,
+                    m_z = 417,
+                    m_room =  dbWeevil.m_nest.m_rooms.Single(x => x.m_type == ENestRoom.Garden)
+                }
             });
             await SaveChangesAsync();
             
