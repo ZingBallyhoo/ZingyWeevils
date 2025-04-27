@@ -28,6 +28,7 @@ namespace BinWeevils.Database
 
         public virtual ICollection<NestRoomDB> m_rooms { get; set; } = [];
         public virtual ICollection<NestItemDB> m_items { get; set; } = [];
+        public virtual ICollection<NestGardenItemDB> m_gardenItems { get; set; } = [];
         
         public static NestDB Empty()
         {
@@ -105,5 +106,30 @@ namespace BinWeevils.Database
         public virtual NestPlacedItemDB? m_placedOnFurniture { get; set; } // ornaments can get placed on furniture
         
         public virtual ICollection<NestPlacedItemDB> m_ornaments { get; set; }
+    }
+    
+    public class NestGardenItemDB 
+    {
+        [Key] public uint m_id { get; set; }
+        
+        [Required] public uint m_itemTypeID { get; set; }
+        [Required, ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
+        
+        [Required] public uint m_nestID { get; set; }
+        [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
+        
+        public virtual NestPlacedGardenItemDB? m_placedItem { get; set; }
+    }
+    
+    public class NestPlacedGardenItemDB 
+    {
+        [Key] public uint m_id { get; set; }
+        
+        public uint m_roomID { get; set; }
+        public short m_x { get; set; }
+        public short m_z { get; set; }
+                
+        [Required, ForeignKey(nameof(m_roomID))] public virtual NestRoomDB m_room { get; set; }
+        [Required, ForeignKey(nameof(m_id))] public virtual NestGardenItemDB m_item { get; set; }
     }
 }

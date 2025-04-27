@@ -15,7 +15,7 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("gardenSize")] public uint m_gardenSize;
         
         [XmlBody] public List<Loc> m_locs;
-        [XmlBody] public List<NestItem> m_items;
+        [XmlBody] public List<ItemBase> m_items;
         
         [XmlCls("loc")]
         public partial class Loc

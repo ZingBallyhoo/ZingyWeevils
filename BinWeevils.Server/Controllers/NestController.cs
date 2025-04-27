@@ -241,7 +241,8 @@ namespace BinWeevils.Server.Controllers
                         y.m_color,
                         y.m_business
                     }),
-                    m_items = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(y => new {
+                    m_items = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(y => new
+                    {
                         y.m_id,
                         y.m_itemType.m_configLocation,
                         y.m_itemType.m_category,
@@ -250,6 +251,17 @@ namespace BinWeevils.Server.Controllers
                         y.m_placedItem!.m_posAnimationFrame,
                         m_placedOnFurnitureID = y.m_placedItem!.m_placedOnFurnitureID ?? 0,
                         y.m_placedItem!.m_spotOnFurniture,
+                    }),
+                    m_gardenItems = weev.m_nest.m_gardenItems.Where(x => x.m_placedItem != null).Select(y => new
+                    {
+                        y.m_id,
+                        y.m_itemType.m_configLocation,
+                        y.m_itemType.m_category,
+                        y.m_itemType.m_powerConsumption,
+                        y.m_itemType.m_boundRadius,
+                        y.m_placedItem!.m_roomID,
+                        y.m_placedItem!.m_x,
+                        y.m_placedItem!.m_z,
                     }),
                     m_score = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
                 })
@@ -300,10 +312,24 @@ namespace BinWeevils.Server.Controllers
                     m_powerConsumption = item.m_powerConsumption,
                     m_configName = item.m_configLocation,
                     m_clrTemp = "0|0|0", // todo
-                    m_locID = item!.m_roomID,
+                    m_locID = item.m_roomID,
                     m_currentPos = item.m_posAnimationFrame,
                     m_placedOnFurnitureID = item.m_placedOnFurnitureID,
                     m_spot = item.m_spotOnFurniture,
+                });
+            }
+            foreach (var item in dto.m_gardenItems)
+            {
+                nestConfig.m_items.Add(new GardenItem
+                {
+                    m_databaseID = item.m_id,
+                    m_category = (int)item.m_category,
+                    m_powerConsumption = item.m_powerConsumption,
+                    m_fileName = item.m_configLocation,
+                    m_locID = item.m_roomID,
+                    m_x = item.m_x,
+                    m_z = item.m_z,
+                    m_r = item.m_boundRadius
                 });
             }
             

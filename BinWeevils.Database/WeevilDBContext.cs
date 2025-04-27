@@ -90,6 +90,23 @@ namespace BinWeevils.Database
                  .IsRequired(false);
             });
             
+            modelBuilder.Entity<NestGardenItemDB>(b =>
+            {
+                b.ToTable("NestGardenItemDB");
+                
+                b.HasOne(x => x.m_placedItem)
+                    .WithOne(x => x.m_item)
+                    .IsRequired(false);
+            });
+            modelBuilder.Entity<NestPlacedGardenItemDB>(b =>
+            {
+                b.ToTable("NestPlacedGardenItemDB");
+                
+                // (constraint)
+                // just for sanity
+                b.HasAlternateKey(p => new { p.m_roomID, p.m_x, p.m_z });
+            });
+            
             modelBuilder.Entity<BusinessDB>(b =>
             {
                 b.ToTable("BusinessDB");
