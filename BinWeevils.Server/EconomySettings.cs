@@ -1,3 +1,5 @@
+using BinWeevils.Protocol.Sql;
+
 namespace BinWeevils.Server
 {
     public class EconomySettings
@@ -14,5 +16,20 @@ namespace BinWeevils.Server
         public uint DailyBrainMaxScore { get; set; } = 500; // not really but using to scale
         public uint DailyBrainMaxMulch { get; set; } = 5000;
         public uint DailyBrainMaxXp { get; set; } = 1000;
+        
+        public uint GetItemXp(int originalXp)
+        {
+            return (uint)(originalXp * ShopXpScalar);
+        }
+        
+        public uint GetItemCost(int originalCost, ItemCurrency currency)
+        {
+            return currency switch
+            {
+                ItemCurrency.Dosh => (uint)(originalCost * ShopDoshToMulch),
+                ItemCurrency.None => throw new InvalidDataException("item doesn't have a currency"),
+                _ => (uint)originalCost,
+            };
+        }
     }
 }

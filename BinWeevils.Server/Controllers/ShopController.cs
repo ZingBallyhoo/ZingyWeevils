@@ -32,6 +32,7 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("shopType", shopType);
 
             IQueryable<ItemType> itemQuery = m_dbContext.m_itemTypes
+                .Where(x => x.m_price > 0)
                 .OrderBy(x => x.m_itemTypeID);
             
             itemQuery = shopType switch
@@ -57,7 +58,6 @@ namespace BinWeevils.Server.Controllers
             };
             
             var items = await itemQuery
-                .Where(x => x.m_price > 0)
                 .Take(100)
                 .ToArrayAsync();
             
@@ -68,27 +68,12 @@ namespace BinWeevils.Server.Controllers
                     m_id = x.m_itemTypeID,
                     m_name = x.m_name,
                     m_description = x.m_description,
-                    m_color = "-1",
-                    m_price = GetItemCost(x.m_price, x.m_currency),
+                    m_color = x.m_defaultHexColor,
+                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
                     m_level = (uint)x.m_minLevel,
-                    m_xp = GetItemXp(x.m_expPoints),
+                    m_xp = m_economySettings.Value.GetItemXp(x.m_expPoints),
                     m_fileName = x.m_configLocation
                 }).ToList()
-            };
-        }
-        
-        private uint GetItemXp(int originalXp)
-        {
-            return (uint)(originalXp * m_economySettings.Value.ShopXpScalar);
-        }
-        
-        private uint GetItemCost(int originalCost, ItemCurrency currency)
-        {
-            return currency switch
-            {
-                ItemCurrency.Dosh => (uint)(originalCost * m_economySettings.Value.ShopDoshToMulch),
-                ItemCurrency.None => throw new InvalidDataException("item doesn't have a currency"),
-                _ => (uint)originalCost,
             };
         }
         
@@ -103,11 +88,14 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
+            // todo: check level?
+            
             var itemToBuy = await m_dbContext.m_itemTypes
                 .Where(x => x.m_price > 0)
+                .Where(x => x.m_category != ItemCategory.Garden) // please don't
                 .SingleAsync(x => x.m_itemTypeID == request.m_id);
-            var itemCost = GetItemCost(itemToBuy.m_price, itemToBuy.m_currency);
-            var itemXp = GetItemXp(itemToBuy.m_expPoints);
+            var itemCost = m_economySettings.Value.GetItemCost(itemToBuy.m_price, itemToBuy.m_currency);
+            var itemXp = m_economySettings.Value.GetItemXp(itemToBuy.m_expPoints);
             
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)

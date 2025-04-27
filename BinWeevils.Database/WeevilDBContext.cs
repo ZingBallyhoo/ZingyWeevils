@@ -128,8 +128,6 @@ namespace BinWeevils.Database
             // todo: efcore doesnt respect DataMemberName for enums (expression based...)
             // (so it would write uppercase names)
             
-            configurationBuilder.Properties<ItemCategory>()
-                .HaveConversion<string>();
             configurationBuilder.Properties<ItemCurrency>()
                 .HaveConversion<string>();
             configurationBuilder.Properties<ItemInternalCategory>()

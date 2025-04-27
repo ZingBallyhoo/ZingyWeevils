@@ -3,7 +3,7 @@ using StackXML;
 namespace BinWeevils.Protocol.Xml
 {
     [XmlCls("item")]
-    public partial class StockItem
+    public partial class StockItemBase
     {
         [XmlField("id")] public uint m_id;
         [XmlField("level")] public uint m_level;
@@ -12,7 +12,11 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("prob")] public int m_probability;
         [XmlField("price")] public uint m_price;
         [XmlField("descr")] public string m_description;
-        
+    }
+    
+    [XmlCls("item")]
+    public partial class StockItem : StockItemBase
+    {
         // anything but hats:
         [XmlField("tyc")] public int m_tycoon;
         [XmlField("xp")] public uint m_xp;
