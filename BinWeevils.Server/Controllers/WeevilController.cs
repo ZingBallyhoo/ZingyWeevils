@@ -200,6 +200,15 @@ namespace BinWeevils.Server.Controllers
         {
             using var activity = ApiServerObservability.StartActivity("WeevilController.GetMyApparel");
             
+            var wornDto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name) 
+                .Select(x => new
+                {
+                    x.m_apparelTypeID,
+                    x.m_apparelPaletteEntryIndex
+                })
+                .SingleAsync();
+            
             var list = new OwnedApparelList();
 
             await foreach (var apparelType in m_dbContext.m_apparelTypes
@@ -208,28 +217,26 @@ namespace BinWeevils.Server.Controllers
                 {
                     x.m_id,
                     x.m_category,
-                    x.m_paletteID
+                    x.m_paletteID,
+                    m_entries = m_dbContext.m_paletteEntries
+                        .Where(y => x.m_paletteID == y.m_paletteID)
+                        .OrderBy(y => y.m_index)
+                        .ToList()
                 })
                 .AsAsyncEnumerable())
             {
-                await foreach (var color in m_dbContext.m_paletteEntries
-                    .Where(x => x.m_paletteID == apparelType.m_paletteID)
-                    .OrderBy(x => x.m_index)
-                    .Select(x => new
-                    {
-                        x.m_index,
-                        x.m_color
-                    })
-                    .AsAsyncEnumerable())
+                foreach (var entry in apparelType.m_entries)
                 {
-                    var wearingColor = false; // todo
+                    var isWearingExact = 
+                        wornDto.m_apparelTypeID == apparelType.m_id &&
+                        wornDto.m_apparelPaletteEntryIndex == entry.m_index;
                     
                     list.m_items.Add(new OwnedApparelEntry
                     {
                         m_id = apparelType.m_id,
                         m_category = apparelType.m_category,
-                        m_rgb = color.m_color,
-                        m_worn = wearingColor,
+                        m_rgb = entry.m_color,
+                        m_worn = isWearingExact,
                     });
                 }
             }

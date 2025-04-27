@@ -171,7 +171,9 @@ namespace BinWeevils.GameServer
                     m_taskQueue.Enqueue(async () => 
                     {
                         var user = GetUser();
-                        var weevilData = user.GetUserDataAs<WeevilData>();
+                        var weevilData = user.GetUserDataAs<WeevilData>()!;
+                        
+                        m_services.GetLogger().LogDebug("Ingame - AddApparel: {ID} - {Color}", addApparel.m_apparelID, addApparel.m_rgb);
                         
                         var changed = await m_services.SetApparel(weevilData.m_idx, addApparel.m_apparelID, addApparel.m_rgb);
                         if (!changed)
@@ -209,6 +211,8 @@ namespace BinWeevils.GameServer
                     {
                         var user = GetUser();
                         var weevilData = user.GetUserDataAs<WeevilData>()!;
+                        
+                        m_services.GetLogger().LogDebug("Ingame - RemoveApparel: {Slot}", removeApparel.m_apparelSlotID);
                         
                         var changed = await m_services.RemoveApparel(weevilData.m_idx);
                         if (!changed)
