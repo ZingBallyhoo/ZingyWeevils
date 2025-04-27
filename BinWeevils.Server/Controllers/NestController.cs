@@ -263,7 +263,9 @@ namespace BinWeevils.Server.Controllers
                         y.m_placedItem!.m_x,
                         y.m_placedItem!.m_z,
                     }),
-                    m_score = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
+                    m_score = 
+                        weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum() +
+                        weev.m_nest.m_gardenItems.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
                 })
                 .AsSplitQuery()
                 .SingleAsync();
