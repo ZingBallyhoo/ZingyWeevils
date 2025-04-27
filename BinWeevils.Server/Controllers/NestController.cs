@@ -245,6 +245,7 @@ namespace BinWeevils.Server.Controllers
                         y.m_id,
                         y.m_itemType.m_configLocation,
                         y.m_itemType.m_category,
+                        y.m_itemType.m_powerConsumption,
                         y.m_placedItem!.m_roomID,
                         y.m_placedItem!.m_posAnimationFrame,
                         m_placedOnFurnitureID = y.m_placedItem!.m_placedOnFurnitureID ?? 0,
@@ -296,7 +297,7 @@ namespace BinWeevils.Server.Controllers
                 {
                     m_databaseID = item.m_id,
                     m_category = (int)item.m_category,
-                    m_powerConsumption = 0, // todo
+                    m_powerConsumption = item.m_powerConsumption,
                     m_configName = item.m_configLocation,
                     m_clrTemp = "0|0|0", // todo
                     m_locID = item!.m_roomID,
@@ -679,7 +680,8 @@ namespace BinWeevils.Server.Controllers
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_mulch >= price)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch - price));
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - price)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + 1000));
             if (rowsUpdated == 0)
             {
                 return new PurchaseNestRoomResponse 
