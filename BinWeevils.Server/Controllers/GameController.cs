@@ -28,17 +28,21 @@ namespace BinWeevils.Server.Controllers
         {
             // todo: this is a sandbox so there's no validation...
             
-            var reward = (uint)Math.Min(request.m_score * m_economy.Value.GameScoreToMulch, m_economy.Value.MaxMulchPerGame);
+            var rewardMulch = (uint)Math.Min(request.m_score * m_economy.Value.GameScoreToMulch, m_economy.Value.MaxMulchPerGame);
+            var rewardXp = (uint)Math.Min(request.m_score * m_economy.Value.GameScoreToXp, m_economy.Value.MaxXpPerGame);
             
             await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch + reward));
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch + rewardMulch)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
+                );
             
             return new SubmitScoreResponse
             {
-                m_mulchEarned = reward,
-                m_result = SubmitScoreResponse.ERR_OK
+                m_result = SubmitScoreResponse.ERR_OK,
+                m_mulchEarned = rewardMulch,
+                m_xpEarned = rewardXp
             };
         }
         
