@@ -54,6 +54,7 @@ internal static class Program
             XmlReadBuffer.ReadStatic<NestLocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["NestLocationDefinitions"]!)));
         builder.Services.AddSingleton<ItemConfigRepository>();
         builder.Services.AddSingleton<QuestRepository>();
+        builder.Services.AddOptions<EconomySettings>();
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
             options.UseSqlite("Filename=db.sqlite"));
@@ -88,7 +89,7 @@ internal static class Program
                     _ => new FixedWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
-                        PermitLimit = 2,
+                        PermitLimit = 3,
                         Window = TimeSpan.FromSeconds(1),
                         QueueLimit = 5
                     });
