@@ -190,14 +190,15 @@ namespace BinWeevils.Server.Controllers
             }
             
             var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name ==  ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_name == request.m_userID)
                 .SelectMany(x => x.m_nest.m_items)
                 .Where(x => x.m_placedItem == null)
                 .Select(x => new
                 {
                     x.m_id,
+                    x.m_itemType.m_category,
+                    x.m_itemType.m_powerConsumption,
                     x.m_itemType.m_configLocation,
-                    x.m_itemType.m_category
                 })
                 .ToArrayAsync();
             
@@ -208,7 +209,7 @@ namespace BinWeevils.Server.Controllers
                 {
                     m_databaseID = item.m_id,
                     m_category = (int)item.m_category,
-                    m_powerConsumption = 0, // todo
+                    m_powerConsumption = item.m_powerConsumption,
                     m_configName = item.m_configLocation,
                     m_clrTemp = "", // todo
                     m_deliveryTime = 0, // todo
