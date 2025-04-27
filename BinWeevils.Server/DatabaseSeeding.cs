@@ -33,6 +33,12 @@ namespace BinWeevils.Server
             var apparelSql = await File.ReadAllTextAsync(Path.Combine("Data", "apparelTypes.sql"));
             await m_dbContext.Database.ExecuteSqlRawAsync(apparelSql);
             
+            // todo: modern hats seem to break the game
+            // why?
+            await m_dbContext.m_apparelTypes
+                .Where(x => x.m_id >= 100)
+                .ExecuteDeleteAsync();
+            
             await SeedPalettes();
         }
         

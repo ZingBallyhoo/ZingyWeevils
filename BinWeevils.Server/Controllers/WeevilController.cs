@@ -212,28 +212,6 @@ namespace BinWeevils.Server.Controllers
                 })
                 .AsAsyncEnumerable())
             {
-                if (apparelType.m_id >= 100)
-                {
-                    // todo: modern hats seem to break the game
-                    // why?
-                    continue;
-                }
-                
-                var wearingHat = false; // todo
-                var baseEntry = new OwnedApparelEntry
-                {
-                    m_id = apparelType.m_id,
-                    m_category = apparelType.m_category,
-                    m_rgb = "0,0,0",
-                    m_worn = wearingHat,
-                };
-
-                if (apparelType.m_paletteID == 0)
-                {
-                    list.m_items.Add(baseEntry);
-                    continue;
-                }
-
                 await foreach (var color in m_dbContext.m_paletteEntries
                     .Where(x => x.m_paletteID == apparelType.m_paletteID)
                     .OrderBy(x => x.m_index)
@@ -244,10 +222,12 @@ namespace BinWeevils.Server.Controllers
                     })
                     .AsAsyncEnumerable())
                 {
-                    var wearingColor = wearingHat && false; // todo
+                    var wearingColor = false; // todo
                     
-                    list.m_items.Add(baseEntry with
+                    list.m_items.Add(new OwnedApparelEntry
                     {
+                        m_id = apparelType.m_id,
+                        m_category = apparelType.m_category,
                         m_rgb = color.m_color,
                         m_worn = wearingColor,
                     });
