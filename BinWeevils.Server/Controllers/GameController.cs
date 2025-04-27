@@ -46,6 +46,52 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
+        [HttpGet("brain-info")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<BrainInfo> GetBrainTrainingInfo()
+        {
+            return new BrainInfo
+            {
+                m_modes = 2
+            };
+        }
+        
+        [StructuredFormPost("brain-submit")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SubmitDailyBrainResponse> SubmitBrainTrainingScore([FromBody] SubmitDailyBrainRequest request)
+        {
+            var score = Math.Min(request.m_score, m_economy.Value.DailyBrainMaxScore);
+            var scoreFac = (float)score/m_economy.Value.DailyBrainMaxScore;
+            
+            var rewardMulch = (uint)(scoreFac * m_economy.Value.DailyBrainMaxMulch);
+            var rewardXp = (uint)(scoreFac * m_economy.Value.DailyBrainMaxXp);
+            
+            await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch + rewardMulch)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
+                );
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_mulch,
+                    x.m_xp
+                })
+                .SingleAsync();
+            
+            return new SubmitDailyBrainResponse
+            {
+                m_modes = 2,
+                m_mulchEarned = rewardMulch,
+                m_xpEarned =rewardXp,
+                m_mulch = dto.m_mulch,
+                m_xp = dto.m_xp
+            };
+        }
+        
         // has-the-user-played
         // save-game-stats
     }
