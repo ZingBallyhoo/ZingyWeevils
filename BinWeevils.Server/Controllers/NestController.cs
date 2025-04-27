@@ -650,5 +650,84 @@ namespace BinWeevils.Server.Controllers
             await m_dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
         }
+        
+        [StructuredFormPost("nest/purchase-nest-room")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<PurchaseNestRoomResponse> PurchaseNestRoom([FromBody] PurchaseNestRoomRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("NestController.PurchaseNestRoom");
+            activity?.SetTag("roomType", request.m_roomType);
+            
+            var price = request.m_roomType switch
+            {
+                ENestRoom.Room1 => 10000, // NW_Room
+                ENestRoom.Room2 => 10000, // N_Room
+                ENestRoom.Room3 => 10000, // NE_Room
+                // 4 = W_Room
+                
+                ENestRoom.Room6 => 8000, // E_Room
+                ENestRoom.Room7 => 8000, // SW_Room
+                ENestRoom.Room8 => 10000, // S_Room
+                ENestRoom.Room9 => 8000, // SE_Room
+                
+                _ => throw new InvalidDataException($"room type {request.m_roomType} is not purchasable")
+            };
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_mulch >= price)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - price));
+            if (rowsUpdated == 0)
+            {
+                return new PurchaseNestRoomResponse 
+                {
+                    m_error = PurchaseNestRoomResponse.ERROR_CANT_AFFORD
+                };
+            }
+            
+            var nest = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(weev => weev.m_nest)
+                .SingleAsync();
+            
+            var newRoom = new NestRoomDB
+            {
+                m_type = request.m_roomType
+            };
+            nest.m_rooms.Add(newRoom);
+            nest.m_lastUpdated = DateTime.UtcNow;
+            
+            try
+            {
+                await m_dbContext.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                return new PurchaseNestRoomResponse 
+                {
+                    m_error = PurchaseNestRoomResponse.ERROR_ALREADY_OWNED
+                };
+            }
+            
+            await transaction.CommitAsync();
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_mulch,
+                    x.m_xp
+                })
+                .SingleAsync();
+            return new PurchaseNestRoomResponse
+            {
+                m_error = PurchaseNestRoomResponse.ERROR_OK,
+                m_locID = newRoom.m_id,
+                m_mulch = dto.m_mulch,
+                m_xp = dto.m_xp
+            };
+        }
     }
 }
