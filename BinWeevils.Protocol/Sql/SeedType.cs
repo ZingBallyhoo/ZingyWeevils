@@ -12,7 +12,7 @@ namespace BinWeevils.Protocol.Sql
         [Column("level")] public byte m_level { get; set; }
         [Column("fileName")] public string m_fileName { get; set; }
         [Column("name")] public string m_name { get; set; }
-        [Column("price")] public int m_price { get; set; }
+        [Column("price")] public uint m_price { get; set; }
         [Column("mulchYield")] public uint m_mulchYield { get; set; }
         [Column("xpYield")] public uint m_xpYield { get; set; }
         [Column("growTime")] public uint m_growTime { get; set; }
