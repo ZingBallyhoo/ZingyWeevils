@@ -163,6 +163,35 @@ namespace BinWeevils.GameServer
                     });
                     break;
                 }
+                case Modules.INGAME_ADD_APPAREL: // 2#7
+                {
+                    var addApparel = new ClientAddApparel();
+                    addApparel.Deserialize(ref reader);
+                    
+                    m_taskQueue.Enqueue(async () => 
+                    {
+                        var user = GetUser();
+                        var weevilData = user.GetUserDataAs<WeevilData>();
+                        
+                        var changed = await m_services.SetApparel(weevilData.m_idx, addApparel.m_apparelID, addApparel.m_rgb);
+                        if (!changed)
+                        {
+                            return;
+                        }
+                        
+                        var room = await user.GetRoom();
+                        if (room.IsLimbo()) return;
+                        
+                        await room.BroadcastXtStr(Modules.INGAME_ADD_APPAREL, new ServerAddApparel
+                        {
+                            m_userID = user.m_id,
+                            m_apparelID = addApparel.m_apparelID,
+                            m_rgb = addApparel.m_rgb
+                        });
+                    });
+                    
+                    break;
+                }
                 case Modules.INGAME_CHANGE_WEEVIL_DEF: // 2#10
                 {
                     var changeWeevilDef = new ChangeWeevilDef();

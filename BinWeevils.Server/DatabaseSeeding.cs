@@ -40,6 +40,15 @@ namespace BinWeevils.Server
         {
             var jsonText = await File.ReadAllTextAsync(Path.Combine("Data", "getAvailablePalettes.php"));
             var json = JsonSerializer.Deserialize<AvailablePalettes>(jsonText);
+            
+            // simplify all of our code by creating a null palette
+            await m_dbContext.m_paletteEntries.AddAsync(new PaletteEntryDB
+            {
+                m_paletteID = 0,
+                m_index = 0,
+                        
+                m_color = "0,0,0"
+            });
 
             foreach (var palettePair in json!.m_palette)
             {

@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using BinWeevils.Protocol.Sql;
 
 namespace BinWeevils.Database
 {
@@ -13,6 +15,10 @@ namespace BinWeevils.Database
         [Required] public DateTime m_lastLogin { get; set; }
         
         [Required] public ulong m_weevilDef { get; set; }
+        public uint? m_apparelTypeID { get; set; }
+        [Required] public int m_apparelPaletteEntryIndex { get; set; }
+        [ForeignKey(nameof(m_apparelTypeID))] public virtual ApparelType? m_apparelType { get; set; }
+        
         [Required] public ushort m_introProgress { get; set; }
         
         [Required] public uint m_xp { get; set; }

@@ -220,6 +220,68 @@ namespace BinWeevils.GameServer
         {
             m_activity?.Dispose();
         }
+
+        public async Task<bool> SetApparel(uint weevilIdx, uint apparelID, string color)
+        {
+            using var activity = GameServerObservability.StartActivity("Set Apparel");
+            activity?.SetTag("apparelID", apparelID);
+            activity?.SetTag("color", color);
+            
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            var apparelType = await context.m_apparelTypes
+                .Where(x => x.m_id == apparelID)
+                .Select(x => new 
+                {
+                    x.m_paletteID
+                })
+                .SingleOrDefaultAsync();
+            
+            if (apparelType == null)
+            {
+                throw new InvalidDataException($"requested unknown apparel id: {apparelID}");
+            }
+            
+            var paletteEntry = await context.m_paletteEntries
+                .Where(x => x.m_paletteID == apparelType.m_paletteID)
+                .Where(x => x.m_color == color)
+                .Select(x => new
+                {
+                    x.m_index
+                })
+                .SingleOrDefaultAsync();
+            if (paletteEntry == null)
+            {
+                throw new InvalidDataException($"requested unknown color \"{color}\" for apparel id {apparelID}");
+            }
+            
+            var rowsUpdated = await context.m_weevilDBs
+                .Where(x => x.m_idx == weevilIdx)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_apparelTypeID, apparelID)
+                    .SetProperty(x => x.m_apparelPaletteEntryIndex, paletteEntry.m_index)
+                );
+            
+            return rowsUpdated != 0;
+        }
+        
+        public async Task<bool> RemoveApparel(uint weevilIdx)
+        {
+            using var activity = GameServerObservability.StartActivity("Remove Apparel");
+            
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            var rowsUpdated = await context.m_weevilDBs
+                .Where(x => x.m_idx == weevilIdx)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_apparelTypeID, (uint?)null)
+                    .SetProperty(x => x.m_apparelPaletteEntryIndex, 0)
+                );
+            
+            return rowsUpdated != 0;
+        }
     }
     
     public class LoginDto

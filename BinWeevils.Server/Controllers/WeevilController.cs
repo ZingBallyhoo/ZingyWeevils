@@ -224,7 +224,8 @@ namespace BinWeevils.Server.Controllers
                 {
                     m_id = apparelType.m_id,
                     m_category = apparelType.m_category,
-                    m_worn = wearingHat
+                    m_rgb = "0,0,0",
+                    m_worn = wearingHat,
                 };
 
                 if (apparelType.m_paletteID == 0)
@@ -247,8 +248,8 @@ namespace BinWeevils.Server.Controllers
                     
                     list.m_items.Add(baseEntry with
                     {
+                        m_rgb = color.m_color,
                         m_worn = wearingColor,
-                        m_rgb = color.m_color
                     });
                 }
             }
