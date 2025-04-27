@@ -190,6 +190,7 @@ namespace BinWeevils.GameServer
                 var weevilData = new WeevilData(user, actorSystem.Root);
                 weevilData.m_idx.SetValue(weevilIdx);
                 weevilData.m_weevilDef.SetValue(loginDto.m_weevilDef);
+                weevilData.m_apparel.SetValue(loginDto.m_apparelString);
                 user.SetUserData(weevilData);
                 
                 var userProps = Props.FromProducer(() => new SocketActor

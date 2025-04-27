@@ -136,7 +136,14 @@ namespace BinWeevils.GameServer
                 .Select(x => new LoginDto
                 {
                     m_weevilDef = x.m_weevilDef,
-                }).SingleAsync();;
+                    m_apparelString = x.m_apparelType == null ? 
+                        string.Empty : 
+                        $"|{x.m_apparelTypeID}:{context.m_paletteEntries
+                            .Single(y => 
+                                y.m_paletteID == x.m_apparelType.m_paletteID &&
+                                y.m_index == x.m_apparelPaletteEntryIndex)
+                            .m_color}"
+                }).SingleAsync();
         }
 
         public async Task<ulong> GetWeevilDef(uint weevilIdx)
@@ -287,5 +294,6 @@ namespace BinWeevils.GameServer
     public class LoginDto
     {
         public ulong m_weevilDef;
+        public string m_apparelString;
     }
 }
