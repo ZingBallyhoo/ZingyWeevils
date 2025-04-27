@@ -12,12 +12,14 @@ namespace BinWeevils.Database
         public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
         public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
 
-        public DbSet<ItemType> m_itemTypes { get; set; }
         // public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestItemDB> m_nestItems { get; set; }
         public DbSet<NestRoomDB> m_nestRooms { get; set; }
         public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
         public DbSet<BusinessDB> m_businesses { get; set; }
+        
+        public DbSet<ItemType> m_itemTypes { get; set; }
+        public DbSet<ApparelType> m_apparelTypes { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
