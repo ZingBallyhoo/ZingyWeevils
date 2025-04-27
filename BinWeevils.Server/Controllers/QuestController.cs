@@ -160,9 +160,10 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_xp, x => x.m_xp + task.m_scrapedData.m_rewardXp)
                 );
 
-            if (task.m_scrapedData.m_rewardItems != null)
+            if (task.m_scrapedData.m_rewardItems != null || 
+                task.m_scrapedData.m_rewardGardenItems != null)
             {
-                // todo: or garden...
+                // todo: or garden seeds...
                 await RewardItems(weevilIdx, task, response);
             }
             
@@ -171,25 +172,61 @@ namespace BinWeevils.Server.Controllers
         
         private async Task RewardItems(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
         {
-            var nest = await m_dbContext.m_weevilDBs
+            var nestID = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_idx == weevilIdx)
-                .Select(x => x.m_nest)
+                .Select(x => x.m_nest.m_id)
                 .SingleAsync();
             
             if (task.m_scrapedData.m_rewardItems != null)
             {
                 foreach (var rewardItem in task.m_scrapedData.m_rewardItems)
                 {
-                    // todo: wasteful query
-                    var itemType = await m_dbContext.m_itemTypes.SingleAsync(x => x.m_configLocation == rewardItem.m_configName);
+                    var itemType = await m_dbContext.m_itemTypes
+                        .Where(x => x.m_configLocation == rewardItem.m_configName)
+                        .Select(x => new 
+                        {
+                            x.m_itemTypeID,
+                            x.m_name
+                        })
+                        .SingleAsync();
+                    
+                    m_logger.LogTrace("Granting {Count} * \"{Name}\"", rewardItem.m_count, itemType.m_name);
                     
                     for (var i = 0; i < rewardItem.m_count; i++)
                     {
-                        nest.m_items.Add(new NestItemDB
+                        await m_dbContext.m_nestItems.AddAsync(new NestItemDB
                         {
-                            m_itemType = itemType 
+                            m_nestID = nestID,
+                            m_itemTypeID = itemType.m_itemTypeID
                         });
                         response.m_itemName.Add(itemType.m_name);
+                    }
+                }
+            }
+            
+            if (task.m_scrapedData.m_rewardGardenItems != null)
+            {
+                foreach (var rewardGardenItem in task.m_scrapedData.m_rewardGardenItems)
+                {
+                    var itemType = await m_dbContext.m_itemTypes
+                        .Where(x => x.m_configLocation == rewardGardenItem.m_configName)
+                        .Select(x => new 
+                        {
+                            x.m_itemTypeID,
+                            x.m_name
+                        })
+                        .SingleAsync();
+                    
+                    m_logger.LogTrace("Granting {Count} * \"{Name}\" (garden)", rewardGardenItem.m_count, itemType.m_name);
+                    
+                    for (var i = 0; i < rewardGardenItem.m_count; i++)
+                    {
+                        await m_dbContext.m_nestGardenItems.AddAsync(new NestGardenItemDB
+                        {
+                            m_nestID = nestID,
+                            m_itemTypeID = itemType.m_itemTypeID
+                        });
+                        response.m_gardenItemName.Add(itemType.m_name);
                     }
                 }
             }
