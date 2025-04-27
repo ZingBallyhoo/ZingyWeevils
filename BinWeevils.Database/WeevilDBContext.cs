@@ -20,6 +20,7 @@ namespace BinWeevils.Database
         
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<ApparelType> m_apparelTypes { get; set; }
+        public DbSet<PaletteEntryDB> m_paletteEntries { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
@@ -47,11 +48,6 @@ namespace BinWeevils.Database
             modelBuilder.Entity<RewardedTaskDB>(b =>
             {
                 b.ToTable("RewardedTaskDB");
-            });
-            
-            modelBuilder.Entity<ItemType>(b =>
-            {
-                b.HasIndex(x => x.m_configLocation);
             });
             
             modelBuilder.Entity<NestRoomDB>(b =>
@@ -97,6 +93,16 @@ namespace BinWeevils.Database
             modelBuilder.Entity<BusinessDB>(b =>
             {
                 b.ToTable("BusinessDB");
+            });
+            
+            modelBuilder.Entity<ItemType>(b =>
+            {
+                b.HasIndex(x => x.m_configLocation);
+            });
+            modelBuilder.Entity<PaletteEntryDB>(b =>
+            {
+                b.ToTable("PaletteEntryDB");
+                b.HasAlternateKey(x => new { x.m_paletteID, x.m_color });
             });
         }
         

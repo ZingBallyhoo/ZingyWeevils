@@ -58,6 +58,7 @@ internal static class Program
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
             options.UseSqlite("Filename=db.sqlite"));
+        builder.Services.AddScoped<DatabaseSeeding>();
         builder.Services.AddIdentity<WeevilAccount, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 1;
@@ -174,16 +175,8 @@ internal static class Program
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-
-            var context = services.GetRequiredService<WeevilDBContext>();
-            await context.Database.EnsureDeletedAsync(); // reset
-            await context.Database.EnsureCreatedAsync();
-            
-            var itemSql = await File.ReadAllTextAsync(Path.Combine("Data", "itemType.sql"));
-            await context.Database.ExecuteSqlRawAsync(itemSql);
-            
-            var apparelSql = await File.ReadAllTextAsync(Path.Combine("Data", "apparelTypes.sql"));
-            await context.Database.ExecuteSqlRawAsync(apparelSql);
+            var seeder = services.GetRequiredService<DatabaseSeeding>();
+            await seeder.Seed();
         }
 
         await app.StartAsync();
