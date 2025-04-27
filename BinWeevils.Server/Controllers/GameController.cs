@@ -26,6 +26,10 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<SubmitScoreResponse> SubmitSingle([FromBody] SubmitScoreRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.SubmitSingle");
+            activity?.SetTag("gameID", request.m_gameID);
+            activity?.SetTag("score", request.m_score);
+
             // todo: this is a sandbox so there's no validation...
             
             var rewardMulch = (uint)Math.Min(request.m_score * m_economy.Value.GameScoreToMulch, m_economy.Value.MaxMulchPerGame);
@@ -50,6 +54,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BrainInfo> GetBrainTrainingInfo()
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.GetBrainTrainingInfo");
+
             return new BrainInfo
             {
                 m_modes = 2
@@ -60,6 +66,10 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<SubmitDailyBrainResponse> SubmitBrainTrainingScore([FromBody] SubmitDailyBrainRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.SubmitBrainTrainingScore");
+            activity?.SetTag("score", request.m_score);
+            activity?.SetTag("levels", request.m_levels);
+            
             var score = Math.Min(request.m_score, m_economy.Value.DailyBrainMaxScore);
             var scoreFac = (float)score/m_economy.Value.DailyBrainMaxScore;
             
