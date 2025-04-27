@@ -23,6 +23,7 @@ namespace BinWeevils.Database
         public DbSet<ItemType> m_itemTypes { get; set; }
         public DbSet<ApparelType> m_apparelTypes { get; set; }
         public DbSet<PaletteEntryDB> m_paletteEntries { get; set; }
+        public DbSet<SeedType> m_seedTypes { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
