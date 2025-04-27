@@ -2,6 +2,9 @@ namespace BinWeevils.Server
 {
     public class EconomySettings
     {
+        public float ShopXpScalar { get; set; } = 10;
+        public float ShopDoshToMulch { get; set; } = 500;
+        
         public uint MaxMulchPerGame { get; set; } = 5000;
         public uint MaxXpPerGame { get; set; } = 2000;
         public float GameScoreToMulch { get; set; } = 3;

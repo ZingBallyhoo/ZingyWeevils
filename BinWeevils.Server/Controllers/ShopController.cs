@@ -6,6 +6,7 @@ using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BinWeevils.Server.Controllers
 {
@@ -15,10 +16,12 @@ namespace BinWeevils.Server.Controllers
     public class ShopController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly IOptionsSnapshot<EconomySettings> m_economySettings;
         
-        public ShopController(WeevilDBContext dbContext)
+        public ShopController(WeevilDBContext dbContext, IOptionsSnapshot<EconomySettings> economySettings)
         {
             m_dbContext = dbContext;
+            m_economySettings = economySettings;
         }
         
         [HttpGet("shop/fetch/type/{shopType}")]
@@ -66,11 +69,26 @@ namespace BinWeevils.Server.Controllers
                     m_name = x.m_name,
                     m_description = x.m_description,
                     m_color = "-1",
-                    m_price = (uint)x.m_price,
+                    m_price = GetItemCost(x.m_price, x.m_currency),
                     m_level = (uint)x.m_minLevel,
-                    m_xp = (uint)x.m_expPoints,
+                    m_xp = GetItemXp(x.m_expPoints),
                     m_fileName = x.m_configLocation
                 }).ToList()
+            };
+        }
+        
+        private uint GetItemXp(int originalXp)
+        {
+            return (uint)(originalXp * m_economySettings.Value.ShopXpScalar);
+        }
+        
+        private uint GetItemCost(int originalCost, ItemCurrency currency)
+        {
+            return currency switch
+            {
+                ItemCurrency.Dosh => (uint)(originalCost * m_economySettings.Value.ShopDoshToMulch),
+                ItemCurrency.None => throw new InvalidDataException("item doesn't have a currency"),
+                _ => (uint)originalCost,
             };
         }
         
@@ -88,13 +106,15 @@ namespace BinWeevils.Server.Controllers
             var itemToBuy = await m_dbContext.m_itemTypes
                 .Where(x => x.m_price > 0)
                 .SingleAsync(x => x.m_itemTypeID == request.m_id);
+            var itemCost = GetItemCost(itemToBuy.m_price, itemToBuy.m_currency);
+            var itemXp = GetItemXp(itemToBuy.m_expPoints);
             
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Where(x => x.m_mulch >= itemToBuy.m_price)
+                .Where(x => x.m_mulch >= itemCost)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch - itemToBuy.m_price)
-                    .SetProperty(x => x.m_xp, x => x.m_xp + itemToBuy.m_expPoints));
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - itemCost)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + itemXp));
             if (rowsUpdated == 0)
             {
                 return new BuyItemResponse
