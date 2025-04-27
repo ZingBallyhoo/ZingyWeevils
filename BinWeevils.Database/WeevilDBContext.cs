@@ -102,7 +102,7 @@ namespace BinWeevils.Database
             modelBuilder.Entity<PaletteEntryDB>(b =>
             {
                 b.ToTable("PaletteEntryDB");
-                b.HasAlternateKey(x => new { x.m_paletteID, x.m_color });
+                b.HasIndex(x => new { x.m_paletteID, x.m_color });
             });
         }
         

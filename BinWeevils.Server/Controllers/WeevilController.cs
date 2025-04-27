@@ -2,6 +2,7 @@ using System.Net.Mime;
 using BinWeevils.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
+using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -191,6 +192,68 @@ namespace BinWeevils.Server.Controllers
             {
                 m_error = ChangeWeevilDefResponse.ERR_OK
             };
+        }
+        
+        [HttpGet("get-my-apparel")]
+        [Produces(MediaTypeNames.Application.Xml)]
+        public async Task<OwnedApparelList> GetMyApparel()
+        {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.GetMyApparel");
+            
+            var list = new OwnedApparelList();
+
+            await foreach (var apparelType in m_dbContext.m_apparelTypes
+                .OrderBy(x => x.m_id)
+                .Select(x => new
+                {
+                    x.m_id,
+                    x.m_category,
+                    x.m_paletteID
+                })
+                .AsAsyncEnumerable())
+            {
+                if (apparelType.m_id >= 100)
+                {
+                    // todo: modern hats seem to break the game
+                    // why?
+                    continue;
+                }
+                
+                var wearingHat = false; // todo
+                var baseEntry = new OwnedApparelEntry
+                {
+                    m_id = apparelType.m_id,
+                    m_category = apparelType.m_category,
+                    m_worn = wearingHat
+                };
+
+                if (apparelType.m_paletteID == 0)
+                {
+                    list.m_items.Add(baseEntry);
+                    continue;
+                }
+
+                await foreach (var color in m_dbContext.m_paletteEntries
+                    .Where(x => x.m_paletteID == apparelType.m_paletteID)
+                    .OrderBy(x => x.m_index)
+                    .Select(x => new
+                    {
+                        x.m_index,
+                        x.m_color
+                    })
+                    .AsAsyncEnumerable())
+                {
+                    var wearingColor = wearingHat && false; // todo
+                    
+                    list.m_items.Add(baseEntry with
+                    {
+                        m_worn = wearingColor,
+                        m_rgb = color.m_color
+                    });
+                }
+            }
+            
+            return list;
         }
     }
 }
