@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Database;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form.Garden;
 using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
@@ -205,9 +206,66 @@ namespace BinWeevils.Server.Controllers
             public uint? m_thisItemID;
         }
         
+        private struct RadialBounds
+        {
+            private readonly short m_x;
+            private readonly short m_z;
+            private readonly short m_r;
+            
+            public RadialBounds(short x, short z, short r)
+            {
+                m_x = x;
+                m_z = z;
+                m_r = r;
+            }
+            
+            private bool CommonCheck(short x, short z, int effectiveR) 
+            {
+                if (effectiveR <= 0) return false; // sanity
+                
+                checked 
+                {
+                    var dSq = 
+                        (x - m_x) * (x - m_x) + 
+                        (z - m_z) * (z - m_z);
+                    
+                    var effectiveRSq = effectiveR * effectiveR;
+                    return dSq < effectiveRSq;
+                }
+            }
+            
+            public bool IsOutside(short x, short z, byte r)
+            {
+                return !CommonCheck(x, z, m_r - r);
+            }
+            
+            public bool IsInside(short x, short z, byte r)
+            {
+                return CommonCheck(x, z, m_r + r);
+            }
+        }
+        
         private async Task ValidatePlacement(ValidatePlacementData data) 
         {
-            // todo: garden bounds
+            var noPlaceArea = new RadialBounds(5, 505, 94);
+            var lawn = data.m_nest.m_gardenSize switch
+            {
+                EGardenSize.Regular => new RadialBounds(-3, 360, 197),
+                EGardenSize.LargerGarden => new RadialBounds(36,360,236),
+                EGardenSize.EvenLargerGarden => new RadialBounds(75,360,275),
+                EGardenSize.DeluxeGarden => new RadialBounds(115, 360, 315),
+                EGardenSize.SuperDeluxeGarden => new RadialBounds(154, 360, 354),
+                _ => throw new ArgumentOutOfRangeException($"unknown garden size: {data.m_nest.m_gardenSize}")
+            };
+            
+            if (noPlaceArea.IsInside(data.m_x, data.m_z, data.m_r))
+            {
+                throw new InvalidDataException("tried to place object inside of no go area");
+            }
+            if (lawn.IsOutside(data.m_x, data.m_z, data.m_r))
+            {
+                throw new InvalidDataException("tried to place object outside of lawn area");
+            }
             
             var rSq = data.m_r * data.m_r;
             var overlappingWithItem = await m_dbContext.m_nestPlacedGardenItems

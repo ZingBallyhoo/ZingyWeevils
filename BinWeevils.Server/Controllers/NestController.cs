@@ -235,6 +235,7 @@ namespace BinWeevils.Server.Controllers
                     m_nestID = weev.m_nest.m_id,
                     m_lastUpdate = weev.m_nest.m_lastUpdated,
                     m_weevilXp = weev.m_xp,
+                    m_gardenSize = weev.m_nest.m_gardenSize,
                     m_rooms = weev.m_nest.m_rooms.Select(y => new
                     {
                         y.m_type,
@@ -278,6 +279,7 @@ namespace BinWeevils.Server.Controllers
                 m_lastUpdate = dto.m_lastUpdate.ToAs3Date(),
                 m_score = (uint)dto.m_score,
                 m_weevilXp = dto.m_weevilXp,
+                m_gardenSize = (uint)dto.m_gardenSize,
                 m_fuel = 46807 // todo
             };
             foreach (var room in dto.m_rooms)

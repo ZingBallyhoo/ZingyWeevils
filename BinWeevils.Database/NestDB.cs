@@ -11,6 +11,8 @@ namespace BinWeevils.Database
     {
         [Key] public uint m_id { get; set; }
         
+        public EGardenSize m_gardenSize { get; set; } = EGardenSize.Regular;
+        
         public DateTime m_lastUpdated { get; set; }
         
         private DateTime m_itemsLastUpdatedBacking;
