@@ -108,5 +108,15 @@ namespace BinWeevils.Server.Controllers
                 highScore = "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
             };
         }
+        
+        [HttpPost("api/weevil/update-user-info")]
+        public Task UpdateUserInfo()
+        {
+            // form: idx
+            
+            // todo: what is this for?
+            // stubbed just to prevent 404s
+            return Task.CompletedTask;
+        }
     }
 }
