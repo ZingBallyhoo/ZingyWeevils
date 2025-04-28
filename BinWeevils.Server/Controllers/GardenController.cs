@@ -153,7 +153,7 @@ namespace BinWeevils.Server.Controllers
                 m_x = request.m_x,
                 m_z = request.m_z,
                 m_r = dto.m_boundRadius,
-                m_thisPlantID = request.m_itemID
+                m_thisItemID = request.m_itemID
             });
             
             dto.m_placedItem.m_x = request.m_x;
