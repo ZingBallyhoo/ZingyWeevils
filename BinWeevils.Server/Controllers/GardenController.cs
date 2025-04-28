@@ -236,6 +236,62 @@ namespace BinWeevils.Server.Controllers
             return new AddPlantResponse();
         }
         
+        [StructuredFormPost("water-plant")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task WaterPlant([FromBody] HarvestPlantRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenController.WaterPlant");
+            activity?.SetTag("plantID", request.m_plantID);
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(weev => new 
+                {
+                    weev.m_happiness,
+                    m_plant = weev.m_nest.m_gardenSeeds
+                        .Where(plant => plant.m_id == request.m_plantID)
+                        .Where(plant => plant.m_placedItem != null)
+                        .Where(seed => seed.m_seedType.m_category == SeedCategory.Perishable)
+                        .Select(plant => new
+                        {
+                            plant.m_seedType.m_category,
+                            m_cycleTime = m_economySettings.Value.GetPlantCycleTime(plant.m_seedType.m_cycleTime, plant.m_seedType.m_category),
+                            m_growTime = m_economySettings.Value.GetPlantGrowTime(plant.m_seedType.m_growTime),
+                            plant.m_placedItem!.m_growthStartTime,
+                        })
+                        .SingleOrDefault()
+                }).SingleOrDefaultAsync();
+            
+            if (dto == null || dto.m_plant == null)
+            {
+                throw new Exception("invalid water plant request");
+            }
+            
+            var state = GetPlantState(new PlantStateData
+            {
+                m_weevilHappiness = dto.m_happiness,
+                m_category = dto.m_plant.m_category,
+                m_growTime = dto.m_plant.m_growTime,
+                m_cycleTime = dto.m_plant.m_cycleTime,
+                m_growthStartTime = dto.m_plant.m_growthStartTime,
+            });
+            if (state != PlantState.Harvestable)
+            {
+                throw new Exception($"attempt to water a plant in the wrong state: {state}");
+            }
+            
+            // todo: why does client use +2 here? (and -2 elsewhere)
+            var newGrowthStart = m_timeProvider.GetUtcNow() - TimeSpan.FromMinutes(dto.m_plant.m_growTime);
+            var rowsUpdated = await m_dbContext.m_nestPlacedSeeds
+                .Where(x => x.m_id == request.m_plantID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_growthStartTime, x => newGrowthStart));
+            if (rowsUpdated == 0)
+            {
+                throw new InvalidDataException("plant to water doesn't exist (race)");
+            }
+        }
+        
         [StructuredFormPost("harvest-plant")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<HarvestPlantResponse> HarvestPlant([FromBody] HarvestPlantRequest request)
