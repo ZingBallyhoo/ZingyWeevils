@@ -278,7 +278,7 @@ namespace BinWeevils.Server.Controllers
                         (other.m_z - data.m_z) * (other.m_z - data.m_z),
                     m_rSq = other.m_item.m_itemType.m_boundRadius * other.m_item.m_itemType.m_boundRadius
                 })
-                .AnyAsync(x => x.m_dSq < rSq);
+                .AnyAsync(x => x.m_dSq < rSq+x.m_rSq);
             if (overlappingWithItem)
             {
                 throw new InvalidDataException("tried to place overlapping a garden item");
@@ -296,7 +296,7 @@ namespace BinWeevils.Server.Controllers
                         (other.m_z - data.m_z) * (other.m_z - data.m_z),
                     m_rSq = other.m_item.m_seedType.m_radius * other.m_item.m_seedType.m_radius
                 })
-                .AnyAsync(x => x.m_dSq < rSq);
+                .AnyAsync(x => x.m_dSq < rSq+x.m_rSq);
             if (overlappingWithPlant)
             {
                 throw new InvalidDataException("tried to place overlapping a plant");
