@@ -36,4 +36,13 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("mulch")] public uint m_mulch;
         [XmlField("xp")] public uint m_xp;
     }
+    
+    [XmlCls("plant")]
+    public partial record GardenPlant : GardenInventorySeed
+    {
+        [XmlField("age")] public uint m_age;
+        [XmlField("watered")] public bool m_watered;
+        [XmlField("x")] public short m_x;
+        [XmlField("z")] public short m_z;
+    }
 }

@@ -77,6 +77,40 @@ namespace BinWeevils.Server.Controllers
             return items;
         }
         
+        [StructuredFormPost("get-plant-configs")]
+        [Produces(MediaTypeNames.Application.Xml)]
+        public async Task<PlantConfigs> GetPlantConfigs([FromBody] GetStoredGardenItemsRequest request)
+        {
+            return await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == request.m_userID)
+                .Select(weev => new PlantConfigs
+                {
+                    m_weevilHappiness = weev.m_happiness,
+                    m_plants = weev.m_nest.m_gardenSeeds
+                        .Where(seed => seed.m_placedItem != null)
+                        .Select(seed => new GardenPlant
+                        {
+                            m_databaseID = seed.m_id,
+                            m_name = seed.m_seedType.m_name,
+                            m_fileName = seed.m_seedType.m_fileName,
+                            m_category = (uint)seed.m_seedType.m_category,
+                            m_cycleTime = seed.m_seedType.m_cycleTime,
+                            m_growTime = seed.m_seedType.m_growTime,
+                            m_mulch = seed.m_seedType.m_mulchYield,
+                            m_xp = seed.m_seedType.m_xpYield,
+                            m_radius = seed.m_seedType.m_radius,
+                            
+                            m_age = 0, // todo
+                            m_watered = false, // todo
+                            m_x = seed.m_placedItem!.m_x,
+                            m_z = seed.m_placedItem!.m_z,
+                        })
+                        .ToList()
+                })
+                .AsSplitQuery()
+                .SingleAsync();
+        }
+        
         [StructuredFormPost("move-item")]
         public async Task MoveItem([FromBody] MoveGardenItemRequest request) 
         {

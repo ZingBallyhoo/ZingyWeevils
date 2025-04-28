@@ -108,11 +108,5 @@ namespace BinWeevils.Server.Controllers
                 highScore = "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
             };
         }
-        
-        [HttpPost("api/garden/get-plant-configs")]
-        public string GetPlantConfigs()
-        {
-            return "<plantConfigs/>";
-        }
     }
 }
