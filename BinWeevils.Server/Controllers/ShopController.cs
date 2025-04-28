@@ -63,7 +63,7 @@ namespace BinWeevils.Server.Controllers
             
             return new Stock
             {
-                m_items = items.Select(x => new StockItem
+                m_items = items.Select(x => new NestStockItem
                 {
                     m_id = x.m_itemTypeID,
                     m_name = x.m_name,

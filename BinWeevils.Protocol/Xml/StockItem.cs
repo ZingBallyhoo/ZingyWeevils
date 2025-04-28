@@ -7,37 +7,41 @@ namespace BinWeevils.Protocol.Xml
     {
         [XmlField("id")] public uint m_id;
         [XmlField("level")] public uint m_level;
-        [XmlField("clr")] public string m_color;
         [XmlField("name")] public string m_name;
         [XmlField("prob")] public int m_probability;
         [XmlField("price")] public uint m_price;
-        [XmlField("descr")] public string m_description;
+        [XmlField("tyc")] public int m_tycoon;
     }
     
     [XmlCls("item")]
-    public partial class StockItem : StockItemBase
+    public partial class FilenameStockItem : StockItemBase
     {
-        // anything but hats:
-        [XmlField("tyc")] public int m_tycoon;
-        [XmlField("xp")] public uint m_xp;
         [XmlField("fileName")] public string m_fileName;
+    }
+    
+    [XmlCls("item")]
+    public partial class NestStockItem : FilenameStockItem
+    {
+        [XmlField("xp")] public uint m_xp;
+        [XmlField("clr")] public string m_color;
+        [XmlField("descr")] public string m_description;
         [XmlField("dt")] public int m_deliveryTime;
     }
     
     [XmlCls("seed")]
-    public partial class SeedStockItem : StockItem
+    public partial class SeedStockItem : FilenameStockItem
     {
-        // todo: cat
-        // todo: mulchYield
-        // todo: xpYield
-        // todo: growTime
-        // todo: cycleTime
+        [XmlField("cat")] public int m_category;
+        [XmlField("mulchYield")] public uint m_mulchYield;
+        [XmlField("xpYield")] public uint m_xpYield;
+        [XmlField("growTime")] public uint m_growTime;
+        [XmlField("cycleTime")] public uint m_cycleTime;
     }
     
     [XmlCls("stock")]
     public partial class Stock
     {
-        [XmlBody] public List<StockItem> m_items;
+        [XmlBody] public List<NestStockItem> m_items;
         [XmlBody] public List<SeedStockItem> m_seeds;
     }
 }
