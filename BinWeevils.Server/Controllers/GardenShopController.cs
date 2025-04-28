@@ -67,10 +67,10 @@ namespace BinWeevils.Server.Controllers
                     m_tycoon = x.m_tycoon ? 1 : 0,
                     m_fileName = x.m_fileName,
                     m_category = (int)x.m_category,
-                    m_mulchYield = x.m_mulchYield,
-                    m_xpYield = x.m_xpYield,
-                    m_growTime = x.m_growTime,
-                    m_cycleTime = x.m_cycleTime,
+                    m_mulchYield = m_economySettings.Value.GetPlantMulchYield(x.m_mulchYield),
+                    m_xpYield = m_economySettings.Value.GetPlantXpYield(x.m_xpYield),
+                    m_growTime = m_economySettings.Value.GetPlantGrowTime(x.m_growTime),
+                    m_cycleTime = m_economySettings.Value.GetPlantCycleTime(x.m_cycleTime, x.m_category),
                 }).ToList()
             };
         }

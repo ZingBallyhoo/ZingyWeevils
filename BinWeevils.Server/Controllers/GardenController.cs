@@ -7,6 +7,7 @@ using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BinWeevils.Server.Controllers
 {
@@ -16,11 +17,14 @@ namespace BinWeevils.Server.Controllers
     public class GardenController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly IOptionsSnapshot<EconomySettings> m_economySettings;
         private readonly TimeProvider m_timeProvider;
         
-        public GardenController(WeevilDBContext dbContext, TimeProvider timeProvider)
+        public GardenController(WeevilDBContext dbContext, IOptionsSnapshot<EconomySettings> economySettings, 
+            TimeProvider timeProvider)
         {
             m_dbContext = dbContext;
+            m_economySettings = economySettings;
             m_timeProvider = timeProvider;
         }
         
@@ -61,10 +65,10 @@ namespace BinWeevils.Server.Controllers
                             m_name = seed.m_seedType.m_name,
                             m_fileName = seed.m_seedType.m_fileName,
                             m_category = (uint)seed.m_seedType.m_category,
-                            m_cycleTime = seed.m_seedType.m_cycleTime,
-                            m_growTime = seed.m_seedType.m_growTime,
-                            m_mulch = seed.m_seedType.m_mulchYield,
-                            m_xp = seed.m_seedType.m_xpYield,
+                            m_cycleTime = m_economySettings.Value.GetPlantCycleTime(seed.m_seedType.m_cycleTime, seed.m_seedType.m_category),
+                            m_growTime = m_economySettings.Value.GetPlantGrowTime(seed.m_seedType.m_growTime),
+                            m_mulch = m_economySettings.Value.GetPlantMulchYield(seed.m_seedType.m_mulchYield),
+                            m_xp = m_economySettings.Value.GetPlantXpYield(seed.m_seedType.m_xpYield),
                             m_radius = seed.m_seedType.m_radius,
                         })
                         .ToList()
@@ -97,10 +101,10 @@ namespace BinWeevils.Server.Controllers
                             m_name = seed.m_seedType.m_name,
                             m_fileName = seed.m_seedType.m_fileName,
                             m_category = (uint)seed.m_seedType.m_category,
-                            m_cycleTime = seed.m_seedType.m_cycleTime,
-                            m_growTime = seed.m_seedType.m_growTime,
-                            m_mulch = seed.m_seedType.m_mulchYield,
-                            m_xp = seed.m_seedType.m_xpYield,
+                            m_cycleTime = m_economySettings.Value.GetPlantCycleTime(seed.m_seedType.m_cycleTime, seed.m_seedType.m_category),
+                            m_growTime = m_economySettings.Value.GetPlantGrowTime(seed.m_seedType.m_growTime),
+                            m_mulch = m_economySettings.Value.GetPlantMulchYield(seed.m_seedType.m_mulchYield),
+                            m_xp = m_economySettings.Value.GetPlantXpYield(seed.m_seedType.m_xpYield),
                             m_radius = seed.m_seedType.m_radius,
                             
                             m_age = GetPlantAge(m_timeProvider, seed.m_placedItem!.m_growthStartTime),
@@ -252,10 +256,10 @@ namespace BinWeevils.Server.Controllers
                         .Select(plant => new
                         {
                             plant.m_seedType.m_category,
-                            plant.m_seedType.m_mulchYield,
-                            plant.m_seedType.m_xpYield,
-                            plant.m_seedType.m_growTime,
-                            plant.m_seedType.m_cycleTime,
+                            m_mulchYield = m_economySettings.Value.GetPlantMulchYield(plant.m_seedType.m_mulchYield),
+                            m_xpYield = m_economySettings.Value.GetPlantXpYield(plant.m_seedType.m_xpYield),
+                            m_cycleTime = m_economySettings.Value.GetPlantCycleTime(plant.m_seedType.m_cycleTime, plant.m_seedType.m_category),
+                            m_growTime = m_economySettings.Value.GetPlantGrowTime(plant.m_seedType.m_growTime),
                             plant.m_placedItem!.m_growthStartTime,
                         })
                         .SingleOrDefault()
