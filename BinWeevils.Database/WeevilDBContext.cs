@@ -75,7 +75,8 @@ namespace BinWeevils.Database
                 
                 b.HasOne(x => x.m_placedItem)
                  .WithOne(x => x.m_item)
-                 .IsRequired(false);
+                 .IsRequired(false)
+                 .OnDelete(DeleteBehavior.Cascade);
             });
             
             modelBuilder.Entity<NestPlacedItemDB>(b =>
@@ -101,7 +102,8 @@ namespace BinWeevils.Database
                 
                 b.HasOne(x => x.m_placedItem)
                     .WithOne(x => x.m_item)
-                    .IsRequired(false);
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             modelBuilder.Entity<NestPlacedGardenItemDB>(b =>
             {
@@ -114,7 +116,8 @@ namespace BinWeevils.Database
                 
                 b.HasOne(x => x.m_placedItem)
                     .WithOne(x => x.m_item)
-                    .IsRequired(false);
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             modelBuilder.Entity<NestPlantDB>(b =>
             {
@@ -203,12 +206,12 @@ namespace BinWeevils.Database
             });
             dbWeevil.m_nest.m_gardenItems.Add(new NestGardenItemDB
             {
-                m_itemTypeID = (await FindItemByConfigName("deckChairRed"))!.Value,
+                m_itemTypeID = (await FindItemByConfigName("wateringCan"))!.Value,
                 m_placedItem = new NestPlacedGardenItemDB
                 {
                     m_x = -69,
                     m_z = 417,
-                    m_room =  dbWeevil.m_nest.m_rooms.Single(x => x.m_type == ENestRoom.Garden)
+                    m_room = dbWeevil.m_nest.m_rooms.Single(x => x.m_type == ENestRoom.Garden)
                 }
             });
             await SaveChangesAsync();

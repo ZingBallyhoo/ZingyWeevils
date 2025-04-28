@@ -229,6 +229,84 @@ namespace BinWeevils.Server.Controllers
             return new AddPlantResponse();
         }
         
+        [StructuredFormPost("harvest-plant")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<HarvestPlantResponse> HarvestPlant([FromBody] HarvestPlantRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenController.HarvestPlant");
+            activity?.SetTag("plantID", request.m_plantID);
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(weev => new 
+                {
+                    //weev.m_happiness,
+                    m_plant = weev.m_nest.m_gardenSeeds
+                        .Where(plant => plant.m_id == request.m_plantID)
+                        .Where(plant => plant.m_placedItem != null)
+                        .Select(plant => new
+                        {
+                            plant.m_seedType.m_mulchYield,
+                            plant.m_seedType.m_xpYield,
+                            //plant.m_seedType.m_growTime,
+                            //plant.m_seedType.m_cycleTime,
+                        })
+                        .SingleOrDefault()
+                })
+                .SingleOrDefaultAsync();
+            if (dto == null || dto.m_plant == null)
+            {
+                throw new Exception("invalid harvest plant request");
+            }
+            
+            // todo: check timer
+            
+            var rowsDeleted = await m_dbContext.m_nestGardenSeeds
+                .Where(x => x.m_id == request.m_plantID)
+                .ExecuteDeleteAsync();
+            if (rowsDeleted == 0)
+            {
+                throw new InvalidDataException("plant to harvest doesn't exist");
+            }
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch + dto.m_plant.m_mulchYield)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + dto.m_plant.m_xpYield));
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("unable to add harvest rewards");
+            }
+            
+            // avoid concurrency check, not needed
+            // todo: the client won't reload other's plant configs so...
+            /*await m_dbContext.m_nests
+                .Where(x => x.m_id == nestID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_lastUpdated, x => DateTime.UtcNow));*/
+            
+            var resultDto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_mulch,
+                    x.m_xp
+                })
+                .SingleAsync();
+            
+            await transaction.CommitAsync();
+            
+            return new HarvestPlantResponse 
+            {
+                m_plantID = request.m_plantID,
+                m_mulch = resultDto.m_mulch,
+                m_xp = resultDto.m_xp
+            };
+        }
+        
         private struct ValidatePlacementData 
         {
             public required NestDB m_nest;
