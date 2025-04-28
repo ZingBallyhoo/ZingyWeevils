@@ -6,6 +6,6 @@ namespace BinWeevils.Protocol.Xml
     public partial class StoredGardenItems
     {
         [XmlBody("storedItem")] public List<GardenInventoryItem> m_items;
-        [XmlBody("seed")] public List<NestInventoryItem> m_seeds; // todo
+        [XmlBody("seed")] public List<GardenInventorySeed> m_seeds;
     }
 }

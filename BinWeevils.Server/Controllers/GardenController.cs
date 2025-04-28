@@ -62,6 +62,18 @@ namespace BinWeevils.Server.Controllers
                     m_deliveryTime = 0
                 });
             }
+            items.m_seeds.Add(new GardenInventorySeed
+            {
+                m_id = 99,
+                m_name = "h",
+                m_fileName = "speedySeed",
+                m_category = 1,
+                m_cycleTime = 1,
+                m_growTime = 1,
+                m_mulch = 5,
+                m_xp = 5,
+                m_radius = 20
+            });
             
             return items;
         }

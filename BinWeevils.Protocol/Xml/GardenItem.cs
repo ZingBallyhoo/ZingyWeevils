@@ -22,4 +22,18 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("z")] public int m_z;
         [XmlField("r")] public int m_r;
     }
+    
+    [XmlCls("seed")]
+    public partial record GardenInventorySeed 
+    {
+        [XmlField("id")] public uint m_id;
+        [XmlField("name")] public string m_name;
+        [XmlField("cat")] public uint m_category;
+        [XmlField("fName")] public string m_fileName;
+        [XmlField("growTime")] public uint m_growTime;
+        [XmlField("cycleTime")] public uint m_cycleTime;
+        [XmlField("r")] public uint m_radius;
+        [XmlField("mulch")] public uint m_mulch;
+        [XmlField("xp")] public uint m_xp;
+    }
 }
