@@ -284,20 +284,36 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception($"attempt to harvest a plant in the wrong state: {state}");
             }
             
-            var rowsDeleted = await m_dbContext.m_nestGardenSeeds
-                .Where(x => x.m_id == request.m_plantID)
-                .ExecuteDeleteAsync();
-            if (rowsDeleted == 0)
+            if (dto.m_plant.m_category == SeedCategory.Perishable)
             {
-                throw new InvalidDataException("plant to harvest doesn't exist");
+                var rowsDeleted = await m_dbContext.m_nestGardenSeeds
+                    .Where(x => x.m_id == request.m_plantID)
+                    .ExecuteDeleteAsync();
+                if (rowsDeleted == 0)
+                {
+                    throw new InvalidDataException("plant to harvest doesn't exist (race)");
+                }
+            } else
+            {
+                var newGrowthStart = m_timeProvider.GetUtcNow() - TimeSpan.FromMinutes(dto.m_plant.m_growTime);
+                
+                var rowsUpdated = await m_dbContext.m_nestPlacedSeeds
+                    .Where(x => x.m_id == request.m_plantID)
+                    .Where(x => x.m_growthStartTime == dto.m_plant.m_growthStartTime) // concurrency check
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(x => x.m_growthStartTime, x => newGrowthStart));
+                if (rowsUpdated == 0)
+                {
+                    throw new InvalidDataException("plant to harvest doesn't exist (race)");
+                }
             }
             
-            var rowsUpdated = await m_dbContext.m_weevilDBs
+            var weevRowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_mulch, x => x.m_mulch + dto.m_plant.m_mulchYield)
                     .SetProperty(x => x.m_xp, x => x.m_xp + dto.m_plant.m_xpYield));
-            if (rowsUpdated == 0)
+            if (weevRowsUpdated == 0)
             {
                 throw new Exception("unable to add harvest rewards");
             }

@@ -17,6 +17,10 @@ namespace BinWeevils.Server
         public uint DailyBrainMaxMulch { get; set; } = 5000;
         public uint DailyBrainMaxXp { get; set; } = 1000;
         
+        public bool InstantPlants { get; set; } = true;
+        public float PlantMulchScalar { get; set; } = 5;
+        public float PlantXpScalar { get; set; } = 20;
+        
         public uint GetItemXp(int originalXp)
         {
             return (uint)(originalXp * ShopXpScalar);
@@ -30,6 +34,36 @@ namespace BinWeevils.Server
                 ItemCurrency.None => throw new InvalidDataException("item doesn't have a currency"),
                 _ => (uint)originalCost,
             };
+        }
+        
+        public uint GetPlantMulchYield(uint mulchYield)
+        {
+            return (uint)(mulchYield * PlantMulchScalar);
+        }
+        
+        public uint GetPlantXpYield(uint xpYield)
+        {
+            return (uint)(xpYield * PlantXpScalar);
+        }
+        
+        public uint GetPlantGrowTime(uint growTime)
+        {
+            if (InstantPlants)
+            {
+                return 1;
+            }
+            return growTime;
+        }
+        
+        public uint GetPlantCycleTime(uint cycleTime, SeedCategory category)
+        {
+            if (category == SeedCategory.Perishable) return cycleTime; // don't perish instantly
+            
+            if (InstantPlants)
+            {
+                return 1;
+            }
+            return cycleTime;
         }
     }
 }
