@@ -27,7 +27,7 @@ namespace BinWeevils.Protocol.Sql
         [Column("deliveryTime")] public int m_deliveryTime { get; set; }
         [Column("expPoints")] public int m_expPoints { get; set; }
         [Column("powerConsumption")] public int m_powerConsumption { get; set; }
-        [Column("boundRadius")] public int m_boundRadius { get; set; }
+        [Column("boundRadius")] public byte m_boundRadius { get; set; }
         [Column("collectionID")] public int? m_collectionID { get; set; }
         [Column("minLevel")] public int m_minLevel { get; set; }
         [Column("tycoonOnly")] public bool m_tycoonOnly { get; set; }

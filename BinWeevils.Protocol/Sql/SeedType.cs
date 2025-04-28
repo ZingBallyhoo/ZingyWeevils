@@ -18,7 +18,7 @@ namespace BinWeevils.Protocol.Sql
         [Column("growTime")] public uint m_growTime { get; set; }
         [Column("cycleTime")] public uint m_cycleTime { get; set; }
         [Column("probability")] public byte m_probability { get; set; }
-        [Column("radius")] public uint m_radius { get; set; }
+        [Column("radius")] public byte m_radius { get; set; }
     }
     
     public enum SeedCategory

@@ -110,23 +110,7 @@ namespace BinWeevils.Server.Controllers
                 })
                 .SingleAsync();
             
-            // todo: well... this will have to deal with plants
-            var rSq = dto.m_itemData.m_boundRadius * dto.m_itemData.m_boundRadius;
-            var overlapping = await m_dbContext.m_nestPlacedGardenItems
-                .Where(x => x.m_id != request.m_itemID)
-                .Where(x => x.m_roomID == dto.m_placedItem.m_roomID)
-                .Select(other => new
-                {
-                    m_dSq = 
-                        (other.m_x - request.m_x) * (other.m_x - request.m_x) +
-                        (other.m_z - request.m_z) * (other.m_z - request.m_z),
-                    m_rSq = other.m_item.m_itemType.m_boundRadius * other.m_item.m_itemType.m_boundRadius
-                })
-                .AnyAsync(x => x.m_dSq < rSq);
-            if (overlapping)
-            {
-                throw new InvalidDataException("tried to place overlapping garden item");
-            }
+            await ValidatePlacement(dto.m_nest, request.m_x, request.m_z, dto.m_itemData.m_boundRadius);
             
             dto.m_placedItem.m_x = request.m_x;
             dto.m_placedItem.m_z = request.m_z;
@@ -159,6 +143,52 @@ namespace BinWeevils.Server.Controllers
             await m_dbContext.SaveChangesAsync();
             
             await transaction.CommitAsync();
+        }
+        
+        [StructuredFormPost("add-plant")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<AddPlantResponse> AddPlant([FromBody] AddPlantRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenController.AddPlant");
+            activity?.SetTag("plantID", request.m_plantID);
+            activity?.SetTag("x", request.m_x);
+            activity?.SetTag("z", request.m_z);
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .SelectMany(weev => weev.m_nest.m_gardenSeeds)
+                .Where(seed => seed.m_id == request.m_plantID)
+                .Where(seed => seed.m_placedItem == null)
+                .Select(x => new 
+                {
+                    x.m_seedType.m_radius,
+                    x.m_nest,
+                })
+                .SingleAsync();
+            
+            await ValidatePlacement(dto.m_nest, request.m_x, request.m_z, dto.m_radius);
+            
+            await m_dbContext.m_nestPlacedSeeds.AddAsync(new NestPlantDB
+            {
+                m_id = request.m_plantID,
+                m_x = request.m_x,
+                m_z = request.m_z,
+                // todo: timers
+            });
+            dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
+            await m_dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+            
+            // client checks that xp field is valid so don't even need to set...
+            return new AddPlantResponse();
+        }
+        
+        private async Task ValidatePlacement(NestDB nest, short x, short y, byte r) 
+        {
+            // todo: validate placement...
+            // todo: gonna need more args too....
         }
     }
 }
