@@ -228,12 +228,62 @@ namespace BinWeevils.Server.Controllers
                 m_z = request.m_z,
                 m_growthStartTime = m_timeProvider.GetUtcNow()
             });
-            dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
+            
+            dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow; // concurrency check
             await m_dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
             
             // client checks that xp field is valid so don't even need to set...
             return new AddPlantResponse();
+        }
+        
+        [StructuredFormPost("move-plant")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task MovePlant([FromBody] AddPlantRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenController.MovePlant");
+            activity?.SetTag("plantID", request.m_plantID);
+            activity?.SetTag("x", request.m_x);
+            activity?.SetTag("z", request.m_z);
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .SelectMany(weev => weev.m_nest.m_gardenSeeds)
+                .Where(seed => seed.m_id == request.m_plantID)
+                .Where(seed => seed.m_placedItem != null)
+                .Select(x => new 
+                {
+                    x.m_seedType.m_category,
+                    x.m_seedType.m_radius,
+                    x.m_nest,
+                })
+                .SingleAsync();
+            if (dto.m_category == SeedCategory.Perishable)
+            {
+                throw new Exception("trying to move a perishable plant");
+            }
+            
+            await ValidatePlacement(new ValidatePlacementData 
+            {
+                m_nest = dto.m_nest,
+                m_x = request.m_x,
+                m_z = request.m_z,
+                m_r = dto.m_radius,
+                m_thisPlantID = request.m_plantID
+            });
+            
+            await m_dbContext.m_nestPlacedSeeds
+                .Where(plant => plant.m_id == request.m_plantID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_x, request.m_x)
+                    .SetProperty(x => x.m_z, request.m_z)
+                );
+            
+            dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow; // concurrency check
+            await m_dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
         
         [StructuredFormPost("water-plant")]
@@ -285,7 +335,7 @@ namespace BinWeevils.Server.Controllers
             var rowsUpdated = await m_dbContext.m_nestPlacedSeeds
                 .Where(x => x.m_id == request.m_plantID)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_growthStartTime, x => newGrowthStart));
+                    .SetProperty(x => x.m_growthStartTime, newGrowthStart));
             if (rowsUpdated == 0)
             {
                 throw new InvalidDataException("plant to water doesn't exist (race)");
@@ -357,7 +407,7 @@ namespace BinWeevils.Server.Controllers
                     .Where(x => x.m_id == request.m_plantID)
                     .Where(x => x.m_growthStartTime == dto.m_plant.m_growthStartTime) // concurrency check
                     .ExecuteUpdateAsync(setters => setters
-                        .SetProperty(x => x.m_growthStartTime, x => newGrowthStart));
+                        .SetProperty(x => x.m_growthStartTime, newGrowthStart));
                 if (rowsUpdated == 0)
                 {
                     throw new InvalidDataException("plant to harvest doesn't exist (race)");
@@ -379,7 +429,7 @@ namespace BinWeevils.Server.Controllers
             /*await m_dbContext.m_nests
                 .Where(x => x.m_id == nestID)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_lastUpdated, x => DateTime.UtcNow));*/
+                    .SetProperty(x => x.m_lastUpdated, DateTime.UtcNow));*/
             
             var resultDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
