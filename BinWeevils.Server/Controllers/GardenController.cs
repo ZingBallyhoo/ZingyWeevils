@@ -379,6 +379,9 @@ namespace BinWeevils.Server.Controllers
         {
             var age = GetPlantAge(data.m_growthStartTime);
             
+            // note: we have to do an approx check on the age for harvesting...
+            // the client has a global update that runs once a minute
+            // which can cause a plant to age instantly after planting...
             switch (data.m_category)
             {
                 case SeedCategory.Perishable:
@@ -394,7 +397,7 @@ namespace BinWeevils.Server.Controllers
                 
                     // note: rounded
                     var growTime = (int)(data.m_growTime * 250 / (double)(150 + data.m_weevilHappiness));
-                    if (age >= growTime)
+                    if (age+1 >= growTime)
                     {
                         return PlantState.Harvestable;
                     }
@@ -411,7 +414,7 @@ namespace BinWeevils.Server.Controllers
                 
                     // note: not rounded
                     var fruitTime = growTime + data.m_cycleTime * 150 / (double)(50 + data.m_weevilHappiness);
-                    if (age >= fruitTime)
+                    if (age+1 >= fruitTime)
                     {
                         return PlantState.Harvestable;
                     }

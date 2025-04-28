@@ -50,7 +50,7 @@ namespace BinWeevils.Server
         {
             if (InstantPlants)
             {
-                return 1;
+                return 2;
             }
             return growTime;
         }
@@ -61,7 +61,7 @@ namespace BinWeevils.Server
             
             if (InstantPlants)
             {
-                return 1;
+                return 2;
             }
             return cycleTime;
         }
