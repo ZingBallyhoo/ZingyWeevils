@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Database;
+using BinWeevils.Protocol.Form.Garden;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
@@ -72,6 +73,95 @@ namespace BinWeevils.Server.Controllers
                     m_cycleTime = x.m_cycleTime,
                 }).ToList()
             };
+        }
+        
+        [StructuredFormPost("buy-seed")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<BuySeedResponse> BuySeed([FromBody] BuySeedRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenShopController.BuySeed");
+            activity?.SetTag("seedTypeID", request.m_seedTypeID);
+            activity?.SetTag("quantity", request.m_quantity);
+            
+            if (request.m_quantity <= 0)
+            {
+                throw new InvalidDataException("trying to buy non-positive seeds");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+
+            // todo: level & tycoon check
+            
+            var seed = await m_dbContext.m_seedTypes
+                .Where(x => x.m_id == request.m_seedTypeID)
+                .Where(x => x.m_price > 0)
+                .SingleOrDefaultAsync();
+            if (seed == null)
+            {
+                return new BuySeedResponse
+                {
+                    m_error = 12, // ERR_CANT_BUY
+                };
+            }
+            
+            if (seed.m_category == SeedCategory.Perishable) 
+            {
+                if (request.m_quantity > BuySeedRequest.MAX_QUANTITY)
+                {
+                    throw new InvalidDataException($"trying to buy too many seeds at once");
+                }
+            } else
+            {
+                if (request.m_quantity != 1)
+                {
+                    throw new InvalidDataException("only allowed to buy 1 non-perishable at a time");
+                }
+            }
+            
+            var totalPrice = request.m_quantity * seed.m_price;
+            var totalXp = 0; // todo: how much xp is rewarded for buy.. anything?
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_mulch >= totalPrice)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - totalPrice)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + totalXp));
+            if (rowsUpdated == 0)
+            {
+                return new BuySeedResponse
+                {
+                    m_error = 13, // ERR_CANT_AFFORD
+                };
+            }
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_nest,
+                    x.m_mulch,
+                    x.m_xp
+                })
+                .SingleAsync();
+            for (var i = 0; i < request.m_quantity; i++)
+            {
+                dto.m_nest.m_gardenSeeds.Add(new NestSeedItemDB
+                {
+                    m_seedTypeID = request.m_seedTypeID
+                });
+            }
+            await m_dbContext.SaveChangesAsync();
+            
+            var resp = new BuySeedResponse
+            {
+                m_mulch = dto.m_mulch,
+                m_xp = dto.m_xp,
+                m_error = 1
+            };
+            
+            await transaction.CommitAsync();
+            return resp;
         }
     }
 }
