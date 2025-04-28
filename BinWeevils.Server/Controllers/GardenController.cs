@@ -118,6 +118,61 @@ namespace BinWeevils.Server.Controllers
                 .SingleAsync();
         }
         
+        [StructuredFormPost("add-item")]
+        public async Task AddItem([FromBody] AddGardenItemRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenController.AddItem");
+            activity?.SetTag("locID", request.m_locID);
+            activity?.SetTag("itemID", request.m_itemID);
+            activity?.SetTag("x", request.m_x);
+            activity?.SetTag("z", request.m_z);
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(weev => new 
+                {
+                    weev.m_nest,
+                    m_boundsRadius = weev.m_nest.m_items
+                        .Where(x => x.m_id == request.m_itemID)
+                        .Where(x => x.m_placedItem == null)
+                        .Select(x => x.m_itemType.m_boundRadius)
+                        .Single(),
+                    m_gardenLocID = weev.m_nest.m_rooms
+                        .Where(x => x.m_type == ENestRoom.Garden)
+                        .Select(x => x.m_id)
+                        .Single()
+                })
+                .SingleAsync();
+            if (dto.m_gardenLocID != request.m_locID) 
+            {
+                throw new Exception("trying to add garden item in wrong loc");
+            }
+            
+            await ValidatePlacement(new ValidatePlacementData
+            {
+                m_nest = dto.m_nest,
+                m_x = request.m_x,
+                m_z = request.m_z,
+                m_r = dto.m_boundsRadius,
+                m_thisItemID = request.m_itemID
+            });
+            
+            await m_dbContext.m_nestPlacedGardenItems.AddAsync(new NestPlacedGardenItemDB
+            {
+                m_id = request.m_itemID,
+                m_roomID = request.m_locID,
+                m_x = request.m_x,
+                m_z = request.m_z,
+            });
+            
+            dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
+            await m_dbContext.SaveChangesAsync();
+            
+            await transaction.CommitAsync();
+        }
+        
         [StructuredFormPost("move-item")]
         public async Task MoveItem([FromBody] MoveGardenItemRequest request) 
         {
@@ -605,6 +660,8 @@ namespace BinWeevils.Server.Controllers
         
         private async Task ValidatePlacement(ValidatePlacementData data) 
         {
+            using var activity = ApiServerObservability.StartActivity("GardenController.ValidatePlacement");
+
             var noPlaceArea = new RadialBounds(5, 505, 94);
             var lawn = data.m_nest.m_gardenSize switch
             {
