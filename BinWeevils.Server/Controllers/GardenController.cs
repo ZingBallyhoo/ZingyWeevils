@@ -400,6 +400,26 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
+        [StructuredFormPost("remove-plant")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task RemovePlant([FromBody] HarvestPlantRequest request)
+        {
+            var validCheck = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .SelectMany(weev => weev.m_nest.m_gardenSeeds)
+                .Where(x => x.m_id == request.m_plantID)
+                .Where(x => x.m_placedItem != null)
+                .AnyAsync();
+            if (!validCheck)
+            {
+                throw new Exception("invalid remove plant request");
+            }
+            
+            await m_dbContext.m_nestGardenSeeds
+                .Where(x => x.m_id == request.m_plantID)
+                .ExecuteDeleteAsync();
+        }
+        
         private struct PlantStateData
         {
             public required byte m_weevilHappiness;
