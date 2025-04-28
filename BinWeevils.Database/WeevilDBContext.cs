@@ -15,6 +15,7 @@ namespace BinWeevils.Database
         // public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestItemDB> m_nestItems { get; set; }
         public DbSet<NestGardenItemDB> m_nestGardenItems { get; set; }
+        public DbSet<NestSeedItemDB> m_nestGardenSeeds { get; set; }
         public DbSet<NestRoomDB> m_nestRooms { get; set; }
         public DbSet<NestPlacedItemDB> m_nestPlacedItems { get; set; }
         public DbSet<NestPlacedGardenItemDB> m_nestPlacedGardenItems { get; set; }

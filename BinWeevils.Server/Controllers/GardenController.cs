@@ -99,18 +99,20 @@ namespace BinWeevils.Server.Controllers
                 .Where(x => x.m_id == request.m_itemID)
                 .Select(x => new
                 {
-                    x.m_room.m_nest,
                     m_placedItem = x,
-                    m_itemData = new
-                    {
-                        x.m_item.m_itemType.m_itemTypeID,
-                        x.m_item.m_itemType.m_configLocation,
-                        x.m_item.m_itemType.m_boundRadius
-                    }
+                    x.m_item.m_itemType.m_boundRadius,
+                    x.m_room.m_nest,
                 })
                 .SingleAsync();
             
-            await ValidatePlacement(dto.m_nest, request.m_x, request.m_z, dto.m_itemData.m_boundRadius);
+            await ValidatePlacement(new ValidatePlacementData
+            {
+                m_nest = dto.m_nest,
+                m_x = request.m_x,
+                m_z = request.m_z,
+                m_r = dto.m_boundRadius,
+                m_thisPlantID = request.m_itemID
+            });
             
             dto.m_placedItem.m_x = request.m_x;
             dto.m_placedItem.m_z = request.m_z;
@@ -168,7 +170,14 @@ namespace BinWeevils.Server.Controllers
                 })
                 .SingleAsync();
             
-            await ValidatePlacement(dto.m_nest, request.m_x, request.m_z, dto.m_radius);
+            await ValidatePlacement(new ValidatePlacementData 
+            {
+                m_nest = dto.m_nest,
+                m_x = request.m_x,
+                m_z = request.m_z,
+                m_r = dto.m_radius,
+                m_thisPlantID = request.m_plantID
+            });
             
             await m_dbContext.m_nestPlacedSeeds.AddAsync(new NestPlantDB
             {
@@ -185,10 +194,55 @@ namespace BinWeevils.Server.Controllers
             return new AddPlantResponse();
         }
         
-        private async Task ValidatePlacement(NestDB nest, short x, short y, byte r) 
+        private struct ValidatePlacementData 
         {
-            // todo: validate placement...
-            // todo: gonna need more args too....
+            public required NestDB m_nest;
+            public required short m_x;
+            public required short m_z;
+            public required byte m_r;
+            
+            public uint? m_thisPlantID;
+            public uint? m_thisItemID;
+        }
+        
+        private async Task ValidatePlacement(ValidatePlacementData data) 
+        {
+            // todo: garden bounds
+            
+            var rSq = data.m_r * data.m_r;
+            var overlappingWithItem = await m_dbContext.m_nestPlacedGardenItems
+                .Where(x => x.m_room.m_nestID == data.m_nest.m_id)
+                .Where(x => x.m_id != data.m_thisItemID)
+                .Select(other => new
+                {
+                    m_dSq = 
+                        (other.m_x - data.m_x) * (other.m_x - data.m_x) +
+                        (other.m_z - data.m_z) * (other.m_z - data.m_z),
+                    m_rSq = other.m_item.m_itemType.m_boundRadius * other.m_item.m_itemType.m_boundRadius
+                })
+                .AnyAsync(x => x.m_dSq < rSq);
+            if (overlappingWithItem)
+            {
+                throw new InvalidDataException("tried to place overlapping a garden item");
+            }
+            
+            var overlappingWithPlant = await m_dbContext.m_nestGardenSeeds
+                .Where(x => x.m_nestID == data.m_nest.m_id)
+                .Where(x => x.m_id != data.m_thisPlantID)
+                .Where(x => x.m_placedItem != null)
+                .Select(x => x.m_placedItem)
+                .Select(other => new
+                {
+                    m_dSq = 
+                        (other.m_x - data.m_x) * (other.m_x - data.m_x) +
+                        (other.m_z - data.m_z) * (other.m_z - data.m_z),
+                    m_rSq = other.m_item.m_seedType.m_radius * other.m_item.m_seedType.m_radius
+                })
+                .AnyAsync(x => x.m_dSq < rSq);
+            if (overlappingWithPlant)
+            {
+                throw new InvalidDataException("tried to place overlapping a plant");
+            }
         }
     }
 }
