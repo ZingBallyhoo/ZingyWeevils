@@ -155,8 +155,7 @@ namespace BinWeevils.Database
         
         public short m_x { get; set; }
         public short m_z { get; set; }
-        // todo: planted at
-        // todo: watered at
+        public DateTimeOffset m_growthStartTime { get; set; }
         
         [Required, ForeignKey(nameof(m_id))] public virtual NestSeedItemDB m_item { get; set; }
     }

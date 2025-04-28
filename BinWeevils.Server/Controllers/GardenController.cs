@@ -2,6 +2,7 @@ using System.Net.Mime;
 using BinWeevils.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form.Garden;
+using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace BinWeevils.Server.Controllers
     public class GardenController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly TimeProvider m_timeProvider;
         
-        public GardenController(WeevilDBContext dbContext)
+        public GardenController(WeevilDBContext dbContext, TimeProvider timeProvider)
         {
             m_dbContext = dbContext;
+            m_timeProvider = timeProvider;
         }
         
         [StructuredFormPost("get-stored-items")]
@@ -100,8 +103,8 @@ namespace BinWeevils.Server.Controllers
                             m_xp = seed.m_seedType.m_xpYield,
                             m_radius = seed.m_seedType.m_radius,
                             
-                            m_age = 0, // todo
-                            m_watered = false, // todo
+                            m_age = GetPlantAge(m_timeProvider, seed.m_placedItem!.m_growthStartTime),
+                            m_watered = false, // why would the server set this...
                             m_x = seed.m_placedItem!.m_x,
                             m_z = seed.m_placedItem!.m_z,
                         })
@@ -219,7 +222,7 @@ namespace BinWeevils.Server.Controllers
                 m_id = request.m_plantID,
                 m_x = request.m_x,
                 m_z = request.m_z,
-                // todo: timers
+                m_growthStartTime = m_timeProvider.GetUtcNow()
             });
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
@@ -242,16 +245,18 @@ namespace BinWeevils.Server.Controllers
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(weev => new 
                 {
-                    //weev.m_happiness,
+                    weev.m_happiness,
                     m_plant = weev.m_nest.m_gardenSeeds
                         .Where(plant => plant.m_id == request.m_plantID)
                         .Where(plant => plant.m_placedItem != null)
                         .Select(plant => new
                         {
+                            plant.m_seedType.m_category,
                             plant.m_seedType.m_mulchYield,
                             plant.m_seedType.m_xpYield,
-                            //plant.m_seedType.m_growTime,
-                            //plant.m_seedType.m_cycleTime,
+                            plant.m_seedType.m_growTime,
+                            plant.m_seedType.m_cycleTime,
+                            plant.m_placedItem!.m_growthStartTime,
                         })
                         .SingleOrDefault()
                 })
@@ -261,7 +266,19 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("invalid harvest plant request");
             }
             
-            // todo: check timer
+            var state = GetPlantState(new PlantStateData
+            {
+                m_weevilHappiness = dto.m_happiness,
+                m_category = dto.m_plant.m_category,
+                m_growTime = dto.m_plant.m_growTime,
+                m_cycleTime = dto.m_plant.m_cycleTime,
+                m_growthStartTime = dto.m_plant.m_growthStartTime,
+            });
+            if (state != PlantState.Harvestable)
+            {
+                // todo: we could handle perished here, just give 0 reward...
+                throw new Exception($"attempt to harvest a plant in the wrong state: {state}");
+            }
             
             var rowsDeleted = await m_dbContext.m_nestGardenSeeds
                 .Where(x => x.m_id == request.m_plantID)
@@ -305,6 +322,86 @@ namespace BinWeevils.Server.Controllers
                 m_mulch = resultDto.m_mulch,
                 m_xp = resultDto.m_xp
             };
+        }
+        
+        private struct PlantStateData
+        {
+            public required byte m_weevilHappiness;
+            
+            public required SeedCategory m_category;
+            public required uint m_growTime;
+            public required uint m_cycleTime;
+            public required DateTimeOffset m_growthStartTime;
+        }
+        
+        private enum PlantState
+        {
+            Growing,
+            Harvestable,
+            Perished
+        }
+        
+        private uint GetPlantAge(DateTimeOffset growthStartTime)
+        {
+            return GetPlantAge(m_timeProvider, growthStartTime);
+        }
+        
+        private static uint GetPlantAge(TimeProvider timeProvider, DateTimeOffset growthStartTime)
+        {
+            // static to help efcore with client eval
+            
+            var timeDelta = timeProvider.GetUtcNow() - growthStartTime;
+            var age = timeDelta.Minutes;
+            return (uint)age;
+        }
+        
+        private PlantState GetPlantState(PlantStateData data) 
+        {
+            var age = GetPlantAge(data.m_growthStartTime);
+            
+            switch (data.m_category)
+            {
+                case SeedCategory.Perishable:
+                {
+                    // does not care about weevil happiness
+                    // todo: why does the client offset by -2?
+                    // i would guess its to combat timer rounding
+                    var perishAge = data.m_growTime + data.m_cycleTime;
+                    if (age >= perishAge)
+                    {
+                        return PlantState.Perished;
+                    }
+                
+                    // note: rounded
+                    var growTime = (int)(data.m_growTime * 250 / (double)(150 + data.m_weevilHappiness));
+                    if (age >= growTime)
+                    {
+                        return PlantState.Harvestable;
+                    }
+                    return PlantState.Growing;
+                }
+                case SeedCategory.Reharvest:
+                {
+                    // does not care about weevil happiness
+                    var growTime = data.m_growTime;
+                    if (age < growTime) 
+                    {
+                        return PlantState.Growing;
+                    }
+                
+                    // note: not rounded
+                    var fruitTime = growTime + data.m_cycleTime * 150 / (double)(50 + data.m_weevilHappiness);
+                    if (age >= fruitTime)
+                    {
+                        return PlantState.Harvestable;
+                    }
+                    return PlantState.Growing; // fruiting
+                }
+                default:
+                {
+                    throw new InvalidDataException($"unknown plant type: {data.m_category}");
+                }
+            }
         }
         
         private struct ValidatePlacementData 
