@@ -40,41 +40,39 @@ namespace BinWeevils.Server.Controllers
                 {
                     m_items = weev.m_nest.m_gardenItems
                         .Where(item => item.m_placedItem == null)
-                        .Select(item => new
+                        .Select(item => new GardenInventoryItem
                         {
-                            item.m_id,
-                            item.m_itemType.m_category,
-                            item.m_itemType.m_powerConsumption,
-                            item.m_itemType.m_configLocation
+                            m_databaseID = item.m_id,
+                            m_category = (int)item.m_itemType.m_category,
+                            m_powerConsumption = item.m_itemType.m_powerConsumption,
+                            m_fileName = item.m_itemType.m_configLocation,
+                            m_deliveryTime = 0
                         })
+                        .ToList(),
+                    m_seeds = weev.m_nest.m_gardenSeeds
+                        .Where(seed => seed.m_placedItem == null)
+                        .Select(seed => new GardenInventorySeed
+                        {
+                            m_databaseID = seed.m_id,
+                            m_name = seed.m_seedType.m_name,
+                            m_fileName = seed.m_seedType.m_fileName,
+                            m_category = (uint)seed.m_seedType.m_category,
+                            m_cycleTime = seed.m_seedType.m_cycleTime,
+                            m_growTime = seed.m_seedType.m_growTime,
+                            m_mulch = seed.m_seedType.m_mulchYield,
+                            m_xp = seed.m_seedType.m_xpYield,
+                            m_radius = seed.m_seedType.m_radius,
+                        })
+                        .ToList()
                 })
+                .AsSplitQuery()
                 .SingleAsync();
             
-            var items = new StoredGardenItems();
-            foreach (var item in dto.m_items)
+            var items = new StoredGardenItems
             {
-                items.m_items.Add(new GardenInventoryItem
-                {
-                    m_databaseID = item.m_id,
-                    m_category = (int)item.m_category,
-                    m_powerConsumption = item.m_powerConsumption,
-                    m_fileName = item.m_configLocation,
-                    m_deliveryTime = 0
-                });
-            }
-            items.m_seeds.Add(new GardenInventorySeed
-            {
-                m_id = 99,
-                m_name = "h",
-                m_fileName = "speedySeed",
-                m_category = 1,
-                m_cycleTime = 1,
-                m_growTime = 1,
-                m_mulch = 5,
-                m_xp = 5,
-                m_radius = 20
-            });
-            
+                m_items = dto.m_items,
+                m_seeds = dto.m_seeds
+            };
             return items;
         }
         

@@ -106,6 +106,19 @@ namespace BinWeevils.Database
                 b.ToTable("NestPlacedGardenItemDB");
             });
             
+            modelBuilder.Entity<NestSeedItemDB>(b =>
+            {
+                b.ToTable("NestSeedItemDB");
+                
+                b.HasOne(x => x.m_placedItem)
+                    .WithOne(x => x.m_item)
+                    .IsRequired(false);
+            });
+            modelBuilder.Entity<NestPlantDB>(b =>
+            {
+                b.ToTable("NestPlantDB");
+            });
+            
             modelBuilder.Entity<BusinessDB>(b =>
             {
                 b.ToTable("BusinessDB");
@@ -182,6 +195,10 @@ namespace BinWeevils.Database
             {
                 m_itemTypeID = (await FindItemByConfigName("o_egg"))!.Value
             });
+            dbWeevil.m_nest.m_gardenSeeds.Add(new NestSeedItemDB
+            {
+                m_seedTypeID = (await FindSeedByConfigName("speedySeed"))!.Value
+            });
             dbWeevil.m_nest.m_gardenItems.Add(new NestGardenItemDB
             {
                 m_itemTypeID = (await FindItemByConfigName("deckChairRed"))!.Value,
@@ -207,6 +224,14 @@ namespace BinWeevils.Database
             return await m_itemTypes
                 .Where(x => x.m_configLocation == configName)
                 .Select(x => x.m_itemTypeID)
+                .SingleOrDefaultAsync();
+        }
+        
+        public async Task<uint?> FindSeedByConfigName(string configName)
+        {
+            return await m_seedTypes
+                .Where(x => x.m_fileName == configName)
+                .Select(x => x.m_id)
                 .SingleOrDefaultAsync();
         }
     }

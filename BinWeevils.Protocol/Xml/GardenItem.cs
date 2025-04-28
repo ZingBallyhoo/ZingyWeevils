@@ -26,7 +26,7 @@ namespace BinWeevils.Protocol.Xml
     [XmlCls("seed")]
     public partial record GardenInventorySeed 
     {
-        [XmlField("id")] public uint m_id;
+        [XmlField("id")] public uint m_databaseID;
         [XmlField("name")] public string m_name;
         [XmlField("cat")] public uint m_category;
         [XmlField("fName")] public string m_fileName;
