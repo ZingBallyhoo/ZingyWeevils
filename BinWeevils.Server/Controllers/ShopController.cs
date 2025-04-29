@@ -66,13 +66,17 @@ namespace BinWeevils.Server.Controllers
                 m_items = items.Select(x => new NestStockItem
                 {
                     m_id = x.m_itemTypeID,
-                    m_name = x.m_name,
-                    m_description = x.m_description,
-                    m_color = x.m_defaultHexColor,
-                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
                     m_level = (uint)x.m_minLevel,
+                    m_name = x.m_name,
+                    //m_probability = x.m_probability,
+                    m_probability = 127, // todo: why is this field zeroed in the table?
+                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
+                    m_tycoon = x.m_tycoonOnly ? 1 : 0,
+                    m_fileName = x.m_configLocation,
                     m_xp = m_economySettings.Value.GetItemXp(x.m_expPoints),
-                    m_fileName = x.m_configLocation
+                    m_color = x.m_defaultHexColor,
+                    m_description = x.m_description,
+                    m_deliveryTime = 0
                 }).ToList()
             };
         }
@@ -91,18 +95,22 @@ namespace BinWeevils.Server.Controllers
             // todo: check level?
             
             var itemToBuy = await m_dbContext.m_itemTypes
-                .Where(x => x.m_price > 0)
+                .Where(x => x.m_itemTypeID == request.m_id)
                 .Where(x => x.m_category != ItemCategory.Garden) // please don't
-                .SingleAsync(x => x.m_itemTypeID == request.m_id);
-            var itemCost = m_economySettings.Value.GetItemCost(itemToBuy.m_price, itemToBuy.m_currency);
-            var itemXp = m_economySettings.Value.GetItemXp(itemToBuy.m_expPoints);
+                .Where(x => x.m_price > 0)
+                .Select(x => new
+                {
+                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
+                    m_expPoints = m_economySettings.Value.GetItemXp(x.m_expPoints),
+                })
+                .SingleAsync();
             
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Where(x => x.m_mulch >= itemCost)
+                .Where(x => x.m_mulch >= itemToBuy.m_price)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch - itemCost)
-                    .SetProperty(x => x.m_xp, x => x.m_xp + itemXp));
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - itemToBuy.m_price)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + itemToBuy.m_expPoints));
             if (rowsUpdated == 0)
             {
                 return new BuyItemResponse
@@ -111,25 +119,26 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
-            var dto = await m_dbContext.m_weevilDBs
+            var resultDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => new
                 {
-                    x.m_nest,
+                    m_nestID = x.m_nest.m_id,
                     x.m_mulch,
                     x.m_xp
                 })
                 .SingleAsync();
-            dto.m_nest.m_items.Add(new NestItemDB
+            await m_dbContext.m_nestItems.AddAsync(new NestItemDB
             {
-                m_itemType = itemToBuy
+                m_itemTypeID = request.m_id,
+                m_nestID = resultDto.m_nestID
             });
             await m_dbContext.SaveChangesAsync();
             
             var resp = new BuyItemResponse
             {
-                m_mulch = dto.m_mulch,
-                m_xp = dto.m_xp,
+                m_mulch = resultDto.m_mulch,
+                m_xp = resultDto.m_xp,
                 m_result = 1
             };
             

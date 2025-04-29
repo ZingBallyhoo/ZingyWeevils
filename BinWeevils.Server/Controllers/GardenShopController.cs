@@ -49,13 +49,16 @@ namespace BinWeevils.Server.Controllers
                 m_items = items.Select(x => new NestStockItem
                 {
                     m_id = x.m_itemTypeID,
-                    m_name = x.m_name,
-                    m_description = x.m_description,
-                    m_color = x.m_defaultHexColor,
-                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
                     m_level = (uint)x.m_minLevel,
+                    m_name = x.m_name,
+                    m_probability = x.m_probability,
+                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
+                    m_tycoon = x.m_tycoonOnly ? 1 : 0,
+                    m_fileName = x.m_configLocation,
                     m_xp = m_economySettings.Value.GetItemXp(x.m_expPoints),
-                    m_fileName = x.m_configLocation
+                    m_color = x.m_defaultHexColor,
+                    m_description = x.m_description,
+                    m_deliveryTime = 0
                 }).ToList(),
                 m_seeds = seeds.Select(x => new SeedStockItem
                 {
@@ -75,9 +78,83 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
+        [StructuredFormPost("buy-item")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<BuyGardenItemResponse> BuyItem([FromBody] BuyGardenItemRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GardenShopController.BuyItem");
+            activity?.SetTag("id", request.m_id);
+            activity?.SetTag("color", request.m_color);
+            
+            if (request.m_color != "-1")
+            {
+                throw new InvalidDataException("garden items are not expected to have colors");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var item = await m_dbContext.m_itemTypes
+                .Where(x => x.m_itemTypeID == request.m_id)
+                .Where(x => x.m_category == ItemCategory.Garden)
+                .Where(x => x.m_price > 0)
+                .Select(x => new
+                {
+                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
+                    m_expPoints = m_economySettings.Value.GetItemXp(x.m_expPoints),
+                })
+                .SingleOrDefaultAsync();
+            if (item == null)
+            {
+                return new BuyGardenItemResponse
+                {
+                    m_error = 12, // ERR_CANT_BUY
+                };
+            }
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_mulch >= item.m_price)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - item.m_price)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + item.m_expPoints));
+            if (rowsUpdated == 0)
+            {
+                return new BuyGardenItemResponse
+                {
+                    m_error = 13, // ERR_CANT_AFFORD
+                };
+            }
+            
+            var resultDto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    m_nestID = x.m_nest.m_id,
+                    x.m_mulch,
+                    x.m_xp
+                })
+                .SingleAsync();
+            await m_dbContext.m_nestGardenItems.AddAsync(new NestGardenItemDB
+            {
+                m_itemTypeID = request.m_id,
+                m_nestID = resultDto.m_nestID
+            });
+            await m_dbContext.SaveChangesAsync();
+            
+            var resp = new BuyGardenItemResponse
+            {
+                m_mulch = resultDto.m_mulch,
+                m_xp = resultDto.m_xp,
+                m_error = 1
+            };
+            
+            await transaction.CommitAsync();
+            return resp;
+        }
+        
         [StructuredFormPost("buy-seed")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public async Task<BuySeedResponse> BuySeed([FromBody] BuySeedRequest request)
+        public async Task<BuyGardenItemResponse> BuySeed([FromBody] BuySeedRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("GardenShopController.BuySeed");
             activity?.SetTag("seedTypeID", request.m_seedTypeID);
@@ -98,7 +175,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (seed == null)
             {
-                return new BuySeedResponse
+                return new BuyGardenItemResponse
                 {
                     m_error = 12, // ERR_CANT_BUY
                 };
@@ -129,34 +206,35 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_xp, x => x.m_xp + totalXp));
             if (rowsUpdated == 0)
             {
-                return new BuySeedResponse
+                return new BuyGardenItemResponse
                 {
                     m_error = 13, // ERR_CANT_AFFORD
                 };
             }
             
-            var dto = await m_dbContext.m_weevilDBs
+            var resultDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => new
                 {
-                    x.m_nest,
+                    m_nestID = x.m_nest.m_id,
                     x.m_mulch,
                     x.m_xp
                 })
                 .SingleAsync();
             for (var i = 0; i < request.m_quantity; i++)
             {
-                dto.m_nest.m_gardenSeeds.Add(new NestSeedItemDB
+                await m_dbContext.m_nestGardenSeeds.AddAsync(new NestSeedItemDB
                 {
-                    m_seedTypeID = request.m_seedTypeID
+                    m_seedTypeID = request.m_seedTypeID,
+                    m_nestID = resultDto.m_nestID
                 });
             }
             await m_dbContext.SaveChangesAsync();
             
-            var resp = new BuySeedResponse
+            var resp = new BuyGardenItemResponse
             {
-                m_mulch = dto.m_mulch,
-                m_xp = dto.m_xp,
+                m_mulch = resultDto.m_mulch,
+                m_xp = resultDto.m_xp,
                 m_error = 1
             };
             
