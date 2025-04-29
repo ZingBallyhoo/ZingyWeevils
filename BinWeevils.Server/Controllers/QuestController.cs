@@ -161,9 +161,10 @@ namespace BinWeevils.Server.Controllers
                 );
 
             if (task.m_scrapedData.m_rewardItems != null || 
-                task.m_scrapedData.m_rewardGardenItems != null)
+                task.m_scrapedData.m_rewardGardenItems != null ||
+                task.m_scrapedData.m_rewardGardenSeeds != null)
             {
-                // todo: or garden seeds...
+                // todo: or bundle items?
                 await RewardItems(weevilIdx, task, response);
             }
             
@@ -190,7 +191,7 @@ namespace BinWeevils.Server.Controllers
                         })
                         .SingleAsync();
                     
-                    m_logger.LogTrace("Granting {Count} * \"{Name}\"", rewardItem.m_count, itemType.m_name);
+                    m_logger.LogTrace("Granting nest item \"{Name}\" * {Count}", itemType.m_name, rewardItem.m_count);
                     
                     for (var i = 0; i < rewardItem.m_count; i++)
                     {
@@ -217,7 +218,7 @@ namespace BinWeevils.Server.Controllers
                         })
                         .SingleAsync();
                     
-                    m_logger.LogTrace("Granting {Count} * \"{Name}\" (garden)", rewardGardenItem.m_count, itemType.m_name);
+                    m_logger.LogTrace("Granting garden item \"{Name}\" * {Count}", itemType.m_name, rewardGardenItem.m_count);
                     
                     for (var i = 0; i < rewardGardenItem.m_count; i++)
                     {
@@ -227,6 +228,32 @@ namespace BinWeevils.Server.Controllers
                             m_itemTypeID = itemType.m_itemTypeID
                         });
                         response.m_gardenItemName.Add(itemType.m_name);
+                    }
+                }
+            }
+            
+            if (task.m_scrapedData.m_rewardGardenSeeds != null)
+            {
+                foreach (var rewardGardenSeed in task.m_scrapedData.m_rewardGardenSeeds)
+                {
+                    var seedType = await m_dbContext.m_seedTypes
+                        .Where(x => x.m_fileName == rewardGardenSeed.Key)
+                        .Select(x => new 
+                        {
+                            x.m_id,
+                            x.m_name
+                        })
+                        .SingleAsync();
+                    
+                    m_logger.LogTrace("Granting garden seed \"{Name}\" * {Count}", seedType.m_name, rewardGardenSeed.Value);
+                    
+                    for (var i = 0; i < rewardGardenSeed.Value; i++)
+                    {
+                        await m_dbContext.m_nestGardenSeeds.AddAsync(new NestSeedItemDB
+                        {
+                            m_nestID = nestID,
+                            m_seedTypeID = seedType.m_id
+                        });
                     }
                 }
             }
