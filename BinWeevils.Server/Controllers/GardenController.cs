@@ -134,10 +134,14 @@ namespace BinWeevils.Server.Controllers
                 .Select(weev => new 
                 {
                     weev.m_nest,
-                    m_boundsRadius = weev.m_nest.m_items
+                    m_itemInfo = weev.m_nest.m_gardenItems
                         .Where(x => x.m_id == request.m_itemID)
                         .Where(x => x.m_placedItem == null)
-                        .Select(x => x.m_itemType.m_boundRadius)
+                        .Select(x => new 
+                        {
+                            x.m_itemType.m_configLocation,
+                            x.m_itemType.m_boundRadius
+                        })
                         .Single(),
                     m_gardenLocID = weev.m_nest.m_rooms
                         .Where(x => x.m_type == ENestRoom.Garden)
@@ -150,14 +154,24 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("trying to add garden item in wrong loc");
             }
             
-            await ValidatePlacement(new ValidatePlacementData
+            if (dto.m_itemInfo.m_configLocation.StartsWith("fence")) 
             {
-                m_nest = dto.m_nest,
-                m_x = request.m_x,
-                m_z = request.m_z,
-                m_r = dto.m_boundsRadius,
-                m_thisItemID = request.m_itemID
-            });
+                // yes, the game checks for fences like this
+                if (request.m_x != 0 || request.m_z != 0)
+                {
+                    throw new Exception("trying to place fence at wrong coordinates");
+                }
+            } else
+            {
+                await ValidatePlacement(new ValidatePlacementData
+                {
+                    m_nest = dto.m_nest,
+                    m_x = request.m_x,
+                    m_z = request.m_z,
+                    m_r = dto.m_itemInfo.m_boundRadius,
+                    m_thisItemID = request.m_itemID
+                });
+            }
             
             await m_dbContext.m_nestPlacedGardenItems.AddAsync(new NestPlacedGardenItemDB
             {
@@ -194,6 +208,7 @@ namespace BinWeevils.Server.Controllers
             
             var dto = await m_dbContext.m_nestPlacedGardenItems
                 .Where(x => x.m_id == request.m_itemID)
+                .Where(x => !x.m_item.m_itemType.m_configLocation.StartsWith("fence")) // sanity
                 .Select(x => new
                 {
                     m_placedItem = x,
