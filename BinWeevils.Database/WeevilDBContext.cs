@@ -8,6 +8,7 @@ namespace BinWeevils.Database
     public class WeevilDBContext : IdentityDbContext<WeevilAccount>
     {
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
+        public DbSet<WeevilSpecialMoveDB> m_weevilSpecialMoves { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
         public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
@@ -39,6 +40,10 @@ namespace BinWeevils.Database
             {
                 b.ToTable("WeevilDB");
                 b.HasIndex(x => x.m_name);
+            });
+            modelBuilder.Entity<WeevilSpecialMoveDB>(b =>
+            {
+                b.ToTable("WeevilSpecialMoveDB");
             });
             
             modelBuilder.Entity<BuddyRecordDB>(b =>

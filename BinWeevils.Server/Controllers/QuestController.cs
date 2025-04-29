@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Database;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -92,17 +93,12 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
-            var weevilID = await m_dbContext.m_weevilDBs
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var weevilIdx = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == request.m_userName)
                 .Select(x => x.m_idx)
                 .SingleAsync();
-            
-            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
-            await m_dbContext.m_completedTasks.AddAsync(new CompletedTaskDB
-            {
-                m_weevilID = weevilID,
-                m_taskID = request.m_taskID
-            });
             
             var response = new TaskCompletedResponse
             {
@@ -112,24 +108,26 @@ namespace BinWeevils.Server.Controllers
                     TaskCompletedResponse.RES_TASK_COMPLETE,
             };
             
-            try
+            var rowsInserted = await m_dbContext.m_completedTasks.Upsert(new CompletedTaskDB
             {
-                await m_dbContext.SaveChangesAsync();
-            } catch (DbUpdateException)
+                m_weevilID = weevilIdx,
+                m_taskID = task.m_scrapedData.m_id
+            }).NoUpdate().RunAsync();
+            if (rowsInserted == 0)
             {
-                var overrideResponse = await TaskCompleted_AlreadyCompleted(weevilID, task, response);
+                var overrideResponse = await TaskCompleted_AlreadyCompleted(weevilIdx, task, response);
                 if (overrideResponse != null)
                 {
                     return overrideResponse;
                 }
                 
                 // we can't reward anything so don't try :)
-                await AddCommonCompletedData(weevilID, response);
+                await AddCommonCompletedData(weevilIdx, response);
                 return response;
             }
 
-            await TryReward(weevilID, task, response);
-            await AddCommonCompletedData(weevilID, response);
+            await TryReward(weevilIdx, task, response);
+            await AddCommonCompletedData(weevilIdx, response);
             
             await transaction.CommitAsync();
             return response;
@@ -137,20 +135,18 @@ namespace BinWeevils.Server.Controllers
         
         private async Task TryReward(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response) 
         {
-            await m_dbContext.m_rewardedTasks.AddAsync(new RewardedTaskDB
+            var rowsInserted = await m_dbContext.m_rewardedTasks.Upsert(new RewardedTaskDB
             {
                 m_weevilID = weevilIdx,
                 m_taskID = task.m_scrapedData.m_id
-            });
-            try
+            }).NoUpdate().RunAsync();
+            if (rowsInserted == 0)
             {
-                await m_dbContext.SaveChangesAsync();
-            } catch (DbUpdateException)
-            {
-                // already rewarded
+                m_logger.LogTrace("Already granted rewards for task {TaskID}", task.m_scrapedData.m_id);
                 return;
             }
             
+            using var activity = ApiServerObservability.StartActivity("QuestController.Reward");
             m_logger.LogTrace("Granting rewards for task {TaskID}", task.m_scrapedData.m_id);
             
             await m_dbContext.m_weevilDBs
@@ -159,20 +155,23 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_mulch, x => x.m_mulch + task.m_scrapedData.m_rewardMulch)
                     .SetProperty(x => x.m_xp, x => x.m_xp + task.m_scrapedData.m_rewardXp)
                 );
-
-            if (task.m_scrapedData.m_rewardItems != null || 
-                task.m_scrapedData.m_rewardGardenItems != null ||
-                task.m_scrapedData.m_rewardGardenSeeds != null)
-            {
-                // todo: or bundle items?
-                await RewardItems(weevilIdx, task, response);
-            }
+            
+            await RewardItems(weevilIdx, task, response);
+            await RewardSpecialMoves(weevilIdx, task, response);
             
             await m_dbContext.SaveChangesAsync();
         }
         
         private async Task RewardItems(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
         {
+            if (task.m_scrapedData.m_rewardItems == null &&
+                task.m_scrapedData.m_rewardGardenItems == null &&
+                task.m_scrapedData.m_rewardGardenSeeds == null)
+            {
+                // todo: or bundle items?
+                return;
+            }
+
             var nestID = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_idx == weevilIdx)
                 .Select(x => x.m_nest.m_id)
@@ -257,6 +256,26 @@ namespace BinWeevils.Server.Controllers
                     }
                 }
             }
+        }
+        
+        private async Task RewardSpecialMoves(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
+        {
+            if (task.m_scrapedData.m_rewardMoves == null) return;
+            
+            foreach (var rewardMove in task.m_scrapedData.m_rewardMoves)
+            {
+                m_logger.LogTrace("Granting special move {Move}", rewardMove);
+            
+                await m_dbContext.m_weevilSpecialMoves
+                    .Upsert(new WeevilSpecialMoveDB
+                    {
+                        m_weevilIdx = weevilIdx,
+                        m_action = rewardMove
+                    })
+                    .NoUpdate()
+                    .RunAsync();
+                response.m_move.Add((int)rewardMove); // todo: does the game even support a list.. and what delimiter
+            }   
         }
         
         private async Task AddCommonCompletedData(uint weevilIdx, TaskCompletedResponse resp)

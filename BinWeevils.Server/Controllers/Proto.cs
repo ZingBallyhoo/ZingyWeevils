@@ -43,12 +43,6 @@ namespace BinWeevils.Server.Controllers
             return "responseCode=1&nextDraw=2020-08-18+17%3A00%3A00&drawID=1479&gotTicket=0&tickets=0";
         }
         
-        [HttpPost("api/php/getSpecialMoves.php")]
-        public string GetSpecialMoves()
-        {
-            return "responseCode=1&result=23";
-        }
-        
         [HttpPost("api/weevil/geo")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public GeoResponse GetGeo()

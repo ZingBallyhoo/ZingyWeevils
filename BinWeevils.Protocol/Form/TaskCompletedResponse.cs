@@ -11,7 +11,7 @@ namespace BinWeevils.Protocol.Form
         // dosh...
         [FormUrlEncodedPropertyName("itemName")] public List<string> m_itemName { get; set; } = [];
         [FormUrlEncodedPropertyName("gardenItemName")] public List<string> m_gardenItemName { get; set; } = [];
-        [FormUrlEncodedPropertyName("move")] public List<string> m_move { get; set; } = [];
+        [FormUrlEncodedPropertyName("move")] public List<int> m_move { get; set; } = [];
         [FormUrlEncodedPropertyName("deleted")] public List<int> m_deletedTasks { get; set; } = [];
         [FormUrlEncodedPropertyName("completedAchievements")] public List<int> m_completedAchievements { get; set; } = [];
         [FormUrlEncodedPropertyName("bundleName")] public string m_bundleName { get; set; } = "";

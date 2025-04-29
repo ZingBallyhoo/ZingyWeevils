@@ -28,7 +28,7 @@ namespace BinWeevils.Protocol.Json
         public required Dictionary<string, int>? m_rewardGardenSeeds { get; set; }
 
         public required List<int>? m_rewardAchievements { get; set; }
-        public required List<int>? m_rewardMoves { get; set; }
+        public required List<EWeevilAction>? m_rewardMoves { get; set; }
 
         public required List<int> m_deletedTasks { get; set; }
 

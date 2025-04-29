@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
+using Microsoft.EntityFrameworkCore;
 
 namespace BinWeevils.Database
 {
@@ -32,5 +34,15 @@ namespace BinWeevils.Database
         [Required] public int m_dosh { get; set; }
         
         [Required] public virtual NestDB m_nest { get; set; }
+        public virtual ICollection<WeevilSpecialMoveDB> m_specialMoves { get; set; }
+    }
+    
+    [PrimaryKey(nameof(m_weevilIdx), nameof(m_action))]
+    public class WeevilSpecialMoveDB
+    {
+        [Key, Required] public uint m_weevilIdx { get; set; }
+        [Key, Required] public EWeevilAction m_action { get; set; }
+        
+        [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }
 }

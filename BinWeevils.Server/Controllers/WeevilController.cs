@@ -11,7 +11,7 @@ namespace BinWeevils.Server.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/weevil")]
+    [Route("api")]
     public class WeevilController : Controller
     {
         private readonly ILogger<WeevilController> m_logger;
@@ -23,7 +23,7 @@ namespace BinWeevils.Server.Controllers
             m_dbContext = dbContext;
         }
         
-        [StructuredFormPost("data")]
+        [StructuredFormPost("weevil/data")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<WeevilDataResponse> GetData([FromBody] WeevilDataRequest request)
         {
@@ -62,7 +62,7 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [StructuredFormPost("buy-food")]
+        [StructuredFormPost("weevil/buy-food")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<BuyFoodResponse> BuyFood([FromBody] BuyFoodRequest request)
         {
@@ -102,7 +102,7 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [StructuredFormPost("update-stats")]
+        [StructuredFormPost("weevil/update-stats")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<UpdateStatsResponse> UpdateStats([FromBody] UpdateStatsRequest request)
         {
@@ -123,7 +123,7 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [HttpGet("get-progress")]
+        [HttpGet("weevil/get-progress")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetIntroProgressResponse> GetIntroProgress()
         {
@@ -141,7 +141,7 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [StructuredFormPost("set-progress")]
+        [StructuredFormPost("weevil/set-progress")]
         public async Task SetIntroProgress([FromBody] SetIntroProgressRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("WeevilController.SetIntroProgress");
@@ -158,7 +158,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_introProgress, encodedProgress.m_bits));
         }
         
-        [StructuredFormPost("change-definition")]
+        [StructuredFormPost("weevil/change-definition")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<ChangeWeevilDefResponse> ChangeDefinition([FromBody] ChangeWeevilDefRequest request)
         {
@@ -194,7 +194,7 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [HttpGet("get-my-apparel")]
+        [HttpGet("weevil/get-my-apparel")]
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<OwnedApparelList> GetMyApparel()
         {
@@ -242,6 +242,31 @@ namespace BinWeevils.Server.Controllers
             }
             
             return list;
+        }
+        
+        [StructuredFormPost("php/getSpecialMoves.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetSpecialMovesResponse> GetSpecialMoves([FromBody] GetIgnoreListRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.GetSpecialMoves");
+            
+            if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to get someone else's special moves");
+            }
+            
+            var specialMoves = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name) 
+                .SelectMany(x => x.m_specialMoves)
+                .OrderBy(x => x.m_action)
+                .Select(x => x.m_action)
+                .ToListAsync();
+            
+            return new GetSpecialMovesResponse
+            {
+                m_responseCode = 1,
+                m_result = string.Join(';', specialMoves.Select(x => (int)x))
+            };
         }
     }
 }
