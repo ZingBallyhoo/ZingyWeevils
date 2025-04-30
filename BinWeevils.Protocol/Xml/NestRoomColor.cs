@@ -1,12 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
+using StackXML.Str;
 
 namespace BinWeevils.Protocol.Xml
 {
-    public struct NestRoomColor : ISpanParsable<NestRoomColor>, ISpanFormattable
+    public partial struct NestRoomColor : ISpanParsable<NestRoomColor>, ISpanFormattable
     {
-        public sbyte m_r;
-        public sbyte m_g;
-        public sbyte m_b;
+        [StrField] public sbyte m_r;
+        [StrField] public sbyte m_g;
+        [StrField] public sbyte m_b;
         
         public static NestRoomColor Parse(string s, IFormatProvider? provider)
         {
@@ -29,20 +30,16 @@ namespace BinWeevils.Protocol.Xml
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out NestRoomColor result)
         {
-            Span<Range> splits = [Range.All, Range.All, Range.All];
-            var count = s.Split(splits, '|');
-            if (count != 3)
+            var reader = new StrReader(s, '|');
+            
+            result = new NestRoomColor();
+            result.Deserialize(ref reader);
+            
+            if (reader.HasRemaining())
             {
-                result = default;
                 return false;
             }
             
-            result = new NestRoomColor
-            {
-                m_r = sbyte.Parse(s[splits[0]]),
-                m_g = sbyte.Parse(s[splits[1]]),
-                m_b = sbyte.Parse(s[splits[2]]),
-            };
             result.Validate();
             return true;
         }

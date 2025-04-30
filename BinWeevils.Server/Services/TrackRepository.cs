@@ -29,6 +29,15 @@ namespace BinWeevils.Server.Services
             public string m_artist { get; set; } 
         }
         
+        public bool IsBinTune(int id)
+        {
+            if (!m_tracks.TryGetValue(id, out var track))
+            {
+                return false;
+            }
+            return IsBinTune(track);
+        }
+        
         public bool IsBinTune(TrackArchiveJson track)
         {
             if (track.m_id == 53) return false; // duplicate of "fall in, flip out"

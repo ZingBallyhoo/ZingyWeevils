@@ -13,7 +13,7 @@ namespace BinWeevils.Database
         public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
         public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
 
-        // public DbSet<NestDB> m_nests { get; set; }
+        public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestItemDB> m_nestItems { get; set; }
         public DbSet<NestGardenItemDB> m_nestGardenItems { get; set; }
         public DbSet<NestSeedItemDB> m_nestGardenSeeds { get; set; }
@@ -132,6 +132,7 @@ namespace BinWeevils.Database
             modelBuilder.Entity<BusinessDB>(b =>
             {
                 b.ToTable("BusinessDB");
+                b.ComplexProperty(x => x.m_playList);
             });
             
             modelBuilder.Entity<ItemType>(b =>
@@ -243,6 +244,14 @@ namespace BinWeevils.Database
                 .Where(x => x.m_fileName == configName)
                 .Select(x => x.m_id)
                 .SingleOrDefaultAsync();
+        }
+        
+        public async Task SetNestUpdatedNoConcurrency(uint nestID) 
+        {
+            await m_nests
+                .Where(x => x.m_id == nestID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_lastUpdated, DateTime.UtcNow));
         }
     }
     

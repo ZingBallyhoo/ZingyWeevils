@@ -2,6 +2,8 @@ using System.Net.Mime;
 using BinWeevils.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form.Business;
+using BinWeevils.Protocol.Xml;
+using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly ILogger<BusinessController> m_logger;
         private readonly WeevilDBContext m_dbContext;
+        private readonly TrackRepository m_trackRepository;
         
         private static readonly HashSet<uint> s_allowedColors = [
             0x990000, 0x00AA00, 0x000099, 
@@ -29,10 +32,29 @@ namespace BinWeevils.Server.Controllers
             0x000000
         ];
         
-        public BusinessController(ILogger<BusinessController> logger, WeevilDBContext dbContext)
+        public BusinessController(ILogger<BusinessController> logger, WeevilDBContext dbContext, 
+            TrackRepository trackRepository)
         {
             m_logger = logger;
             m_dbContext = dbContext;
+            m_trackRepository = trackRepository;
+        }
+        
+        private async Task<uint> ValidateNest(uint locID)
+        {
+            var checkDto = await m_dbContext.m_weevilDBs
+                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(weev => weev.m_nest.m_rooms.Any(x => x.m_id == locID))
+                .Select(weev => new
+                {
+                    m_nestID = weev.m_nest.m_id
+                })
+                .SingleAsync();
+            if (checkDto == null)
+            {
+                throw new Exception("invalid request - not our room");
+            }
+            return checkDto.m_nestID;
         }
         
         [StructuredFormPost("php/buyTycoonBusinessPremises.php")]
@@ -124,16 +146,7 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
-            var nest = await m_dbContext.m_weevilDBs
-                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Where(weev => weev.m_nest.m_rooms.Any(x => x.m_id == request.m_locID))
-                .Select(weev => weev.m_nest)
-                .SingleAsync();
-            if (nest == null)
-            {
-                throw new Exception("invalid change name request");
-            }
-            
+            var nestID = await ValidateNest(request.m_locID);
             var rowsUpdated = await m_dbContext.m_businesses
                 .Where(x => x.m_id == request.m_locID)
                 .Where(x => x.m_type == EBusinessType.NightClub)
@@ -144,9 +157,7 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("business name change failed");
             }
             
-            nest.m_lastUpdated = DateTime.UtcNow;
-            await m_dbContext.SaveChangesAsync();
-            
+            await m_dbContext.SetNestUpdatedNoConcurrency(nestID);
             await transaction.CommitAsync();
             
             return new SubmitBusinessNameResponse
@@ -172,16 +183,7 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
-            var nest = await m_dbContext.m_weevilDBs
-                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Where(weev => weev.m_nest.m_rooms.Any(x => x.m_id == request.m_locID))
-                .Select(weev => weev.m_nest)
-                .SingleAsync();
-            if (nest == null)
-            {
-                throw new Exception("invalid save business state request");
-            }
-            
+            var nestID = await ValidateNest(request.m_locID);
             var rowsUpdated = await m_dbContext.m_businesses
                 .Where(x => x.m_id == request.m_locID)
                 .Where(x => x.m_type == EBusinessType.NightClub)
@@ -194,9 +196,73 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("business save state failed");
             }
             
-            nest.m_lastUpdated = DateTime.UtcNow;
-            await m_dbContext.SaveChangesAsync();
+            await m_dbContext.SetNestUpdatedNoConcurrency(nestID);
+            await transaction.CommitAsync();
+        }
+        
+        [StructuredFormPost("php/getPlaylistIDsForRoom.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetPlayListIDsForRoomResponse> GetPlayListIDsForRoom([FromBody] GetPlayListIDsForRoomRequest request)
+        {
+            // todo: only called by owner but doesn't really matter
             
+            using var activity = ApiServerObservability.StartActivity("BusinessController.GetPlayListIDsForRoom");
+            activity?.SetTag("locID", request.m_locID);
+            
+            var dto = await m_dbContext.m_businesses
+                .Where(bus => bus.m_id == request.m_locID)
+                .Select(x => new
+                {
+                    x.m_playList
+                })
+                .SingleOrDefaultAsync();
+            
+            if (dto == null)
+            {
+                return new GetPlayListIDsForRoomResponse
+                {
+                    m_success = false
+                };
+            }
+            
+            return new GetPlayListIDsForRoomResponse
+            {
+                m_success = true,
+                m_playList = dto.m_playList.ToString()
+            };
+        }
+        
+        [StructuredFormPost("php/savePlayListIDsForRoom.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task SavePlayListIDsForRoom([FromBody] SavePlayListIDsForRoomRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("BusinessController.SavePlayListIDsForRoom");
+            activity?.SetTag("locID", request.m_locID);
+            activity?.SetTag("playListIDs", request.m_playListIDs);
+            
+            if (!PlayListIDs.TryParse(request.m_playListIDs, null, out var playList)) 
+            {
+                throw new InvalidDataException("invalid play list");
+            }
+
+            foreach (var value in playList.GetAllValues())
+            {
+                if (value == -1) continue;
+                if (!m_trackRepository.IsBinTune(value))
+                {
+                    throw new InvalidDataException("trying to use a non-bin-tune track");
+                }
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var nestID = await ValidateNest(request.m_locID);
+            await m_dbContext.m_businesses
+                .Where(x => x.m_id == request.m_locID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_playList, playList));
+            
+            await m_dbContext.SetNestUpdatedNoConcurrency(nestID);
             await transaction.CommitAsync();
         }
     }

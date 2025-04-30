@@ -4,7 +4,7 @@ using System.Text;
 using ArcticFox.PolyType.FormEncoded;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
-namespace BinWeevils.Server.Services
+namespace BinWeevils.Server
 {
     public class FormInputFormatter : TextInputFormatter
     {

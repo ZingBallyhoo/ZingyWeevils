@@ -5,7 +5,7 @@ using ArcticFox.PolyType.FormEncoded;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using PolyType;
 
-namespace BinWeevils.Server.Services
+namespace BinWeevils.Server
 {
     public partial class FormOutputFormatter : TextOutputFormatter
     {

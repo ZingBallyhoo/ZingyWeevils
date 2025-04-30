@@ -4,7 +4,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
-namespace BinWeevils.Server.Services
+namespace BinWeevils.Server
 {
     public class UsernameOnlyAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {

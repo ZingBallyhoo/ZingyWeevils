@@ -236,7 +236,7 @@ namespace BinWeevils.Server.Controllers
                     m_nestID = weev.m_nest.m_id,
                     m_lastUpdate = weev.m_nest.m_lastUpdated,
                     m_weevilXp = weev.m_xp,
-                    m_gardenSize = weev.m_nest.m_gardenSize,
+                    weev.m_nest.m_gardenSize,
                     m_rooms = weev.m_nest.m_rooms.Select(y => new
                     {
                         y.m_type,
@@ -293,9 +293,9 @@ namespace BinWeevils.Server.Controllers
                         m_name = room.m_business.m_name,
                         m_busOpen = room.m_business.m_open,
                         m_busType = (uint)room.m_business.m_type,
-                        m_signColour = room.m_business.m_signColor,
-                        m_signTextColour = room.m_business.m_signTextColor, 
-                        m_playList = "" // todo
+                        m_signColor = room.m_business.m_signColor,
+                        m_signTextColor = room.m_business.m_signTextColor, 
+                        m_playList = room.m_business.m_playList
                     };
                 } else
                 {
@@ -666,12 +666,16 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
 
-            var nest = await m_dbContext.m_weevilDBs
+            var check = await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(weev => weev.m_nest)
                 .Where(nest => nest.m_id == request.m_nestID)
                 .Where(nest => nest.m_rooms.Any(room => room.m_id == request.m_locID))
-                .SingleAsync();
+                .AnyAsync();
+            if (!check)
+            {
+                throw new InvalidDataException("invalid request");
+            }
             
             var parsedCol = NestRoomColor.Parse(request.m_col, null);
             await m_dbContext.m_nestRooms
@@ -679,8 +683,7 @@ namespace BinWeevils.Server.Controllers
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_color, parsedCol));
             
-            nest.m_lastUpdated = DateTime.UtcNow;
-            await m_dbContext.SaveChangesAsync();
+            await m_dbContext.SetNestUpdatedNoConcurrency(request.m_nestID);
             await transaction.CommitAsync();
         }
         

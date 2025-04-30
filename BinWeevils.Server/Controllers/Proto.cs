@@ -105,11 +105,5 @@ namespace BinWeevils.Server.Controllers
             // stubbed just to prevent 404s
             return Task.CompletedTask;
         }
-        
-        [HttpPost("api/php/getPlaylistIDsForRoom.php")]
-        public string GetPlayListIdsForRoom()
-        {
-            return "success=1&playlistIDs=4,7&b=r";
-        }
     }
 }

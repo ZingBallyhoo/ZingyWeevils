@@ -495,12 +495,8 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("unable to add harvest rewards");
             }
             
-            // avoid concurrency check, not needed
             // todo: the client won't reload other's plant configs so...
-            /*await m_dbContext.m_nests
-                .Where(x => x.m_id == nestID)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_lastUpdated, DateTime.UtcNow));*/
+            //await m_dbContext.SetNestUpdatedNoConcurrency(nestID);
             
             var resultDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
