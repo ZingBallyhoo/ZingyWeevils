@@ -60,6 +60,13 @@ namespace BinWeevils.Protocol.Xml
         {
             result = new ItemColor();
             
+            if (s is "-1")
+            {
+                // this code path should only be used in the context of the client sending the default color of an
+                // uncolorable object
+                return true;
+            }
+            
             if (s.StartsWith("0x"))
             {
                 if (!uint.TryParse(s.Slice(2), NumberStyles.HexNumber, null, out var parsedHexEarly))

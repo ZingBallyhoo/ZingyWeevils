@@ -21,7 +21,7 @@ namespace BinWeevils.Server.Services
                 m_fileName = itemType.m_configLocation,
                 m_description = itemType.m_description,
                 m_deliveryTime = 0,
-                m_color = itemType.m_defaultHexColor == "-1" && itemType.m_paletteID != -1 ? 
+                m_color = /*itemType.m_defaultHexColor == "-1" && */itemType.m_paletteID != -1 ? 
                     dbContext.m_paletteEntries
                         .Where(y => y.m_paletteID == itemType.m_paletteID)
                         .OrderBy(y => EF.Functions.Random())

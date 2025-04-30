@@ -60,7 +60,7 @@ namespace BinWeevils.Server.Controllers
             
             var items = await itemQuery
                 .ToStockItem(m_dbContext, m_economySettings.Value)
-                .Take(100)
+                .Take(300)
                 .ToArrayAsync();
             
             return new Stock
