@@ -190,7 +190,7 @@ namespace BinWeevils.Server.Controllers
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_signColor, request.m_signColor)
                     .SetProperty(x => x.m_signTextColor, request.m_signTextColor)
-                    .SetProperty(x => x.m_open, request.m_busOpen != 0));
+                    .SetProperty(x => x.m_open, request.m_busOpen));
             if (rowsUpdated == 0)
             {
                 throw new Exception("business save state failed");
@@ -257,10 +257,15 @@ namespace BinWeevils.Server.Controllers
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             var nestID = await ValidateNest(request.m_locID);
-            await m_dbContext.m_businesses
+            var rowsUpdated = await m_dbContext.m_businesses
                 .Where(x => x.m_id == request.m_locID)
+                .Where(x => x.m_type == EBusinessType.NightClub)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_playList, playList));
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("save playlist failed");
+            }
             
             await m_dbContext.SetNestUpdatedNoConcurrency(nestID);
             await transaction.CommitAsync();
