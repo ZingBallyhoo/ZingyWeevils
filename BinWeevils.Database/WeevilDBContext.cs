@@ -77,6 +77,7 @@ namespace BinWeevils.Database
             modelBuilder.Entity<NestItemDB>(b =>
             {
                 b.ToTable("NestItemDB");
+                b.ComplexProperty(x => x.m_color);
                 
                 b.HasOne(x => x.m_placedItem)
                  .WithOne(x => x.m_item)
@@ -104,6 +105,7 @@ namespace BinWeevils.Database
             modelBuilder.Entity<NestGardenItemDB>(b =>
             {
                 b.ToTable("NestGardenItemDB");
+                b.ComplexProperty(x => x.m_color);
                 
                 b.HasOne(x => x.m_placedItem)
                     .WithOne(x => x.m_item)

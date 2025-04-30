@@ -8,5 +8,6 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("id")] public uint m_databaseID;
         [XmlField("cat")] public int m_category;
         [XmlField("pc")] public int m_powerConsumption;
+        [XmlField("clr")] public ItemColor m_color;
     }
 }

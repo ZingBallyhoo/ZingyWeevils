@@ -54,6 +54,7 @@ namespace BinWeevils.Server.Controllers
                             m_databaseID = item.m_id,
                             m_category = (int)item.m_itemType.m_category,
                             m_powerConsumption = item.m_itemType.m_powerConsumption,
+                            m_color = item.m_color,
                             m_fileName = item.m_itemType.m_configLocation,
                             m_deliveryTime = 0
                         })

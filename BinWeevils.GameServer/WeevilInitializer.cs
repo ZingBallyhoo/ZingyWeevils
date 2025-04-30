@@ -194,6 +194,7 @@ namespace BinWeevils.GameServer
                     nest.m_gardenItems.Add(new NestGardenItemDB
                     {
                         m_itemTypeID = (await m_dbContext.FindItemByConfigName(gardenItem.m_fileName)).Value,
+                        m_color = gardenItem.m_color,
                         m_placedItem = new NestPlacedGardenItemDB
                         {
                             m_room = locMap[gardenItem.m_locID],
@@ -243,10 +244,10 @@ namespace BinWeevils.GameServer
                     .FirstOrDefaultAsync();
                 if (itemTypeID == 0) return; // ceiling
                 
-                // todo: item color
                 var dbItem = new NestItemDB
                 {
                     m_itemTypeID = itemTypeID,
+                    m_color = nestItem.m_color,
                     m_placedItem = new NestPlacedItemDB
                     {
                         m_room = locMap[nestItem.m_locID],

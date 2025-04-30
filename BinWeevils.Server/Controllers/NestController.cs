@@ -197,6 +197,7 @@ namespace BinWeevils.Server.Controllers
                 .Select(x => new
                 {
                     x.m_id,
+                    x.m_color,
                     x.m_itemType.m_category,
                     x.m_itemType.m_powerConsumption,
                     x.m_itemType.m_configLocation,
@@ -212,7 +213,7 @@ namespace BinWeevils.Server.Controllers
                     m_category = (int)item.m_category,
                     m_powerConsumption = item.m_powerConsumption,
                     m_configName = item.m_configLocation,
-                    m_clrTemp = "", // todo
+                    m_color = item.m_color,
                     m_deliveryTime = 0, // todo
                 });
             }
@@ -247,6 +248,7 @@ namespace BinWeevils.Server.Controllers
                     m_items = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(y => new
                     {
                         y.m_id,
+                        y.m_color,
                         y.m_itemType.m_configLocation,
                         y.m_itemType.m_category,
                         y.m_itemType.m_powerConsumption,
@@ -258,6 +260,7 @@ namespace BinWeevils.Server.Controllers
                     m_gardenItems = weev.m_nest.m_gardenItems.Where(x => x.m_placedItem != null).Select(y => new
                     {
                         y.m_id,
+                        y.m_color,
                         y.m_itemType.m_configLocation,
                         y.m_itemType.m_category,
                         y.m_itemType.m_powerConsumption,
@@ -316,8 +319,8 @@ namespace BinWeevils.Server.Controllers
                     m_databaseID = item.m_id,
                     m_category = (int)item.m_category,
                     m_powerConsumption = item.m_powerConsumption,
+                    m_color = item.m_color,
                     m_configName = item.m_configLocation,
-                    m_clrTemp = "0|0|0", // todo
                     m_locID = item.m_roomID,
                     m_currentPos = item.m_posAnimationFrame,
                     m_placedOnFurnitureID = item.m_placedOnFurnitureID,
@@ -331,6 +334,7 @@ namespace BinWeevils.Server.Controllers
                     m_databaseID = item.m_id,
                     m_category = (int)item.m_category,
                     m_powerConsumption = item.m_powerConsumption,
+                    m_color = item.m_color,
                     m_fileName = item.m_configLocation,
                     m_locID = item.m_roomID,
                     m_x = item.m_x,

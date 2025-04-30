@@ -80,15 +80,14 @@ namespace BinWeevils.Database
     public class NestItemDB
     {
         [Key] public uint m_id { get; set; }
-        // todo: color...
-        
-        [Required] public uint m_itemTypeID { get; set; }
-        [Required, ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
-        
         [Required] public uint m_nestID { get; set; }
-        [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
+        [Required] public uint m_itemTypeID { get; set; }
+        [Required] public ItemColor m_color { get; set; } = new ItemColor();
         
         public virtual NestPlacedItemDB? m_placedItem { get; set; }
+        
+        [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
+        [Required, ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
 
     }
     
@@ -114,11 +113,11 @@ namespace BinWeevils.Database
     public class NestGardenItemDB 
     {
         [Key] public uint m_id { get; set; }
-        
-        [Required] public uint m_itemTypeID { get; set; }
-        [Required, ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
-        
         [Required] public uint m_nestID { get; set; }
+        [Required] public uint m_itemTypeID { get; set; }
+        [Required] public ItemColor m_color { get; set; } = new ItemColor();
+
+        [Required, ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
         [Required, ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
         
         public virtual NestPlacedGardenItemDB? m_placedItem { get; set; }

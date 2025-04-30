@@ -6,7 +6,6 @@ namespace BinWeevils.Protocol.Xml
     public partial record NestItemBase : ItemBase
     {
         [XmlField("configName")] public string m_configName;
-        [XmlField("clr")] public string m_clrTemp;
     }
     
     [XmlCls("item")]
