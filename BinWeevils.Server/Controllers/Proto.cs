@@ -111,11 +111,5 @@ namespace BinWeevils.Server.Controllers
         {
             return "success=1&playlistIDs=4,7&b=r";
         }
-        
-        [HttpGet("api/php/getBinTunes.php")]
-        public string GetBinTunes()
-        {
-            return "success=1&title0=Party+On&filename0=partyloop1&price0=50&artist0=Bin+Party&trackID0=1&title1=Party+Now&filename1=partyloop2&price1=50&artist1=Bin+Party&trackID1=2&title2=Party+Slow&filename2=partyloop3&price2=50&artist2=Bin+Party&trackID2=3&title3=Funk+Party&filename3=partyloop4&price3=50&artist3=Bin+Party&trackID3=4&title4=Fiesta+Tunes&filename4=fiesta_DanceAtTheRioGrande&price4=150&artist4=Bin+Party&trackID4=58&title5=Fall+In%2C+Flip+Out&filename5=celebrity%2FBE_Fall_In_Flip_Out_New_Master_06_03_12&price5=150&artist5=Bin+Party&trackID5=60&title6=Enemy&filename6=Enemy&price6=100&artist6=Dan+Morrissey&trackID6=5&title7=Altered+States&filename7=AlteredStates&price7=100&artist7=James+Treweek&trackID7=6&title8=Diva+Fever&filename8=DivaFever&price8=100&artist8=Redfor-Courtie&trackID8=7&title9=Scratch&filename9=Scratch&price9=100&artist9=Tim+Butler&trackID9=8&title10=Prodigious+Party&filename10=prodigious&price10=80&artist10=Prodigious&trackID10=9&numBinTunes=11&myTrack0=58&myTrack1=60&myTrack2=1&myTrack3=2&myTrack4=3&myTrack5=5&myTrack6=6&myTrack7=8&myTrack8=9&myTrack9=7&myTrack10=4&numTracksPurchased=11&b=r";
-        }
     }
 }

@@ -6,7 +6,7 @@ using BinWeevils.Protocol.Json;
 using BinWeevils.Protocol.Xml;
 using StackXML;
 
-namespace BinWeevils.Server
+namespace BinWeevils.Server.Services
 {
     public class QuestRepository
     {
@@ -151,10 +151,10 @@ namespace BinWeevils.Server
                     2 => true, // silver knight
                     3 => true, // bd 1
                     4 => true, // bd2
-                    5 => true, // ztec
+                    5 => true, // aztec
                     6 => true, // binstalk
-                    7 => true, // trouble 1 - 84
-                    8 => true, // trouble 2 - 130
+                    //7 => true, // trouble 1 - 84
+                    //8 => true, // trouble 2 - 130
                     _ => false,
                     
                     /*1 => true, // join the sws

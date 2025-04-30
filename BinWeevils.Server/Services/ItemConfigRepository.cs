@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using BinWeevils.Protocol.Xml;
 using StackXML;
 
-namespace BinWeevils.Server
+namespace BinWeevils.Server.Services
 {
     public class ItemConfigRepository
     {

@@ -1,6 +1,6 @@
 using BinWeevils.Protocol.Sql;
 
-namespace BinWeevils.Server
+namespace BinWeevils.Server.Services
 {
     public class EconomySettings
     {

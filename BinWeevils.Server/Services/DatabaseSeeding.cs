@@ -3,7 +3,7 @@ using BinWeevils.Database;
 using BinWeevils.Protocol.Json;
 using Microsoft.EntityFrameworkCore;
 
-namespace BinWeevils.Server
+namespace BinWeevils.Server.Services
 {
     public class DatabaseSeeding
     {

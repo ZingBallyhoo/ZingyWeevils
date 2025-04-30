@@ -8,6 +8,7 @@ using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
 using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
+using BinWeevils.Server.Services;
 using Grafana.OpenTelemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -54,6 +55,7 @@ internal static class Program
             XmlReadBuffer.ReadStatic<NestLocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["NestLocationDefinitions"]!)));
         builder.Services.AddSingleton<ItemConfigRepository>();
         builder.Services.AddSingleton<QuestRepository>();
+        builder.Services.AddSingleton<TrackRepository>();
         builder.Services.AddOptions<EconomySettings>();
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
@@ -151,6 +153,7 @@ internal static class Program
             .AddRedirect("^cinema/(.+).flv", "cdn/ads/binweevils/binTycoonTour2.flv") // riggs
             .AddRewrite("^nestNews/xml/uk/nestNews\\.xml", "nestNews/xml/nestNews.xml", true)
             .AddRewrite("^sounds/nestSounds/firePlace\\.mp3", "bintunes/flemManor/firePlace.mp3", true) // library_no_book
+            .AddRedirect("^externalUIs/myMusicManager\\.swf", "externalUIs/myMusicManager_20_05_13.swf") // fix page size
         
             // overwritten with incompatible versions...
             .AddRewrite("^externalUIs/petBuilder\\.swf", "cdn/play/externalUIs/petBuilder.swf", true)

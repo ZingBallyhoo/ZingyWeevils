@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using BinWeevils.Database;
 using BinWeevils.Protocol.Sql;
-using BinWeevils.Server;
+using BinWeevils.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace BinWeevils.Tests

@@ -3,10 +3,11 @@ using System.Reflection;
 using System.Text;
 using ArcticFox.PolyType.FormEncoded;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using PolyType;
 
-namespace BinWeevils.Server
+namespace BinWeevils.Server.Services
 {
-    public class FormOutputFormatter : TextOutputFormatter
+    public partial class FormOutputFormatter : TextOutputFormatter
     {
         public FormOutputFormatter()
         {
@@ -20,12 +21,25 @@ namespace BinWeevils.Server
         {
             var options = new FormOptions();
 
-            var polyTypeMethod = typeof(FormOptions)
-                .GetMethod(nameof(FormOptions.Serialize), BindingFlags.Instance | BindingFlags.Public)!
-                .MakeGenericMethod(context.ObjectType!);
-            var encoded = (string)polyTypeMethod.Invoke(options, [context.Object])!;
+            string encoded;
+            if (context.ObjectType == typeof(Dictionary<string, string>))
+            {
+                encoded = options.Serialize2<Dictionary<string, string>, DictWitness>((Dictionary<string, string>?)context.Object);
+            } else
+            {
+                var polyTypeMethod = typeof(FormOptions)
+                    .GetMethod(nameof(FormOptions.Serialize), BindingFlags.Instance | BindingFlags.Public)!
+                    .MakeGenericMethod(context.ObjectType!);
+                encoded = (string)polyTypeMethod.Invoke(options, [context.Object])!;
+            }
+            
             
             return context.HttpContext.Response.WriteAsync(encoded, selectedEncoding);
+        }
+        
+        [GenerateShape<Dictionary<string, string>>]
+        private partial class DictWitness
+        {
         }
     }
 }

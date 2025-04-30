@@ -1,6 +1,6 @@
 using System.Net.Mime;
-using System.Text.Json;
 using BinWeevils.Protocol.Form;
+using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,26 +11,18 @@ namespace BinWeevils.Server.Controllers
     [Route("api")]
     public class TrackDetailsController : Controller
     {
-        private readonly Dictionary<int, TrackArchiveJson> m_tracks;
+        private readonly TrackRepository m_repository;
         
-        public TrackDetailsController()
+        public TrackDetailsController(TrackRepository repository) 
         {
-            var tracksPath = Path.Combine("Data", "tracks.json");
-            m_tracks = JsonSerializer.Deserialize<Dictionary<int, TrackArchiveJson>>(System.IO.File.ReadAllText(tracksPath))!;
-        }
-        
-        private class TrackArchiveJson
-        {
-            public string m_file { get; set; } 
-            public string m_title { get; set; } 
-            public string m_artist { get; set; } 
+            m_repository = repository;
         }
         
         [StructuredFormPost("php/getTrackDetails.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public TrackDetailsResponse GetTrackDetails([FromBody] TrackDetailsRequest request)
         {
-            if (!m_tracks.TryGetValue(request.m_trackID, out var track))
+            if (!m_repository.m_tracks.TryGetValue(request.m_trackID, out var track))
             {
                 return new TrackDetailsResponse
                 {
@@ -46,6 +38,32 @@ namespace BinWeevils.Server.Controllers
                 m_artist = track.m_artist,
                 m_trackID = request.m_trackID
             };
+        }
+        
+        [HttpGet("php/getBinTunes.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public Dictionary<string, string> GetBinTunes()
+        {
+            var binTunes = m_repository.m_tracks.Values.Where(x => m_repository.IsBinTune(x)).ToArray();
+            var resp = new Dictionary<string, string>
+            {
+                {"success", "1"},
+                {"numBinTunes", $"{binTunes.Length}"},
+                {"numTracksPurchased", $"{binTunes.Length}"}
+            };
+            
+            for (var i = 0; i < binTunes.Length; i++)
+            {
+                resp.Add($"title{i}", binTunes[i].m_title);
+                resp.Add($"filename{i}", binTunes[i].m_file);
+                resp.Add($"price{i}", "0");
+                resp.Add($"artist{i}", binTunes[i].m_artist);
+                resp.Add($"trackID{i}", $"{binTunes[i].m_id}");
+                
+                resp.Add($"myTrack{i}", $"{binTunes[i].m_id}");
+            }
+            
+            return resp;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using StackXML;
 
-namespace BinWeevils.Server
+namespace BinWeevils.Server.Services
 {
     public class StackXMLOutputFormatter : TextOutputFormatter
     {
