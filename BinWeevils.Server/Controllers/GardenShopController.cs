@@ -38,7 +38,8 @@ namespace BinWeevils.Server.Controllers
                 .OrderBy(x => x.m_ordering);
             
             var items = await itemQuery
-                .ToArrayAsync();
+                .ToStockItem(m_dbContext, m_economySettings.Value)
+                .ToListAsync();
             
             var seeds = await m_dbContext.m_seedTypes
                 .Where(x => x.m_price > 0)
@@ -47,20 +48,7 @@ namespace BinWeevils.Server.Controllers
             
             return new Stock
             {
-                m_items = items.Select(x => new NestStockItem
-                {
-                    m_id = x.m_itemTypeID,
-                    m_level = (uint)x.m_minLevel,
-                    m_name = x.m_name,
-                    m_probability = x.m_probability,
-                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
-                    m_tycoon = x.m_tycoonOnly ? 1 : 0,
-                    m_fileName = x.m_configLocation,
-                    m_xp = m_economySettings.Value.GetItemXp(x.m_expPoints),
-                    m_color = x.m_defaultHexColor,
-                    m_description = x.m_description,
-                    m_deliveryTime = 0
-                }).ToList(),
+                m_items = items,
                 m_seeds = seeds.Select(x => new SeedStockItem
                 {
                     m_id = x.m_id,
@@ -86,11 +74,6 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("GardenShopController.BuyItem");
             activity?.SetTag("id", request.m_id);
             activity?.SetTag("color", request.m_color);
-            
-            if (request.m_color != "-1")
-            {
-                throw new InvalidDataException("garden items are not expected to have colors");
-            }
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             

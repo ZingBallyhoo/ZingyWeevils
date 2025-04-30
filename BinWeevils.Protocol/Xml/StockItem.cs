@@ -3,7 +3,7 @@ using StackXML;
 namespace BinWeevils.Protocol.Xml
 {
     [XmlCls("item")]
-    public partial class StockItemBase
+    public partial record StockItemBase
     {
         [XmlField("id")] public uint m_id;
         [XmlField("level")] public uint m_level;
@@ -14,13 +14,13 @@ namespace BinWeevils.Protocol.Xml
     }
     
     [XmlCls("item")]
-    public partial class FilenameStockItem : StockItemBase
+    public partial record FilenameStockItem : StockItemBase
     {
         [XmlField("fileName")] public string m_fileName;
     }
     
     [XmlCls("item")]
-    public partial class NestStockItem : FilenameStockItem
+    public partial record NestStockItem : FilenameStockItem
     {
         [XmlField("xp")] public uint m_xp;
         [XmlField("clr")] public string m_color;
@@ -29,7 +29,7 @@ namespace BinWeevils.Protocol.Xml
     }
     
     [XmlCls("seed")]
-    public partial class SeedStockItem : FilenameStockItem
+    public partial record SeedStockItem : FilenameStockItem
     {
         [XmlField("cat")] public int m_category;
         [XmlField("mulchYield")] public uint m_mulchYield;

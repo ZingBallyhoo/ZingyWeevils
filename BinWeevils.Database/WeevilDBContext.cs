@@ -1,4 +1,3 @@
-using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

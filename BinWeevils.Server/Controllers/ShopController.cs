@@ -59,25 +59,15 @@ namespace BinWeevils.Server.Controllers
             };
             
             var items = await itemQuery
+                .ToStockItem(m_dbContext, m_economySettings.Value)
                 .Take(100)
                 .ToArrayAsync();
             
             return new Stock
             {
-                m_items = items.Select(x => new NestStockItem
+                m_items = items.Select(x => x with
                 {
-                    m_id = x.m_itemTypeID,
-                    m_level = (uint)x.m_minLevel,
-                    m_name = x.m_name,
-                    //m_probability = x.m_probability,
                     m_probability = 127, // todo: why is this field zeroed in the table?
-                    m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
-                    m_tycoon = x.m_tycoonOnly ? 1 : 0,
-                    m_fileName = x.m_configLocation,
-                    m_xp = m_economySettings.Value.GetItemXp(x.m_expPoints),
-                    m_color = x.m_defaultHexColor,
-                    m_description = x.m_description,
-                    m_deliveryTime = 0
                 }).ToList()
             };
         }
