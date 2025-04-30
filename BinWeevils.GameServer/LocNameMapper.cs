@@ -22,6 +22,8 @@ namespace BinWeevils.GameServer
             m_allowedLocNames.Add("map");
             m_allowedLocNames.Add("videoAdsUI");
             m_allowedLocNames.Add("test"); // okay why (weevilPost_18032011.swf)
+            m_allowedLocNames.Add("doing a wordsearch");
+            m_allowedLocNames.Add("doing a crossword");
 
             foreach (var location in locationDefinitions.m_locations)
             {

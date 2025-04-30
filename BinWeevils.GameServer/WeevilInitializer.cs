@@ -21,7 +21,7 @@ namespace BinWeevils.GameServer
             var createParams = new WeevilCreateParams
             {
                 m_name = name,
-                m_weevilDef = 0
+                m_weevilDef = WeevilDef.DEFAULT
             };
             if (name.Contains("fairriver"))
             {
@@ -58,6 +58,7 @@ namespace BinWeevils.GameServer
                 {
                     throw new InvalidDataException();
                 }
+                createParams.m_weevilDef = def.AsNumber();
             }
             
             return await Create(createParams);
@@ -123,7 +124,7 @@ namespace BinWeevils.GameServer
             {
                 m_seedTypeID = (await m_dbContext.FindSeedByConfigName("speedySeed"))!.Value
             });
-            nest.m_gardenItems.Add(new NestGardenItemDB
+            /*nest.m_gardenItems.Add(new NestGardenItemDB
             {
                 m_itemTypeID = (await m_dbContext.FindItemByConfigName("wateringCan"))!.Value,
                 m_placedItem = new NestPlacedGardenItemDB
@@ -132,7 +133,7 @@ namespace BinWeevils.GameServer
                     m_z = 417,
                     m_room = nest.m_rooms.Single(x => x.m_type == ENestRoom.Garden)
                 }
-            });
+            });*/
             
             return nest;
         }

@@ -163,6 +163,22 @@ namespace BinWeevils.GameServer
                     });
                     break;
                 }
+                case Modules.INGAME_GET_ZONE_TIME: // 2#6
+                {
+                    m_taskQueue.Enqueue(() => 
+                    {
+                        var ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+                        // (this handles dst)
+                    
+                        var ukTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, ukTimeZone);
+                        return this.BroadcastXtStr(Modules.INGAME_GET_ZONE_TIME, new GetZoneTimeResponse
+                        {
+                            m_dateTime = ukTime.ToAs3Date()
+                        });
+                    });
+                    
+                    break;
+                }
                 case Modules.INGAME_ADD_APPAREL: // 2#7
                 {
                     var addApparel = new ClientAddApparel();
