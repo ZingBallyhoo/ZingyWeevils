@@ -60,6 +60,11 @@ namespace BinWeevils.Protocol.Xml
         {
             result = new ItemColor();
             
+            if (s is "-1")
+            {
+                return true;
+            }
+            
             if (s.StartsWith("0x"))
             {
                 if (!uint.TryParse(s.Slice(2), NumberStyles.HexNumber, null, out var parsedHexEarly))

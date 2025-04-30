@@ -1,5 +1,6 @@
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
+using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -144,7 +145,8 @@ namespace BinWeevils.Database
             modelBuilder.Entity<PaletteEntryDB>(b =>
             {
                 b.ToTable("PaletteEntryDB");
-                b.HasIndex(x => new { x.m_paletteID, x.m_color });
+                b.ComplexProperty(x => x.m_color);
+                b.HasIndex(x => new { x.m_paletteID, x.m_colorString });
             });
         }
         
@@ -183,6 +185,36 @@ namespace BinWeevils.Database
                 .Where(x => x.m_id == nestID)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_lastUpdated, DateTime.UtcNow));
+        }
+
+        public async Task<ItemColor> ValidateShopItemColor(string str, int paletteID) 
+        {
+            if (!ItemColor.TryParse(str, null, out var parsedColor))
+            {
+                throw new InvalidDataException($"invalid color string");
+            }
+            
+            if (paletteID == -1)
+            {
+                if (parsedColor.m_r != 0 || parsedColor.m_g != 0 || parsedColor.m_b != 0)
+                {
+                    throw new InvalidDataException("no color expected");
+                }
+                return parsedColor;
+            }
+            
+            var valid = await m_paletteEntries
+                .Where(x => x.m_paletteID == paletteID)
+                .AnyAsync(x => 
+                    x.m_color.m_r  == parsedColor.m_r &&
+                    x.m_color.m_g  == parsedColor.m_g &&
+                    x.m_color.m_b  == parsedColor.m_b);
+            if (!valid)
+            {
+                throw new InvalidDataException("color not allowed by palette");
+            }
+            
+            return parsedColor;
         }
     }
     

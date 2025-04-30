@@ -221,6 +221,11 @@ namespace BinWeevils.Server.Controllers
                     m_entries = m_dbContext.m_paletteEntries
                         .Where(y => x.m_paletteID == y.m_paletteID)
                         .OrderBy(y => y.m_index)
+                        .Select(y => new
+                        {
+                            y.m_index,
+                            y.m_colorString
+                        })
                         .ToList()
                 })
                 .AsAsyncEnumerable())
@@ -235,7 +240,7 @@ namespace BinWeevils.Server.Controllers
                     {
                         m_id = apparelType.m_id,
                         m_category = apparelType.m_category,
-                        m_rgb = entry.m_color,
+                        m_rgb = entry.m_colorString,
                         m_worn = isWearingExact,
                     });
                 }

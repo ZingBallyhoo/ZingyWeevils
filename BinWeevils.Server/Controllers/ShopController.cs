@@ -101,10 +101,19 @@ namespace BinWeevils.Server.Controllers
                 .Where(x => x.m_price > 0)
                 .Select(x => new
                 {
+                    x.m_paletteID,
                     m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
                     m_expPoints = m_economySettings.Value.GetItemXp(x.m_expPoints),
                 })
-                .SingleAsync();
+                .SingleOrDefaultAsync();
+            if (itemToBuy == null)
+            {
+                return new BuyItemResponse
+                {
+                    m_result = 3, // ERR_CANT_BUY
+                };
+            }
+            var itemColor = await m_dbContext.ValidateShopItemColor(request.m_itemColor, itemToBuy.m_paletteID);
             
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
@@ -132,7 +141,8 @@ namespace BinWeevils.Server.Controllers
             await m_dbContext.m_nestItems.AddAsync(new NestItemDB
             {
                 m_itemTypeID = request.m_id,
-                m_nestID = resultDto.m_nestID
+                m_nestID = resultDto.m_nestID,
+                m_color = itemColor,
             });
             await m_dbContext.SaveChangesAsync();
             

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using BinWeevils.Database;
 using BinWeevils.Protocol.Json;
+using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
 
 namespace BinWeevils.Server.Services
@@ -61,8 +62,9 @@ namespace BinWeevils.Server.Services
             {
                 m_paletteID = 0,
                 m_index = 0,
-                        
-                m_color = "0,0,0"
+                
+                m_colorString = "0,0,0",
+                m_color = new ItemColor()
             });
 
             foreach (var palettePair in json!.m_palette)
@@ -72,12 +74,18 @@ namespace BinWeevils.Server.Services
                 for (var index = 0; index < palettePair.Value.Count; index++)
                 {
                     var color = palettePair.Value[index];
+                    if (!ItemColor.TryParse(color, null, out var parsedColor))
+                    {
+                        throw new InvalidDataException($"unable to parse palette color: {color}");
+                    }
+                    
                     await m_dbContext.m_paletteEntries.AddAsync(new PaletteEntryDB
                     {
                         m_paletteID = paletteId,
                         m_index = index,
                         
-                        m_color = color
+                        m_colorString = color,
+                        m_color = parsedColor
                     });
                 }
 

@@ -102,7 +102,7 @@ namespace BinWeevils.GameServer
                             .Single(y => 
                                 y.m_paletteID == x.m_apparelType.m_paletteID &&
                                 y.m_index == x.m_apparelPaletteEntryIndex)
-                            .m_color}"
+                            .m_colorString}"
                 }).SingleAsync();
         }
 
@@ -212,7 +212,7 @@ namespace BinWeevils.GameServer
             
             var paletteEntry = await context.m_paletteEntries
                 .Where(x => x.m_paletteID == apparelType.m_paletteID)
-                .Where(x => x.m_color == color)
+                .Where(x => x.m_colorString == color)
                 .Select(x => new
                 {
                     x.m_index
