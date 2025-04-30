@@ -19,7 +19,7 @@ namespace BinWeevils.Server.Controllers
         private readonly WeevilDBContext m_dbContext;
         private readonly TrackRepository m_trackRepository;
         
-        private static readonly HashSet<uint> s_allowedColors = [
+        private static readonly HashSet<int> s_allowedColors = [
             0x990000, 0x00AA00, 0x000099, 
             0x997700, 0x880088, 0xAADFFF, 
             0x0066FF, 0xFF9900, 0xCCCC00,

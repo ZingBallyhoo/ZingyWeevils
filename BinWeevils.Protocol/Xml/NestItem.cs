@@ -19,8 +19,8 @@ namespace BinWeevils.Protocol.Xml
     public partial record NestItem : NestItemBase
     {
         [XmlField("locID")] public uint m_locID;
-        [XmlField("crntPos")] public uint m_currentPos;
+        [XmlField("crntPos")] public byte m_currentPos;
         [XmlField("fID")] public uint m_placedOnFurnitureID;
-        [XmlField("spot")] public uint m_spot;
+        [XmlField("spot")] public byte m_spot;
     }
 }

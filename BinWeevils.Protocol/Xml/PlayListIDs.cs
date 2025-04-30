@@ -63,6 +63,10 @@ namespace BinWeevils.Protocol.Xml
         {
             result = new PlayListIDs();
 
+            if (s.Length == 0)
+            {
+                return true;
+            }
             if (s.Contains("-1", StringComparison.Ordinal))
             {
                 // hey! don't

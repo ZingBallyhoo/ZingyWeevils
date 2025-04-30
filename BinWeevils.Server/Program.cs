@@ -48,6 +48,7 @@ internal static class Program
             return new ActorSystem();
         });
         builder.Services.AddSingleton<LocNameMapper>();
+        builder.Services.AddScoped<WeevilInitializer>();
         
         builder.Services.AddSingleton<LocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));

@@ -159,77 +159,6 @@ namespace BinWeevils.Database
                 .HaveConversion<string>();
         }
         
-        public async Task<WeevilDB> CreateWeevil(WeevilCreateParams createParams)
-        {
-            var now = DateTime.UtcNow;
-            
-            var dbWeevil = new WeevilDB
-            {
-                m_name = createParams.m_name,
-                m_createdAt = now,
-                m_lastLogin = now,
-                m_weevilDef = createParams.m_weevilDef,
-                m_food = 75,
-                m_fitness = 50,
-                m_happiness = 75,
-                m_lastAcknowledgedLevel = 1,
-                m_mulch = 20000,
-                m_dosh = 0
-            };
-            dbWeevil.m_xp = WeevilLevels.GetXpForLevel(dbWeevil.m_lastAcknowledgedLevel);
-            
-            NestDB nest;
-            if (createParams.m_nestDef != null)
-            {
-                nest = await CreateNest(createParams.m_nestDef);
-            } else
-            {
-                nest = NestDB.Empty();
-            }
-            dbWeevil.m_nest = nest;
-            
-            await m_weevilDBs.AddAsync(dbWeevil);
-            await SaveChangesAsync();
-            
-            //var test = await m_itemTypes.Where(x => x.m_configLocation == "f_shelf1").ToArrayAsync();
-            //Console.Out.WriteLine($"{test.Length}");
-            
-            dbWeevil.m_nest.m_items.Add(new NestItemDB
-            {
-                // todo: there are 2 f_shelf1... one with color one without
-                
-                m_itemType = await m_itemTypes
-                    .Where(x => x.m_paletteID == -1)
-                    .SingleAsync(x => x.m_configLocation == "f_shelf1")
-            });
-            dbWeevil.m_nest.m_items.Add(new NestItemDB
-            {
-                m_itemTypeID = (await FindItemByConfigName("o_egg"))!.Value
-            });
-            dbWeevil.m_nest.m_gardenSeeds.Add(new NestSeedItemDB
-            {
-                m_seedTypeID = (await FindSeedByConfigName("speedySeed"))!.Value
-            });
-            dbWeevil.m_nest.m_gardenItems.Add(new NestGardenItemDB
-            {
-                m_itemTypeID = (await FindItemByConfigName("wateringCan"))!.Value,
-                m_placedItem = new NestPlacedGardenItemDB
-                {
-                    m_x = -69,
-                    m_z = 417,
-                    m_room = dbWeevil.m_nest.m_rooms.Single(x => x.m_type == ENestRoom.Garden)
-                }
-            });
-            await SaveChangesAsync();
-            
-            return dbWeevil;
-        }
-        
-        private async Task<NestDB> CreateNest(string nestDef)
-        {
-            throw new NotImplementedException();
-        }
-        
         public async Task<uint?> FindItemByConfigName(string configName)
         {
             return await m_itemTypes
@@ -260,6 +189,8 @@ namespace BinWeevils.Database
         public required string m_name;
         public required ulong m_weevilDef;
         
+        public int? m_mulch;
+        public uint? m_xp;
         public string? m_nestDef;
     }
 }

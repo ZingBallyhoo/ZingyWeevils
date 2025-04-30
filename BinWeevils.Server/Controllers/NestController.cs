@@ -556,6 +556,13 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
+            if (request.m_itemType == "null")
+            {
+                // even the client knows this request is invalid
+                // (moved an item. deleted it, move request is queued and sent later..(?))
+                return;
+            }
+            
             var validCheck = await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(weev => weev.m_nest.m_id == request.m_nestID)

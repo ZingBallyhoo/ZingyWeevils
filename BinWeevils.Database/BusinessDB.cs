@@ -12,8 +12,8 @@ namespace BinWeevils.Database
         public string m_name { get; set; } = "";
         public bool m_open { get; set; }
         public EBusinessType m_type { get; set; }
-        public uint m_signColor { get; set; } = 0xFFFFFF;
-        public uint m_signTextColor { get; set; } = 0;
+        public int m_signColor { get; set; } = 0xFFFFFF;
+        public int m_signTextColor { get; set; } = 0;
         public PlayListIDs m_playList { get; set; } = new PlayListIDs();
         
         [Required, ForeignKey(nameof(m_id))] public virtual NestRoomDB m_room { get; set; }

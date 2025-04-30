@@ -42,6 +42,12 @@ namespace BinWeevils.Server.Services
                 .Where(x => x.m_id >= 100)
                 .ExecuteDeleteAsync();
             
+            // todo: core we are using doesn't support ceilings
+            // this is the easiest way of getting rid of them
+            await m_dbContext.m_itemTypes
+                .Where(x => x.m_configLocation.StartsWith("ceiling_"))
+                .ExecuteDeleteAsync();
+            
             await SeedPalettes();
         }
         

@@ -49,7 +49,7 @@ namespace BinWeevils.GameServer
             m_z = new TypedVar<double>(this, "z", Var.TYPE_NUMBER);
             m_r = new TypedVar<int>(this, "r", Var.TYPE_NUMBER);
             
-            m_weevilDef.SetValue(ulong.Parse(WeevilDef.DEFAULT));
+            m_weevilDef.SetValue(WeevilDef.DEFAULT);
         }
         
         public PID GetUserAddress()

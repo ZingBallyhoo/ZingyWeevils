@@ -31,9 +31,9 @@ namespace BinWeevils.Protocol.Xml
             [XmlField("name")] public string m_name;
             [XmlField("busOpen")] public bool m_busOpen;
             [XmlField("busType")] public uint m_busType;
-            [XmlField("signClr")] public uint m_signColor;
-            [XmlField("signTxtClr")] public uint m_signTextColor;
-            [XmlField("playList")] public PlayListIDs m_playList;
+            [XmlField("signClr")] public int m_signColor;
+            [XmlField("signTxtClr")] public int m_signTextColor;
+            [XmlField("playList")] public PlayListIDs m_playList = new PlayListIDs();
         }
     }
 }

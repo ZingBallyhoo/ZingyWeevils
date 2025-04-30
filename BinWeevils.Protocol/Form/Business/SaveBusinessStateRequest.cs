@@ -6,8 +6,8 @@ namespace BinWeevils.Protocol.Form.Business
     public partial class SaveBusinessStateRequest
     {
         [PropertyShape(Name = "locID")] public uint m_locID { get; set; }
-        [PropertyShape(Name = "signClr")] public uint m_signColor { get; set; }
-        [PropertyShape(Name = "signTxtClr")] public uint m_signTextColor { get; set; }
-        [PropertyShape(Name = "busOpen")] public byte m_busOpen { get; set; }
+        [PropertyShape(Name = "signClr")] public int m_signColor { get; set; }
+        [PropertyShape(Name = "signTxtClr")] public int m_signTextColor { get; set; }
+        [PropertyShape(Name = "busOpen")] public bool m_busOpen { get; set; }
     }
 }

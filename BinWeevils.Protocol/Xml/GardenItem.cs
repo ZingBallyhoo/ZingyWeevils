@@ -18,8 +18,8 @@ namespace BinWeevils.Protocol.Xml
     public partial record GardenItem : GardenItemBase
     {
         [XmlField("locID")] public uint m_locID;
-        [XmlField("x")] public int m_x;
-        [XmlField("z")] public int m_z;
+        [XmlField("x")] public short m_x;
+        [XmlField("z")] public short m_z;
         [XmlField("r")] public int m_r;
     }
     
