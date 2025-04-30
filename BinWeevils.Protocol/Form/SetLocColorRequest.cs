@@ -1,11 +1,12 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class SetLocColorRequest
+    [GenerateShape]
+    public partial class SetLocColorRequest
     {
-        [FormUrlEncodedPropertyName("nestID")] public uint m_nestID { get; set; }
-        [FormUrlEncodedPropertyName("locID")] public uint m_locID { get; set; }
-        [FormUrlEncodedPropertyName("col")] public string m_col { get; set; }
+        [PropertyShape(Name = "nestID")] public uint m_nestID { get; set; }
+        [PropertyShape(Name = "locID")] public uint m_locID { get; set; }
+        [PropertyShape(Name = "col")] public string m_col { get; set; }
     }
 }

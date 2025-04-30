@@ -1,15 +1,16 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class WeevilDataResponse
+    [GenerateShape]
+    public partial class WeevilDataResponse
     {
-        [FormUrlEncodedPropertyName("res")] public int m_result { get; set; }
-        [FormUrlEncodedPropertyName("idx")] public uint m_idx { get; set; }
-        [FormUrlEncodedPropertyName("weevilDef")] public ulong m_weevilDef { get; set; }
-        [FormUrlEncodedPropertyName("level")] public int m_level { get; set; }
-        [FormUrlEncodedPropertyName("tycoon")] public int m_tycoon { get; set; }
-        [FormUrlEncodedPropertyName("lastLog")] public string m_lastLog { get; set; }
-        [FormUrlEncodedPropertyName("dateJoined")] public string m_dateJoined { get; set; }
+        [PropertyShape(Name = "res")] public int m_result { get; set; }
+        [PropertyShape(Name = "idx")] public uint m_idx { get; set; }
+        [PropertyShape(Name = "weevilDef")] public ulong m_weevilDef { get; set; }
+        [PropertyShape(Name = "level")] public int m_level { get; set; }
+        [PropertyShape(Name = "tycoon")] public int m_tycoon { get; set; }
+        [PropertyShape(Name = "lastLog")] public string m_lastLog { get; set; }
+        [PropertyShape(Name = "dateJoined")] public string m_dateJoined { get; set; }
     }
 }

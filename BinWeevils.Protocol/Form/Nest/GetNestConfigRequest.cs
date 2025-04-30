@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Nest
 {
-    public class GetNestConfigRequest
+    [GenerateShape]
+    public partial class GetNestConfigRequest
     {
-        [FormUrlEncodedPropertyName("id")] public string m_userName { get; set; }
+        [PropertyShape(Name = "id")] public string m_userName { get; set; }
     }
 }

@@ -1,18 +1,20 @@
 using System.Globalization;
 using System.Text;
-using ByteDev.FormUrlEncoded;
 using CommunityToolkit.HighPerformance.Helpers;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class SetIntroProgressRequest
+    [GenerateShape]
+    public partial class SetIntroProgressRequest
     {
-        [FormUrlEncodedPropertyName("progress")] public string m_progress { get; set; }
+        [PropertyShape(Name = "progress")] public string m_progress { get; set; }
     }
     
-    public class GetIntroProgressResponse
+    [GenerateShape]
+    public partial class GetIntroProgressResponse
     {
-        [FormUrlEncodedPropertyName("res")] public string m_result { get; set; }
+        [PropertyShape(Name = "res")] public string m_result { get; set; }
     }
     
     public enum IntroProgressBit

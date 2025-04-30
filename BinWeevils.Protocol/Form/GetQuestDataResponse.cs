@@ -1,12 +1,13 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class GetQuestDataResponse
+    [GenerateShape]
+    public partial class GetQuestDataResponse
     {
-        [FormUrlEncodedPropertyName("tasks")] public List<int> m_tasks { get; set; }
-        [FormUrlEncodedPropertyName("itemList")] public string m_itemList { get; set; } = "";
+        [PropertyShape(Name = "tasks")] public List<int> m_tasks { get; set; }
+        [PropertyShape(Name = "itemList")] public string m_itemList { get; set; } = "";
         // "b=r"... why?
-        [FormUrlEncodedPropertyName("responseCode")] public int m_responseCode { get; set; }
+        [PropertyShape(Name = "responseCode")] public int m_responseCode { get; set; }
     }
 }

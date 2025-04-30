@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class GetSpecialMovesRequest
+    [GenerateShape]
+    public partial class GetSpecialMovesRequest
     {
-        [FormUrlEncodedPropertyName("userID")] public string m_userID { get; set; }
+        [PropertyShape(Name = "userID")] public string m_userID { get; set; }
     }
 }

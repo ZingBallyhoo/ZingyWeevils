@@ -1,10 +1,11 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class SubmitDailyBrainRequest
+    [GenerateShape]
+    public partial class SubmitDailyBrainRequest
     {
-        [FormUrlEncodedPropertyName("levels")] public List<string> m_levels { get; set; }
-        [FormUrlEncodedPropertyName("score")] public uint m_score { get; set; }
+        [PropertyShape(Name = "levels")] public List<string> m_levels { get; set; }
+        [PropertyShape(Name = "score")] public uint m_score { get; set; }
     }
 }

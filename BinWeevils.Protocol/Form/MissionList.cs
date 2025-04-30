@@ -1,22 +1,23 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public record MissionList
+    [GenerateShape]
+    public partial record MissionList
     {
-        [FormUrlEncodedPropertyName("responseCode")] public int m_responseCode { get; set; }
-        [FormUrlEncodedPropertyName("idList")] public string m_ids { get; set; }
-        [FormUrlEncodedPropertyName("nameList")] public string m_names { get; set; }
-        [FormUrlEncodedPropertyName("pathList")] public string m_paths { get; set; }
-        [FormUrlEncodedPropertyName("levelList")] public string levelList { get; set; }
-        [FormUrlEncodedPropertyName("completedList")] public string completedList { get; set; }
-        [FormUrlEncodedPropertyName("tycoonList")] public string tycoonList { get; set; }
-        [FormUrlEncodedPropertyName("roomList")] public string roomList { get; set; }
-        [FormUrlEncodedPropertyName("priceList")] public string priceList { get; set; }
-        [FormUrlEncodedPropertyName("scoreBronze")] public string scoreBronze { get; set; }
-        [FormUrlEncodedPropertyName("scoreSilver")] public string scoreSilver { get; set; }
-        [FormUrlEncodedPropertyName("scoreGold")] public string scoreGold { get; set; }
-        [FormUrlEncodedPropertyName("scorePlatinum")] public string scorePlatinum { get; set; }
-        [FormUrlEncodedPropertyName("highScore")] public string highScore { get; set; }
+        [PropertyShape(Name = "responseCode")] public int m_responseCode { get; set; }
+        [PropertyShape(Name = "idList")] public string m_ids { get; set; }
+        [PropertyShape(Name = "nameList")] public string m_names { get; set; }
+        [PropertyShape(Name = "pathList")] public string m_paths { get; set; }
+        [PropertyShape(Name = "levelList")] public string levelList { get; set; }
+        [PropertyShape(Name = "completedList")] public string completedList { get; set; }
+        [PropertyShape(Name = "tycoonList")] public string tycoonList { get; set; }
+        [PropertyShape(Name = "roomList")] public string roomList { get; set; }
+        [PropertyShape(Name = "priceList")] public string priceList { get; set; }
+        [PropertyShape(Name = "scoreBronze")] public string scoreBronze { get; set; }
+        [PropertyShape(Name = "scoreSilver")] public string scoreSilver { get; set; }
+        [PropertyShape(Name = "scoreGold")] public string scoreGold { get; set; }
+        [PropertyShape(Name = "scorePlatinum")] public string scorePlatinum { get; set; }
+        [PropertyShape(Name = "highScore")] public string highScore { get; set; }
     }
 }

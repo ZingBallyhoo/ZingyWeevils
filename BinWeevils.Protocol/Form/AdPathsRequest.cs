@@ -1,10 +1,11 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class AdPathsRequest
+    [GenerateShape]
+    public partial class AdPathsRequest
     {
-        [FormUrlEncodedPropertyName("area")] public AdPathsArea m_area { get; set; }
+        [PropertyShape(Name = "area")] public AdPathsArea m_area { get; set; }
     }
     
     public enum AdPathsArea

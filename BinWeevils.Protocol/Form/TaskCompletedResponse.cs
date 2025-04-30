@@ -1,20 +1,21 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class TaskCompletedResponse
+    [GenerateShape]
+    public partial class TaskCompletedResponse
     {
-        [FormUrlEncodedPropertyName("responseCode")] public int m_responseCode { get; set; }
-        [FormUrlEncodedPropertyName("res")] public int m_result { get; set; }
-        [FormUrlEncodedPropertyName("mulch")] public int m_mulch { get; set; }
-        [FormUrlEncodedPropertyName("xp")] public uint m_xp { get; set; }
+        [PropertyShape(Name = "responseCode")] public int m_responseCode { get; set; }
+        [PropertyShape(Name = "res")] public int m_result { get; set; }
+        [PropertyShape(Name = "mulch")] public int m_mulch { get; set; }
+        [PropertyShape(Name = "xp")] public uint m_xp { get; set; }
         // dosh...
-        [FormUrlEncodedPropertyName("itemName")] public List<string> m_itemName { get; set; } = [];
-        [FormUrlEncodedPropertyName("gardenItemName")] public List<string> m_gardenItemName { get; set; } = [];
-        [FormUrlEncodedPropertyName("move")] public List<int> m_move { get; set; } = [];
-        [FormUrlEncodedPropertyName("deleted")] public List<int> m_deletedTasks { get; set; } = [];
-        [FormUrlEncodedPropertyName("completedAchievements")] public List<int> m_completedAchievements { get; set; } = [];
-        [FormUrlEncodedPropertyName("bundleName")] public string m_bundleName { get; set; } = "";
+        [PropertyShape(Name = "itemName")] public List<string> m_itemName { get; set; } = [];
+        [PropertyShape(Name = "gardenItemName")] public List<string> m_gardenItemName { get; set; } = [];
+        [PropertyShape(Name = "move")] public List<int> m_move { get; set; } = [];
+        [PropertyShape(Name = "deleted")] public List<int> m_deletedTasks { get; set; } = [];
+        [PropertyShape(Name = "completedAchievements")] public List<int> m_completedAchievements { get; set; } = [];
+        [PropertyShape(Name = "bundleName")] public string m_bundleName { get; set; } = "";
         
         // who cooked
         

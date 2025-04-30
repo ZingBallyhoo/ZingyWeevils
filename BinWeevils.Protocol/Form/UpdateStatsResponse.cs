@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class UpdateStatsResponse
+    [GenerateShape]
+    public partial class UpdateStatsResponse
     {
-        [FormUrlEncodedPropertyName("res")] public int m_result { get; set; }
+        [PropertyShape(Name = "res")] public int m_result { get; set; }
     }
 }

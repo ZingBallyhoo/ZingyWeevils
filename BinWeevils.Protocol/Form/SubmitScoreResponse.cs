@@ -1,12 +1,13 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class SubmitScoreResponse
+    [GenerateShape]
+    public partial class SubmitScoreResponse
     {
-        [FormUrlEncodedPropertyName("result")] public int m_result { get; set; }
-        [FormUrlEncodedPropertyName("mulchEarned")] public uint m_mulchEarned { get; set; }
-        [FormUrlEncodedPropertyName("xpEarned")] public uint m_xpEarned { get; set; }
+        [PropertyShape(Name = "result")] public int m_result { get; set; }
+        [PropertyShape(Name = "mulchEarned")] public uint m_mulchEarned { get; set; }
+        [PropertyShape(Name = "xpEarned")] public uint m_xpEarned { get; set; }
         
         public const int ERR_OK = 1;
         public const int ERR_INVALID_USER = 2;

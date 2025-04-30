@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Garden
 {
-    public class GetStoredGardenItemsRequest
+    [GenerateShape]
+    public partial class GetStoredGardenItemsRequest
     {
-        [FormUrlEncodedPropertyName("userID")] public string m_userID { get; set; }
+        [PropertyShape(Name = "userID")] public string m_userID { get; set; }
     }
 }

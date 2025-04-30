@@ -1,10 +1,11 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class BrainInfo
+    [GenerateShape]
+    public partial class BrainInfo
     {
-        [FormUrlEncodedPropertyName("levels")] public List<string> m_levels { get; set; }
-        [FormUrlEncodedPropertyName("modes")] public byte m_modes { get; set; }
+        [PropertyShape(Name = "levels")] public List<string> m_levels { get; set; }
+        [PropertyShape(Name = "modes")] public byte m_modes { get; set; }
     }
 }

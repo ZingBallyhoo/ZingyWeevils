@@ -12,7 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="ByteDev.FormUrlEncoded" Version="1.1.0" />
       <PackageReference Include="PolyType" Version="0.36.1" />
     </ItemGroup>
 

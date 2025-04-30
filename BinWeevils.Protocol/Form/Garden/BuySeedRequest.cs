@@ -1,11 +1,12 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Garden
 {
-    public class BuySeedRequest
+    [GenerateShape]
+    public partial class BuySeedRequest
     {
-        [FormUrlEncodedPropertyName("id")] public uint m_seedTypeID { get; set; }
-        [FormUrlEncodedPropertyName("quantity")] public uint m_quantity { get; set; }
+        [PropertyShape(Name = "id")] public uint m_seedTypeID { get; set; }
+        [PropertyShape(Name = "quantity")] public uint m_quantity { get; set; }
         
         public const uint MAX_QUANTITY = 25;
     }

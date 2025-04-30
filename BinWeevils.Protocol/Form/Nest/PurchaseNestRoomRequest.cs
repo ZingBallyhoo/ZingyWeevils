@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Nest
 {
-    public class PurchaseNestRoomRequest
+    [GenerateShape]
+    public partial class PurchaseNestRoomRequest
     {
-        [FormUrlEncodedPropertyName("roomID")] public ENestRoom m_roomType { get; set; }
+        [PropertyShape(Name = "roomID")] public ENestRoom m_roomType { get; set; }
     }
 }

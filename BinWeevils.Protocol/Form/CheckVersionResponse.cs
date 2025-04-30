@@ -1,21 +1,20 @@
-using System.Diagnostics.CodeAnalysis;
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    public record CheckVersionResponse
+    [GenerateShape]
+    public partial record CheckVersionResponse
     {
-        [FormUrlEncodedPropertyName("vOK")] public int m_ok { get; set; }
-        [FormUrlEncodedPropertyName("core")] public int m_coreVersionNumber { get; set; }
-        [FormUrlEncodedPropertyName("VODplayer")] public int m_vodPlayerVersion { get; set; }
-        [FormUrlEncodedPropertyName("VODcontent")] public int m_vodContentVersion { get; set; }
-        [FormUrlEncodedPropertyName("locDef")] public int m_locDefVersion { get; set; }
-        [FormUrlEncodedPropertyName("nestDef")] public int m_nestDefVersion { get; set; }
-        [FormUrlEncodedPropertyName("p")] public int m_p { get; set; }
-        [FormUrlEncodedPropertyName("binBadgesDisplay")] public int m_binBadgesDisplayVersion { get; set; }
-        [FormUrlEncodedPropertyName("achievementAlerts")] public int m_achievementAlertsVersion { get; set; }
-        [FormUrlEncodedPropertyName("URLDef")] public int m_urlDefVersion { get; set; }
-        [FormUrlEncodedPropertyName("news")] public int m_newsVersion { get; set; }
+        [PropertyShape(Name = "vOK")] public int m_ok { get; set; }
+        [PropertyShape(Name = "core")] public int m_coreVersionNumber { get; set; }
+        [PropertyShape(Name = "VODplayer")] public int m_vodPlayerVersion { get; set; }
+        [PropertyShape(Name = "VODcontent")] public int m_vodContentVersion { get; set; }
+        [PropertyShape(Name = "locDef")] public int m_locDefVersion { get; set; }
+        [PropertyShape(Name = "nestDef")] public int m_nestDefVersion { get; set; }
+        [PropertyShape(Name = "p")] public int m_p { get; set; }
+        [PropertyShape(Name = "binBadgesDisplay")] public int m_binBadgesDisplayVersion { get; set; }
+        [PropertyShape(Name = "achievementAlerts")] public int m_achievementAlertsVersion { get; set; }
+        [PropertyShape(Name = "URLDef")] public int m_urlDefVersion { get; set; }
+        [PropertyShape(Name = "news")] public int m_newsVersion { get; set; }
     }
 }

@@ -1,14 +1,15 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Nest
 {
-    public class GetNestStateResponse
+    [GenerateShape]
+    public partial class GetNestStateResponse
     {
-        [FormUrlEncodedPropertyName("responseCode")] public int m_responseCode { get; set; }
-        [FormUrlEncodedPropertyName("err")] public string m_error { get; set; }
-        [FormUrlEncodedPropertyName("xp")] public uint m_weevilXp { get; set; }
-        [FormUrlEncodedPropertyName("score")] public int m_score { get; set; }
-        [FormUrlEncodedPropertyName("fuel")] public uint m_fuel { get; set; }
-        [FormUrlEncodedPropertyName("lastUpdate")] public string m_lastUpdate { get; set; }
+        [PropertyShape(Name = "responseCode")] public int m_responseCode { get; set; }
+        [PropertyShape(Name = "err")] public string m_error { get; set; }
+        [PropertyShape(Name = "xp")] public uint m_weevilXp { get; set; }
+        [PropertyShape(Name = "score")] public int m_score { get; set; }
+        [PropertyShape(Name = "fuel")] public uint m_fuel { get; set; }
+        [PropertyShape(Name = "lastUpdate")] public string m_lastUpdate { get; set; }
     }
 }

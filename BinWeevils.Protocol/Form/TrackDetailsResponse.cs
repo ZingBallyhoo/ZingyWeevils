@@ -1,13 +1,14 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class TrackDetailsResponse
+    [GenerateShape]
+    public partial class TrackDetailsResponse
     {
-        [FormUrlEncodedPropertyName("responseCode")] public int m_responseCode { get; set; }
-        [FormUrlEncodedPropertyName("file")] public string m_file { get; set; }
-        [FormUrlEncodedPropertyName("title")] public string m_title { get; set; }
-        [FormUrlEncodedPropertyName("artist")] public string m_artist { get; set; }
-        [FormUrlEncodedPropertyName("trackID")] public int m_trackID { get; set; }
+        [PropertyShape(Name = "responseCode")] public int m_responseCode { get; set; }
+        [PropertyShape(Name = "file")] public string m_file { get; set; }
+        [PropertyShape(Name = "title")] public string m_title { get; set; }
+        [PropertyShape(Name = "artist")] public string m_artist { get; set; }
+        [PropertyShape(Name = "trackID")] public int m_trackID { get; set; }
     }
 }

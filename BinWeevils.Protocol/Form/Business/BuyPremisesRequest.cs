@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Business
 {
-    public class BuyPremisesRequest
+    [GenerateShape]
+    public partial class BuyPremisesRequest
     {
-        [FormUrlEncodedPropertyName("locTypeID")] public uint m_locTypeID { get; set;}
+        [PropertyShape(Name = "locTypeID")] public uint m_locTypeID { get; set;}
     }
 }

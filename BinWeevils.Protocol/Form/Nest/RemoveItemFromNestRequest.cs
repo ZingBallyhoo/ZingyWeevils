@@ -1,11 +1,12 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Nest
 {
-    public class RemoveItemFromNestRequest
+    [GenerateShape]
+    public partial class RemoveItemFromNestRequest
     {
-        [FormUrlEncodedPropertyName("userID")] public string m_userName { get; set; }
-        [FormUrlEncodedPropertyName("nestID")] public uint m_nestID { get; set; }
-        [FormUrlEncodedPropertyName("itemID")] public uint m_itemID { get; set; }
+        [PropertyShape(Name = "userID")] public string m_userName { get; set; }
+        [PropertyShape(Name = "nestID")] public uint m_nestID { get; set; }
+        [PropertyShape(Name = "itemID")] public uint m_itemID { get; set; }
     }
 }

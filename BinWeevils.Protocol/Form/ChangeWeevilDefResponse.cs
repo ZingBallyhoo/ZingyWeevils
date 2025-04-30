@@ -1,10 +1,11 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class ChangeWeevilDefResponse
+    [GenerateShape]
+    public partial class ChangeWeevilDefResponse
     {
-        [FormUrlEncodedPropertyName("err")] public int m_error { get; set; }
+        [PropertyShape(Name = "err")] public int m_error { get; set; }
         
         public const int ERR_OK = 1;
         public const int ERR_DEF_IN_USE = 4;

@@ -1,7 +1,7 @@
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
-using ByteDev.FormUrlEncoded;
+using ArcticFox.PolyType.FormEncoded;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace BinWeevils.Server
@@ -19,13 +19,14 @@ namespace BinWeevils.Server
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
         {
             using var reader = new StreamReader(context.HttpContext.Request.Body, encoding);
-            
-            var method = typeof(FormUrlEncodedSerializer).GetMethod("Deserialize", BindingFlags.Static | BindingFlags.Public, [typeof(string)])!
-                .MakeGenericMethod(context.ModelType);
-            
             var bodyText = await reader.ReadToEndAsync();
-            var result = method.Invoke(null, [bodyText]);
             
+            var options = new FormOptions();
+                
+            var polyTypeMethod = typeof(FormOptions)
+                .GetMethod(nameof(FormOptions.Deserialize), BindingFlags.Instance | BindingFlags.Public, [typeof(string)])!
+                .MakeGenericMethod(context.ModelType);
+            var result = polyTypeMethod.Invoke(options, [bodyText]);
             return await InputFormatterResult.SuccessAsync(result);
         }
     }

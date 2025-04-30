@@ -1,10 +1,11 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Nest
 {
-    public class GetStoredItemsRequest
+    [GenerateShape]
+    public partial class GetStoredItemsRequest
     {
-        [FormUrlEncodedPropertyName("userID")] public string m_userID { get; set; }
-        [FormUrlEncodedPropertyName("mine")] public bool m_mine { get; set; }
+        [PropertyShape(Name = "userID")] public string m_userID { get; set; }
+        [PropertyShape(Name = "mine")] public bool m_mine { get; set; }
     }
 }

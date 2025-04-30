@@ -1,12 +1,13 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class SubmitTurnBasedResponse
+    [GenerateShape]
+    public partial class SubmitTurnBasedResponse
     {
-        [FormUrlEncodedPropertyName("mulchEarned")] public int m_mulchEarned { get; set; }
-        [FormUrlEncodedPropertyName("xpEarned")] public int m_xpEarned { get; set; }
-        [FormUrlEncodedPropertyName("mulch")] public int m_mulch { get; set; }
-        [FormUrlEncodedPropertyName("xp")] public int m_xp { get; set; }
+        [PropertyShape(Name = "mulchEarned")] public int m_mulchEarned { get; set; }
+        [PropertyShape(Name = "xpEarned")] public int m_xpEarned { get; set; }
+        [PropertyShape(Name = "mulch")] public int m_mulch { get; set; }
+        [PropertyShape(Name = "xp")] public int m_xp { get; set; }
     }
 }

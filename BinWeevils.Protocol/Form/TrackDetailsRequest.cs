@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class TrackDetailsRequest
+    [GenerateShape]
+    public partial class TrackDetailsRequest
     {
-        [FormUrlEncodedPropertyName("trackID")] public int m_trackID { get; set; }
+        [PropertyShape(Name = "trackID")] public int m_trackID { get; set; }
     }
 }

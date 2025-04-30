@@ -1,9 +1,10 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public record CheckVersionRequest
+    [GenerateShape]
+    public partial record CheckVersionRequest
     {
-        [FormUrlEncodedPropertyName("version")] public int m_siteVersion { get; set; }
+        [PropertyShape(Name = "version")] public int m_siteVersion { get; set; }
     }
 }

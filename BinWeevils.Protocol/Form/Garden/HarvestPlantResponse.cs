@@ -1,11 +1,12 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Garden
 {
-    public class HarvestPlantResponse
+    [GenerateShape]
+    public partial class HarvestPlantResponse
     {
-        [FormUrlEncodedPropertyName("plantID")] public uint m_plantID { get; set; }
-        [FormUrlEncodedPropertyName("mulch")] public int m_mulch { get; set; }
-        [FormUrlEncodedPropertyName("xp")] public uint m_xp { get; set; }
+        [PropertyShape(Name = "plantID")] public uint m_plantID { get; set; }
+        [PropertyShape(Name = "mulch")] public int m_mulch { get; set; }
+        [PropertyShape(Name = "xp")] public uint m_xp { get; set; }
     }
 }

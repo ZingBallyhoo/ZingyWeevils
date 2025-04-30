@@ -1,9 +1,9 @@
-using ByteDev.FormUrlEncoded;
 using Microsoft.AspNetCore.Mvc;
+using PolyType;
 
 namespace BinWeevils.Server.Controllers
 {
-    public class IndexController : Controller
+    public partial class IndexController : Controller
     {
         [HttpGet("index.php")]
         public IResult IndexRedirect()
@@ -26,9 +26,10 @@ namespace BinWeevils.Server.Controllers
             return Results.Redirect("/game.php");
         }
         
-        public class UsernameForm
+        [GenerateShape]
+        public partial class UsernameForm
         {
-            [FormUrlEncodedPropertyName("username")] public string m_username { get; set; }
+            [PropertyShape(Name = "username")] public string m_username { get; set; }
         }
     }
 }

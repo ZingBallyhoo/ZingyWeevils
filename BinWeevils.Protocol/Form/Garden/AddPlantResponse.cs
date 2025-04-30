@@ -1,10 +1,11 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Garden
 {
-    public class AddPlantResponse
+    [GenerateShape]
+    public partial class AddPlantResponse
     {
-        [FormUrlEncodedPropertyName("xp")] public uint m_xp { get; set; }
+        [PropertyShape(Name = "xp")] public uint m_xp { get; set; }
         // todo: res, err... but the client doesn't care so
     }
 }

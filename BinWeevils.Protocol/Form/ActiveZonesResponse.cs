@@ -1,12 +1,13 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class ActiveZonesResponse
+    [GenerateShape]
+    public partial class ActiveZonesResponse
     {
-        [FormUrlEncodedPropertyName("names")] public List<string> m_names { get; set; } = new List<string>();
-        [FormUrlEncodedPropertyName("ips")] public List<string> m_ips { get; set; } = new List<string>();
-        [FormUrlEncodedPropertyName("oo5")] public List<int> m_outOf5 { get; set; } = new List<int>();
-        [FormUrlEncodedPropertyName("responseCode")] public bool m_responseCode { get; set; }
+        [PropertyShape(Name = "names")] public List<string> m_names { get; set; } = new List<string>();
+        [PropertyShape(Name = "ips")] public List<string> m_ips { get; set; } = new List<string>();
+        [PropertyShape(Name = "oo5")] public List<int> m_outOf5 { get; set; } = new List<int>();
+        [PropertyShape(Name = "responseCode")] public bool m_responseCode { get; set; }
     }
 }

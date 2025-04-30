@@ -1,16 +1,17 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form.Nest
 {
-    public class LevelUpResponse
+    [GenerateShape]
+    public partial class LevelUpResponse
     {
-        [FormUrlEncodedPropertyName("level")] public int m_level { get; set; }
-        [FormUrlEncodedPropertyName("mulch")] public int m_mulch { get; set; }
-        [FormUrlEncodedPropertyName("xp")] public uint m_xp { get; set; }
-        [FormUrlEncodedPropertyName("xp1")] public int m_xpLowerThreshold { get; set; }
-        [FormUrlEncodedPropertyName("xp2")] public int m_xpUpperThreshold { get; set; }
+        [PropertyShape(Name = "level")] public int m_level { get; set; }
+        [PropertyShape(Name = "mulch")] public int m_mulch { get; set; }
+        [PropertyShape(Name = "xp")] public uint m_xp { get; set; }
+        [PropertyShape(Name = "xp1")] public int m_xpLowerThreshold { get; set; }
+        [PropertyShape(Name = "xp2")] public int m_xpUpperThreshold { get; set; }
         
-        [FormUrlEncodedPropertyName("st")] public int m_serverTime { get; set; }
-        [FormUrlEncodedPropertyName("hash")] public string m_hash { get; set; }
+        [PropertyShape(Name = "st")] public int m_serverTime { get; set; }
+        [PropertyShape(Name = "hash")] public string m_hash { get; set; }
     }
 }

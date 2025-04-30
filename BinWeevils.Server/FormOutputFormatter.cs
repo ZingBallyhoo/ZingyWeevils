@@ -1,6 +1,7 @@
 using System.Net.Mime;
+using System.Reflection;
 using System.Text;
-using ByteDev.FormUrlEncoded;
+using ArcticFox.PolyType.FormEncoded;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace BinWeevils.Server
@@ -17,10 +18,13 @@ namespace BinWeevils.Server
         
         public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            var encoded = FormUrlEncodedSerializer.Serialize(context.Object, new SerializeOptions
-            {
-                EncodeSpaceAsPlus = false
-            });
+            var options = new FormOptions();
+
+            var polyTypeMethod = typeof(FormOptions)
+                .GetMethod(nameof(FormOptions.Serialize), BindingFlags.Instance | BindingFlags.Public)!
+                .MakeGenericMethod(context.ObjectType!);
+            var encoded = (string)polyTypeMethod.Invoke(options, [context.Object])!;
+            
             return context.HttpContext.Response.WriteAsync(encoded, selectedEncoding);
         }
     }

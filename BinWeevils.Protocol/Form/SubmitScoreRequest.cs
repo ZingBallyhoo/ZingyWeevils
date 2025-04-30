@@ -1,11 +1,12 @@
-using ByteDev.FormUrlEncoded;
+using PolyType;
 
 namespace BinWeevils.Protocol.Form
 {
-    public class SubmitScoreRequest
+    [GenerateShape]
+    public partial class SubmitScoreRequest
     {
-        [FormUrlEncodedPropertyName("gameID")] public uint m_gameID { get; set; }
-        [FormUrlEncodedPropertyName("score")] public uint m_score { get; set; }
+        [PropertyShape(Name = "gameID")] public uint m_gameID { get; set; }
+        [PropertyShape(Name = "score")] public uint m_score { get; set; }
         
         public const int GAME_SPOTDIFFERENCE = 2;
     }
