@@ -238,6 +238,7 @@ namespace BinWeevils.Server.Controllers
                     m_lastUpdate = weev.m_nest.m_lastUpdated,
                     m_weevilXp = weev.m_xp,
                     weev.m_nest.m_gardenSize,
+                    weev.m_nest.m_fuel,
                     m_rooms = weev.m_nest.m_rooms.Select(y => new
                     {
                         y.m_type,
@@ -284,7 +285,7 @@ namespace BinWeevils.Server.Controllers
                 m_score = (uint)dto.m_score,
                 m_weevilXp = dto.m_weevilXp,
                 m_gardenSize = (uint)dto.m_gardenSize,
-                m_fuel = 46807 // todo
+                m_fuel = dto.m_fuel
             };
             foreach (var room in dto.m_rooms)
             {
@@ -358,8 +359,9 @@ namespace BinWeevils.Server.Controllers
                 .Select(weev => new
                 {
                     weev.m_xp,
+                    m_score = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum(),
+                    weev.m_nest.m_fuel,
                     weev.m_nest.m_lastUpdated,
-                    m_score = weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
                 })
                 .SingleOrDefaultAsync();
             
@@ -374,7 +376,7 @@ namespace BinWeevils.Server.Controllers
                 m_error = "OK",
                 m_weevilXp = dto.m_xp,
                 m_score = dto.m_score,
-                m_fuel = 222, // todo
+                m_fuel = dto.m_fuel,
                 m_lastUpdate = dto.m_lastUpdated.ToAs3Date(),
             };
         }

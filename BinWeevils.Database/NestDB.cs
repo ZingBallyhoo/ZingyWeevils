@@ -12,6 +12,7 @@ namespace BinWeevils.Database
         [Key] public uint m_id { get; set; }
         
         public EGardenSize m_gardenSize { get; set; } = EGardenSize.Regular;
+        public uint m_fuel { get; set; } = 46807; // todo: pick a number..
         
         public DateTime m_lastUpdated { get; set; }
         

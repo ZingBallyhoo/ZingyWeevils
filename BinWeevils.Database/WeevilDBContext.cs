@@ -190,7 +190,7 @@ namespace BinWeevils.Database
         {
             if (!ItemColor.TryParse(str, null, out var parsedColor))
             {
-                throw new InvalidDataException($"invalid color string");
+                throw new InvalidDataException("invalid color string");
             }
             
             if (paletteID == -1)
