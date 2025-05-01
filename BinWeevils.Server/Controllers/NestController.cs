@@ -856,5 +856,59 @@ namespace BinWeevils.Server.Controllers
                 m_mulch = resultDto.m_mulch,
             };
         }
+        
+        [StructuredFormPost("nest/update-fuel")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task UpdateFuel([FromBody] UpdateFuelRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("NestController.UpdateFuel");
+            activity?.SetTag("fuel", request.m_fuel);
+            
+            if (request.m_fuel < MIN_FUEL || request.m_fuel > MAX_FUEL)
+            {
+                throw new InvalidDataException("invalid fuel");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    m_nestID = x.m_nest.m_id,
+                    x.m_nest.m_fuel,
+                    m_powerConsumption = 
+                        x.m_nest.m_items.Where(item => item.m_placedItem != null).Sum(item => item.m_itemType.m_powerConsumption) + 
+                        x.m_nest.m_gardenItems.Where(item => item.m_placedItem != null).Sum(item => item.m_itemType.m_powerConsumption) +
+                        x.m_nest.m_rooms.Where(room => room.m_type != ENestRoom.Garden).Sum(room => 60)
+                })
+                .SingleAsync();
+            
+            if (request.m_fuel == dto.m_fuel)
+            {
+                // okay.. doesn't matter then
+                return;
+            }
+            if (request.m_fuel > dto.m_fuel) 
+            {
+                throw new InvalidDataException($"trying to add fuel via update-fuel. {dto.m_fuel} -> {request.m_fuel}");
+            }
+            
+            var toRemove = dto.m_fuel - request.m_fuel;
+            if (toRemove > dto.m_powerConsumption*1.5f)
+            {
+                // this only exists to look for the presumably very rare case where buying fuel races with updating...
+                throw new InvalidDataException($"trying to remove too much fuel. request:{toRemove}, pc:{dto.m_powerConsumption}");
+            }
+            
+            var nestRowsUpdated = await m_dbContext.m_nests
+                .Where(x => x.m_id == dto.m_nestID)
+                .Where(x => x.m_fuel == dto.m_fuel) // concurrency check
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_fuel, x => request.m_fuel));
+            if (nestRowsUpdated == 0)
+            {
+                throw new Exception("concurrency check on take fuel failed");
+            }
+        }
     }
 }
