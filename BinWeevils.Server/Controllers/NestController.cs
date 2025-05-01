@@ -22,6 +22,10 @@ namespace BinWeevils.Server.Controllers
         private readonly ItemConfigRepository m_configRepo;
         private readonly NestLocationDefinitions m_locations;
         
+        private const int MIN_FUEL = 2000;
+        private const int MAX_FUEL = 80000;
+        private const int FUEL_PER_MULCH = 500;
+        
         public NestController(ILogger<NestController> logger, WeevilDBContext dbContext, 
             ItemConfigRepository configRepo, NestLocationDefinitions locations)
         {
@@ -777,6 +781,79 @@ namespace BinWeevils.Server.Controllers
                 m_locID = newRoom.m_id,
                 m_mulch = dto.m_mulch,
                 m_xp = dto.m_xp
+            };
+        }
+        
+        [StructuredFormPost("nest/buy-nest-fuel")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<BuyNestFuelResponse> BuyNestFuel([FromBody] BuyNestFuelRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("NestController.BuyNestFuel");
+            activity?.SetTag("cost", request.m_cost);
+            
+            if (request.m_cost <= 0) 
+            {
+                throw new InvalidDataException("invalid cost");
+            }
+            
+            var fuelToAdd = (uint)request.m_cost * FUEL_PER_MULCH;
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_idx,
+                    m_nestID = x.m_nest.m_id,
+                    x.m_nest.m_fuel
+                })
+                .SingleAsync();
+            
+            var endFuel = fuelToAdd + dto.m_fuel;
+            endFuel = Math.Min(endFuel, MAX_FUEL);
+            fuelToAdd = endFuel - dto.m_fuel;
+            var cost = (int)Math.Ceiling((float)fuelToAdd/FUEL_PER_MULCH);
+            
+            var weevRowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_idx == dto.m_idx)
+                .Where(x => x.m_mulch >= cost)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - cost));
+            if (weevRowsUpdated == 0)
+            {
+                return new BuyNestFuelResponse
+                {
+                    m_success = false
+                };
+            }
+            
+            var nestRowsUpdated = await m_dbContext.m_nests
+                .Where(x => x.m_id == dto.m_nestID)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_fuel, x => Math.Max(x.m_fuel + fuelToAdd, MAX_FUEL)));
+            if (nestRowsUpdated == 0)
+            {
+                return new BuyNestFuelResponse
+                {
+                    m_success = false
+                };
+            }
+            
+            var resultDto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_idx == dto.m_idx)
+                .Select(x => new
+                {
+                    x.m_mulch,
+                    x.m_nest.m_fuel
+                })
+                .SingleAsync();
+            
+            await transaction.CommitAsync();
+            return new BuyNestFuelResponse
+            {
+                m_success = true,
+                m_fuel = resultDto.m_fuel,
+                m_mulch = resultDto.m_mulch,
             };
         }
     }
