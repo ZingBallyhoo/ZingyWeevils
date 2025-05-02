@@ -126,7 +126,7 @@ namespace BinWeevils.Server.Controllers
                 dict.Add($"fromIDX{index}", $"{messageDto.m_fromIdx}");
                 dict.Add($"msg{index}", messageDto.m_message);
                 dict.Add($"id{index}", $"{messageDto.m_id}");
-                dict.Add($"read{index}", $"{messageDto.m_read}");
+                dict.Add($"read{index}", $"{(messageDto.m_read ? "1" : "0")}");
                 dict.Add($"timeSent{index}", TimeZoneInfo.ConvertTimeFromUtc(messageDto.m_sentAt, m_timeProvider.LocalTimeZone).ToString("dd/MM"));
                 
                 index++;
@@ -137,7 +137,26 @@ namespace BinWeevils.Server.Controllers
             return dict;
         }
         
-        // todo: mark-read
+        [StructuredFormPost("buddy-messages/mark-read")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task MarkRead([FromBody] MarkReadRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.MarkRead");
+            activity?.SetTag("id", request.m_id);
+
+            var rowsUpdated = await m_dbContext.m_buddyMesssages
+                .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_id == request.m_id)
+                .Where(x => !x.m_read)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_read, true));
+            
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("failed to mark read");
+            }
+        }
+        
         // todo: delete
     }
 }

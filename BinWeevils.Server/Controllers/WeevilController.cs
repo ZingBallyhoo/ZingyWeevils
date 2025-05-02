@@ -50,6 +50,7 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
+            // todo: local time?
             return new WeevilDataResponse
             {
                 m_result = 1,
@@ -59,6 +60,24 @@ namespace BinWeevils.Server.Controllers
                 m_tycoon = 1,
                 m_lastLog = dto.m_lastLogin.ToAs3Date(),
                 m_dateJoined = dto.m_createdAt.ToAs3Date()
+            };
+        }
+        
+        [StructuredFormPost("php/getWeevilDefinition.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetWeevilDefResponse> GetWeevilDef([FromBody] GetWeevilDefRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.GetWeevilDef");
+            activity?.SetTag("userID", request.m_userID);
+            
+            var weevilDef = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_userID)
+                .Select(x => x.m_weevilDef)
+                .SingleAsync();
+            
+            return new GetWeevilDefResponse
+            {
+                m_weevilDef = weevilDef
             };
         }
         

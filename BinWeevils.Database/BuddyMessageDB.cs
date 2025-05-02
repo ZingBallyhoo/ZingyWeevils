@@ -5,7 +5,7 @@ namespace BinWeevils.Database
 {
     public class BuddyMessageDB
     {
-        [Key] public int m_id { get; set; }
+        [Key] public uint m_id { get; set; }
         
         public uint m_to { get; set; }
         public uint m_from { get; set; }
