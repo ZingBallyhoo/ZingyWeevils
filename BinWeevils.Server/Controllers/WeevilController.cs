@@ -170,6 +170,10 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new InvalidDataException($"ChangeDefinition: invalid weevil def: \"{request.m_weevilDef}\"");
             }
+            if (def.HasSuperAntenna())
+            {
+                throw new InvalidDataException("not allowed to keep/add super antennna when changing def");
+            }
             
             const int cost = 2500;
             var defNum = def.AsNumber();
