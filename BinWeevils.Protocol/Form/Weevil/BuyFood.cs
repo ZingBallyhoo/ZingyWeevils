@@ -1,6 +1,6 @@
 using PolyType;
 
-namespace BinWeevils.Protocol.Form
+namespace BinWeevils.Protocol.Form.Weevil
 {
     [GenerateShape]
     public partial class BuyFoodRequest

@@ -1,6 +1,6 @@
 using PolyType;
 
-namespace BinWeevils.Protocol.Form
+namespace BinWeevils.Protocol.Form.Game
 {
     [GenerateShape]
     public partial class BrainInfo

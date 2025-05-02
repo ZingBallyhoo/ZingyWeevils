@@ -1,6 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Database;
-using BinWeevils.Protocol.Form;
+using BinWeevils.Protocol.Form.Game;
 using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
