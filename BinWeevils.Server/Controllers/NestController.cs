@@ -827,10 +827,11 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
+            // use addition to prevent any possible cop
             var nestRowsUpdated = await m_dbContext.m_nests
                 .Where(x => x.m_id == dto.m_nestID)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_fuel, x => Math.Max(x.m_fuel + fuelToAdd, MAX_FUEL)));
+                    .SetProperty(x => x.m_fuel, x => Math.Min(x.m_fuel + fuelToAdd, MAX_FUEL)));
             if (nestRowsUpdated == 0)
             {
                 return new BuyNestFuelResponse
