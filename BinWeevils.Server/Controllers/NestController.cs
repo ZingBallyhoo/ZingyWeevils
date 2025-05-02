@@ -827,7 +827,7 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
-            // use addition to prevent any possible cop
+            // use addition to prevent any possible concurrency issues
             var nestRowsUpdated = await m_dbContext.m_nests
                 .Where(x => x.m_id == dto.m_nestID)
                 .ExecuteUpdateAsync(setters => setters
