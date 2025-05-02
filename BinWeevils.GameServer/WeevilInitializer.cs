@@ -140,7 +140,10 @@ namespace BinWeevils.GameServer
         
         private async Task<NestDB> ImportNest(string nestDef)
         {
-            var nest = new NestDB();
+            var nest = new NestDB 
+            {
+                m_itemsLastUpdated = DateTime.UtcNow
+            };
             await m_dbContext.m_nests.AddAsync(nest);
 
             var locMap = new Dictionary<uint, NestRoomDB>();

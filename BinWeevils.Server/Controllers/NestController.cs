@@ -909,6 +909,8 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new Exception("concurrency check on take fuel failed");
             }
+            
+            await transaction.CommitAsync();
         }
     }
 }
