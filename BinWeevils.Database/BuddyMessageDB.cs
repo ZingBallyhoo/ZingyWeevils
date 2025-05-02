@@ -10,7 +10,7 @@ namespace BinWeevils.Database
         public uint m_to { get; set; }
         public uint m_from { get; set; }
         public string m_message { get; set; }
-        public DateTimeOffset m_sentAt { get; set; }
+        public DateTime m_sentAt { get; set; }
         public bool m_read { get; set; }
         
         [Required, ForeignKey(nameof(m_to))] public WeevilDB m_toWeevil { get; set; }

@@ -73,28 +73,68 @@ namespace BinWeevils.Server.Controllers
                 m_to = request.m_recipientIdx,
                 m_from = checkDto.m_idx,
                 m_message = request.m_message,
-                m_sentAt = m_timeProvider.GetUtcNow(),
+                m_sentAt = m_timeProvider.GetUtcNow().DateTime,
                 m_read = false
             });
             await m_dbContext.SaveChangesAsync();
+        }
+        
+        [HttpGet("php/hasUnreadBuddyMsg.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<HasUnreadBuddyMessageResponse> HasUnreadBuddyMessage()
+        {
+            using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.HasUnreadBuddyMessage");
+            
+            var count = await m_dbContext.m_buddyMesssages
+                .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => !x.m_read)
+                .CountAsync();
+            
+            // todo: is this a bool or count?
+            // i'm assuming count because the code checks for >0
+            return new HasUnreadBuddyMessageResponse
+            {
+                m_result = count
+            };
         }
         
         [HttpGet("buddy-messages/get-buddy-messages")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<Dictionary<string, string>> GetBuddyMessages()
         {
-            return new Dictionary<string, string>
+            using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.GetBuddyMessages");
+            var dict = new Dictionary<string, string>();
+            
+            var messages = await m_dbContext.m_buddyMesssages
+                .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new 
+                {
+                    m_fromName = x.m_fromWeevil.m_name,
+                    m_fromIdx = x.m_from,
+                    x.m_message,
+                    x.m_id,
+                    x.m_read,
+                    x.m_sentAt
+                })
+                .OrderByDescending(x => x.m_sentAt)
+                .ToListAsync();
+            
+            var index = 0;
+            foreach (var messageDto in messages) 
             {
-                {"success", "true"},
-                {"numMessages", "1"},
+                dict.Add($"from{index}", messageDto.m_fromName);
+                dict.Add($"fromIDX{index}", $"{messageDto.m_fromIdx}");
+                dict.Add($"msg{index}", messageDto.m_message);
+                dict.Add($"id{index}", $"{messageDto.m_id}");
+                dict.Add($"read{index}", $"{messageDto.m_read}");
+                dict.Add($"timeSent{index}", TimeZoneInfo.ConvertTimeFromUtc(messageDto.m_sentAt, m_timeProvider.LocalTimeZone).ToString("dd/MM"));
                 
-                {"from0", "h"},
-                {"fromIDX0", "192170"},
-                {"msg0", "hhhhhhhhhhhhhhhhhhh"},
-                {"id0", "1"},
-                {"read0", "0"},
-                {"timeSent0", m_timeProvider.GetLocalNow().ToString("dd/MM")}
-            };
+                index++;
+            }
+            
+            dict.Add("success", $"{(index != 0 ? "true" : "false")}");
+            dict.Add("numMessages", $"{index}");
+            return dict;
         }
         
         // todo: mark-read
