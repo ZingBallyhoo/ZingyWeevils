@@ -16,11 +16,13 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly ILogger<WeevilController> m_logger;
         private readonly WeevilDBContext m_dbContext;
+        private readonly TimeProvider m_timeProvider;
         
-        public WeevilController(ILogger<WeevilController> logger, WeevilDBContext dbContext)
+        public WeevilController(ILogger<WeevilController> logger, WeevilDBContext dbContext, TimeProvider timeProvider)
         {
             m_logger = logger;
             m_dbContext = dbContext;
+            m_timeProvider = timeProvider;
         }
         
         [StructuredFormPost("weevil/data")]
@@ -58,8 +60,8 @@ namespace BinWeevils.Server.Controllers
                 m_weevilDef = dto.m_weevilDef,
                 m_level = dto.m_lastAcknowledgedLevel,
                 m_tycoon = 1,
-                m_lastLog = dto.m_lastLogin.ToAs3Date(),
-                m_dateJoined = dto.m_createdAt.ToAs3Date()
+                m_lastLog = TimeZoneInfo.ConvertTimeFromUtc(dto.m_lastLogin, m_timeProvider.LocalTimeZone).ToAs3Date(),
+                m_dateJoined = TimeZoneInfo.ConvertTimeFromUtc(dto.m_createdAt, m_timeProvider.LocalTimeZone).ToAs3Date()
             };
         }
         
