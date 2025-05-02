@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using BinWeevils.Database;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form.Garden;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
@@ -228,5 +229,93 @@ namespace BinWeevils.Server.Controllers
             await transaction.CommitAsync();
             return resp;
         }
+        
+        [StructuredFormPost("upgrade-garden/")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+         public async Task<BuyGardenItemResponse> UpgradeGarden([FromBody] UpgradeGardenRequest request)
+         {
+             using var activity = ApiServerObservability.StartActivity("NestController.UpgradeGarden");
+             activity?.SetTag("size", request.m_size);
+             
+             if (!Enum.IsDefined(request.m_size))
+             {
+                 throw new InvalidDataException("invalid garden size");
+             }
+            
+             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+             var dto = await m_dbContext.m_weevilDBs
+                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                 .Select(x => new
+                 {
+                     m_idx = x.m_idx,
+                     m_nestID = x.m_nest.m_id,
+                     x.m_nest.m_gardenSize,
+                 })
+                 .SingleAsync();
+             
+             if (request.m_size <= dto.m_gardenSize)
+             {
+                 throw new InvalidDataException("trying to upgrade to an already owned garden size");
+             }
+
+             var totalPrice = 0;
+             for (var step = dto.m_gardenSize+1; step <= request.m_size; step++)
+             {
+                 totalPrice += step switch
+                 {
+                     EGardenSize.LargerGarden => 8000,
+                     EGardenSize.EvenLargerGarden => 11000,
+                     EGardenSize.DeluxeGarden => 15000,
+                     EGardenSize.SuperDeluxeGarden => 20000,
+                     _ => throw new InvalidDataException($"unknown upgrade step: {step}")
+                 };
+             }
+             if (totalPrice == 0)
+             {
+                 throw new InvalidDataException("?");
+             }
+             
+             var rowsUpdated = await m_dbContext.m_weevilDBs
+                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                 .Where(x => x.m_mulch >= totalPrice)
+                 .ExecuteUpdateAsync(setters => setters
+                     .SetProperty(x => x.m_mulch, x => x.m_mulch - totalPrice));
+             if (rowsUpdated == 0)
+             {
+                 return new BuyGardenItemResponse
+                 {
+                     m_error = 2, // ERR_CANT_AFFORD (normal shop error enum!!)
+                 };
+             }
+             
+             var nestRowsUpdated = await m_dbContext.m_nests
+                 .Where(x => x.m_id == dto.m_nestID)
+                 .Where(x => x.m_gardenSize == dto.m_gardenSize) // concurrency check
+                 .ExecuteUpdateAsync(setters => setters
+                     .SetProperty(x => x.m_gardenSize, x => request.m_size));
+             if (nestRowsUpdated == 0)
+             {
+                 throw new Exception("concurrency check on set garden size failed");
+             }
+             
+             var resultDto = await m_dbContext.m_weevilDBs
+                 .Where(x => x.m_idx == dto.m_idx)
+                 .Select(x => new
+                 {
+                     x.m_mulch,
+                     x.m_xp
+                 })
+                 .SingleAsync();
+             
+             await m_dbContext.SetNestUpdatedNoConcurrency(dto.m_nestID);
+             await transaction.CommitAsync();
+             
+             return new BuyGardenItemResponse 
+             {
+                 m_error = 1,
+                 m_mulch = resultDto.m_mulch,
+                 m_xp = resultDto.m_xp
+             };
+         }
     }
 }
