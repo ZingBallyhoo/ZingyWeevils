@@ -174,5 +174,20 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("failed to delete");
             }
         }
+        
+        [StructuredFormPost("buddy-messages/delete-no-from-buddy")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<Dictionary<string, string>> DeleteNonBuddyMessages([FromBody] DeleteNonBuddyMessagesRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.DeleteNonBuddyMessages");
+            activity?.SetTag("ids", request.m_ids);
+            
+            await m_dbContext.m_buddyMesssages
+                .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => request.m_ids.Contains(x.m_id))
+                .ExecuteDeleteAsync();
+            
+            return await GetBuddyMessages();
+        }
     }
 }
