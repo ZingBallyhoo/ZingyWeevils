@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using ArcticFox.Codec;
 using ArcticFox.Net;
+using ArcticFox.Net.Batching;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Actors;
@@ -39,6 +40,8 @@ namespace BinWeevils.GameServer
             {
                 logger.LogTrace("{Packet}", input.ToString());
             }
+            
+            GameServerObservability.s_packetsReceived.Add(1);
             
             try
             {
@@ -323,6 +326,13 @@ namespace BinWeevils.GameServer
             }
 
             m_services.GetLogger().LogWarning("Unknown command: {Command} - {Args}", message.m_command.ToString(), string.Join(" ", reader.ReadToEnd()));
+        }
+        
+        public override async ValueTask<int> HandlePendingSendEvents(ISendContext ctx)
+        {
+            var count = await base.HandlePendingSendEvents(ctx);
+            GameServerObservability.s_packetsSent.Add(count);
+            return count;
         }
 
         public override ValueTask CleanupAsync()

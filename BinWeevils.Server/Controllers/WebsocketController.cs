@@ -24,6 +24,19 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
+            ApiServerObservability.s_connectionAttempts.Add(1);
+            ApiServerObservability.s_activeConnections.Add(1);
+            try
+            {
+                await AcceptWebsocket();
+            } finally
+            {
+                ApiServerObservability.s_activeConnections.Add(-1);
+            }
+        }
+        
+        private async Task AcceptWebsocket()
+        {
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
             var socket = new WebSocketInterface(webSocket, true);
             

@@ -72,6 +72,7 @@ namespace BinWeevils.GameServer
         {
             using var loginActivity = GameServerObservability.s_source.StartActivity("Attempt Login");
             loginActivity?.SetTag("userName", name);
+            GameServerObservability.s_loginAttempts.Add(1);
             
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
             var account = await identityManager.FindByNameAsync(name);
@@ -97,6 +98,7 @@ namespace BinWeevils.GameServer
             account = await identityManager.FindByNameAsync(name);
             if (account == null) throw new NullReferenceException(nameof(account));
             
+            GameServerObservability.s_usersCreated.Add(1);
             await transaction.CommitAsync();
             return account.m_weevilIdx;
         }

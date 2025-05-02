@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Proto;
 using StackXML;
@@ -112,6 +113,9 @@ internal static class Program
             })
             .WithMetrics(metrics =>
             {
+                metrics.AddAspNetCoreInstrumentation();
+                metrics.AddMeter(GameServerObservability.s_meter.Name);
+                metrics.AddMeter(ApiServerObservability.s_meter.Name);
                 metrics.UseGrafana();
             });
         builder.Logging
