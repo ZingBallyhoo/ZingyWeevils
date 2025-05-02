@@ -181,7 +181,7 @@ namespace BinWeevils.GameServer
                     
             m_taskQueue.Enqueue(async () =>
             {
-                var weevilIdx = await m_services.CreateTempAccount(login.m_data.m_nickname);
+                var weevilIdx = await m_services.Login(login.m_data.m_nickname);
                 var loginDto = await m_services.GetLoginData(weevilIdx);
                 
                 var actorSystem = m_services.GetActorSystem();

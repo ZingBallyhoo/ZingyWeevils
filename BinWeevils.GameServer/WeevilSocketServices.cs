@@ -43,17 +43,35 @@ namespace BinWeevils.GameServer
             return m_activity;
         }
         
-        public async Task<uint> CreateTempAccount(string name)
+        public async Task<uint> Login(string name)
+        {
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var idx = await LoginInternal(scope, name);
+            if (idx == 0)
+            {
+                throw new Exception("failed to log in");
+            }
+            
+            m_activity?.SetTag("userName", name);
+            
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            await context.m_weevilDBs
+                .Where(x => x.m_idx == idx)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_lastLogin, DateTime.UtcNow));
+            
+            return idx;
+        }
+        
+        private async Task<uint> LoginInternal(AsyncServiceScope scope, string name)
         {
             using var loginActivity = GameServerObservability.s_source.StartActivity("Attempt Login");
             loginActivity?.SetTag("userName", name);
             
-            await using var scope = m_rootProvider.CreateAsyncScope();
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
             var account = await identityManager.FindByNameAsync(name);
             if (account != null)
             {
-                LoginOkay(name);
                 return account.m_weevilIdx;
             }
             
@@ -75,13 +93,7 @@ namespace BinWeevils.GameServer
             if (account == null) throw new NullReferenceException(nameof(account));
             
             await transaction.CommitAsync();
-            LoginOkay(name);
             return account.m_weevilIdx;
-        }
-        
-        private void LoginOkay(string userName)
-        {
-            m_activity?.SetTag("userName", userName);
         }
         
         public async Task<LoginDto> GetLoginData(uint weevilIdx)
