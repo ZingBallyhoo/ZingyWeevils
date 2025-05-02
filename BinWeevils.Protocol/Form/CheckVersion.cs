@@ -3,6 +3,12 @@ using PolyType;
 namespace BinWeevils.Protocol.Form
 {
     [GenerateShape]
+    public partial record CheckVersionRequest
+    {
+        [PropertyShape(Name = "version")] public int m_siteVersion { get; set; }
+    }
+    
+    [GenerateShape]
     public partial record CheckVersionResponse
     {
         [PropertyShape(Name = "vOK")] public int m_ok { get; set; }

@@ -3,6 +3,12 @@ using PolyType;
 namespace BinWeevils.Protocol.Form
 {
     [GenerateShape]
+    public partial class ChangeWeevilDefRequest
+    {
+        [PropertyShape(Name = "weevilDef")] public ulong m_weevilDef { get; set; }
+    }
+    
+    [GenerateShape]
     public partial class ChangeWeevilDefResponse
     {
         [PropertyShape(Name = "err")] public int m_error { get; set; }

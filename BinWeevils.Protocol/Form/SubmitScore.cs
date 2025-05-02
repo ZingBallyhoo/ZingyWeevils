@@ -3,6 +3,15 @@ using PolyType;
 namespace BinWeevils.Protocol.Form
 {
     [GenerateShape]
+    public partial class SubmitScoreRequest
+    {
+        [PropertyShape(Name = "gameID")] public uint m_gameID { get; set; }
+        [PropertyShape(Name = "score")] public uint m_score { get; set; }
+        
+        public const int GAME_SPOTDIFFERENCE = 2;
+    }
+    
+    [GenerateShape]
     public partial class SubmitScoreResponse
     {
         [PropertyShape(Name = "result")] public int m_result { get; set; }

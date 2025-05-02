@@ -3,6 +3,12 @@ using PolyType;
 namespace BinWeevils.Protocol.Form.Nest
 {
     [GenerateShape]
+    public partial class GetNestStateRequest
+    {
+        [PropertyShape(Name = "id")] public string m_userName { get; set; }
+    }
+    
+    [GenerateShape]
     public partial class GetNestStateResponse
     {
         [PropertyShape(Name = "responseCode")] public int m_responseCode { get; set; }

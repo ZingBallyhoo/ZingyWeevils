@@ -3,6 +3,13 @@ using PolyType;
 namespace BinWeevils.Protocol.Form
 {
     [GenerateShape]
+    public partial class SubmitTurnBasedRequest
+    {
+        [PropertyShape(Name = "key")] public string m_authKey { get; set; }
+        [PropertyShape(Name = "result")] public int m_gameResult { get; set; }
+    }
+    
+    [GenerateShape]
     public partial class SubmitTurnBasedResponse
     {
         [PropertyShape(Name = "mulchEarned")] public int m_mulchEarned { get; set; }

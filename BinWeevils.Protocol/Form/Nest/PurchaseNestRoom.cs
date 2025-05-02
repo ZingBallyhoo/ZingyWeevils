@@ -3,6 +3,12 @@ using PolyType;
 namespace BinWeevils.Protocol.Form.Nest
 {
     [GenerateShape]
+    public partial class PurchaseNestRoomRequest
+    {
+        [PropertyShape(Name = "roomID")] public ENestRoom m_roomType { get; set; }
+    }
+    
+    [GenerateShape]
     public partial class PurchaseNestRoomResponse
     {
         [PropertyShape(Name = "err")] public int m_error { get; set; }
