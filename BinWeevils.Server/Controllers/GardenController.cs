@@ -565,8 +565,8 @@ namespace BinWeevils.Server.Controllers
             // static to help efcore with client eval
             
             var timeDelta = timeProvider.GetUtcNow() - growthStartTime;
-            var age = timeDelta.Minutes;
-            return (uint)age;
+            var age = timeDelta.TotalMinutes;
+            return (uint)Math.Floor(age);
         }
         
         private PlantState GetPlantState(PlantStateData data) 
