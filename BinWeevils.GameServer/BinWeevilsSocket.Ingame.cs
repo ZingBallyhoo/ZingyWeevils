@@ -167,10 +167,7 @@ namespace BinWeevils.GameServer
                 {
                     m_taskQueue.Enqueue(() => 
                     {
-                        var ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-                        // (this handles dst)
-                    
-                        var ukTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, ukTimeZone);
+                        var ukTime = m_services.GetTimeProvider().GetLocalNow();
                         return this.BroadcastXtStr(Modules.INGAME_GET_ZONE_TIME, new GetZoneTimeResponse
                         {
                             m_dateTime = ukTime.ToAs3Date()

@@ -49,6 +49,7 @@ internal static class Program
         });
         builder.Services.AddSingleton<LocNameMapper>();
         builder.Services.AddScoped<WeevilInitializer>();
+        builder.Services.AddSingleton<TimeProvider, UkTimeProvider>();
         
         builder.Services.AddSingleton<LocationDefinitions>(p => 
             XmlReadBuffer.ReadStatic<LocationDefinitions>(File.ReadAllText(p.GetRequiredService<IConfiguration>()["LocationDefinitions"]!)));

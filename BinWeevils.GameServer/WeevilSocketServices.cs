@@ -43,6 +43,11 @@ namespace BinWeevils.GameServer
             return m_activity;
         }
         
+        public TimeProvider GetTimeProvider()
+        {
+            return m_rootProvider.GetRequiredService<TimeProvider>();
+        }
+        
         public async Task<uint> Login(string name)
         {
             await using var scope = m_rootProvider.CreateAsyncScope();
