@@ -120,7 +120,7 @@ namespace BinWeevils.GameServer
             {
                 "mulch4" => new Mulch4Game(gameRoom),
                 "squares" => new SquaresGame(gameRoom),
-                "reversi" => null,
+                "reversi" => new ReversiGame(gameRoom),
                 "BallGame2Ball" => new BallGame(gameRoom), // todo: do we care about the number of balls? ig to validate
                 "BallGame6Ball" => new BallGame(gameRoom),
                 "BallGame12Ball" => new BallGame(gameRoom),

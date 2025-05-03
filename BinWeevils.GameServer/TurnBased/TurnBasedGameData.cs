@@ -16,5 +16,12 @@ namespace BinWeevils.GameServer.TurnBased
         }
         
         public abstract string Serialize();
+        
+        public string GetOtherPlayer(string player)
+        {
+            if (m_player1 == player) return m_player2!;
+            if (m_player2 == player) return m_player1!;
+            throw new InvalidDataException("game doesn't have 2 players");
+        }
     }
 }

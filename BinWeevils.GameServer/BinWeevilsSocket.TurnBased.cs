@@ -87,6 +87,17 @@ namespace BinWeevils.GameServer
                     }
                     break;
                 }
+                case "reverseMulch":
+                {
+                    switch (command)
+                    {
+                        case Modules.TURN_BASED_TAKE_TURN:
+                        {
+                            return KeyValueDeserializer.Deserialize<ReversiTakeTurnRequest>(request);
+                        }
+                    }
+                    break;
+                }
                 case "ballGame":
                 {
                     switch (command)

@@ -20,8 +20,11 @@ namespace BinWeevils.GameServer.TurnBased
         protected TurnBasedGame(Room room)
         {
             m_room = room;
-            m_gameData = new AsyncLockedAccess<T>(new T());
             m_recycling = false;
+            
+            var data = new T();
+            data.Reset();
+            m_gameData = new AsyncLockedAccess<T>(data);
         }
         
         protected async ValueTask<AsyncLockedAccess<T>.Token> GetData()

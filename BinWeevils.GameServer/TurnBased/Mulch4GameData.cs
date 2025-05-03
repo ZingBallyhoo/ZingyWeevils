@@ -1,29 +1,11 @@
-using System.Text;
-
 namespace BinWeevils.GameServer.TurnBased
 {
-    public class Mulch4GameData : TurnBasedGameData
+    public class Mulch4GameData : TileBasedGameData
     {
-        public readonly TileState[][] m_columns;
-        
-        private const int COLUMNS = 7;
-        private const int ROWS = 6;
         private const int SEQUENCE = 4;
         
-        public enum TileState : byte
+        public Mulch4GameData() : base(6, 7)
         {
-            Empty,
-            Player1,
-            Player2,
-        }
-        
-        public Mulch4GameData()
-        {
-            m_columns = new TileState[COLUMNS][];
-            for (var i = 0; i < m_columns.Length; i++)
-            {
-                m_columns[i] = new TileState[ROWS];
-            }
         }
         
         public List<string>? FindWinningSlots(int column, int row)
@@ -46,7 +28,7 @@ namespace BinWeevils.GameServer.TurnBased
             
             var column = startColumn - colStep;
             var row = startRow - rowStep;
-            while (column >= 0 && row >= 0 && column < COLUMNS && row < ROWS)
+            while (column >= 0 && row >= 0 && column < m_numColumns && row < m_numRows)
             {
                 var curr = m_columns[column][row];
                 if (curr != desired) break;
@@ -62,7 +44,7 @@ namespace BinWeevils.GameServer.TurnBased
 
             column = startColumn;
             row = startRow;
-            while (column >= 0 && row >= 0 && column < COLUMNS && row < ROWS)
+            while (column >= 0 && row >= 0 && column < m_numColumns && row < m_numRows)
             {
                 var curr = m_columns[column][row];
                 if (curr != desired) break;
@@ -86,39 +68,6 @@ namespace BinWeevils.GameServer.TurnBased
                 winningSlots.Add($"{sequenceStartCol+i*colStep}:{sequenceStartRow+i*rowStep}");
             }
             return winningSlots;
-        }
-
-        public override string Serialize()
-        {
-            var sb = new StringBuilder();
-            for (var col = 0; col < COLUMNS; col++)
-            {
-                var colData = m_columns[col];
-                
-                for (var row = 0; row < ROWS; row++)
-                {
-                    var tileOwner = colData[row] switch
-                    {
-                        TileState.Empty => "-1",
-                        TileState.Player1 => m_player1,
-                        TileState.Player2 => m_player2,
-                        _ => throw new InvalidDataException()
-                    };
-                    
-                    sb.Append($"{row}_{col}:{tileOwner},");
-                }
-            }
-            
-            return sb.ToString();
-        }
-        
-        public override void Reset()
-        {
-            base.Reset();
-            foreach (var column in m_columns)
-            {
-                column.AsSpan().Fill(TileState.Empty);
-            }
         }
     }
 }
