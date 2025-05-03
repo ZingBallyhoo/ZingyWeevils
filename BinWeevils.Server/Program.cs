@@ -21,6 +21,7 @@ using Microsoft.Extensions.FileProviders;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Proto;
+using Proto.DependencyInjection;
 using StackXML;
 using Stl.DependencyInjection;
 using WeevilWorld.Server;
@@ -46,7 +47,7 @@ internal static class Program
         builder.Services.AddSingleton(provider =>
         {
             Log.SetLoggerFactory(provider.GetRequiredService<ILoggerFactory>());
-            return new ActorSystem();
+            return new ActorSystem().WithServiceProvider(provider);
         });
         builder.Services.AddSingleton<LocNameMapper>();
         builder.Services.AddScoped<WeevilInitializer>();

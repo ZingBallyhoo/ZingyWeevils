@@ -2,11 +2,11 @@ using StackXML.Str;
 
 namespace BinWeevils.Protocol.Str.WeevilKart
 {
-    public ref partial struct JoinGameRequest
+    public partial record struct JoinGameRequest
     {
-        [StrField] public ReadOnlySpan<char> m_trackName;
-        [StrField] public int m_numPlayers;
-        [StrField] public int m_kartID;
-        [StrField] public ReadOnlySpan<char> m_kartColor;
+        [StrField] public string m_trackName;
+        [StrField] public byte m_numPlayers;
+        [StrField] public byte m_kartID;
+        [StrField] public string m_kartColor;
     }
 }

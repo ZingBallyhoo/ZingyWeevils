@@ -1,9 +1,7 @@
-using ArcticFox.SmartFoxServer;
 using BinWeevils.Protocol;
-using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.WeevilKart;
-using Proto;
+using Microsoft.Extensions.Logging;
 using StackXML.Str;
 
 namespace BinWeevils.GameServer
@@ -17,50 +15,55 @@ namespace BinWeevils.GameServer
 
             switch (clientMessage.m_command)
             {
-                case "joinGame":
+                case Modules.KART_JOIN_GAME:
                 {
                     var joinGame = new JoinGameRequest();
                     joinGame.Deserialize(ref reader);
                     
-                    /*var gameName = $"kart/{joinGame.m_trackName}_{joinGame.m_numPlayers}";
+                    m_services.GetLogger().LogDebug("Kart - JoinGame: {Data}", joinGame);
+                    
+                    var actorSystem = m_services.GetActorSystem();                    
+                    var us = GetUser();
+                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), joinGame);
+                    break;
+                }
+                case Modules.KART_LEFT_GAME:
+                {
+                    var leaveGame = new LeaveGameRequest(); // empty
+                    leaveGame.Deserialize(ref reader);
+                    
+                    m_services.GetLogger().LogDebug("Kart - LeaveGame");
+                    
                     var actorSystem = m_services.GetActorSystem();
-                    var gamePID = new PID(actorSystem.Address, gameName);
-                    actorSystem.Root.RequestAsync<>(gamePID, null);*/
+                    var us = GetUser();
+                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), leaveGame);
+                    break;
+                }
+                case Modules.KART_USER_READY:
+                {
+                    var userReady = new UserReadyRequest(); // empty
+                    userReady.Deserialize(ref reader);
                     
-                    m_taskQueue.Enqueue(async () =>
-                    {
-                        await this.BroadcastXtRes(new KartNotification
-                        {
-                            m_commandType = Modules.KART,
-                            m_command = Modules.KART_FORCE_DISCONNECT
-                        });
-                    });
+                    m_services.GetLogger().LogDebug("Kart - UserReady");
                     
+                    var actorSystem = m_services.GetActorSystem();
+                    var us = GetUser();
+                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), userReady);
+                    break;
+                }
+                case Modules.KART_DRIVEN_OFF:
+                {
+                    var drivenOff = new DrivenOffRequest(); // empty
+                    drivenOff.Deserialize(ref reader);
+                    
+                    m_services.GetLogger().LogDebug("Kart - DrivenOff");
+                    
+                    var actorSystem = m_services.GetActorSystem();
+                    var us = GetUser();
+                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), drivenOff);
                     break;
                 }
             }
         }
     }
-    
-    /*public class KartGameActor : IActor
-    {
-        public record Join(PID pid, User user, int kartID);
-        
-        public record ForceDisconnectNotification();
-        
-        public Task ReceiveAsync(IContext context)
-        {
-            switch (context.Message)
-            {
-                case Join join:
-                {
-                    context.Respond(false);
-                   // join.
-                    break;
-                }
-            }
-            
-            return Task.CompletedTask;
-        }
-    }*/
 }

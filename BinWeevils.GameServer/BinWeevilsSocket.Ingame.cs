@@ -481,7 +481,7 @@ namespace BinWeevils.GameServer
 
                     break;
                 }
-                // todo: SIT_IN_CAR (validate only)
+                case EWeevilAction.SIT_IN_CAR:
                 case EWeevilAction.EXIT_CAR:
                 {
                     var exitCar = new ExitCarAction();

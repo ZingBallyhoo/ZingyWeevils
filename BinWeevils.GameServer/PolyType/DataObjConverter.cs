@@ -1,4 +1,5 @@
 using BinWeevils.Protocol.XmlMessages;
+using PolyType.Abstractions;
 
 namespace BinWeevils.GameServer.PolyType
 {
@@ -54,6 +55,14 @@ namespace BinWeevils.GameServer.PolyType
         }
     }
     
+    public class DataObjInlineObjConverter<T>(DataObjPropertyConverter<T>[] properties) : DataObjObjectConverter<T>(properties)
+    {
+        public override void AppendToXml(ActionScriptObject obj, string? name, T? value)
+        {
+            base.AppendToXml(obj, null, value);
+        }
+    }
+    
     public class DataObjBoolConverter : DataObjConverter<bool>
     {
         public override void AppendToXml(ActionScriptObject obj, string? name, bool value)
@@ -96,6 +105,25 @@ namespace BinWeevils.GameServer.PolyType
             ArgumentNullException.ThrowIfNull(name);
             
             obj.m_vars.Add(Var.Number(name, value));
+        }
+    }
+    
+    public class DataObjOptionalConverter<TOptional, TElement> : DataObjConverter<TOptional>
+    {
+        public required DataObjConverter<TElement> m_innerConverter;
+        public required OptionDeconstructor<TOptional, TElement> m_deconstructor;
+
+        public override void AppendToXml(ActionScriptObject obj, string? name, TOptional? value)
+        {
+            ArgumentNullException.ThrowIfNull(name);
+            
+            if (!m_deconstructor(value, out var element)) 
+            {
+                obj.m_vars.Add(Var.Null(name));
+                return;
+            }
+            
+            m_innerConverter.AppendToXml(obj, name, element);
         }
     }
 }

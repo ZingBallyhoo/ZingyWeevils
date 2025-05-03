@@ -2,17 +2,20 @@ using System.Net;
 using ArcticFox.Net;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.GameServer.Actors;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.GameServer.TurnBased;
 using BinWeevils.Protocol.Xml;
 using Microsoft.Extensions.Hosting;
+using Proto;
 
 namespace BinWeevils.GameServer
 {
     public class BinWeevilsSocketHost : SocketHost, IHostedService
     {
         private readonly SmartFoxManager m_manager;
+        private readonly ActorSystem m_actorSystem;
         private readonly LocationDefinitions m_locationDefinitions;
         private readonly TcpServer m_tcpServer;
         
@@ -20,9 +23,11 @@ namespace BinWeevils.GameServer
         
         public static readonly int TURN_BASED_GAME_ROOM_TYPE = RoomTypeIDs.NewType("TurnBasedGame");
         
-        public BinWeevilsSocketHost(SmartFoxManager manager, LocationDefinitions locationDefinitions)
+        public BinWeevilsSocketHost(SmartFoxManager manager, ActorSystem actorSystem, 
+            LocationDefinitions locationDefinitions)
         {
             m_manager = manager;
+            m_actorSystem = actorSystem;
             m_locationDefinitions = locationDefinitions;
             m_tcpServer = new TcpServer(this, new IPEndPoint(IPAddress.Loopback, 9339));
         }
@@ -100,7 +105,20 @@ namespace BinWeevils.GameServer
                     if (obj.m_type != "gameSlot") continue;
                     await CreateGameRoom(zone, location.m_name, obj.m_slot, obj.m_gamePath);
                 }
+
+                foreach (var kartSlot in location.m_karts.GroupBy(x => GetKartGameAddress(x.m_track, x.m_numPlayers)))
+                {
+                    var kartSlotProps = Props.FromProducer(() => new KartGameSlot(room, kartSlot))
+                        .WithChildSupervisorStrategy(new AlwaysStopStrategy())
+                        .WithGuardianSupervisorStrategy(new CustomAlwaysRestartStrategy());
+                    m_actorSystem.Root.SpawnNamed(kartSlotProps, kartSlot.Key);
+                }
             }
+        }
+        
+        public static string GetKartGameAddress(ReadOnlySpan<char> trackID, int numPlayers)
+        {
+            return $"kartSlot/{trackID}/{numPlayers}";
         }
         
         public static string GetTurnBasedRoomName(string location, int slot)

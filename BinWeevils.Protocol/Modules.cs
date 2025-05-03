@@ -48,6 +48,12 @@ namespace BinWeevils.Protocol
         public const string KART = "b";
         public const string KART_JOIN_GAME = "joinGame";
         public const string KART_JOINED_NOTIFICATION = "playerJoinGame";
+        public const string KART_LEFT_GAME = "playerLeaveGame";
+        public const string KART_USER_READY = "userReady";
         public const string KART_FORCE_DISCONNECT = "forceDisconnect";
+        
+        public const string KART_DRIVE_OFF_NOTIFICATION = "driveOff";
+        public const string KART_DRIVEN_OFF = "drivenOff";
+        public const string KART_PREPARE_GAME_NOTIFICATION = "prepareGame";
     }
 }

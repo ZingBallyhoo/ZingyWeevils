@@ -1,3 +1,4 @@
+using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.XmlMessages;
 using PolyType;
 using PolyType.Abstractions;
@@ -46,9 +47,20 @@ namespace BinWeevils.GameServer.PolyType
                     return new DataObjDoubleConverter();
                 }
                 
+                if (type.Type.IsPrimitive)
+                {
+                    throw new NotImplementedException($"unimplemented primitive: {type}");
+                }
+                
                 var properties = type.Properties
                     .Select(prop => (DataObjPropertyConverter<T>)prop.Accept(this)!)
                     .ToArray();
+                
+                var inlineAttr = type.AttributeProvider?.GetCustomAttribute<DataObjInlineAttribute>();
+                if (inlineAttr != null)
+                {
+                    return new DataObjInlineObjConverter<T>(properties);
+                }
                 return new DataObjObjectConverter<T>(properties);
             }
         
@@ -56,6 +68,16 @@ namespace BinWeevils.GameServer.PolyType
             {
                 var propertyConverter = ReEnter(propertyShape.PropertyType);
                 return new DataObjPropertyConverter<TDeclaringType, TPropertyType>(propertyShape, propertyConverter);
+            }
+
+            public override object? VisitOptional<TOptional, TElement>(IOptionalTypeShape<TOptional, TElement> optionalShape, object? state = null)
+            {
+                var underlyingConverter = ReEnter(optionalShape.ElementType);
+                return new DataObjOptionalConverter<TOptional, TElement>
+                {
+                    m_innerConverter = underlyingConverter,
+                    m_deconstructor = optionalShape.GetDeconstructor()
+                };
             }
         }
         

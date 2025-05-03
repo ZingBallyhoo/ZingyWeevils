@@ -1,7 +1,9 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Str;
+using BinWeevils.Protocol.Str.WeevilKart;
 using BinWeevils.Protocol.XmlMessages;
 using Proto;
 
@@ -14,6 +16,7 @@ namespace BinWeevils.GameServer.Actors
         
         private PID m_nest;
         private PID m_buddyList;
+        private PID? m_kartGame;
         
         public record KickFromNest(string userName);
         
@@ -68,6 +71,50 @@ namespace BinWeevils.GameServer.Actors
                 case RemoveBuddyBody:
                 {
                     context.Forward(m_buddyList);
+                    break;
+                }
+                
+                case JoinGameRequest joinKartGame:
+                {
+                    if (m_kartGame != null)
+                    {
+                        throw new InvalidDataException("already in a kart game");
+                    }
+                    
+                    var slotAddress = BinWeevilsSocketHost.GetKartGameAddress(joinKartGame.m_trackName, joinKartGame.m_numPlayers);
+                    var slotPID = new PID(context.Self.Address, slotAddress);
+                    
+                    var request = new KartGameSlot.JoinRequest(context.Self, checked((int)m_user.m_id), joinKartGame.m_kartID);
+                    var response = await context.RequestAsync<KartGameSlot.JoinResponse>(slotPID, request);
+                    if (response.game != null)
+                    {
+                        m_kartGame = response.game;
+                    }
+                    await m_user.BroadcastXtRes(response.clientResponse);
+                    break;
+                }
+                case LeaveGameRequest:
+                case UserReadyRequest: 
+                case DrivenOffRequest:
+                {
+                    if (m_kartGame == null) return;
+                                        
+                    context.Send(m_kartGame, new KartGame.SocketMessage(context.Self, context.Message));
+                    if (context.Message is LeaveGameRequest)
+                    {
+                        m_kartGame = null;
+                    }
+                    break;
+                }
+                case KartNotification kartNotification:
+                {
+                    if (m_kartGame == null) return;
+                    if (kartNotification.m_command == Modules.KART_FORCE_DISCONNECT)
+                    {
+                        m_kartGame = null;
+                    }
+                    Console.Out.WriteLine(kartNotification);
+                    await m_user.BroadcastXtRes(kartNotification);
                     break;
                 }
             }
