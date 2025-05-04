@@ -94,32 +94,38 @@ namespace BinWeevils.GameServer.Actors
             
             switch (message)
             {
-                case UserReadyRequest: 
+                case KartUserReadyRequest: 
                 {
                     await UserInSlotReady(context, slot);
                     break;
                 }
-                case DrivenOffRequest: 
+                case KartDrivenOffRequest: 
                 {
                     await UserInSlotDrivenOff(context, slot);
                     break;
                 }
-                case LeaveGameRequest:
+                case KartLeaveGameRequest:
                 {
                     await PlayerLeftSlot(context, slot);
                     break;
                 }
-                case PositionUpdate update:
+                case KartPositionUpdate update:
                 {
                     await HandlePositionUpdate(context, slot, update);
                     break;
                 }
-                case FinishLineRequest request:
+                case KartJump jump:
+                {
+                    await HandleJump(context, slot, jump);
+                    break;
+                }
+                
+                case KartFinishLineRequest request:
                 {
                     await HandleFinishLine(context, slot, request.m_time);
                     break;
                 }
-                case Ping:
+                case KartPing:
                 {
                     PingAcknowledged(context, slot);
                     break;

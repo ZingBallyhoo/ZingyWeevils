@@ -2,7 +2,7 @@ using StackXML.Str;
 
 namespace BinWeevils.Protocol.Str.WeevilKart
 {
-    public record Ping : IStrClass
+    public record KartDrivenOffRequest : IStrClass
     {
         public void Serialize(ref StrWriter writer)
         {

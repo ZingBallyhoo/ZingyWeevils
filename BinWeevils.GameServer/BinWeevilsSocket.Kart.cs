@@ -1,6 +1,4 @@
-using System.Text;
 using BinWeevils.GameServer.Actors;
-using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.WeevilKart;
@@ -13,45 +11,50 @@ namespace BinWeevils.GameServer
     {
         private void HandleKartCommand(in XtClientMessage message, ref StrReader reader)
         {
-            var clientMessage = new ClientRequest();
+            var clientMessage = new KartRequestHeader();
             clientMessage.Deserialize(ref reader);
 
             switch (clientMessage.m_command)
             {
                 case Modules.KART_JOIN_GAME:
                 {
-                    KartMessageHandler<JoinGameRequest>(ref reader); // empty
+                    KartMessageHandler<KartJoinGameRequest>(ref reader); // empty
                     break;
                 }
                 case Modules.KART_LEFT_GAME:
                 {
-                    KartMessageHandler<LeaveGameRequest>(ref reader); // empty
+                    KartMessageHandler<KartLeaveGameRequest>(ref reader); // empty
                     break;
                 }
                 case Modules.KART_USER_READY:
                 {
-                    KartMessageHandler<UserReadyRequest>(ref reader); // empty
+                    KartMessageHandler<KartUserReadyRequest>(ref reader); // empty
                     break;
                 }
                 case Modules.KART_DRIVEN_OFF:
                 {
-                    KartMessageHandler<DrivenOffRequest>(ref reader); // empty
+                    KartMessageHandler<KartDrivenOffRequest>(ref reader); // empty
                     break;
                 }
                 
                 case Modules.KART_POSITION_UPDATE:
                 {
-                    KartMessageHandler<PositionUpdate>(ref reader);
+                    KartMessageHandler<KartPositionUpdate>(ref reader);
+                    break;
+                }
+                case Modules.KART_JUMP:
+                {
+                    KartMessageHandler<KartJump>(ref reader);
                     break;
                 }
                 case Modules.KART_FINISH_LINE:
                 {
-                    KartMessageHandler<FinishLineRequest>(ref reader);
+                    KartMessageHandler<KartFinishLineRequest>(ref reader);
                     break;
                 }
                 case Modules.KART_PING:
                 {
-                    KartMessageHandler<Ping>(ref reader);
+                    KartMessageHandler<KartPing>(ref reader);
                     break;
                 }
             }
@@ -66,7 +69,7 @@ namespace BinWeevils.GameServer
                 throw new Exception($"didn't fully parse kart message");
             }
             
-            if (packet is not PositionUpdate)
+            if (packet is not KartPositionUpdate)
             {
                 m_services.GetLogger().LogDebug("Kart - {Data}", packet);
             }

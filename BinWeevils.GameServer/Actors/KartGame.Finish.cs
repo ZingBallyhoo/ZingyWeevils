@@ -37,7 +37,7 @@ namespace BinWeevils.GameServer.Actors
                 if (slot.m_finishTime != null) continue; // no need to ping, they finished
                 
                 slot.m_pingPending = true;
-                Notify(context, slot.m_index, Modules.KART_PING, new Protocol.Str.WeevilKart.Ping());
+                Notify(context, slot.m_index, Modules.KART_PING, new Protocol.Str.WeevilKart.KartPing());
                 
                 usersToPing++;
             }

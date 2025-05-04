@@ -2,7 +2,7 @@ using StackXML.Str;
 
 namespace BinWeevils.Protocol.Str.WeevilKart
 {
-    public partial record PositionUpdate
+    public partial record KartPositionUpdate
     {
         [StrField] public byte m_kartID;
         [StrField] public uint m_time;

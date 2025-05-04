@@ -105,7 +105,7 @@ namespace BinWeevils.GameServer.Actors
         {
             switch (message)
             {
-                case JoinGameRequest joinKartGame:
+                case KartJoinGameRequest joinKartGame:
                 {
                     if (m_kartGame != null)
                     {
@@ -129,7 +129,7 @@ namespace BinWeevils.GameServer.Actors
                     if (m_kartGame == null) return;
                                         
                     context.Send(m_kartGame, new KartGame.UserMessage(context.Self, message));
-                    if (message is LeaveGameRequest)
+                    if (message is KartLeaveGameRequest)
                     {
                         m_kartGame = null;
                     }

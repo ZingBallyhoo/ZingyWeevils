@@ -129,7 +129,21 @@ namespace BinWeevils.GameServer.Actors
             });
         }
         
-        private async ValueTask HandlePositionUpdate(IContext context, int index, PositionUpdate update)
+        private async ValueTask<bool> ValidatePosition(IContext context, int index, double x, double z)
+        {
+            if (x < 1450 && x > 50 && z < 1450 && z > 50)
+            {
+                // valid pos
+                return true;
+            }
+            
+            // invalid pos
+            m_logger.LogError("Kart/{PID}: player {PID} sending position out of valid area", context.Self, m_slots[index].m_user);
+            await ForceDisconnectPlayer(context, index);
+            return false;
+        }
+        
+        private async ValueTask HandlePositionUpdate(IContext context, int index, KartPositionUpdate update)
         {
             if (index != update.m_kartID)
             {
@@ -138,19 +152,27 @@ namespace BinWeevils.GameServer.Actors
                 return;
             }
             
-            if (update.m_x < 1450 && update.m_x > 50 && update.m_z < 1450 && update.m_z > 50)
+            if (!await ValidatePosition(context, index, update.m_x, update.m_z))
             {
-                // valid pos
-            } else
+                return;
+            }
+            NotifyAll(context, Modules.KART_POSITION_UPDATE, update);
+        }
+        
+        private async ValueTask HandleJump(IContext context, int index, KartJump jump)
+        {
+            if (index != jump.m_kartID)
             {
-                // invalid pos
-                
-                m_logger.LogError("Kart/{PID}: player {PID} sending position out of valid area", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {PID} sending jump for someone else", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
             
-            NotifyAll(context, Modules.KART_POSITION_UPDATE, update);
+            if (!await ValidatePosition(context, index, jump.m_x, jump.m_z))
+            {
+                return;
+            }
+            NotifyAll(context, Modules.KART_JUMP, jump);
         }
     }
 }
