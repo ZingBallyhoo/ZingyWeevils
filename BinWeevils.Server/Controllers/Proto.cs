@@ -52,9 +52,14 @@ namespace BinWeevils.Server.Controllers
         }
         
         [HttpGet("api/site/server-time")]
-        public string GetServerTime()
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public ServerTimeResponse GetServerTime([FromServices] TimeProvider timeProvider)
         {
-            return "res=1&t=1597760479&x=y";
+            return new ServerTimeResponse
+            {
+                m_result = true,
+                m_time = timeProvider.GetUtcNow().ToUnixTimeSeconds()
+            };
         }
         
         [HttpPost("api/php/hardestTrackUnlocked.php")]
@@ -103,6 +108,15 @@ namespace BinWeevils.Server.Controllers
             
             // todo: what is this for?
             // stubbed just to prevent 404s
+            return Task.CompletedTask;
+        }
+        
+        [HttpPost("tycoon/startSession.php")]
+        public Task BeginTycoonSession()
+        {
+            // form: bunch of stuff
+            
+            // todo: stubbed just to prevent 404s
             return Task.CompletedTask;
         }
     }
