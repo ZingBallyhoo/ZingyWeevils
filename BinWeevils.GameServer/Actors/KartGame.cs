@@ -84,7 +84,6 @@ namespace BinWeevils.GameServer.Actors
             {
                 return;
             }
-            Console.Out.WriteLine($"{user} - {message}");
             
             switch (message)
             {

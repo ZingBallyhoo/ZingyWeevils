@@ -89,7 +89,6 @@ namespace BinWeevils.GameServer.Actors
                     {
                         m_kartGame = null;
                     }
-                    Console.Out.WriteLine(kartNotification);
                     await m_user.BroadcastXtRes(kartNotification);
                     break;
                 }

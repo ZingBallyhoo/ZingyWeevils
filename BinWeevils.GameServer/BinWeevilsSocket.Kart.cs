@@ -52,7 +52,10 @@ namespace BinWeevils.GameServer
             var packet = new T();
             packet.Deserialize(ref reader);
             
-            m_services.GetLogger().LogDebug("Kart - {Data}", packet);
+            if (packet is not PositionUpdateRequest)
+            {
+                m_services.GetLogger().LogDebug("Kart - {Data}", packet);
+            }
             
             var actorSystem = m_services.GetActorSystem();                    
             var us = GetUser();

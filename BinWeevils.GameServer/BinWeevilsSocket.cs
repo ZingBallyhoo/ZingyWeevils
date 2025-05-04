@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using ArcticFox.Codec;
 using ArcticFox.Net;
 using ArcticFox.Net.Batching;
@@ -32,12 +33,16 @@ namespace BinWeevils.GameServer
                 .AddCodec(new TextDecodeCodec(Encoding.ASCII))
                 .AddCodec(this);
         }
+        
+        [GeneratedRegex(@"^\%xt\%login\%b\%[^%]+%p%")]
+        private partial Regex KartPositionUpdateRegex { get ;}
 
         public void Input(ReadOnlySpan<char> input, ref object? state)
         {
             var logger = m_services.GetLogger();
-            if (logger.IsEnabled(LogLevel.Trace))
+            if (logger.IsEnabled(LogLevel.Trace) && !KartPositionUpdateRegex.IsMatch(input))
             {
+                // (don't trace kart position messages as it's way too spammy)
                 logger.LogTrace("{Packet}", input.ToString());
             }
             
