@@ -579,8 +579,12 @@ namespace BinWeevils.GameServer
                     var jiggle = new JiggleAction();
                     jiggle.Deserialize(ref extraParamsReader);
                     
-                    if (jiggle.m_armMode < 1 || jiggle.m_armMode > 3)
+                    if (jiggle.m_armMode < 0 || jiggle.m_armMode > 3)
                     {
+                        // 0: none
+                        // 1: single leg out
+                        // 2: arms up
+                        // 3: multiple legs out
                         throw new InvalidDataException("invalid jiggle arm mode");
                     }
                     break;
