@@ -254,7 +254,7 @@ namespace BinWeevils.GameServer.Actors
             var varList = new BuddyUpdateRecord.VarList();
             
             var weevilData = user?.GetUserDataAs<WeevilData>();
-            if (weevilData != null)
+            if (weevilData?.m_buddyLocName != null)
             {
                 varList.m_buddyVars.Add(new BuddyUpdateRecord.Var
                 {
