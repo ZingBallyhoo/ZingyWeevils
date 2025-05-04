@@ -1,5 +1,6 @@
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
+using BinWeevils.Protocol.Str.WeevilKart;
 using Microsoft.Extensions.Logging;
 using Proto;
 
@@ -28,7 +29,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (m_notifiedDriveOff) return;
             
-            m_logger.LogInformation("Kart game {PID} notifying drive off", context.Self);
+            m_logger.LogInformation("Kart/{PID}: notifying drive off", context.Self);
             
             m_notifiedDriveOff = true;
             await m_locRoom.BroadcastXtRes(new KartDriveOffNotification
@@ -47,6 +48,13 @@ namespace BinWeevils.GameServer.Actors
         {
             ref var slot = ref m_slots[index];
             
+            if (!m_notifiedDriveOff)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sent drive-off before notified", context.Self, slot.m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
             if (slot.m_drivenOff) return;
             slot.m_drivenOff = true;
             
@@ -62,7 +70,7 @@ namespace BinWeevils.GameServer.Actors
                 if (slot.m_user == null) continue;
                 if (slot.m_drivenOff) continue;
                 
-                m_logger.LogWarning("Kart game {PID} kicking player {Player} as they did not drive off", context.Self, slot.m_user);
+                m_logger.LogWarning("Kart/{PID}: kicking player {Player} as they did not drive off", context.Self, slot.m_user);
                 await ForceDisconnectPlayer(context, slot.m_index);
             }
         }
@@ -89,31 +97,60 @@ namespace BinWeevils.GameServer.Actors
             if (m_raceSequenceStarted) return;
             m_raceSequenceStarted = true;
             
-            m_logger.LogInformation("Kart game {PID} starting race sequence", context.Self);
+            m_logger.LogInformation("Kart/{PID}: starting race sequence", context.Self);
             
+            // start rendering
             NotifyAll(context, new KartNotification 
             {
                 m_commandType = Modules.KART,
                 m_command = Modules.KART_PREPARE_GAME_NOTIFICATION
             });
             
-            context.ReenterAfter(Task.Delay(TimeSpan.FromSeconds(3)), async _ => 
+            context.ReenterAfter(Task.Delay(TimeSpan.FromSeconds(3)), _ => 
             {
+                // start traffic light anim
                 NotifyAll(context, new KartNotification 
                 {
                     m_commandType = Modules.KART,
-                    m_command = "getReady"
+                    m_command = Modules.KART_GET_READY_NOTIFICATION
                 });
             });
-            context.ReenterAfter(Task.Delay(TimeSpan.FromSeconds(6)), async _ => 
+            context.ReenterAfter(Task.Delay(TimeSpan.FromSeconds(6)), _ => 
             {
-                m_logger.LogInformation("Kart game {PID} starting race", context.Self);
+                m_logger.LogInformation("Kart/{PID}: starting race", context.Self);
+                m_raceStarted = true;
+                
+                // begin moving
                 NotifyAll(context, new KartNotification 
                 {
                     m_commandType = Modules.KART,
-                    m_command = "startRace"
+                    m_command = Modules.KART_START_RACE_NOTIFICATION
                 });
             });
+        }
+        
+        private async ValueTask HandlePositionUpdate(IContext context, int index, PositionUpdateRequest update)
+        {
+            if (index != update.m_kartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending position update for someone else", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            if (update.m_x < 1450 && update.m_x > 50 && update.m_z < 1450 && update.m_z > 50)
+            {
+                // valid pos
+            } else
+            {
+                // invalid pos
+                
+                m_logger.LogError("Kart/{PID}: player {PID} sending position out of valid area", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAll(context, Modules.KART_POSITION_UPDATE, update);
         }
     }
 }

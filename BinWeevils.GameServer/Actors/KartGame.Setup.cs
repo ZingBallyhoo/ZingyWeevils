@@ -85,6 +85,13 @@ namespace BinWeevils.GameServer.Actors
         {
             ref var slot = ref m_slots[index];
             
+            if (!m_gameReady)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sent user ready before the game is ready", context.Self, slot.m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
             if (slot.m_userReady) return;
             slot.m_userReady = true;
             
@@ -100,7 +107,7 @@ namespace BinWeevils.GameServer.Actors
                 if (slot.m_user == null) continue;
                 if (slot.m_userReady) continue;
                 
-                m_logger.LogWarning("Kart game {PID} kicking player {Player} as they did not ready up", context.Self, slot.m_user);
+                m_logger.LogWarning("Kart/{PID}: kicking player {Player} as they did not ready up", context.Self, slot.m_user);
                 await ForceDisconnectPlayer(context, slot.m_index);
             }
         }

@@ -60,7 +60,7 @@ namespace BinWeevils.GameServer
                 writer.PutString(command);
                 writer.Put(room);
                 obj.Serialize(ref writer);
-                return bc.BroadcastZeroTerminatedAscii(writer.AsSpan());
+                return bc.BroadcastZeroTerminatedAscii(writer.AsSpan(true));
             } finally
             {
                 writer.Dispose();
@@ -81,11 +81,30 @@ namespace BinWeevils.GameServer
                 obj.Serialize(ref eventWriter);
                 writer.Put(eventWriter.AsSpan());
                 
-                return bc.BroadcastZeroTerminatedAscii(writer.AsSpan());
+                return bc.BroadcastZeroTerminatedAscii(writer.AsSpan(true));
             } finally
             {
                 writer.Dispose();
                 eventWriter.Dispose();
+            }
+        }
+        
+        public static byte[] SerializeKartEvent<T>(string type, T obj) where T : IStrClass
+        {
+            var writer = SmartFoxStrMessage.MakeWriter();
+            try
+            {
+                writer.PutString("xt");
+                writer.PutString(Modules.KART);
+                writer.Put(-1);
+                writer.Put(type);
+                obj.Serialize(ref writer);
+                
+                var terminatedSpan = writer.AsSpan(true);
+                return TempBroadcasterExtensions.SerializeZeroTerminatedAscii(terminatedSpan);
+            } finally
+            {
+                writer.Dispose();
             }
         }
         

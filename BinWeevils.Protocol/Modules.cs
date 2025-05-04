@@ -55,5 +55,9 @@ namespace BinWeevils.Protocol
         public const string KART_DRIVE_OFF_NOTIFICATION = "driveOff";
         public const string KART_DRIVEN_OFF = "drivenOff";
         public const string KART_PREPARE_GAME_NOTIFICATION = "prepareGame";
+        public const string KART_GET_READY_NOTIFICATION = "getReady";
+        public const string KART_START_RACE_NOTIFICATION = "startRace";
+        
+        public const string KART_POSITION_UPDATE = "p";
     }
 }

@@ -4,6 +4,7 @@ using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Str.WeevilKart;
 using Microsoft.Extensions.Logging;
 using Proto;
+using StackXML.Str;
 
 namespace BinWeevils.GameServer.Actors
 {
@@ -27,8 +28,9 @@ namespace BinWeevils.GameServer.Actors
         private bool m_gameReady;
         private bool m_notifiedDriveOff;
         private bool m_raceSequenceStarted;
+        private bool m_raceStarted;
         
-        public record SocketMessage(PID pid, object message);
+        public record UserMessage(PID pid, object message);
         
         public KartGame(Room locRoom, string[] kartColors, ILogger<KartGame> logger) 
         {
@@ -54,9 +56,9 @@ namespace BinWeevils.GameServer.Actors
                     HandleJoinRequest(context, joinRequest);
                     break;
                 }
-                case SocketMessage socketMessage: 
+                case UserMessage userMessage: 
                 {
-                    await HandleSocketMessage(context, socketMessage.pid, socketMessage.message);
+                    await HandleUserMessage(context, userMessage.pid, userMessage.message);
                     break;
                 }
                 case Terminated playerTerminated:
@@ -70,19 +72,19 @@ namespace BinWeevils.GameServer.Actors
                 case Restarting:
                 case Stopping:
                 {
-                    ForceDisconnectPlayers(context);
+                    await ForceDisconnectPlayers(context);
                     break;
                 }
             }
         }
         
-        private async ValueTask HandleSocketMessage(IContext context, PID user, object message)
+        private async ValueTask HandleUserMessage(IContext context, PID user, object message)
         {
-            Console.Out.WriteLine($"{user} - {message}");
             if (!m_playerToSlot.TryGetValue(user, out var slot))
             {
                 return;
             }
+            Console.Out.WriteLine($"{user} - {message}");
             
             switch (message)
             {
@@ -101,24 +103,12 @@ namespace BinWeevils.GameServer.Actors
                     await PlayerLeftSlot(context, slot);
                     break;
                 }
+                case PositionUpdateRequest update:
+                {
+                    await HandlePositionUpdate(context, slot, update);
+                    break;
+                }
             }
-        }
-        
-        private async ValueTask ForceDisconnectPlayer(IContext context, int slot)
-        {
-            if (m_notifiedDriveOff)
-            {
-                // we cant send force dc as it won't work pas this point...
-                context.Stop(m_slots[slot].m_user!);
-                return;
-            }
-            context.Send(m_slots[slot].m_user!, new KartNotification 
-            {
-                m_commandType = Modules.KART,
-                m_command = Modules.KART_FORCE_DISCONNECT
-            });
-            
-            await PlayerLeftSlot(context, slot);
         }
         
         private async ValueTask PlayerLeftSlot(IContext context, int index) 
@@ -160,23 +150,43 @@ namespace BinWeevils.GameServer.Actors
             
             if (!m_gameReady)
             {
-                // prevent driving off
+                // the game didn't actually try to start yet
+                // so this instance can just be reused
                 return true;
             }
             
             // this game has "started" but there's nobody in it.. goodbye
-            m_logger.LogInformation("Kart game {PID} closing as no players remain", context.Self);
+            m_logger.LogInformation("Kart/{PID}: closing as no players remain", context.Self);
             context.Stop(context.Self);
             return true;
         }
         
-        private void ForceDisconnectPlayers(IContext context)
+        private async ValueTask ForceDisconnectPlayer(IContext context, int index)
         {
-            NotifyAll(context, new KartNotification 
+            var user = m_slots[index].m_user;
+            if (user == null) return;
+            
+            await PlayerLeftSlot(context, index);
+            
+            if (m_notifiedDriveOff)
+            {
+                // we cant send force dc as it won't work at this point...
+                context.Stop(user);
+                return;
+            }
+            context.Send(user, new KartNotification 
             {
                 m_commandType = Modules.KART,
                 m_command = Modules.KART_FORCE_DISCONNECT
             });
+        }
+        
+        private async ValueTask ForceDisconnectPlayers(IContext context)
+        {
+            for (var i = 0; i < m_slots.Length; i++)
+            {
+                await ForceDisconnectPlayer(context, i);
+            }
         }
         
         private void NotifyAll(IContext context, KartNotification notification) 
@@ -185,6 +195,19 @@ namespace BinWeevils.GameServer.Actors
             {
                 if (slot.m_user == null) continue;
                 context.Send(slot.m_user, notification);
+            }
+        }
+        
+        private void NotifyAll<T>(IContext context, string type, T obj) where T : IStrClass
+        {
+            // todo: this is not great but i'd really like for this to use the serialize-once pattern so...
+            var serialized = BroadcasterExtensions.SerializeKartEvent(type, obj);
+            var sererEvent = new SocketActor.KartServerEvent(serialized);
+            
+            foreach (var slot in m_slots)
+            {
+                if (slot.m_user == null) continue;
+                context.Send(slot.m_user, sererEvent);
             }
         }
     }

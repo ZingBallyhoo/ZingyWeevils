@@ -1,3 +1,6 @@
+using System.Text;
+using BinWeevils.GameServer.Actors;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.WeevilKart;
@@ -17,53 +20,43 @@ namespace BinWeevils.GameServer
             {
                 case Modules.KART_JOIN_GAME:
                 {
-                    var joinGame = new JoinGameRequest();
-                    joinGame.Deserialize(ref reader);
-                    
-                    m_services.GetLogger().LogDebug("Kart - JoinGame: {Data}", joinGame);
-                    
-                    var actorSystem = m_services.GetActorSystem();                    
-                    var us = GetUser();
-                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), joinGame);
+                    KartMessageHandler<JoinGameRequest>(ref reader); // empty
                     break;
                 }
                 case Modules.KART_LEFT_GAME:
                 {
-                    var leaveGame = new LeaveGameRequest(); // empty
-                    leaveGame.Deserialize(ref reader);
-                    
-                    m_services.GetLogger().LogDebug("Kart - LeaveGame");
-                    
-                    var actorSystem = m_services.GetActorSystem();
-                    var us = GetUser();
-                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), leaveGame);
+                    KartMessageHandler<LeaveGameRequest>(ref reader); // empty
                     break;
                 }
                 case Modules.KART_USER_READY:
                 {
-                    var userReady = new UserReadyRequest(); // empty
-                    userReady.Deserialize(ref reader);
-                    
-                    m_services.GetLogger().LogDebug("Kart - UserReady");
-                    
-                    var actorSystem = m_services.GetActorSystem();
-                    var us = GetUser();
-                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), userReady);
+                    KartMessageHandler<UserReadyRequest>(ref reader); // empty
                     break;
                 }
                 case Modules.KART_DRIVEN_OFF:
                 {
-                    var drivenOff = new DrivenOffRequest(); // empty
-                    drivenOff.Deserialize(ref reader);
-                    
-                    m_services.GetLogger().LogDebug("Kart - DrivenOff");
-                    
-                    var actorSystem = m_services.GetActorSystem();
-                    var us = GetUser();
-                    actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), drivenOff);
+                    KartMessageHandler<DrivenOffRequest>(ref reader); // empty
+                    break;
+                }
+                
+                case Modules.KART_POSITION_UPDATE:
+                {
+                    KartMessageHandler<PositionUpdateRequest>(ref reader);
                     break;
                 }
             }
+        }
+        
+        private void KartMessageHandler<T>(ref StrReader reader) where T : IStrClass, new()
+        {
+            var packet = new T();
+            packet.Deserialize(ref reader);
+            
+            m_services.GetLogger().LogDebug("Kart - {Data}", packet);
+            
+            var actorSystem = m_services.GetActorSystem();                    
+            var us = GetUser();
+            actorSystem.Root.Send(us.GetUserData<WeevilData>().GetUserAddress(), new SocketActor.KartSocketMessage(packet));
         }
     }
 }
