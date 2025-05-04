@@ -19,6 +19,10 @@ namespace BinWeevils.GameServer.Actors
             public int m_userID;
             public bool m_userReady;
             public bool m_drivenOff;
+            
+            public bool m_pingPending;
+            public uint? m_finishTime;
+            public int? m_ranking;
         }
         
         private readonly ILogger<KartGame> m_logger;
@@ -29,6 +33,9 @@ namespace BinWeevils.GameServer.Actors
         private bool m_notifiedDriveOff;
         private bool m_raceSequenceStarted;
         private bool m_raceStarted;
+        
+        private bool m_pingPending;
+        private int m_lastAwardedRanking;
         
         public record UserMessage(PID pid, object message);
         
@@ -102,9 +109,19 @@ namespace BinWeevils.GameServer.Actors
                     await PlayerLeftSlot(context, slot);
                     break;
                 }
-                case PositionUpdateRequest update:
+                case PositionUpdate update:
                 {
                     await HandlePositionUpdate(context, slot, update);
+                    break;
+                }
+                case FinishLineRequest request:
+                {
+                    await HandleFinishLine(context, slot, request.m_time);
+                    break;
+                }
+                case Ping:
+                {
+                    PingAcknowledged(context, slot);
                     break;
                 }
             }
@@ -208,6 +225,18 @@ namespace BinWeevils.GameServer.Actors
                 if (slot.m_user == null) continue;
                 context.Send(slot.m_user, sererEvent);
             }
+        }
+        
+        private void Notify<T>(IContext context, int index, string type, T obj) where T : IStrClass
+        {
+            ref var slot = ref m_slots[index];
+            if (slot.m_user == null) return;
+            
+            // todo: this is not great but i'd really like for this to use the serialize-once pattern so...
+            var serialized = BroadcasterExtensions.SerializeKartEvent(type, obj);
+            var sererEvent = new SocketActor.KartServerEvent(serialized);
+            
+            context.Send(slot.m_user, sererEvent);
         }
     }
 }

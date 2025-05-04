@@ -98,6 +98,16 @@ namespace BinWeevils.GameServer.PolyType
         }
     }
     
+    public class DataObjUIntConverter : DataObjConverter<uint>
+    {
+        public override void AppendToXml(ActionScriptObject obj, string? name, uint value)
+        {
+            ArgumentNullException.ThrowIfNull(name);
+            
+            obj.m_vars.Add(Var.Number(name, value));
+        }
+    }
+    
     public class DataObjDoubleConverter : DataObjConverter<double>
     {
         public override void AppendToXml(ActionScriptObject obj, string? name, double value)

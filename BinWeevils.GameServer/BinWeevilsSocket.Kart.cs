@@ -41,7 +41,17 @@ namespace BinWeevils.GameServer
                 
                 case Modules.KART_POSITION_UPDATE:
                 {
-                    KartMessageHandler<PositionUpdateRequest>(ref reader);
+                    KartMessageHandler<PositionUpdate>(ref reader);
+                    break;
+                }
+                case Modules.KART_FINISH_LINE:
+                {
+                    KartMessageHandler<FinishLineRequest>(ref reader);
+                    break;
+                }
+                case Modules.KART_PING:
+                {
+                    KartMessageHandler<Ping>(ref reader);
                     break;
                 }
             }
@@ -51,8 +61,12 @@ namespace BinWeevils.GameServer
         {
             var packet = new T();
             packet.Deserialize(ref reader);
+            if (reader.HasRemaining())
+            {
+                throw new Exception($"didn't fully parse kart message");
+            }
             
-            if (packet is not PositionUpdateRequest)
+            if (packet is not PositionUpdate)
             {
                 m_services.GetLogger().LogDebug("Kart - {Data}", packet);
             }

@@ -34,18 +34,10 @@ namespace BinWeevils.GameServer.PolyType
                 {
                     return new DataObjStringConverter();
                 }
-                if (type.Type == typeof(int))
-                {
-                    return new DataObjIntConverter();
-                }
-                if (type.Type == typeof(bool))
-                {
-                    return new DataObjBoolConverter();
-                }
-                if (type.Type == typeof(double))
-                {
-                    return new DataObjDoubleConverter();
-                }
+                if (type.Type == typeof(int)) return new DataObjIntConverter();
+                if (type.Type == typeof(uint)) return new DataObjUIntConverter();
+                if (type.Type == typeof(bool)) return new DataObjBoolConverter();
+                if (type.Type == typeof(double)) return new DataObjDoubleConverter();
                 
                 if (type.Type.IsPrimitive)
                 {

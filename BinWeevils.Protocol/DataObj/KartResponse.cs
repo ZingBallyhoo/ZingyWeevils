@@ -51,4 +51,17 @@ namespace BinWeevils.Protocol.DataObj
     {
         [PropertyShape(Name = "playerCount")] public int m_playerCount;
     }
+    
+    [GenerateShape]
+    public partial record KartRanksNotification : KartNotification
+    {
+        [PropertyShape(Name = "p0_pos")] public int? m_player0Pos;
+        [PropertyShape(Name = "p1_pos")] public int? m_player1Pos;
+        [PropertyShape(Name = "p2_pos")] public int? m_player2Pos;
+        [PropertyShape(Name = "p3_pos")] public int? m_player3Pos;
+        [PropertyShape(Name = "p0_time")] public uint m_player0Time;
+        [PropertyShape(Name = "p1_time")] public uint m_player1Time;
+        [PropertyShape(Name = "p2_time")] public uint m_player2Time;
+        [PropertyShape(Name = "p3_time")] public uint m_player3Time;
+    }
 }

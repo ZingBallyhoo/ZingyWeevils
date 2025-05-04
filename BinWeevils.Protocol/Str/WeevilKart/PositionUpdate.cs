@@ -2,10 +2,10 @@ using StackXML.Str;
 
 namespace BinWeevils.Protocol.Str.WeevilKart
 {
-    public partial record PositionUpdateRequest
+    public partial record PositionUpdate
     {
-        [StrField] public int m_kartID;
-        [StrField] public int m_time;
+        [StrField] public byte m_kartID;
+        [StrField] public uint m_time;
         [StrField] public double m_x;
         [StrField] public double m_z;
         [StrField] public int m_ry;

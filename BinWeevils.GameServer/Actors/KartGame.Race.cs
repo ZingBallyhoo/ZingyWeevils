@@ -129,7 +129,7 @@ namespace BinWeevils.GameServer.Actors
             });
         }
         
-        private async ValueTask HandlePositionUpdate(IContext context, int index, PositionUpdateRequest update)
+        private async ValueTask HandlePositionUpdate(IContext context, int index, PositionUpdate update)
         {
             if (index != update.m_kartID)
             {

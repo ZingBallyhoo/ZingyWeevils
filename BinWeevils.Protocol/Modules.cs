@@ -59,5 +59,8 @@ namespace BinWeevils.Protocol
         public const string KART_START_RACE_NOTIFICATION = "startRace";
         
         public const string KART_POSITION_UPDATE = "p";
+        public const string KART_FINISH_LINE = "finishLine";
+        public const string KART_PING = "ping";
+        public const string KART_RANKS = "ranks";
     }
 }
