@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using ArcticFox.Net;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
@@ -12,6 +13,9 @@ namespace BinWeevils.GameServer
 {
     public partial class BinWeevilsSocket
     {
+        [GeneratedRegex(@"^(?! )[a-zA-Z?!\-.&* ]{1,38}(?<! )$")]
+        private partial Regex ChatMessageRegex { get; }
+        
         private void HandleChatCommand(in XtClientMessage message, ref StrReader reader)
         {
             switch (message.m_command)
@@ -52,6 +56,11 @@ namespace BinWeevils.GameServer
                 if (room.IsLimbo()) return;
                 
                 m_services.GetLogger().LogDebug("Chat - Send: {Message}", pubMsg.m_text);
+                
+                if (!ChatMessageRegex.IsMatch(pubMsg.m_text))
+                {
+                    throw new InvalidDataException("chat message contains invalid characters");
+                }
                 
                 await room.BroadcastSys(new ServerPubMsgBody
                 {

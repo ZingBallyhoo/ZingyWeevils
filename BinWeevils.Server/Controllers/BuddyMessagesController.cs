@@ -17,7 +17,7 @@ namespace BinWeevils.Server.Controllers
         private readonly WeevilDBContext m_dbContext;
         private readonly TimeProvider m_timeProvider;
         
-        [GeneratedRegex(@"^[a-zA-Z?!\-.& ]{1,100}$")]
+        [GeneratedRegex(@"^(?! )[a-zA-Z?!\-.& ]{1,100}(?<! )$")]
         private partial Regex MessageRegex { get; }
         
         public BuddyMessagesController(WeevilDBContext dbContext, TimeProvider timeProvider)
