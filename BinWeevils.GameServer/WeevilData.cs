@@ -52,6 +52,23 @@ namespace BinWeevils.GameServer
             m_weevilDef.SetValue(WeevilDef.DEFAULT);
         }
         
+        public int CalculateNewDirection(double xStart, double zStart, double x, double z)
+        {
+            var dx = x - xStart;
+            var dz = z - xStart;
+            if(dx == 0 && dz == 0)
+            {
+                return m_r.GetValue(); // unchanged
+            }
+            
+            return (int)double.RadiansToDegrees(Math.Atan2(-dx, -dz));
+        }
+        
+        public int CalculateNewDirection(double x, double z)
+        {
+            return CalculateNewDirection(m_x.GetValue(), m_z.GetValue(), x, z);
+        }
+        
         public PID GetUserAddress()
         {
             return new PID(m_contextAddress, m_user.m_name);

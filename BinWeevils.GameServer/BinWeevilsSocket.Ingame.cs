@@ -452,13 +452,54 @@ namespace BinWeevils.GameServer
                     var flyUpTube = new FlyUpTube();
                     flyUpTube.Deserialize(ref extraParamsReader);
                     
+                    weevil.m_r.SetValue(weevil.CalculateNewDirection(flyUpTube.m_xFinal, flyUpTube.m_zFinal));
                     weevil.m_x.SetValue(flyUpTube.m_xFinal);
                     weevil.m_y.SetValue(flyUpTube.m_yDest);
                     weevil.m_z.SetValue(flyUpTube.m_zFinal);
-                    // todo: calc dir (client doesn't send here or in vars...)
                     break;
                 }
                 // todo: SKATE?
+                case EWeevilAction.SLIDE_OUT:
+                {
+                    var slideOut = new SlideOutAction();
+                    slideOut.Deserialize(ref extraParamsReader);
+                    
+                    if (slideOut.m_slideFactor > 0.94 || slideOut.m_slideFactor < 0.85)
+                    {
+                        // sanity
+                        // new slime pool uses 0.85
+                        // old uses 0.94
+                        throw new InvalidDataException("invalid slide out");
+                    }
+                    
+                    var x = (double)slideOut.m_xStart;
+                    var z = (double)slideOut.m_zStart;
+                    
+                    var vx = (double) slideOut.m_vx;
+                    var vz = (double) slideOut.m_vz;
+
+                    for (var i = 0; i < 100; i++)
+                    {
+                        // todo: replace with non-iterative
+                        
+                        x += vx;
+                        z += vz;
+                        vx *= slideOut.m_slideFactor;
+                        vz *= slideOut.m_slideFactor;
+                        if (vx < 0.5 && vx > -0.5 && vz < 0.5 && vz > -0.5)
+                        {
+                            break;
+                        }
+                    }
+                    
+                    weevil.m_x.SetValue(x);
+                    weevil.m_y.SetValue(slideOut.m_yStart);
+                    weevil.m_z.SetValue(z);
+                    weevil.m_r.SetValue(weevil.CalculateNewDirection(
+                        slideOut.m_xStart, slideOut.m_zStart, 
+                        slideOut.m_xStart + slideOut.m_vx, slideOut.m_zStart + slideOut.m_vz));
+                    break;
+                }
                 // todo: which other actions need this
                 
                 
@@ -541,7 +582,6 @@ namespace BinWeevils.GameServer
                     
                     break;
                 }
-                // todo: SLIDE_OUT
                 case EWeevilAction.DROP_OUT:
                 {
                     var dropOut = new DropOutAction();
