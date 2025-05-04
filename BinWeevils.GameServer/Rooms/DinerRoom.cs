@@ -15,7 +15,7 @@ namespace BinWeevils.GameServer.Rooms
 
         public override async ValueTask ClientSentRoomEvent(User user, ClientRoomEvent roomEvent)
         {
-            var eventReader = new StrReader(roomEvent.m_eventParams, ';');
+            var eventReader = new StrReader(roomEvent.m_eventParams, ';', WeevilStrParser.s_instance);
             var eventID = (DinerEventID)eventReader.Get<int>();
             
             // Console.Out.WriteLine($"diner event: {eventID} - {roomEvent.m_eventParams} - {roomEvent.m_roomState}");

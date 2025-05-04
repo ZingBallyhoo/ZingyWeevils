@@ -2,6 +2,7 @@ using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Actors;
 using BinWeevils.GameServer.Rooms;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Actions;
@@ -372,7 +373,7 @@ namespace BinWeevils.GameServer
         {
             m_services.GetLogger().LogDebug("Ingame - Action: {Action} - {Args}", (EWeevilAction)action.m_actionID, action.m_extraParams);
 
-            var extraParamsReader = new StrReader(action.m_extraParams, ',');
+            var extraParamsReader = new StrReader(action.m_extraParams, ',', WeevilStrParser.s_instance);
             switch ((EWeevilAction)action.m_actionID)
             {
                 case EWeevilAction.JUMP_TO:

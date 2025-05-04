@@ -12,7 +12,7 @@ namespace BinWeevils.GameServer.Sfs
             if (span[^1] != SEPARATOR) throw new InvalidDataException();
             
             var trimmedSpan = span.Slice(1, span.Length - 2);
-            return new StrReader(trimmedSpan, SEPARATOR, StandardStrParser.s_instance);
+            return new StrReader(trimmedSpan, SEPARATOR, WeevilStrParser.s_instance);
         }
         
         public static StrWriter MakeWriter()
