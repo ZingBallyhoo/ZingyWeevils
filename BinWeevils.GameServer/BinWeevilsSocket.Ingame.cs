@@ -459,6 +459,21 @@ namespace BinWeevils.GameServer
                     break;
                 }
                 // todo: SKATE?
+                case EWeevilAction.GET_SPUN:
+                {
+                    var getSpun = new GetSpunAction();
+                    getSpun.Deserialize(ref extraParamsReader);
+                    
+                    if (getSpun.m_vr < 15 || getSpun.m_vr > 30)
+                    {
+                        throw new InvalidDataException("GET_SPUN velocity out of range");
+                    }
+                    
+                    // todo: not really any point syncing r..
+                    // this is for blue diamond only
+                    
+                    break;
+                }
                 case EWeevilAction.SLIDE_OUT:
                 {
                     var slideOut = new SlideOutAction();
@@ -574,7 +589,6 @@ namespace BinWeevils.GameServer
                     
                     break;
                 }
-                // todo: GET_SPUN (validate only)
                 case EWeevilAction.FLY_OUT:
                 {
                     var flyOut = new FlyOutAction();
