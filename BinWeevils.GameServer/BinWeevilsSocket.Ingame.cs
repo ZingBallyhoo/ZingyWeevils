@@ -458,7 +458,10 @@ namespace BinWeevils.GameServer
                     weevil.m_z.SetValue(flyUpTube.m_zFinal);
                     break;
                 }
-                // todo: SKATE?
+                case EWeevilAction.SKATE:
+                {
+                    throw new InvalidDataException("client sent SKATE action - not allowed");
+                }
                 case EWeevilAction.GET_SPUN:
                 {
                     var getSpun = new GetSpunAction();
@@ -526,16 +529,17 @@ namespace BinWeevils.GameServer
                 
                 case EWeevilAction.WALK:
                 {
-                    // todo: invalid to send
-                    break;
+                    throw new InvalidDataException("client sent WALK action - not allowed");
                 }
                 case EWeevilAction.JUMP:
                 {
-                    // (validate only)
                     var jump = new SpinAction();
                     jump.Deserialize(ref extraParamsReader);
-                    // todo: validate
 
+                    if (jump.m_level < 1 || jump.m_level > 5)
+                    {
+                        throw new InvalidDataException("invalid jump level");
+                    }
                     break;
                 }
                 case EWeevilAction.SIT_IN_CAR:
@@ -553,31 +557,48 @@ namespace BinWeevils.GameServer
                 {
                     var spin = new SpinAction();
                     spin.Deserialize(ref extraParamsReader);
-                    // todo: validate
                     
+                    if (spin.m_level < 1 || spin.m_level > 5)
+                    {
+                        throw new InvalidDataException("invalid spin level");
+                    }
                     break;
                 }
                 case EWeevilAction.JIGGLE:
                 {
                     var jiggle = new JiggleAction();
                     jiggle.Deserialize(ref extraParamsReader);
-                    // todo: validate
                     
+                    if (jiggle.m_armMode < 1 || jiggle.m_armMode > 3)
+                    {
+                        throw new InvalidDataException("invalid jiggle arm mode");
+                    }
                     break;
                 }
-                // todo: HOLD_TRAY (validate only)
+                case EWeevilAction.HOLD_TRAY:
+                {
+                    throw new InvalidDataException("client HOLD_TRAY WALK action - not allowed");
+                }
                 case EWeevilAction.HOLD_ITEM:
                 {
                     var holdItem = new HoldItemAction();
                     holdItem.Deserialize(ref extraParamsReader);
                     
-                    // todo: validate
+                    if (holdItem.m_itemType < 1 || holdItem.m_itemType > 10)
+                    {
+                        throw new InvalidDataException("invalid hold item type");
+                    }
                     break;
                 }
                 case EWeevilAction.ADD_ITEM_TO_TRAY:
                 {
                     var addItemToTray = new AddItemToTrayAction();
                     addItemToTray.Deserialize(ref extraParamsReader);
+                    
+                    if (addItemToTray.m_trayType != 1 && addItemToTray.m_trayType != 2)
+                    {
+                        throw new InvalidDataException("invalid tray type");
+                    }
                     
                     // todo: validate
                     break;

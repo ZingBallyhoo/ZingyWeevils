@@ -37,6 +37,7 @@ namespace BinWeevils.Protocol.Xml
         [XmlField("maintainY")] public bool m_maintainY;
         [XmlField("roomEvents")] public bool m_roomEvents;
         [XmlField("clickAnywhere")] public bool m_clickAnywhere;
+        [XmlField("slippery")] public bool m_slippery;
         
         [XmlField("hasAudio")] public bool m_hasAudio;
         [XmlField("playList")] [XmlSplitStr] public List<int> m_playList;
