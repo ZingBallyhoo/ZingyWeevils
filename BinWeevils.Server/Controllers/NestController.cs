@@ -572,14 +572,25 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
-            var validCheck = await m_dbContext.m_weevilDBs
+            var checkDto = await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(weev => weev.m_nest.m_id == request.m_nestID)
                 .SelectMany(weev => weev.m_nest.m_items)
-                .AnyAsync(item => item.m_id == request.m_itemID && item.m_placedItem != null);
-            if (!validCheck)
+                .Where(item => item.m_id == request.m_itemID)
+                .Select(item => new
+                {
+                    m_isPlaced = item.m_placedItem != null
+                })
+                .SingleOrDefaultAsync();
+            if (checkDto == null)
             {
-                throw new Exception("invalid update item request");
+                throw new Exception("invalid update item position request");
+            }
+            if (!checkDto.m_isPlaced) 
+            {
+                // the client really likes to send update requests just after the item has been removed
+                // ignore
+                return;
             }
             
             var dto = await m_dbContext.m_nestPlacedItems
