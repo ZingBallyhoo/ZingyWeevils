@@ -70,6 +70,13 @@ namespace BinWeevils.GameServer
         
         private async Task<uint> LoginInternal(AsyncServiceScope scope, string name)
         {
+            name = name.Trim();
+            if (name.Length > 20)
+            {
+                // todo: share setting instead of hardcoding...
+                throw new InvalidDataException("invalid username");
+            }
+            
             using var loginActivity = GameServerObservability.s_source.StartActivity("Attempt Login");
             loginActivity?.SetTag("userName", name);
             GameServerObservability.s_loginAttempts.Add(1);

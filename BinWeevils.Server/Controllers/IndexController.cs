@@ -14,12 +14,13 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("")]
         public IResult PostUsername([FromBody] UsernameForm form)
         {
-            if (string.IsNullOrWhiteSpace(form.m_username))
+            var username = form.m_username.Trim().Replace('+', ' ');
+            if (string.IsNullOrWhiteSpace(username))
             {
                 return Results.Redirect("/");
             }
             
-            Response.Cookies.Append("username", form.m_username, new CookieOptions
+            Response.Cookies.Append("username", username, new CookieOptions
             {
                 Expires = DateTime.MaxValue
             });

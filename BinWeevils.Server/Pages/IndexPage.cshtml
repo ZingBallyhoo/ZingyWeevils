@@ -1,6 +1,13 @@
 @page "/"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
 @using WeevilWorld.Server
 @attribute [ResponseCache(Duration = 60*60*60)]
+@inject IOptionsSnapshot<IdentityOptions> IdentityOptions
+
+@{
+    var allowedUsernameChars = IdentityOptions.Value.User.AllowedUserNameCharacters;
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,9 +66,16 @@
 
             if (cookieValue) {
                 let input = document.getElementById("username-input");
-                input.value = cookieValue;
+                input.value = decodeURIComponent(cookieValue);
             }
         });
+        
+        function filterUsernameInput(event) {
+            event = event || window.event;
+            if (!"@allowedUsernameChars".includes(event.key)) {
+                event.preventDefault();
+            }
+        }
     </script>
 </head>
 <body>
@@ -81,7 +95,8 @@
     <div class="row no-gutters justify-content-center p-5">
         <form class="col-auto" method="post" asp-antiforgery="false" autocomplete="off">
             <div class="form-row">
-                <input id="username-input" type="text" class="form-control form-control-lg mb-2" name="username" placeholder="fairriver5">
+                <input id="username-input" type="text" class="form-control form-control-lg mb-2" name="username" 
+                       placeholder="fairriver5" onkeypress="filterUsernameInput()" maxlength="20">
             </div>
             <div class="form-row">
                 <button type="submit" class="btn btn-block btn-primary mb-2">Play</button>
