@@ -171,13 +171,16 @@ namespace BinWeevils.Server.Controllers
 
             var encodedProgress = new EncodedIntroProgress(request.m_progress);
             
-            // todo: validate that not progressing backwards?
-            // but who cares...
-            
-            await m_dbContext.m_weevilDBs
+            var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => (x.m_introProgress & encodedProgress.m_bits) == x.m_introProgress) // dont progress backwards
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_introProgress, encodedProgress.m_bits));
+            
+            if (rowsUpdated == 0)
+            {
+                throw new InvalidDataException("tried remove intro progress bits?");
+            }
         }
         
         [StructuredFormPost("weevil/change-definition")]
@@ -194,7 +197,7 @@ namespace BinWeevils.Server.Controllers
             }
             if (def.HasSuperAntenna())
             {
-                throw new InvalidDataException("not allowed to keep/add super antennna when changing def");
+                throw new InvalidDataException("not allowed to keep/add super antenna when changing def");
             }
             
             const int cost = 2500;
