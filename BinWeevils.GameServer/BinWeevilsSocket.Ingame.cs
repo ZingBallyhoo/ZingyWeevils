@@ -341,10 +341,20 @@ namespace BinWeevils.GameServer
             {
                 throw new InvalidDataException($"invalid action id: {action.m_endPoseID}");
             }
-                    
-            if (action.m_endPoseID != -1 && !Enum.IsDefined(typeof(EWeevilAction), action.m_endPoseID))
+            
+            if (action.m_endPoseID != -1)
             {
-                throw new InvalidDataException($"invalid end pose id: {action.m_endPoseID}");
+                var validPose = (EWeevilAction)action.m_endPoseID switch
+                {
+                    EWeevilAction.WALK => true,
+                    EWeevilAction.STAND_TALL => true,
+                    EWeevilAction.SQUAT => true,
+                    _ => false
+                };
+                if (!validPose)
+                {
+                    throw new InvalidDataException($"invalid end pose: {(EWeevilAction)action.m_endPoseID}");
+                }
             }
                     
             m_taskQueue.Enqueue(async () => { await HandleInGameCommand_Action_Async(action); });
@@ -666,14 +676,12 @@ namespace BinWeevils.GameServer
             var yVar = setUvars.m_vars.m_vars.SingleOrDefault(x => x.m_name == "y");
             if (yVar.m_value != null && float.TryParse(yVar.m_value, out var newYValue))
             {
-                var yValue = float.Parse(yVar.m_value);
-                
                 m_taskQueue.Enqueue(() =>
                 {
                     var user = GetUser();
                     var weevil = user.GetUserData<WeevilData>();
                     
-                    weevil.m_y.SetValue(yValue);
+                    weevil.m_y.SetValue(newYValue);
                     
                     return ValueTask.CompletedTask;
                 });
