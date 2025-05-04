@@ -29,8 +29,9 @@ namespace BinWeevils.Protocol.Xml
             var seenUnset = false;
             foreach (var value in GetAllValues())
             {
-                if (value == -1)
+                if (value < 0)
                 {
+                    if (value != -1) return false;
                     seenUnset = true;
                 } else if (seenUnset)
                 {
@@ -66,11 +67,6 @@ namespace BinWeevils.Protocol.Xml
             if (s.Length == 0)
             {
                 return true;
-            }
-            if (s.Contains("-1", StringComparison.Ordinal))
-            {
-                // hey! don't
-                return false;
             }
             
             var reader = new StrReader(s, ',');
