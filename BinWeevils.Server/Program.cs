@@ -160,15 +160,19 @@ internal static class Program
             .AddRewrite("^cinema/lobbyScreenData\\.xml", "cdn/binConfig/uk/lobbyScreenData.xml", true) // riggs
             .AddRewrite("^cinema/cinema\\.xml", "cdn/externalUIs/cinema/cinema.xml", true) // riggs
             .AddRedirect("^cinema/(.+).flv", "cdn/ads/binweevils/binTycoonTour2.flv") // riggs
-            .AddRewrite("^nestNews/xml/uk/nestNews\\.xml", "nestNews/xml/nestNews.xml", true)
+            .AddRewrite("^nestNews/xml/h/nestNews\\.xml", "nestNews/xml/nestNews.xml", true)
             .AddRewrite("^sounds/nestSounds/firePlace\\.mp3", "bintunes/flemManor/firePlace.mp3", true) // library_no_book
             .AddRedirect("^externalUIs/myMusicManager\\.swf", "externalUIs/myMusicManager_20_05_13.swf") // fix page size
+            .AddRedirect("^overlayUIs/haggleHutOverlay\\.swf", "overlayUIs/haggleHutOverlay_18_02_2011.swf") // first version to support delimited colors
         
             // overwritten with incompatible versions...
             .AddRewrite("^externalUIs/petBuilder\\.swf", "cdn/play/externalUIs/petBuilder.swf", true)
             .AddRewrite("^overlayUIs/introGuide\\.swf", "cdn/play/overlayUIs/introGuide.swf", true)
             .AddRewrite("^fixedCam/shoppingMall_dynamAds\\.swf", "cdn/play/fixedCam/shoppingMall_dynamAds.swf", true) // bugged...
             .AddRewrite("^fixedCam/LabsLab\\.swf", "cdn/play/fixedCam/LabsLab.swf", true) // overwritten with videoPod
+            
+            // aspnet won't match the route otherwise...
+            .AddRedirect("^api//nest/get-all-stored", "api/nest/get-all-stored")
         );
         
         var archivePath = app.Configuration["ArchivePath"]!;
