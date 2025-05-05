@@ -313,6 +313,11 @@ namespace BinWeevils.GameServer
                     HandleNestCommand(message, ref reader);
                     return;
                 }
+                case Modules.PET:
+                {
+                    HandlePetCommand(message, ref reader);
+                    return;
+                }
                 case Modules.DINER:
                 {
                     HandleDinerCommand(message, ref reader);

@@ -561,6 +561,19 @@ namespace BinWeevils.GameServer
                     
                     break;
                 }
+                case EWeevilAction.THROW:
+                {
+                    var throwAct = new ThrowAction();
+                    throwAct.Deserialize(ref extraParamsReader);
+                    
+                    // todo: validate pet id...
+                    
+                    if (throwAct.m_ballID >= 9)
+                    {
+                        throw new InvalidDataException("ball id out of range");
+                    }
+                    break;
+                }
                 // todo: THROW (validate only)
                 case EWeevilAction.SPIN1:
                 case EWeevilAction.SPIN2:

@@ -39,6 +39,9 @@ namespace BinWeevils.Protocol
         public const string NEST_DENY_NEST_INVITE = $"{NEST}#6"; // delete an invite we received
         public const string NEST_RETURN_TO_NEST = $"{NEST}#7";
         
+        public const string PET = "6";
+        public const string PET_MODULE_SEND_PET_COMMAND = $"{PET}#7";
+        
         public const string DINER = "9";
         public const string DINER_GRAB_TRAY = $"{DINER}#1";
         public const string DINER_DROP_TRAY = $"{DINER}#2";
