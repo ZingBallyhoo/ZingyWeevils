@@ -1,3 +1,4 @@
+using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
 using BinWeevils.Protocol.Amf;
 using PolyType;
@@ -25,6 +26,19 @@ namespace BinWeevils.Server.Controllers
                 case "weevilservices.cWeevilLoginService.getUserBuddyCount":
                 {
                     return "-1";
+                }
+                case "weevilservices.cPetShop.getUserPetCount":
+                {
+                    var paramArray = (object?[])context.m_message.m_data!;
+                    
+                    var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
+                    return await petService.GetPetCount(context, (string)paramArray[0]!);
+                }
+                case "weevilservices.cPetShop.validatePetName":
+                {
+                    var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
+                    var request = ArrayMapper.ToObject<ValidatePetNameRequest>(context.m_message.m_data);
+                    return await petService.ValidatePetName(context, request) ? 1 : 0;
                 }
                 default:
                 {

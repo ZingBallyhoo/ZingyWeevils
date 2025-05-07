@@ -55,7 +55,13 @@ namespace BinWeevils.Server.Controllers
         [HttpPost("api/php/getPetSkills.php")]
         public string GetPetSkills() 
         {
-            return $"result={string.Join('|', Enumerable.Range(1, 17).Select(x => $"{x};100;50"))}";
+            return $"result={string.Join('|', Enumerable.Range(1, 17).Select(x => $"{x};100;0"))}";
+        }
+        
+        [HttpPost("api/php/getPetJugglingSkills.php")]
+        public string GetJugglingSKills()
+        {
+            return "result=1;1;300,0,0,0,0,9,0;10;99|10;1;40004000300,0,0,0,0,9,0;12;99";
         }
         
         [HttpGet("api/php/getMyLottoTicketsAndDrawDate.php")]

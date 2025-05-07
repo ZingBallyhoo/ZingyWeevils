@@ -13,6 +13,8 @@ namespace BinWeevils.Database
         public DbSet<BuddyMessageDB> m_buddyMesssages { get; set; }
         public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
         public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
+        
+        public DbSet<PetDB> m_pets { get; set; }
 
         public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestItemDB> m_nestItems { get; set; }
@@ -63,6 +65,14 @@ namespace BinWeevils.Database
             modelBuilder.Entity<RewardedTaskDB>(b =>
             {
                 b.ToTable("RewardedTaskDB");
+            });
+            
+            modelBuilder.Entity<PetDB>(b =>
+            {
+                b.ToTable("PetDB");
+                // todo: cascade behavior?
+                // i think currently it will delete the bed/bowl
+                // which i guess could be fine... otherwise it would become an orphan
             });
             
             modelBuilder.Entity<NestRoomDB>(b =>

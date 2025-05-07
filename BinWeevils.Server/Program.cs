@@ -39,6 +39,7 @@ internal static class Program
             options.OutputFormatters.Add(new StackXMLOutputFormatter());
         });
         builder.Services.AddSingleton<IAmfGatewayRouter, WeevilGatewayRouter>();
+        builder.Services.AddTransient<PetAmfService>();
         
         builder.Services.AddSingleton<BinWeevilsSocketHost>();
         builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());
@@ -61,6 +62,10 @@ internal static class Program
         builder.Services.AddSingleton<QuestRepository>();
         builder.Services.AddSingleton<TrackRepository>();
         builder.Services.AddOptions<EconomySettings>();
+        builder.Services.AddOptions<PetsSettings>().BindConfiguration("Pets").Validate(settings =>
+        {
+            return settings.ItemColors.Count == settings.BowlItemTypes.Count;
+        }).ValidateOnStart();
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
             options.UseSqlite("Filename=db.sqlite"));
