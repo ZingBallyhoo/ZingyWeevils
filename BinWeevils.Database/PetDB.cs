@@ -8,6 +8,7 @@ namespace BinWeevils.Database
     public class PetDB
     {
         [Key] public uint m_id { get; set; }
+        public uint m_ownerIdx { get; set; }
         
         public string m_name { get; set; }
         public uint m_bodyColor { get; set; }
@@ -20,12 +21,14 @@ namespace BinWeevils.Database
         public byte m_mentalEnergy { get; set; }
         public byte m_health { get; set; }
         public byte m_fitness { get; set; }
-        public uint m_experience { get; set; }
+        public uint m_experience { get; set; } = 0;
         
         public virtual ICollection<PetSkillDB> m_skills { get; set; }
         
         public virtual NestItemDB m_bedItem { get; set; }
         public virtual NestItemDB m_bowlItem { get; set; }
+        
+        [ForeignKey(nameof(m_ownerIdx))] public virtual WeevilDB m_owner { get; set; }
     }
     
     [PrimaryKey(nameof(m_petID), nameof(m_skillID))]

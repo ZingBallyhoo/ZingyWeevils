@@ -35,6 +35,7 @@ namespace BinWeevils.Database
         
         [Required] public virtual NestDB m_nest { get; set; }
         public virtual ICollection<WeevilSpecialMoveDB> m_specialMoves { get; set; }
+        public virtual ICollection<PetDB> m_pets { get; set; }
     }
     
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_action))]

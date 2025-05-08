@@ -25,20 +25,26 @@ namespace BinWeevils.Server.Controllers
                 }
                 case "weevilservices.cWeevilLoginService.getUserBuddyCount":
                 {
+                    var request = ArrayMapper.ToObject<GetUserBuddyCountRequest>(context.m_message.m_data);
                     return "-1";
                 }
                 case "weevilservices.cPetShop.getUserPetCount":
                 {
-                    var paramArray = (object?[])context.m_message.m_data!;
-                    
                     var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
-                    return await petService.GetPetCount(context, (string)paramArray[0]!);
+                    var request = ArrayMapper.ToObject<GetUserPetCountRequest>(context.m_message.m_data);
+                    return await petService.GetPetCount(context, request);
                 }
                 case "weevilservices.cPetShop.validatePetName":
                 {
                     var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
                     var request = ArrayMapper.ToObject<ValidatePetNameRequest>(context.m_message.m_data);
-                    return await petService.ValidatePetName(context, request) ? 1 : 0;
+                    return await petService.ValidatePetName(context, request);
+                }
+                case "weevilservices.cPetShop.userBuyPet":
+                {
+                    var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
+                    var request = ArrayMapper.ToObject<BuyPetRequest>(context.m_message.m_data);
+                    return await petService.BuyPet(context, request);
                 }
                 default:
                 {
