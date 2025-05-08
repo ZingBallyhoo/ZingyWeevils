@@ -27,6 +27,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetPetDefsResponse> GetPetDefs([FromBody] GetPetDefsRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("PetController.GetPetDefs");
+            activity?.SetTag("userID", request.m_userID);
+
             if (ControllerContext.HttpContext.User.Identity!.Name != request.m_userID)
             {
                 throw new InvalidDataException("trying to get someone else's pet defs");
@@ -65,10 +68,33 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [HttpPost("php/getPetSkills.php")]
-        public string GetPetSkills() 
+        [StructuredFormPost("php/getPetSkills.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetPetSkillsResponse> GetPetSkills([FromBody] GetPetSkillsRequest request) 
         {
-            return $"result={string.Join('|', Enumerable.Range(1, 17).Select(x => $"{x};100;0"))}";
+            using var activity = ApiServerObservability.StartActivity("PetController.GetPetSkills");
+            activity?.SetTag("petID", request.m_petID);
+            
+            if (!await m_dbContext.m_pets.AnyAsync(x => x.m_id == request.m_petID && x.m_owner.m_name == ControllerContext.HttpContext.User.Identity!.Name))
+            {
+                throw new Exception("invalid pet skills request");
+            }
+            
+            var skills = await m_dbContext.m_pets
+                .Where(x => x.m_id == request.m_petID)
+                .SelectMany(x => x.m_skills)
+                .Select(x => new DelimitedPetSkill 
+                {
+                    m_skillID = (uint)x.m_skillID,
+                    m_obedience = x.m_obedience,
+                    m_skillLevel = x.m_skillLevel
+                })
+                .ToArrayAsync();
+            
+            return new GetPetSkillsResponse
+            {
+                m_resultSkills = string.Join('|', skills.Select(x => x.AsString(';')))
+            };
         }
         
         [HttpPost("php/getPetJugglingSkills.php")]

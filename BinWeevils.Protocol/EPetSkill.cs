@@ -26,5 +26,7 @@ namespace BinWeevils.Protocol
         GO_THERE,
         WEEVIL_THROW_BALL,
         STOP_JUGGLING,
+        
+        COUNT
     }
 }

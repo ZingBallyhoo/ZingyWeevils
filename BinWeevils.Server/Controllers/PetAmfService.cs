@@ -1,5 +1,6 @@
 using ArcticFox.RPC.AmfGateway;
 using BinWeevils.Database;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,9 @@ namespace BinWeevils.Server.Controllers
         
         public Task<int> GetPetCount(AmfGatewayContext context, GetUserPetCountRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("PetAmfService.GetPetCount");
+            activity?.SetTag("userID", request.m_userID);
+
             if (context.m_httpContext.User.Identity!.Name != request.m_userID)
             {
                 throw new InvalidDataException("trying to buy a pet for somebody else");
@@ -35,6 +39,9 @@ namespace BinWeevils.Server.Controllers
         
         public Task<int> ValidatePetName(AmfGatewayContext context, ValidatePetNameRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("PetAmfService.ValidatePetName");
+            activity?.SetTag("name", request.m_name);
+            
             return Task.FromResult(ValidatePetName(request.m_name));
         }
         
@@ -47,6 +54,16 @@ namespace BinWeevils.Server.Controllers
         
         public async Task<bool> BuyPet(AmfGatewayContext context, BuyPetRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("PetAmfService.BuyPet");
+            activity?.SetTag("name", request.m_name);
+            activity?.SetTag("bodyColor", request.m_bodyColor);
+            activity?.SetTag("antenna1Color", request.m_antenna1Color);
+            activity?.SetTag("antenna2Color", request.m_antenna2Color);
+            activity?.SetTag("eye1Color", request.m_eye1Color);
+            activity?.SetTag("eye2Color", request.m_eye2Color);
+            activity?.SetTag("bowlItemTypeID", request.m_bowlItemTypeID);
+            activity?.SetTag("bedColor", request.m_bedColor);
+            
             if (context.m_httpContext.User.Identity!.Name != request.m_userID)
             {
                 throw new InvalidDataException("trying to buy a pet for somebody else");
@@ -83,6 +100,8 @@ namespace BinWeevils.Server.Controllers
                 })
                 .SingleAsync();
             
+            // todo: subtract price
+            
             var bowlItem = new NestItemDB
             {
                 m_itemTypeID = request.m_bowlItemTypeID,
@@ -107,7 +126,27 @@ namespace BinWeevils.Server.Controllers
                 m_eye1Color = request.m_eye1Color,
                 m_eye2Color = request.m_eye2Color,
                 m_bowlItem = bowlItem,
-                m_bedItem = bedItem
+                m_bedItem = bedItem,
+                m_skills = 
+                    Enumerable.Range(0, (int)EPetSkill.COUNT)
+                    .Where(x =>
+                    {
+                        var skill = (EPetSkill)x;
+                        var clientManaged = skill switch
+                        {
+                            EPetSkill.CALL => true,
+                            EPetSkill.GO_THERE => true,
+                            EPetSkill.WEEVIL_THROW_BALL => true,
+                            EPetSkill.STOP_JUGGLING => true,
+                            _ => false,
+                        };
+                        
+                        return !clientManaged;
+                    }).Select(x => new PetSkillDB
+                    {
+                        m_skillID = (EPetSkill)x
+                    })
+                    .ToList()
             });
             
             await m_dbContext.SaveChangesAsync();
