@@ -1,4 +1,4 @@
-namespace BinWeevils.Server
+namespace BinWeevils.Common
 {
     public class PetsSettings
     {

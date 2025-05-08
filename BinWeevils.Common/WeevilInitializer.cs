@@ -5,7 +5,7 @@ using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
 using StackXML;
 
-namespace BinWeevils.GameServer
+namespace BinWeevils.Common
 {
     public class WeevilInitializer
     {

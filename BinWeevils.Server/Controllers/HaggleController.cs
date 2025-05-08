@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Xml;

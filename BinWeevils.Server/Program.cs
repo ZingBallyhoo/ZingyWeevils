@@ -2,6 +2,7 @@ using System.Threading.RateLimiting;
 using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
 using ArcticFox.SmartFoxServer;
+using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.GameServer;
 using BinWeevils.Protocol.Amf;

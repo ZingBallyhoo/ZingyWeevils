@@ -1,3 +1,4 @@
+using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
