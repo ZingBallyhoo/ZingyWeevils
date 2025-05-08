@@ -68,6 +68,47 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
+        [StructuredFormPost("php/updatePetStats.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task UpdatePetStats([FromBody] UpdatePetStatsRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("PetController.UpdatePetStats");
+            activity?.SetTag("petID", request.m_petID);
+            activity?.SetTag("mentalEnergy", request.m_mentalEnergy);
+            activity?.SetTag("fuel", request.m_fuel);
+            activity?.SetTag("health", request.m_health);
+            activity?.SetTag("fitness", request.m_fitness);
+            activity?.SetTag("experience", request.m_experience);
+            
+            if (request.m_mentalEnergy > 100 ||
+                request.m_fuel > 100 ||
+                request.m_health > 100 ||
+                request.m_fitness > 100 ||
+                request.m_health < 2 ||
+                request.m_fitness < 35)
+            {
+                throw new InvalidDataException("pet stat out of range");
+            }
+            
+            var rowsUpdated = await m_dbContext.m_pets
+                .Where(x => x.m_id == request.m_petID)
+                .Where(x => x.m_owner.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_experience <= request.m_experience) // can only go up
+                .Where(x => (request.m_experience - x.m_experience) <= 25) // can't go up too much :)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mentalEnergy, request.m_mentalEnergy)
+                    .SetProperty(x => x.m_fuel, request.m_fuel)
+                    .SetProperty(x => x.m_health, request.m_health)
+                    .SetProperty(x => x.m_fitness, request.m_fitness)
+                    .SetProperty(x => x.m_experience, request.m_experience)
+                );
+            
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("invalid update pet stats request");
+            }
+        }
+        
         [StructuredFormPost("php/getPetSkills.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetPetSkillsResponse> GetPetSkills([FromBody] GetPetSkillsRequest request) 
