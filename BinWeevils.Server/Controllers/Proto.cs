@@ -29,41 +29,6 @@ namespace BinWeevils.Server.Controllers
             return "responseCode=2&failed=0";
         }
         
-        [HttpPost("api/pets/defs")]
-        public string GetPetDefs()
-        {
-            return "result=";
-            return "result=0;h;0;0;0;0;0;0;0;100;100;100;100;99;h";
-            
-            // 0: id
-            // 1: name
-            // 2: bed id
-            // 3: bowl id
-            // 4: body color
-            // 5: antenna 1 color
-            // 6: antenna 2 color
-            // 7: eye 1 color
-            // 8: eye 2 color
-            // 9: fuel
-            // 10: mentalEnergy
-            // 11: health
-            // 12: fitness
-            // 13: experience
-            // 14: nameHash
-        }
-        
-        [HttpPost("api/php/getPetSkills.php")]
-        public string GetPetSkills() 
-        {
-            return $"result={string.Join('|', Enumerable.Range(1, 17).Select(x => $"{x};100;0"))}";
-        }
-        
-        [HttpPost("api/php/getPetJugglingSkills.php")]
-        public string GetJugglingSKills()
-        {
-            return "result=1;1;300,0,0,0,0,9,0;10;99|10;1;40004000300,0,0,0,0,9,0;12;99";
-        }
-        
         [HttpGet("api/php/getMyLottoTicketsAndDrawDate.php")]
         public string GetMyLottoTickets()
         {

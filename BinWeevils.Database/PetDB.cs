@@ -17,10 +17,10 @@ namespace BinWeevils.Database
         public uint m_eye1Color { get; set; }
         public uint m_eye2Color { get; set; }
         
-        public byte m_fuel { get; set; }
-        public byte m_mentalEnergy { get; set; }
-        public byte m_health { get; set; }
-        public byte m_fitness { get; set; }
+        public byte m_fuel { get; set; } // max:100
+        public byte m_mentalEnergy { get; set; } // max:100
+        public byte m_health { get; set; } // max:100
+        public byte m_fitness { get; set; } // min:35, max:100
         public uint m_experience { get; set; } = 0;
         
         public virtual ICollection<PetSkillDB> m_skills { get; set; }

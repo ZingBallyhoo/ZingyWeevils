@@ -77,30 +77,12 @@ namespace BinWeevils.Protocol.Xml
 
         public string ToString(string? format, IFormatProvider? formatProvider)
         {
-            var writer = new StrWriter(',');
-            try
-            {
-                Serialize(ref writer);
-                return writer.AsSpan().ToString();
-            } finally
-            {
-                writer.Dispose();
-            }
+            return this.AsString(',');
         }
 
         public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         {
-            var writer = new StrWriter(',');
-            try
-            {
-                Serialize(ref writer);
-                var finishedSpan = writer.AsSpan();
-                charsWritten = finishedSpan.Length;
-                return finishedSpan.TryCopyTo(destination);
-            } finally
-            {
-                writer.Dispose();
-            }
+            return this.TryFormat(destination, out charsWritten, ',');
         }
         
         public override string ToString()
