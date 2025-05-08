@@ -64,7 +64,7 @@ namespace BinWeevils.Server.Controllers
             
             return new GetPetDefsResponse
             {
-                m_resultDefs = string.Join('|', pets.Select(x => x.AsString(';')).Append("0;h;0;0;0;0;0;0;0;100;100;100;100;99;h"))
+                m_resultDefs = string.Join('|', pets.Select(x => x.AsString(';')))
             };
         }
         
