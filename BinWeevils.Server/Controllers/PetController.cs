@@ -80,11 +80,14 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("fitness", request.m_fitness);
             activity?.SetTag("experience", request.m_experience);
             
+            // when overeating the game will send an update without clamping values
+            // (and can send negative health...)
+            request.m_health = Math.Max(request.m_health, (byte)2);
+            
             if (request.m_mentalEnergy > 100 ||
                 request.m_fuel > 100 ||
                 request.m_health > 100 ||
                 request.m_fitness > 100 ||
-                request.m_health < 2 ||
                 request.m_fitness < 35)
             {
                 throw new InvalidDataException("pet stat out of range");
