@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form.Pet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -140,6 +141,46 @@ namespace BinWeevils.Server.Controllers
             {
                 m_resultSkills = string.Join('|', skills.Select(x => x.AsString(';')))
             };
+        }
+        
+        [StructuredFormPost("php/updatePetSkill.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task UpdatePetSkill([FromBody] UpdatePetSkillRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("PetController.UpdatePetSkill");
+            activity?.SetTag("petID", request.m_petID);
+            activity?.SetTag("skillID", request.m_skillID);
+            activity?.SetTag("obedience", request.m_obedience);
+            activity?.SetTag("skillLevel", request.m_skillLevel);
+            
+            if (request.m_skillID.IsClientManaged())
+            {
+                // for some reason the client sends updates for these
+                // even though their stats is set at load time by the client
+                return;
+            }
+            
+            if (request.m_obedience > 105 || 
+                request.m_skillLevel > 100 || 
+                request.m_skillLevel < 0)
+            {
+                throw new InvalidDataException("pet skill value out of range");
+            }
+            
+            var rowsUpdated = await m_dbContext.m_petSkills
+                .Where(x => x.m_petID == request.m_petID)
+                .Where(x => x.m_skillID == request.m_skillID)
+                .Where(x => x.m_pet.m_owner.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_skillLevel <= request.m_skillLevel) // can only go up
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_obedience, request.m_obedience)
+                    .SetProperty(x => x.m_skillLevel, request.m_skillLevel)
+                );
+            
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("invalid update pet skill request");
+            }
         }
         
         [HttpPost("php/getPetJugglingSkills.php")]

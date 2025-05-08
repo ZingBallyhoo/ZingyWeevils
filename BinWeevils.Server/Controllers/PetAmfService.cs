@@ -50,6 +50,7 @@ namespace BinWeevils.Server.Controllers
         {
             if (!m_settings.Enabled) return 0;
             if (name.Length > m_settings.MaxNameLength) return 0;
+            // todo: validate allowed characters
             return 1;
         }
         
@@ -133,16 +134,7 @@ namespace BinWeevils.Server.Controllers
                     .Where(x =>
                     {
                         var skill = (EPetSkill)x;
-                        var clientManaged = skill switch
-                        {
-                            EPetSkill.CALL => true,
-                            EPetSkill.GO_THERE => true,
-                            EPetSkill.WEEVIL_THROW_BALL => true,
-                            EPetSkill.STOP_JUGGLING => true,
-                            _ => false,
-                        };
-                        
-                        return !clientManaged;
+                        return !skill.IsClientManaged();
                     }).Select(x => new PetSkillDB
                     {
                         m_skillID = (EPetSkill)x
