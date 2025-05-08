@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using BinWeevils.Database;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Server.Services;
 using Microsoft.EntityFrameworkCore;

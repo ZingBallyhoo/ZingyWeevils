@@ -1,4 +1,4 @@
-using BinWeevils.Database;
+using BinWeevils.Common.Database;
 using BinWeevils.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
