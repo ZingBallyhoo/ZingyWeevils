@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using BinWeevils.Database;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Xml;
 using Microsoft.Extensions.DependencyInjection;
 

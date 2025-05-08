@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.GameServer", "Bi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcticFox.RPC.AmfGateway", "ArcticFox\ArcticFox.RPC.AmfGateway\ArcticFox.RPC.AmfGateway.csproj", "{D700300A-494E-48FC-B57F-20CE76D23DDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Database", "BinWeevils.Database\BinWeevils.Database.csproj", "{20E6937E-D5C3-436A-A06F-088854AC44CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Common", "BinWeevils.Common\BinWeevils.Common.csproj", "{20E6937E-D5C3-436A-A06F-088854AC44CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinWeevils.Tests", "BinWeevils.Tests\BinWeevils.Tests.csproj", "{56D95221-D3B6-4480-B382-162DD76D84E9}"
 EndProject

@@ -1,6 +1,6 @@
 using System.Net.Mime;
 using System.Text.RegularExpressions;
-using BinWeevils.Database;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Form.BuddyMessage;
 using Microsoft.AspNetCore.Authorization;

@@ -1,5 +1,5 @@
 using ArcticFox.RPC.AmfGateway;
-using BinWeevils.Database;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;

@@ -3,7 +3,7 @@ using BinWeevils.Protocol.Xml;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     public class WeevilDBContext : IdentityDbContext<WeevilAccount>
     {

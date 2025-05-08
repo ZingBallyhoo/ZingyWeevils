@@ -4,7 +4,7 @@ using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     [Table("NestDB")]
     public class NestDB

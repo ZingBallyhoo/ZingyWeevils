@@ -4,7 +4,7 @@ using BinWeevils.Protocol;
 using BinWeevils.Protocol.Sql;
 using Microsoft.EntityFrameworkCore;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     public class WeevilDB
     {

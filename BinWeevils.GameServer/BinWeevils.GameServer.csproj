@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ArcticFox\ArcticFox.PolyType.FormEncoded\ArcticFox.PolyType.FormEncoded.csproj" />
       <ProjectReference Include="..\ArcticFox\ArcticFox.SmartFoxServer\ArcticFox.SmartFoxServer.csproj" />
-      <ProjectReference Include="..\BinWeevils.Database\BinWeevils.Database.csproj" />
+      <ProjectReference Include="..\BinWeevils.Common\BinWeevils.Common.csproj" />
       <ProjectReference Include="..\BinWeevils.Protocol\BinWeevils.Protocol.csproj" />
     </ItemGroup>
 

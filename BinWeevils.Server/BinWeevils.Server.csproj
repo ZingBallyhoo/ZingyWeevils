@@ -10,7 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ArcticFox\ArcticFox.PolyType.Amf\ArcticFox.PolyType.Amf.csproj" />
       <ProjectReference Include="..\ArcticFox\ArcticFox.RPC.AmfGateway\ArcticFox.RPC.AmfGateway.csproj" />
-      <ProjectReference Include="..\BinWeevils.Database\BinWeevils.Database.csproj" />
+      <ProjectReference Include="..\BinWeevils.Common\BinWeevils.Common.csproj" />
       <ProjectReference Include="..\BinWeevils.GameServer\BinWeevils.GameServer.csproj" />
       <ProjectReference Include="..\BinWeevils.Protocol\BinWeevils.Protocol.csproj" />
     </ItemGroup>

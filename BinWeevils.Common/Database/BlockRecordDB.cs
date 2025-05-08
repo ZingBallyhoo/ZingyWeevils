@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     public class BlockRecord
     {

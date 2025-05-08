@@ -1,5 +1,5 @@
 using System.Text.Json;
-using BinWeevils.Database;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Json;
 using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;

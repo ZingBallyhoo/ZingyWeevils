@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     [PrimaryKey(nameof(m_paletteID), nameof(m_index))]
     public class PaletteEntryDB

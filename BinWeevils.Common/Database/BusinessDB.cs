@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Xml;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     public class BusinessDB
     {

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace BinWeevils.Database
+namespace BinWeevils.Common.Database
 {
     [PrimaryKey(nameof(m_weevilID), nameof(m_taskID))]
     public class WeevilTaskRecord
