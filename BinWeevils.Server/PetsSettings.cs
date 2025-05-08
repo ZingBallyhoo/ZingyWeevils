@@ -10,5 +10,6 @@ namespace BinWeevils.Server
         public HashSet<uint> Colors { get; set; }
         public HashSet<uint> ItemColors { get; set; }
         public List<uint> BowlItemTypes { get; set; }
+        public string BedItem { get; set; }
     }
 }

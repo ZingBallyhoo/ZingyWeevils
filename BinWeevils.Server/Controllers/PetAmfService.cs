@@ -109,7 +109,7 @@ namespace BinWeevils.Server.Controllers
             };
             var bedItem = new NestItemDB
             {
-                m_itemTypeID = (await m_dbContext.FindItemByConfigName("f_petBasket2"))!.Value,
+                m_itemTypeID = (await m_dbContext.FindItemByConfigName(m_settings.BedItem))!.Value,
                 m_nestID = dto.m_nestID,
                 m_color = ItemColor.Parse($"0x{request.m_bedColor:X}", null)
             };

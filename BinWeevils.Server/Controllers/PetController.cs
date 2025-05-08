@@ -102,5 +102,11 @@ namespace BinWeevils.Server.Controllers
         {
             return "result=1;1;300,0,0,0,0,9,0;10;99|10;1;40004000300,0,0,0,0,9,0;12;99";
         }
+        
+        [HttpPost("php/getMyPetFoodStock.php")]
+        public string GetPetFoodStock()
+        {
+            return "result=9";
+        }
     }
 }
