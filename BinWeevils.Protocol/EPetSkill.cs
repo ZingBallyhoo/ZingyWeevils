@@ -1,6 +1,6 @@
 namespace BinWeevils.Protocol
 {
-    public enum EPetSkill
+    public enum EPetSkill : byte
     {
         CALL,
         COME_HERE,

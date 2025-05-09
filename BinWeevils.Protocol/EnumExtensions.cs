@@ -13,5 +13,16 @@ namespace BinWeevils.Protocol
                 _ => false,
             };
         }
+        
+        public static bool IsValidPose(this EPetAction action)
+        {
+            return action switch
+            {
+                EPetAction.DEFAULT => true,
+                EPetAction.SLEEP => true,
+                EPetAction.JUMP_ON => true,
+                _ => false
+            };
+        }
     }
 }

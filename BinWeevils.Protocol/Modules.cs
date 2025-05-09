@@ -40,6 +40,12 @@ namespace BinWeevils.Protocol
         public const string NEST_RETURN_TO_NEST = $"{NEST}#7";
         
         public const string PET = "6";
+        public const string PET_MODULE_JOIN_NEST_LOC = $"{PET}#1";
+        public const string PET_MODULE_SET_NEST_DOOR = $"{PET}#2";
+        public const string PET_MODULE_EXPRESSION = $"{PET}#3";
+        public const string PET_MODULE_ACTION = $"{PET}#4";
+        public const string PET_MODULE_GOT_BALL = $"{PET}#5";
+        public const string PET_MODULE_RETURN_TO_NEST = $"{PET}#6";
         public const string PET_MODULE_SEND_PET_COMMAND = $"{PET}#7";
         
         public const string DINER = "9";
