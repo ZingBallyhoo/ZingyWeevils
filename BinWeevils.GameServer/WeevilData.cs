@@ -30,6 +30,9 @@ namespace BinWeevils.GameServer
         
         // todo: petDef
         // todo: petState
+        
+        public HashSet<uint> m_myPetIDs = [];
+        public HashSet<string> m_myPetNames = [];
 
         public WeevilData(User user, IRootContext context)
         {

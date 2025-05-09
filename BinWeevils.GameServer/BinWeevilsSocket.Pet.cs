@@ -19,17 +19,27 @@ namespace BinWeevils.GameServer
                     
                     m_taskQueue.Enqueue(async () =>
                     {
-                        var us = GetUser();
-                        var room = await us.GetRoom();
+                        var user = GetUser();
+                        var weevilData = user.GetUserDataAs<WeevilData>()!;
+
+                        var room = await user.GetRoom();
                         if (room.IsLimbo()) return;
                         
-                        // todo: decide what to do with name hash
+                        var expectedHash = m_services.GetPetsSettings().CalculateNameHash(command.m_petName);
+                        if (expectedHash != command.m_petNameHash)
+                        {
+                            throw new InvalidDataException("invalid pet name hash");
+                        }
+                        if (!weevilData.m_myPetNames.Contains(command.m_petName!))
+                        {
+                            throw new InvalidDataException("sending pet command for someone else's pet");
+                        }
                         
                         m_services.GetLogger().LogDebug("Pet - SendCommand: {PetName} {Command}", command.m_petName, command.m_commandID);
                         
                         await room.BroadcastXtStr(Modules.PET_MODULE_SEND_PET_COMMAND, new ServerPetCommand
                         {
-                            m_userID = us.m_id,
+                            m_userID = user.m_id,
                             m_petName = command.m_petName!,
                             m_commandID = command.m_commandID
                         });

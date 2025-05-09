@@ -61,13 +61,18 @@ namespace BinWeevils.Server.Controllers
                     m_health = x.m_health,
                     m_fitness = x.m_fitness,
                     m_experience = x.m_experience,
-                    m_nameHash = "todo"
+                    m_nameHash = GetNameHash(m_settings, x.m_name)
                 }).ToListAsync();
             
             return new GetPetDefsResponse
             {
                 m_resultDefs = string.Join('|', pets.Select(x => x.AsString(';')))
             };
+        }
+        
+        private static string GetNameHash(PetsSettings settings, string name)
+        {
+            return settings.CalculateNameHash(name);
         }
         
         [StructuredFormPost("php/updatePetStats.php")]

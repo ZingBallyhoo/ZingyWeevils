@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Proto;
+using Stl.Collections;
 
 namespace BinWeevils.GameServer
 {
@@ -46,6 +48,11 @@ namespace BinWeevils.GameServer
         public TimeProvider GetTimeProvider()
         {
             return m_rootProvider.GetRequiredService<TimeProvider>();
+        }
+        
+        public PetsSettings GetPetsSettings()
+        {
+            return m_rootProvider.GetRequiredService<IOptionsMonitor<PetsSettings>>().CurrentValue;
         }
         
         public async Task<uint> Login(string name)
@@ -274,6 +281,27 @@ namespace BinWeevils.GameServer
                 );
             
             return rowsUpdated != 0;
+        }
+        
+        public async Task InitPetData(WeevilData weevil)
+        {
+            if (!GetPetsSettings().Enabled) return;
+            
+            using var activity = GameServerObservability.StartActivity("Init Pet Data");
+            await using var scope = m_rootProvider.CreateAsyncScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+
+            var pets = await context.m_pets
+                .Where(x => x.m_ownerIdx == weevil.m_idx.GetValue())
+                .Select(x => new
+                {
+                    x.m_id,
+                    x.m_name
+                })
+                .ToListAsync();
+            
+            weevil.m_myPetIDs.AddRange(pets.Select(x => x.m_id));
+            weevil.m_myPetNames.AddRange(pets.Select(x => x.m_name));
         }
     }
     

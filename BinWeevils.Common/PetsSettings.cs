@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using CommunityToolkit.HighPerformance;
+
 namespace BinWeevils.Common
 {
     public class PetsSettings
@@ -11,5 +14,11 @@ namespace BinWeevils.Common
         public HashSet<uint> ItemColors { get; set; }
         public List<uint> BowlItemTypes { get; set; }
         public string BedItem { get; set; }
+        
+        public string CalculateNameHash(ReadOnlySpan<char> name)
+        {
+            var hashBytes = MD5.HashData($"{NameHashSalt}{name}".AsSpan().AsBytes());
+            return Convert.ToHexStringLower(hashBytes);
+        }
     }
 }

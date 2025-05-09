@@ -226,6 +226,8 @@ namespace BinWeevils.GameServer
                     }
                 };
                 await this.BroadcastXtRes(loginResponse);
+                
+                await m_services.InitPetData(weevilData);
             });
         }
         

@@ -566,8 +566,10 @@ namespace BinWeevils.GameServer
                     var throwAct = new ThrowAction();
                     throwAct.Deserialize(ref extraParamsReader);
                     
-                    // todo: validate pet id...
-                    
+                    if (!weevil.m_myPetIDs.Contains(throwAct.m_petID))
+                    {
+                        throw new InvalidDataException("throwing a ball for somebody else's pet");
+                    }
                     if (throwAct.m_ballID >= 9)
                     {
                         throw new InvalidDataException("ball id out of range");
