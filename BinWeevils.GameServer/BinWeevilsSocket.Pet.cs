@@ -28,12 +28,7 @@ namespace BinWeevils.GameServer
                         }
                         
                         m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
-                        
-                        var room = await user.GetRoomOrNull();
-                        if (room == null) return; // the client likes to send during init
-                        if (room.IsLimbo()) return;
-                        
-                        
+                        m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), action);
                     });
                     
                     break;

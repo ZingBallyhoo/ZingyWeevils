@@ -1,4 +1,5 @@
 using ArcticFox.Net;
+using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
@@ -14,6 +15,7 @@ namespace BinWeevils.GameServer.Actors
     {
         public required WeevilSocketServices m_services;
         public required User m_user;
+        private Room m_nestRoom;
         
         private PID m_nest;
         private PID m_buddyList;
@@ -113,6 +115,15 @@ namespace BinWeevils.GameServer.Actors
                     context.Forward(m_petManager);
                     break;
                 }
+                case PetManager.PetNotification petNotification:
+                {
+                    var room = petNotification.inNest ? m_nestRoom : await m_user.GetRoomOrNull();
+                    if (room == null) break;
+                    
+                    var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, m_user);
+                    await broadcaster.BroadcastXtStr(petNotification.command, petNotification.data);
+                    break;
+                }
             }
         }
         
@@ -159,7 +170,7 @@ namespace BinWeevils.GameServer.Actors
             {
                 m_us = m_user
             });
-            m_nest = context.SpawnNamed(nestProps, $"nest");
+            m_nest = context.SpawnNamed(nestProps, "nest");
             
             var nestDesc = new WeevilRoomDescription($"nest_{m_user.m_name}")
             {
@@ -168,11 +179,11 @@ namespace BinWeevils.GameServer.Actors
                 m_isTemporary = true,
                 m_data = new NestRoom
                 {
-                    m_owner = m_user,
-                    m_nest = m_nest
+                    m_ownerWeevil = m_user.GetUserData<WeevilData>(),
+                    m_context = context
                 }
             };
-            await m_user.m_zone.CreateRoom(nestDesc);
+            m_nestRoom = await m_user.m_zone.CreateRoom(nestDesc);
         }
     }
 }

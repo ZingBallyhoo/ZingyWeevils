@@ -159,8 +159,11 @@ namespace BinWeevils.GameServer.Rooms
     
     public class NestRoom : IStatefulRoom, IRoomEventHandler
     {
-        public required PID m_nest;
-        public required User m_owner;
+        public required WeevilData m_ownerWeevil;
+        public required IContext m_context;
+        
+        private User m_owner => m_ownerWeevil.m_user;
+        
         private string m_ownerName => m_owner.m_name;
 
         public async ValueTask UserJoinedRoom(Room room, User user)
@@ -185,10 +188,14 @@ namespace BinWeevils.GameServer.Rooms
             });
         }
 
-        public ValueTask<VarBag> GetVars()
+        public async ValueTask<VarBag> GetVars()
         {
-            // todo
-            return ValueTask.FromResult(new VarBag());
+            return await m_context.RequestAsync<VarBag>(m_ownerWeevil.GetPetManagerAddress(), new PetManager.GetNestVarsRequest());
+        }
+        
+        public PID GetNestAddress()
+        {
+            return m_ownerWeevil.GetNestAddress();
         }
     }
 }

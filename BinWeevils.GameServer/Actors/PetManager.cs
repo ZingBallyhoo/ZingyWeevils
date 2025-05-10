@@ -1,10 +1,12 @@
 using System.Text.RegularExpressions;
 using BinWeevils.GameServer.PolyType;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.KeyValue;
 using BinWeevils.Protocol.Str.Pet;
 using BinWeevils.Protocol.XmlMessages;
 using Proto;
+using StackXML.Str;
 using Stl.Collections;
 
 namespace BinWeevils.GameServer.Actors
@@ -21,6 +23,9 @@ namespace BinWeevils.GameServer.Actors
         public required WeevilData m_weevilData;
         private Dictionary<uint, Pet> m_pets = [];
         private uint? m_equippedPet;
+        
+        public record GetNestVarsRequest();
+        public record PetNotification(string command, IStrClass data, bool inNest);
         
         public async Task ReceiveAsync(IContext context)
         {
@@ -74,8 +79,44 @@ namespace BinWeevils.GameServer.Actors
                     HandleRoomVars(context, roomVars);
                     break;
                 }
-                case ClientPetAction petAction:
+                case ClientPetAction clientAction:
                 {
+                    // todo: validate action
+                    
+                    var petInNest = clientAction.m_petID != m_equippedPet;
+                    if (petInNest != (clientAction.m_broadcastSwitch == 0))
+                    {
+                        throw new InvalidDataException("client disagrees on pet being in nest or not");
+                    }
+                    
+                    if (clientAction.m_stateVars != "-1") 
+                    {
+                        UpdatePetState(clientAction.m_petID, ParsePetState(clientAction.m_stateVars));
+                    }
+                    
+                    var serverAction = new ServerPetAction
+                    {
+                        m_petID = clientAction.m_petID,
+                        m_actionID = clientAction.m_actionID,
+                        m_extraParams = clientAction.m_extraParams
+                    };
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_ACTION, serverAction, petInNest));
+                    break;
+                }
+                
+                case GetNestVarsRequest:
+                {
+                    var petsInRoom = m_pets.Keys.Where(x => x != m_equippedPet).ToList();
+                    
+                    var bag = new VarBag();
+                    bag.UpdateVar(Var.String("petIDs", string.Join(',', petsInRoom)));
+                    foreach (var petPair in m_pets)
+                    {
+                        bag.UpdateVar(Var.String($"petDef{petPair.Key}", petPair.Value.m_def.ToString()));
+                        bag.UpdateVar(Var.String($"petState{petPair.Key}", petPair.Value.m_state.ToString()));
+                    }
+                    
+                    context.Respond(bag);
                     break;
                 }
             }
@@ -110,7 +151,8 @@ namespace BinWeevils.GameServer.Actors
             var petIDsVar = setRoomVars.m_varList.m_roomVars.SingleOrDefault(x => x.m_name == "petIDs");
             if (petIDsVar.m_value != null)
             {
-                var idsInNest = petIDsVar.m_value.Split(',').Select(uint.Parse).ToHashSet();
+                var idsInNest = petIDsVar.m_value.Length != 0 ? 
+                        petIDsVar.m_value.Split(',').Select(uint.Parse).ToHashSet() : [];
                 if (idsInNest.Count != m_pets.Count && idsInNest.Count != m_pets.Count-1)
                 {
                     throw new InvalidDataException($"invalid pet-in-nest count: {idsInNest}. pet count: {m_pets.Count}");
@@ -165,9 +207,10 @@ namespace BinWeevils.GameServer.Actors
             {
                 if (m_equippedPet != null)
                 {
+                    if (def.Value.m_id == m_equippedPet.Value) return;
                     throw new InvalidDataException("pet already equipped");
                 }
-                        
+                
                 // pet added to us
                 
                 m_equippedPet = def.Value.m_id;
@@ -205,7 +248,16 @@ namespace BinWeevils.GameServer.Actors
         
         private void UpdatePetState(uint id, PetStateVar state)
         {
-            m_pets[m_equippedPet!.Value].m_state = state;
+            if (state.m_locID == 0)
+            {
+                if (m_equippedPet != id)
+                {
+                    throw new InvalidDataException("pet state without loc, but pet is not equipped");
+                }
+                state.m_locID = m_weevilData.m_locID;
+            }
+            
+            m_pets[id].m_state = state;
             if (m_equippedPet == id)
             {
                 m_weevilData.SetPetState(state);

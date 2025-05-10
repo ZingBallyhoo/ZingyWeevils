@@ -6,11 +6,11 @@ namespace BinWeevils.Protocol.KeyValue
     public partial record struct PetStateVar
     {
         [PropertyShape(Name = "locID")] public int m_locID;
-        [PropertyShape(Name = "pose")] public EPetAction m_pose;
+        [PropertyShape(Name = "ps")] public EPetAction m_pose;
         [PropertyShape(Name = "x")] public double m_x;
         [PropertyShape(Name = "y")] public double m_y;
         [PropertyShape(Name = "z")] public double m_z;
-        [PropertyShape(Name = "r")] public short m_r;
+        [PropertyShape(Name = "r")] public double m_r;
 
         public override string ToString()
         {

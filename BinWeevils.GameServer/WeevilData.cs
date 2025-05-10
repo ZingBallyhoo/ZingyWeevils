@@ -101,5 +101,9 @@ namespace BinWeevils.GameServer
         {
             return new PID(m_contextAddress, $"{m_user.m_name}/nest");
         }
+        public PID GetPetManagerAddress()
+        {
+            return new PID(m_contextAddress, $"{m_user.m_name}/petManager");
+        }
     }
 }

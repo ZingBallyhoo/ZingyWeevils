@@ -321,7 +321,7 @@ namespace BinWeevils.GameServer
             bool success;
             try
             {
-                success = await system.Root.RequestAsync<bool>(nestRoom.m_nest, new NestActor.Join(GetUser(), newRoom));
+                success = await system.Root.RequestAsync<bool>(nestRoom.GetNestAddress(), new NestActor.Join(GetUser(), newRoom));
             } catch (DeadLetterException)
             {
                 success = false;
