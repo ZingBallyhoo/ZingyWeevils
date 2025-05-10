@@ -296,7 +296,7 @@ namespace BinWeevils.Common
               <item id="77644419" cat="1" configName="f_wallLight1" locID="246492737" clr="0xF9F19B" pc="1" crntPos="9" fID="0" spot=""/>
               <item id="85026872" cat="1" configName="f_bookcase_macmillan" locID="251624512" pc="1" crntPos="1" fID="0" spot=""/>
               <item id="86821070" cat="1" configName="f_petBowl_orange" locID="246492737" pc="1" crntPos="20" fID="0" spot=""/>
-              <item id="86821071" cat="1" configName="f_petBasket2" locID="246492737" clr="16759552" pc="1" crntPos="10" fID="0" spot=""/>
+              <item id="86821071" cat="1" configName="f_petBasket" locID="246492737" clr="16759552" pc="1" crntPos="10" fID="0" spot=""/>
               <item id="86910844" cat="6" configName="f_VODskin3" locID="22390190" clr="-150,0,112" pc="5" crntPos="1" fID="0" spot=""/>
               <item id="92799845" cat="1" configName="o_awardBENFTA" locID="246492737" pc="1" crntPos="0" fID="230181161" spot="2"/>
               <item id="94896929" cat="1" configName="f_fireExtinguisher" locID="246492737" pc="1" crntPos="10" fID="0" spot=""/>
