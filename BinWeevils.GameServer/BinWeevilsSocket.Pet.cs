@@ -25,13 +25,23 @@ namespace BinWeevils.GameServer
                     m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), joinNestLoc);
                     break;
                 }
+                case Modules.PET_MODULE_SET_NEST_DOOR: // 6#2
+                {
+                    var setNestDoor = new ClientPetSetNestDoor();
+                    setNestDoor.FullyDeserialize(ref reader);
+                    
+                    var weevilData = GetWeevilData();
+                    m_services.GetLogger().LogDebug("Pet({PetID}) - SetNestDoor: {DoorID}", setNestDoor.m_shared.m_petID, setNestDoor.m_shared.m_doorID);
+                    m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), setNestDoor);
+                    break;
+                }
                 case Modules.PET_MODULE_EXPRESSION: // 6#3
                 {
                     var expression = new ClientPetExpression();
                     expression.FullyDeserialize(ref reader);
                     
                     var weevilData = GetWeevilData();
-                    m_services.GetLogger().LogDebug("Pet({PetID}) - Expression: {Expression}", expression.m_petID, (EPetExpression)expression.m_expressionID);
+                    m_services.GetLogger().LogDebug("Pet({PetID}) - Expression: {Expression}", expression.m_shared.m_petID, (EPetExpression)expression.m_shared.m_expressionID);
                     m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), expression);
                     break;
                 }

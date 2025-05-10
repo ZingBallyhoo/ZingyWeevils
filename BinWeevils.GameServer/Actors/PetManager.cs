@@ -63,7 +63,7 @@ namespace BinWeevils.GameServer.Actors
                         m_def = x.Value,
                         m_state = new PetStateVar
                         {
-                            // just a general "In the nest" state until the client starts sending upadtes
+                            // just a general "In the nest" state until the client starts sending updates
                             m_locID = -5,
                             m_pose = EPetAction.DEFAULT,
                             m_x = 50,
@@ -107,21 +107,28 @@ namespace BinWeevils.GameServer.Actors
                     });
                     break;
                 }
+                case ClientPetSetNestDoor setNestDoor:
+                {
+                    ValidatePetID(setNestDoor.m_shared.m_petID);
+                    var petInNest = await ValidateBroadcastSwitch(setNestDoor.m_shared.m_petID, setNestDoor.m_broadcastSwitch);
+                    if (!petInNest)
+                    {
+                        throw new InvalidDataException("how could a pet outside of the nest set a nest door...?");
+                    }
+                    
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_SET_NEST_DOOR, setNestDoor.m_shared, petInNest));
+                    break;
+                }
                 case ClientPetExpression expression:
                 {
-                    ValidatePetID(expression.m_petID);
-                    if (!Enum.IsDefined(typeof(EPetExpression), expression.m_expressionID))
+                    ValidatePetID(expression.m_shared.m_petID);
+                    if (!Enum.IsDefined(typeof(EPetExpression), expression.m_shared.m_expressionID))
                     {
-                        throw new InvalidDataException($"invalid pet expression: {expression.m_expressionID}");
+                        throw new InvalidDataException($"invalid pet expression: {expression.m_shared.m_expressionID}");
                     }
-                    var petInNest = await ValidateBroadcastSwitch(expression.m_petID, expression.m_broadcastSwitch);
+                    var petInNest = await ValidateBroadcastSwitch(expression.m_shared.m_petID, expression.m_broadcastSwitch);
                     
-                    var serverExpression = new ServerPetExpression
-                    {
-                        m_petID = expression.m_petID,
-                        m_expressionID = expression.m_expressionID,
-                    };
-                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_EXPRESSION, serverExpression, petInNest));
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_EXPRESSION, expression.m_shared, petInNest));
                     break;
                 }
                 case ClientPetAction action:

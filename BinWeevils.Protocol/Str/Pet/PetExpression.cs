@@ -4,8 +4,7 @@ namespace BinWeevils.Protocol.Str.Pet
 {
     public partial record struct ClientPetExpression
     {
-        [StrField] public uint m_petID;
-        [StrField] public byte m_expressionID;
+        [StrField] public ServerPetExpression m_shared;
         [StrField] public byte m_broadcastSwitch;
     }
     
