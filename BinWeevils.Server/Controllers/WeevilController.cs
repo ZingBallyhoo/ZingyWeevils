@@ -280,11 +280,11 @@ namespace BinWeevils.Server.Controllers
         
         [StructuredFormPost("php/getSpecialMoves.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public async Task<GetSpecialMovesResponse> GetSpecialMoves([FromBody] GetIgnoreListRequest request)
+        public async Task<GetSpecialMovesResponse> GetSpecialMoves([FromBody] GetSpecialMovesRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("WeevilController.GetSpecialMoves");
             
-            if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
+            if (request.m_userID != ControllerContext.HttpContext.User.Identity!.Name)
             {
                 throw new Exception("trying to get someone else's special moves");
             }

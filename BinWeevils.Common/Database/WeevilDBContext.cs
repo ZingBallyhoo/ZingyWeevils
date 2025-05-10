@@ -11,6 +11,7 @@ namespace BinWeevils.Common.Database
         public DbSet<WeevilSpecialMoveDB> m_weevilSpecialMoves { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<BuddyMessageDB> m_buddyMesssages { get; set; }
+        public DbSet<IgnoreRecordDB> m_ignoreRecords { get; set; }
         public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
         public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
         
@@ -46,6 +47,8 @@ namespace BinWeevils.Common.Database
             {
                 b.ToTable("WeevilDB");
                 b.HasIndex(x => x.m_name);
+                b.HasMany(x => x.m_ignoredWeevils)
+                 .WithOne(x => x.m_forWeevil);
             });
             modelBuilder.Entity<WeevilSpecialMoveDB>(b =>
             {
@@ -59,6 +62,10 @@ namespace BinWeevils.Common.Database
             modelBuilder.Entity<BuddyMessageDB>(b =>
             {
                 b.ToTable("BuddyMessageDB");
+            });
+            modelBuilder.Entity<IgnoreRecordDB>(b =>
+            {
+                b.ToTable("IgnoreRecordDB");
             });
             
             modelBuilder.Entity<CompletedTaskDB>(b =>
