@@ -54,7 +54,7 @@ namespace BinWeevils.Server.Controllers
             return 1;
         }
         
-        public async Task<bool> BuyPet(AmfGatewayContext context, BuyPetRequest request)
+        public async Task<uint> BuyPet(AmfGatewayContext context, BuyPetRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("PetAmfService.BuyPet");
             activity?.SetTag("name", request.m_name);
@@ -73,7 +73,7 @@ namespace BinWeevils.Server.Controllers
             
             if (ValidatePetName(request.m_name) != 1)
             {
-                return false;
+                return 0;
             }
             
             if (!m_settings.Colors.Contains(request.m_bodyColor) || 
@@ -102,7 +102,16 @@ namespace BinWeevils.Server.Controllers
                 })
                 .SingleAsync();
             
-            // todo: subtract price
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_idx == dto.m_idx)
+                .Where(x => x.m_mulch >= m_settings.Cost)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - m_settings.Cost));
+            if (rowsUpdated == 0)
+            {
+                // can't afford
+                return 0;
+            }
             
             var bowlItem = new NestItemDB
             {
@@ -150,7 +159,7 @@ namespace BinWeevils.Server.Controllers
             }
             await transaction.CommitAsync();
             
-            return true; // todo
+            return m_settings.Cost;
         }
         
         public async Task<uint> BuyPetFood(AmfGatewayContext context, BuyPetFoodRequest request)
