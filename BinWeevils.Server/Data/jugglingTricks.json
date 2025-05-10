@@ -1,0 +1,1090 @@
+[
+    {
+        "id": 1,
+        "aptitude": 43.2,
+        "numBalls": 1,
+        "pattern": "300,0,0,0,0,9,0",
+        "difficulty": 10,
+        "name": "A"
+    },
+    {
+        "id": 2,
+        "aptitude": 36.23,
+        "numBalls": 2,
+        "pattern": "330,0,0,0,0,9,0",
+        "difficulty": 11,
+        "name": "A"
+    },
+    {
+        "id": 3,
+        "aptitude": 32.92,
+        "numBalls": 3,
+        "pattern": "3,0,0,0,0,9,0",
+        "difficulty": 12,
+        "name": "A"
+    },
+    {
+        "id": 4,
+        "aptitude": 33.83,
+        "numBalls": 4,
+        "pattern": "4,0,0,0,0,9,0",
+        "difficulty": 25,
+        "name": "A"
+    },
+    {
+        "id": 5,
+        "aptitude": 26.88,
+        "numBalls": 5,
+        "pattern": "5,0,0,0,0,8,0",
+        "difficulty": 39,
+        "name": "A"
+    },
+    {
+        "id": 6,
+        "aptitude": 10.4,
+        "numBalls": 6,
+        "pattern": "6,0,0,0,0,8,0",
+        "difficulty": 50,
+        "name": "A"
+    },
+    {
+        "id": 7,
+        "aptitude": 10.11,
+        "numBalls": 7,
+        "pattern": "7,0,0,0,0,7,0",
+        "difficulty": 69,
+        "name": "A"
+    },
+    {
+        "id": 8,
+        "aptitude": 10.32,
+        "numBalls": 8,
+        "pattern": "8,0,0,0,0,7,0",
+        "difficulty": 84,
+        "name": "A"
+    },
+    {
+        "id": 9,
+        "aptitude": 12.49,
+        "numBalls": 9,
+        "pattern": "9,0,0,0,0,6,0",
+        "difficulty": 99,
+        "name": "A"
+    },
+    {
+        "id": 10,
+        "aptitude": 10,
+        "numBalls": 1,
+        "pattern": "40004000300,0,0,0,0,9,0",
+        "difficulty": 12,
+        "name": "B"
+    },
+    {
+        "id": 11,
+        "aptitude": 10.58,
+        "numBalls": 1,
+        "pattern": "50000,0,0,0,0,9,360",
+        "difficulty": 17,
+        "name": "C"
+    },
+    {
+        "id": 12,
+        "aptitude": 0,
+        "numBalls": 1,
+        "pattern": "70000,0,0,0,0,9,720",
+        "difficulty": 18,
+        "name": "D"
+    },
+    {
+        "id": 13,
+        "aptitude": 26.38,
+        "numBalls": 2,
+        "pattern": "4040404030340404040,0,0,0,0,9,0",
+        "difficulty": 14,
+        "name": "B"
+    },
+    {
+        "id": 14,
+        "aptitude": 18.87,
+        "numBalls": 2,
+        "pattern": "55000,0,0,0,0,9,360",
+        "difficulty": 19,
+        "name": "C"
+    },
+    {
+        "id": 15,
+        "aptitude": 0,
+        "numBalls": 2,
+        "pattern": "7700000,0,0,0,0,9,720",
+        "difficulty": 22,
+        "name": "D"
+    },
+    {
+        "id": 16,
+        "aptitude": 27,
+        "numBalls": 3,
+        "pattern": "3,1,1,0,0,9,0",
+        "difficulty": 15,
+        "name": "B"
+    },
+    {
+        "id": 17,
+        "aptitude": 29.74,
+        "numBalls": 3,
+        "pattern": "51,1,0,1,-1,7,0",
+        "difficulty": 18,
+        "name": "C"
+    },
+    {
+        "id": 18,
+        "aptitude": 0.95,
+        "numBalls": 3,
+        "pattern": "55500,0,0,0,0,8,0",
+        "difficulty": 21,
+        "name": "D"
+    },
+    {
+        "id": 19,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "441,0,0,0,0,9,0",
+        "difficulty": 23,
+        "name": "G"
+    },
+    {
+        "id": 20,
+        "aptitude": 0.8,
+        "numBalls": 3,
+        "pattern": "531,0,0,0,0,9,0",
+        "difficulty": 25,
+        "name": "S"
+    },
+    {
+        "id": 21,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "441,1,1,0,0,9,0",
+        "difficulty": 23,
+        "name": "H"
+    },
+    {
+        "id": 22,
+        "aptitude": 26.82,
+        "numBalls": 3,
+        "pattern": "441333,1,1,0,0,9,0",
+        "difficulty": 23,
+        "name": "T"
+    },
+    {
+        "id": 23,
+        "aptitude": 2.4,
+        "numBalls": 3,
+        "pattern": "531,1,1,0,0,9,0",
+        "difficulty": 25,
+        "name": "U"
+    },
+    {
+        "id": 24,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "5313333,0,0,0,0,9,0",
+        "difficulty": 25,
+        "name": "O"
+    },
+    {
+        "id": 25,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "5313333,1,1,0,0,9,0",
+        "difficulty": 25,
+        "name": "N"
+    },
+    {
+        "id": 26,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "315171,0,0,0,0,9,0",
+        "difficulty": 35,
+        "name": "G"
+    },
+    {
+        "id": 27,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "315171,1,1,0,0,8,0",
+        "difficulty": 35,
+        "name": "H"
+    },
+    {
+        "id": 28,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "33342,0,0,0,0,9,0",
+        "difficulty": 22,
+        "name": "F"
+    },
+    {
+        "id": 29,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "33342,1,1,0,0,9,0",
+        "difficulty": 22,
+        "name": "L"
+    },
+    {
+        "id": 30,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "3334242,0,0,0,0,9,0",
+        "difficulty": 22,
+        "name": "E"
+    },
+    {
+        "id": 31,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "3334242,1,1,0,0,9,0",
+        "difficulty": 22,
+        "name": "K"
+    },
+    {
+        "id": 32,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "3333333333333337770000,1,1,0,0,9,360",
+        "difficulty": 33,
+        "name": "N"
+    },
+    {
+        "id": 34,
+        "aptitude": 17.2,
+        "numBalls": 3,
+        "pattern": "3333333333333337770000,1,1,0,0,9,720",
+        "difficulty": 33,
+        "name": "S"
+    },
+    {
+        "id": 35,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "1919190000,0,1,-1,1,7,360",
+        "difficulty": 39,
+        "name": "R"
+    },
+    {
+        "id": 36,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "60606050505606060,0,0,0,0,8,0",
+        "difficulty": 40,
+        "name": "P"
+    },
+    {
+        "id": 37,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "63141,0,0,0,0,9,0",
+        "difficulty": 24,
+        "name": "P"
+    },
+    {
+        "id": 38,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "63141,1,1,0,0,9,0",
+        "difficulty": 24,
+        "name": "M"
+    },
+    {
+        "id": 39,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "66300,0,0,0,0,7,0",
+        "difficulty": 23,
+        "name": "I"
+    },
+    {
+        "id": 40,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "66300,1,1,0,0,7,0",
+        "difficulty": 23,
+        "name": "J"
+    },
+    {
+        "id": 41,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "72312,0,0,0,0,8,0",
+        "difficulty": 29,
+        "name": "F"
+    },
+    {
+        "id": 42,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "72312,1,1,0,0,8,0",
+        "difficulty": 29,
+        "name": "J"
+    },
+    {
+        "id": 43,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "73131,1,1,0,0,8,0",
+        "difficulty": 29,
+        "name": "I"
+    },
+    {
+        "id": 44,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "74112,0,0,0,0,9,0",
+        "difficulty": 29,
+        "name": "L"
+    },
+    {
+        "id": 45,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "74112,1,1,0,0,9,0",
+        "difficulty": 29,
+        "name": "K"
+    },
+    {
+        "id": 46,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "74130,0,0,0,0,9,0",
+        "difficulty": 29,
+        "name": "E"
+    },
+    {
+        "id": 47,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "74202,0,0,0,0,8,0",
+        "difficulty": 29,
+        "name": "D"
+    },
+    {
+        "id": 48,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "74202,1,1,0,0,8,0",
+        "difficulty": 29,
+        "name": "C"
+    },
+    {
+        "id": 49,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "75300,0,0,0,0,8,0",
+        "difficulty": 31,
+        "name": "T"
+    },
+    {
+        "id": 50,
+        "aptitude": 29.21,
+        "numBalls": 3,
+        "pattern": "75300,1,1,0,0,8,0",
+        "difficulty": 31,
+        "name": "M"
+    },
+    {
+        "id": 51,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "9750000,0,0,0,0,7,360",
+        "difficulty": 37,
+        "name": "U"
+    },
+    {
+        "id": 52,
+        "aptitude": 1.62,
+        "numBalls": 3,
+        "pattern": "9750000,1,1,0,0,7,360",
+        "difficulty": 37,
+        "name": "O"
+    },
+    {
+        "id": 53,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "4515501,0,0,0,0,8,0",
+        "difficulty": 27,
+        "name": "Q"
+    },
+    {
+        "id": 54,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "4515501,1,1,0,0,8,0",
+        "difficulty": 27,
+        "name": "R"
+    },
+    {
+        "id": 55,
+        "aptitude": 30.25,
+        "numBalls": 3,
+        "pattern": "4516131,0,0,0,0,8,0",
+        "difficulty": 27,
+        "name": "A"
+    },
+    {
+        "id": 56,
+        "aptitude": 0.74,
+        "numBalls": 3,
+        "pattern": "4516131,1,1,0,0,8,0",
+        "difficulty": 27,
+        "name": "B"
+    },
+    {
+        "id": 57,
+        "aptitude": 26.86,
+        "numBalls": 4,
+        "pattern": "53,1,0,1,-1,9,0",
+        "difficulty": 27,
+        "name": "B"
+    },
+    {
+        "id": 58,
+        "aptitude": 26.21,
+        "numBalls": 4,
+        "pattern": "71,1,0,1,-1,7,0",
+        "difficulty": 32,
+        "name": "C"
+    },
+    {
+        "id": 59,
+        "aptitude": 0.6,
+        "numBalls": 4,
+        "pattern": "7333,0,0,0,0,8,0",
+        "difficulty": 33,
+        "name": "D"
+    },
+    {
+        "id": 60,
+        "aptitude": 0,
+        "numBalls": 4,
+        "pattern": "7333,1,1,0,0,8,0",
+        "difficulty": 33,
+        "name": "H"
+    },
+    {
+        "id": 61,
+        "aptitude": 27.14,
+        "numBalls": 4,
+        "pattern": "633,0,0,0,0,8,0",
+        "difficulty": 31,
+        "name": "F"
+    },
+    {
+        "id": 62,
+        "aptitude": 0,
+        "numBalls": 4,
+        "pattern": "8080808080808080808080807070707,0,0,0,0,7,0",
+        "difficulty": 60,
+        "name": "R"
+    },
+    {
+        "id": 63,
+        "aptitude": 0,
+        "numBalls": 4,
+        "pattern": "808080807070707,1,1,0,0,7,0",
+        "difficulty": 59,
+        "name": "Q"
+    },
+    {
+        "id": 64,
+        "aptitude": 25.4,
+        "numBalls": 4,
+        "pattern": "9151,1,0,1,-1,7,0",
+        "difficulty": 42,
+        "name": "L"
+    },
+    {
+        "id": 65,
+        "aptitude": 25.84,
+        "numBalls": 4,
+        "pattern": "741,0,0,0,0,8,0",
+        "difficulty": 35,
+        "name": "E"
+    },
+    {
+        "id": 66,
+        "aptitude": 25.47,
+        "numBalls": 4,
+        "pattern": "7531,0,0,0,0,8,0",
+        "difficulty": 45,
+        "name": "M"
+    },
+    {
+        "id": 67,
+        "aptitude": 0.62,
+        "numBalls": 4,
+        "pattern": "56630,1,1,0,0,8,0",
+        "difficulty": 32,
+        "name": "G"
+    },
+    {
+        "id": 68,
+        "aptitude": 0.5,
+        "numBalls": 4,
+        "pattern": "57512,1,1,0,0,8,0",
+        "difficulty": 40,
+        "name": "J"
+    },
+    {
+        "id": 69,
+        "aptitude": 25.32,
+        "numBalls": 4,
+        "pattern": "66251,0,0,0,0,8,0",
+        "difficulty": 37,
+        "name": "I"
+    },
+    {
+        "id": 70,
+        "aptitude": 0,
+        "numBalls": 4,
+        "pattern": "58530853085308530853034,1,1,0,0,8,0",
+        "difficulty": 41,
+        "name": "K"
+    },
+    {
+        "id": 71,
+        "aptitude": 16.2,
+        "numBalls": 4,
+        "pattern": "44444444999900000,0,0,0,0,7,360",
+        "difficulty": 51,
+        "name": "O"
+    },
+    {
+        "id": 72,
+        "aptitude": 0,
+        "numBalls": 4,
+        "pattern": "44444444555507777000999900000,0,0,0,0,7,720",
+        "difficulty": 55,
+        "name": "P"
+    },
+    {
+        "id": 73,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "55555bbbbb0000005555555555,0,0,0,0,6,720",
+        "difficulty": 74,
+        "name": "W"
+    },
+    {
+        "id": 74,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "555559999900005555555555,0,0,0,0,7,360",
+        "difficulty": 69,
+        "name": "U"
+    },
+    {
+        "id": 75,
+        "aptitude": 16.5,
+        "numBalls": 5,
+        "pattern": "5,1,1,0,0,8,0",
+        "difficulty": 41,
+        "name": "B"
+    },
+    {
+        "id": 76,
+        "aptitude": 0,
+        "numBalls": 3,
+        "pattern": "3334560606060603033333333,1,1,0,0,9,0",
+        "difficulty": 41,
+        "name": "Q"
+    },
+    {
+        "id": 77,
+        "aptitude": 0,
+        "numBalls": 4,
+        "pattern": "44445678080808080805050444444,1,1,0,0,8,0",
+        "difficulty": 61,
+        "name": "S"
+    },
+    {
+        "id": 78,
+        "aptitude": 26.11,
+        "numBalls": 4,
+        "pattern": "b17131,1,0,1,-1,6,0",
+        "difficulty": 48,
+        "name": "N"
+    },
+    {
+        "id": 79,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "663,0,0,0,0,8,0",
+        "difficulty": 48,
+        "name": "F"
+    },
+    {
+        "id": 80,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "91,1,0,1,-1,6,0",
+        "difficulty": 54,
+        "name": "J"
+    },
+    {
+        "id": 81,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "744,0,0,0,0,8,0",
+        "difficulty": 50,
+        "name": "Q"
+    },
+    {
+        "id": 82,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "744,1,1,0,0,8,0",
+        "difficulty": 50,
+        "name": "R"
+    },
+    {
+        "id": 83,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "753,0,0,0,0,8,0",
+        "difficulty": 51,
+        "name": "G"
+    },
+    {
+        "id": 84,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "753,1,1,0,0,8,0",
+        "difficulty": 51,
+        "name": "H"
+    },
+    {
+        "id": 85,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "73,0,0,0,0,8,0",
+        "difficulty": 47,
+        "name": "D"
+    },
+    {
+        "id": 86,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "73,1,1,0,0,8,0",
+        "difficulty": 47,
+        "name": "E"
+    },
+    {
+        "id": 87,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "73,1,0,1,-1,8,0",
+        "difficulty": 45,
+        "name": "C"
+    },
+    {
+        "id": 88,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "852,0,0,0,0,8,0",
+        "difficulty": 57,
+        "name": "K"
+    },
+    {
+        "id": 89,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "861,1,1,0,0,8,0",
+        "difficulty": 57,
+        "name": "L"
+    },
+    {
+        "id": 90,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "771,1,1,0,0,8,0",
+        "difficulty": 51,
+        "name": "I"
+    },
+    {
+        "id": 91,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "960,0,0,0,0,7,0",
+        "difficulty": 60,
+        "name": "M"
+    },
+    {
+        "id": 92,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "97531,0,0,0,0,7,0",
+        "difficulty": 65,
+        "name": "N"
+    },
+    {
+        "id": 93,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "97531,1,1,0,0,7,0",
+        "difficulty": 65,
+        "name": "O"
+    },
+    {
+        "id": 94,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "123456789,0,0,0,0,7,0",
+        "difficulty": 66,
+        "name": "P"
+    },
+    {
+        "id": 95,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "55555bbbbb0000005555555555,1,1,0,0,6,720",
+        "difficulty": 75,
+        "name": "X"
+    },
+    {
+        "id": 96,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "555559999900005555555555,1,1,0,0,7,360",
+        "difficulty": 70,
+        "name": "V"
+    },
+    {
+        "id": 97,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "555557777700999990000bbbbb00000055555,0,0,0,0,6,720",
+        "difficulty": 77,
+        "name": "Y"
+    },
+    {
+        "id": 98,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "555557777700999990000bbbbb00000055555,1,1,0,0,6,720",
+        "difficulty": 78,
+        "name": "Z"
+    },
+    {
+        "id": 99,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "55555944445,0,0,0,0,7,0",
+        "difficulty": 50,
+        "name": "S"
+    },
+    {
+        "id": 100,
+        "aptitude": 0,
+        "numBalls": 5,
+        "pattern": "55555944445,1,1,0,0,7,0",
+        "difficulty": 50,
+        "name": "T"
+    },
+    {
+        "id": 101,
+        "aptitude": 10.18,
+        "numBalls": 6,
+        "pattern": "75,1,0,1,-1,7,0",
+        "difficulty": 55,
+        "name": "B"
+    },
+    {
+        "id": 102,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "75,0,0,0,0,8,0",
+        "difficulty": 55,
+        "name": "F"
+    },
+    {
+        "id": 103,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "864,0,0,0,0,8,0",
+        "difficulty": 67,
+        "name": "J"
+    },
+    {
+        "id": 104,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "864,1,1,0,0,7,0",
+        "difficulty": 67,
+        "name": "H"
+    },
+    {
+        "id": 105,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "a26,0,0,0,0,6,0",
+        "difficulty": 71,
+        "name": "E"
+    },
+    {
+        "id": 106,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "a26,1,1,0,0,6,0",
+        "difficulty": 71,
+        "name": "K"
+    },
+    {
+        "id": 107,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "a71,0,0,0,0,6,0",
+        "difficulty": 76,
+        "name": "M"
+    },
+    {
+        "id": 108,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "a17,1,1,0,0,6,0",
+        "difficulty": 76,
+        "name": "I"
+    },
+    {
+        "id": 109,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "9555,1,1,0,0,7,0",
+        "difficulty": 62,
+        "name": "D"
+    },
+    {
+        "id": 110,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "b1,1,0,1,-1,6,0",
+        "difficulty": 60,
+        "name": "G"
+    },
+    {
+        "id": 111,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "b97531,0,0,0,0,6,0",
+        "difficulty": 82,
+        "name": "L"
+    },
+    {
+        "id": 112,
+        "aptitude": 0,
+        "numBalls": 6,
+        "pattern": "b97531,1,1,0,0,6,0",
+        "difficulty": 83,
+        "name": "N"
+    },
+    {
+        "id": 113,
+        "aptitude": 11.66,
+        "numBalls": 7,
+        "pattern": "7,1,1,0,0,7,0",
+        "difficulty": 72,
+        "name": "B"
+    },
+    {
+        "id": 114,
+        "aptitude": 10.98,
+        "numBalls": 9,
+        "pattern": "9,1,1,0,0,6,0",
+        "difficulty": 100,
+        "name": "B"
+    },
+    {
+        "id": 116,
+        "aptitude": 0.35,
+        "numBalls": 6,
+        "pattern": "93,1,0,1,-1,7,0",
+        "difficulty": 56,
+        "name": "C"
+    },
+    {
+        "id": 117,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "95,1,0,1,-1,6,0",
+        "difficulty": 74,
+        "name": "E"
+    },
+    {
+        "id": 119,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "975,0,0,0,0,7,0",
+        "difficulty": 80,
+        "name": "F"
+    },
+    {
+        "id": 120,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "975,1,1,0,0,7,0",
+        "difficulty": 80,
+        "name": "D"
+    },
+    {
+        "id": 121,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "b9753,0,0,0,0,6,0",
+        "difficulty": 88,
+        "name": "N"
+    },
+    {
+        "id": 122,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "b9753,1,1,0,0,6,0",
+        "difficulty": 88,
+        "name": "K"
+    },
+    {
+        "id": 123,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "a74,0,0,0,0,6,0",
+        "difficulty": 81,
+        "name": "L"
+    },
+    {
+        "id": 124,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "b3,1,0,1,-1,6,0",
+        "difficulty": 76,
+        "name": "C"
+    },
+    {
+        "id": 125,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "7777777bbbbbbb00007777777,0,0,0,0,6,360",
+        "difficulty": 94,
+        "name": "O"
+    },
+    {
+        "id": 126,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "7777777bbbbbbb00007777777,1,1,0,0,6,360",
+        "difficulty": 95,
+        "name": "P"
+    },
+    {
+        "id": 127,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "b91,0,0,0,0,6,0",
+        "difficulty": 80,
+        "name": "G"
+    },
+    {
+        "id": 128,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "ab0,1,1,0,0,6,0",
+        "difficulty": 80,
+        "name": "H"
+    },
+    {
+        "id": 129,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "b6666,0,0,0,0,6,0",
+        "difficulty": 85,
+        "name": "I"
+    },
+    {
+        "id": 130,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "b6666,1,1,0,0,6,0",
+        "difficulty": 85,
+        "name": "J"
+    },
+    {
+        "id": 131,
+        "aptitude": 0,
+        "numBalls": 7,
+        "pattern": "a8647777777,1,1,0,0,6,0",
+        "difficulty": 92,
+        "name": "M"
+    },
+    {
+        "id": 133,
+        "aptitude": 9.41,
+        "numBalls": 8,
+        "pattern": "b5,1,0,1,-1,6,0",
+        "difficulty": 87,
+        "name": "I"
+    },
+    {
+        "id": 134,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "a86,0,0,0,0,6,0",
+        "difficulty": 90,
+        "name": "B"
+    },
+    {
+        "id": 135,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "a86,1,1,0,0,6,0",
+        "difficulty": 90,
+        "name": "D"
+    },
+    {
+        "id": 136,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "b85,0,0,0,0,6,0",
+        "difficulty": 90,
+        "name": "H"
+    },
+    {
+        "id": 137,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "b975,0,0,0,0,6,0",
+        "difficulty": 95,
+        "name": "C"
+    },
+    {
+        "id": 138,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "b975,1,1,0,0,6,0",
+        "difficulty": 95,
+        "name": "G"
+    },
+    {
+        "id": 139,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "88888888b9758,0,0,0,0,6,0",
+        "difficulty": 100,
+        "name": "E"
+    },
+    {
+        "id": 140,
+        "aptitude": 0,
+        "numBalls": 8,
+        "pattern": "88888888b9758,1,1,0,0,6,0",
+        "difficulty": 100,
+        "name": "F"
+    }
+]

@@ -25,6 +25,7 @@ namespace BinWeevils.Common.Database
         public uint m_experience { get; set; }
         
         public virtual ICollection<PetSkillDB> m_skills { get; set; }
+        public virtual ICollection<PetJugglingTrickDB> m_jugglingTricks { get; set; }
         
         public virtual NestItemDB m_bedItem { get; set; }
         public virtual NestItemDB m_bowlItem { get; set; }
@@ -38,9 +39,20 @@ namespace BinWeevils.Common.Database
         public uint m_petID { get; set; }
         public EPetSkill m_skillID { get; set; }
         
-        public byte m_obedience { get; set; } = 20;
-        public double m_skillLevel { get; set; } = 0;
+        public byte m_obedience { get; set; }
+        public double m_skillLevel { get; set; }
         
         [ForeignKey(nameof(m_petID))] public PetDB m_pet { get; set; }
+    }
+    
+    [PrimaryKey(nameof(m_petID), nameof(m_trickID))]
+    public class PetJugglingTrickDB
+    {
+        public uint m_petID { get; set; }
+        public uint m_trickID { get; set; }
+        public double m_aptitude { get; set; } = 2;
+        
+        [ForeignKey(nameof(m_petID))] public PetDB m_pet { get; set; }
+        [ForeignKey(nameof(m_trickID))] public JugglingTrickDB m_trick { get; set; }
     }
 }

@@ -6,6 +6,7 @@ namespace BinWeevils.Common
     public class PetsSettings
     {
         public bool Enabled { get; set; }
+        public bool SpawnFullyLevelled { get; set; }
         public int MaxNameLength { get; set; }
         public string NameHashSalt { get; set; } = "";
         public uint Cost { get; set; }

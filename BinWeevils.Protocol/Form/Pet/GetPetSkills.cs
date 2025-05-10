@@ -15,10 +15,11 @@ namespace BinWeevils.Protocol.Form.Pet
         [PropertyShape(Name = "result")] public string m_resultSkills;
     }
     
+    [GenerateShape]
     public partial record struct DelimitedPetSkill
     {
-        [StrField] public uint m_skillID;
-        [StrField] public byte m_obedience;
-        [StrField] public double m_skillLevel;
+        [PropertyShape(Name = "skillID")] [StrField] public uint m_skillID;
+        [PropertyShape(Name = "obedience")] [StrField] public byte m_obedience;
+        [PropertyShape(Name = "skillLevel")] [StrField] public double m_skillLevel;
     }
 }

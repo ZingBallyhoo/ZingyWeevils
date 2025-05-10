@@ -188,10 +188,32 @@ namespace BinWeevils.Server.Controllers
             }
         }
         
-        [HttpPost("php/getPetJugglingSkills.php")]
-        public string GetJugglingSKills()
+        [StructuredFormPost("php/getPetJugglingSkills.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetPetJugglingTricksResponse> GetJugglingTricks([FromBody] GetPetJugglingTricksRequest request)
         {
-            return "result=1;1;300,0,0,0,0,9,0;10;99|10;1;40004000300,0,0,0,0,9,0;12;99";
+            using var activity = ApiServerObservability.StartActivity("PetController.GetJugglingTricks");
+            activity?.SetTag("petID", request.m_petID);
+            
+            var tricks = await m_dbContext.m_pets
+                .Where(x => x.m_id == request.m_petID)
+                .SelectMany(x => x.m_jugglingTricks)
+                .Select(x => new DelimitedJugglingTrick 
+                {
+                    m_trickID = x.m_trickID,
+                    m_aptitude = x.m_aptitude,
+                    
+                    m_numBalls = x.m_trick.m_numBalls,
+                    m_difficulty = x.m_trick.m_difficulty,
+                    m_pattern = x.m_trick.m_pattern,
+                })
+                .ToArrayAsync();
+            
+            return new GetPetJugglingTricksResponse
+            {
+                // "1;1;300,0,0,0,0,9,0;10;99|10;1;40004000300,0,0,0,0,9,0;12;99"
+                m_resultTricks = string.Join('|', tricks.Select(x => x.AsString(';')))
+            };
         }
         
         [StructuredFormPost("php/getMyPetFoodStock.php")]

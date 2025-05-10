@@ -50,6 +50,7 @@ namespace BinWeevils.Server.Services
                 .ExecuteDeleteAsync();
             
             await SeedPalettes();
+            await SeedJugglingTricks();
         }
         
         private async Task SeedPalettes()
@@ -89,6 +90,25 @@ namespace BinWeevils.Server.Services
                     });
                 }
 
+            }
+            
+            await m_dbContext.SaveChangesAsync();
+        }
+        
+        private async Task SeedJugglingTricks()
+        {
+            var tricksJsonText = await File.ReadAllTextAsync(Path.Combine("Data", "jugglingTricks.json"));
+            var tricks = JsonSerializer.Deserialize<List<JsonJugglingTrick>>(tricksJsonText)!;
+            foreach (var jsonJugglingTrick in tricks)
+            {
+                await m_dbContext.m_jugglingTricks.AddAsync(new JugglingTrickDB
+                {
+                    m_id = jsonJugglingTrick.m_id,
+                    m_numBalls = jsonJugglingTrick.m_numBalls,
+                    m_name = jsonJugglingTrick.m_name,
+                    m_difficulty = jsonJugglingTrick.m_difficulty,
+                    m_pattern = jsonJugglingTrick.m_pattern
+                });
             }
             
             await m_dbContext.SaveChangesAsync();

@@ -68,9 +68,27 @@ namespace BinWeevils.Common
                         return !skill.IsClientManaged();
                     }).Select(x => new PetSkillDB
                     {
-                        m_skillID = (EPetSkill)x
+                        m_skillID = (EPetSkill)x,
+                        m_obedience = m_settings.SpawnFullyLevelled ? (byte)105 : (byte)20,
+                        m_skillLevel = m_settings.SpawnFullyLevelled ? 100 : 0
                     })
                     .ToList();
+            
+            List<PetJugglingTrickDB> jugglingTricks;
+            if (m_settings.SpawnFullyLevelled)
+            {
+                jugglingTricks = await m_dbContext.m_jugglingTricks.Select(x => new PetJugglingTrickDB
+                {
+                    m_trickID = x.m_id,
+                    m_aptitude = 99
+                }).ToListAsync();
+            } else
+            {
+                // todo: the way i would assume this should work is...
+                // by default, give easiest trick for each ball count (aptitude=2)
+                // client sends getNewJugglingTrick at apt 25, 60, 95 for each trick
+                throw new NotImplementedException("unlocking juggling tricks from client is not implemented");
+            }
             
             await m_dbContext.m_pets.AddAsync(new PetDB
             {
@@ -92,7 +110,9 @@ namespace BinWeevils.Common
                 
                 m_bowlItem = bowlItem,
                 m_bedItem = bedItem,
-                m_skills = skills
+                
+                m_skills = skills,
+                m_jugglingTricks = jugglingTricks,
             });
             await m_dbContext.SaveChangesAsync();
             

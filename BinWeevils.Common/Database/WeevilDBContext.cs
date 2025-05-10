@@ -16,6 +16,7 @@ namespace BinWeevils.Common.Database
         
         public DbSet<PetDB> m_pets { get; set; }
         public DbSet<PetSkillDB> m_petSkills { get; set; }
+        public DbSet<PetJugglingTrickDB> m_petJugglingTricks { get; set; }
 
         public DbSet<NestDB> m_nests { get; set; }
         public DbSet<NestItemDB> m_nestItems { get; set; }
@@ -31,6 +32,7 @@ namespace BinWeevils.Common.Database
         public DbSet<ApparelType> m_apparelTypes { get; set; }
         public DbSet<PaletteEntryDB> m_paletteEntries { get; set; }
         public DbSet<SeedType> m_seedTypes { get; set; }
+        public DbSet<JugglingTrickDB> m_jugglingTricks { get; set; }
         
         public WeevilDBContext(DbContextOptions<WeevilDBContext> options) : base(options)
         {
@@ -78,6 +80,10 @@ namespace BinWeevils.Common.Database
             modelBuilder.Entity<PetSkillDB>(b =>
             {
                 b.ToTable("PetSkillDB");
+            });
+            modelBuilder.Entity<PetJugglingTrickDB>(b =>
+            {
+                b.ToTable("PetJugglingTrickDB");
             });
             
             modelBuilder.Entity<NestRoomDB>(b =>
@@ -166,6 +172,11 @@ namespace BinWeevils.Common.Database
                 b.ToTable("PaletteEntryDB");
                 b.ComplexProperty(x => x.m_color);
                 b.HasIndex(x => new { x.m_paletteID, x.m_colorString });
+            });
+            modelBuilder.Entity<JugglingTrickDB>(b =>
+            {
+                b.ToTable("JugglingTrickDB");
+                b.HasIndex(t => new { t.m_pattern });
             });
         }
         
