@@ -194,10 +194,40 @@ namespace BinWeevils.Server.Controllers
             return "result=1;1;300,0,0,0,0,9,0;10;99|10;1;40004000300,0,0,0,0,9,0;12;99";
         }
         
-        [HttpPost("php/getMyPetFoodStock.php")]
-        public string GetPetFoodStock()
+        [StructuredFormPost("php/getMyPetFoodStock.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetPetFoodStockResponse> GetPetFoodStock([FromBody] GetPetFoodStockRequest request)
         {
-            return "result=9";
+            using var activity = ApiServerObservability.StartActivity("PetController.GetPetFoodStock");
+            activity?.SetTag("userID", request.m_userID);
+            
+            if (ControllerContext.HttpContext.User.Identity!.Name != request.m_userID)
+            {
+                throw new InvalidDataException("trying to get someone else's pet food stock");
+            }
+            
+            var result = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_userID)
+                .Select(x => x.m_petFoodStock)
+                .SingleAsync();
+            
+            if (result > 0) 
+            {
+                var rowsUpdated = await m_dbContext.m_weevilDBs
+                    .Where(x => x.m_name == request.m_userID)
+                    .Where(x => x.m_petFoodStock > 0)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(x => x.m_petFoodStock, x => x.m_petFoodStock - 1));
+                if (rowsUpdated == 0)
+                {
+                    result = 0;
+                }
+            }
+            
+            return new GetPetFoodStockResponse 
+            {
+                m_result = result
+            };
         }
     }
 }

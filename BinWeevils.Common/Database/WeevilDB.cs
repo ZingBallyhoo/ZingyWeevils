@@ -33,6 +33,8 @@ namespace BinWeevils.Common.Database
         [Required] public int m_mulch { get; set; }
         [Required] public int m_dosh { get; set; }
         
+        [Required] public uint m_petFoodStock { get; set; } = 15;
+        
         [Required] public virtual NestDB m_nest { get; set; }
         public virtual ICollection<WeevilSpecialMoveDB> m_specialMoves { get; set; }
         public virtual ICollection<PetDB> m_pets { get; set; }

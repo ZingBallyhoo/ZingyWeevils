@@ -46,6 +46,12 @@ namespace BinWeevils.Server.Controllers
                     var request = ArrayMapper.ToObject<BuyPetRequest>(context.m_message.m_data);
                     return await petService.BuyPet(context, request);
                 }
+                case "weevilservices.cPetShop.userBuyPetFood":
+                {
+                    var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
+                    var request = ArrayMapper.ToObject<BuyPetFoodRequest>(context.m_message.m_data);
+                    return await petService.BuyPetFood(context, request);
+                }
                 default:
                 {
                     throw new Exception($"Unknown AMF Target Uri: \"{context.m_message.m_targetUri}\"");

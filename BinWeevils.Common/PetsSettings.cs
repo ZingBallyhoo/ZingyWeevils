@@ -14,11 +14,18 @@ namespace BinWeevils.Common
         public HashSet<uint> ItemColors { get; set; }
         public List<uint> BowlItemTypes { get; set; }
         public string BedItem { get; set; }
+        public Dictionary<string, PetFoodPack> FoodPacks { get; set; }
         
         public string CalculateNameHash(ReadOnlySpan<char> name)
         {
             var hashBytes = MD5.HashData($"{NameHashSalt}{name}".AsSpan().AsBytes());
             return Convert.ToHexStringLower(hashBytes);
         }
+    }
+    
+    public class PetFoodPack
+    {
+        public uint Cost { get; set; }
+        public uint Feeds { get; set; }
     }
 }

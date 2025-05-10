@@ -152,5 +152,34 @@ namespace BinWeevils.Server.Controllers
             
             return true; // todo
         }
+        
+        public async Task<uint> BuyPetFood(AmfGatewayContext context, BuyPetFoodRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("PetAmfService.BuyPetFood");
+            activity?.SetTag("type", request.m_type);
+            
+            if (context.m_httpContext.User.Identity!.Name != request.m_userID)
+            {
+                throw new InvalidDataException("trying to buy pet food for somebody else");
+            }
+            
+            if (!m_settings.FoodPacks.TryGetValue(request.m_type, out var foodPack))
+            {
+                throw new InvalidDataException("unknown food pack");
+            }
+            
+            var rowsUpdated = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_userID)
+                .Where(x => x.m_mulch >= foodPack.Cost)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch - foodPack.Cost)
+                    .SetProperty(x => x.m_petFoodStock, x => x.m_petFoodStock + foodPack.Feeds));
+            if (rowsUpdated == 0)
+            {
+                return 0;
+            }
+            
+            return foodPack.Cost;
+        }
     }
 }
