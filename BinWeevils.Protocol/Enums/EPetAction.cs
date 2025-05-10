@@ -2,7 +2,7 @@ namespace BinWeevils.Protocol.Enums
 {
     public enum EPetAction
     {
-        EYE_THING = -5, // todo: what actually is this
+        EYE_EXTEND = -5, // todo: what actually is this
         STOP = -4,
         END_PANT = -3,
         START_PANT = -2,
