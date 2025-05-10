@@ -216,6 +216,53 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
+        [StructuredFormPost("php/updateJugglingTrick.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task UpdateJugglingTrick([FromBody] UpdateJugglingTrickRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("PetController.UpdateJugglingTrick");
+            activity?.SetTag("petID", request.m_petID);
+            activity?.SetTag("jugglingSkill", request.m_jugglingSkill);
+            activity?.SetTag("trickID", request.m_trickID);
+            activity?.SetTag("aptitude", request.m_aptitude);
+            
+            if (request.m_aptitude > 99 || 
+                request.m_jugglingSkill > 100)
+            {
+                throw new InvalidDataException("pet juggling trick value out of range");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var rowsUpdated = await m_dbContext.m_petSkills
+                .Where(x => x.m_petID == request.m_petID)
+                .Where(x => x.m_skillID == EPetSkill.JUGGLE)
+                .Where(x => x.m_pet.m_owner.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_skillLevel <= request.m_jugglingSkill) // can only go up
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_skillLevel, request.m_jugglingSkill)
+                );
+            
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("invalid update pet juggling trick request");
+            }
+            
+            rowsUpdated = await m_dbContext.m_petJugglingTricks
+                .Where(x => x.m_petID == request.m_petID)
+                .Where(x => x.m_trickID == request.m_trickID)
+                .Where(x => x.m_aptitude <= request.m_aptitude) // can only go up
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_aptitude, request.m_aptitude)
+                );
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("invalid update pet juggling trick request");
+            }
+            
+            await transaction.CommitAsync();
+        }
+        
         [StructuredFormPost("php/getMyPetFoodStock.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<GetPetFoodStockResponse> GetPetFoodStock([FromBody] GetPetFoodStockRequest request)
