@@ -17,6 +17,7 @@ namespace BinWeevils.GameServer.Actors
         
         private PID m_nest;
         private PID m_buddyList;
+        private PID m_petManager;
         private PID? m_kartGame;
         
         public record KickFromNest(string userName);
@@ -38,6 +39,13 @@ namespace BinWeevils.GameServer.Actors
                     }).WithStartDeadline(TimeSpan.FromSeconds(1));
                     // locally this takes about 0.1 seconds to start which protoactor doesn't like...
                     m_buddyList = context.SpawnNamed(buddyListProps, "buddyList");
+                    
+                    var petManagerProps = Props.FromProducer(() => new PetManager
+                    {
+                        m_services = m_services,
+                        m_weevilData = m_user.GetUserData<WeevilData>()
+                    });
+                    m_petManager = context.SpawnNamed(petManagerProps, "petManager");
                     break;
                 }
                 case KickFromNest kickFromNest:
@@ -96,6 +104,13 @@ namespace BinWeevils.GameServer.Actors
                 {
                     if (m_kartGame == null) return;
                     await m_user.BroadcastBytes(kartEvent.bytes);
+                    break;
+                }
+                
+                case SetUserVarsRequest:
+                case SetRoomVarsRequest:
+                {
+                    context.Forward(m_petManager);
                     break;
                 }
             }

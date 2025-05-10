@@ -1,5 +1,6 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Actors;
+using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using Proto;
@@ -156,7 +157,7 @@ namespace BinWeevils.GameServer.Rooms
         }
     }
     
-    public class NestRoom : StatelessRoom, IRoomEventHandler
+    public class NestRoom : IStatefulRoom, IRoomEventHandler
     {
         public required PID m_nest;
         public required User m_owner;
@@ -182,6 +183,12 @@ namespace BinWeevils.GameServer.Rooms
                 m_name = user.m_name,
                 m_joined = 0
             });
+        }
+
+        public ValueTask<VarBag> GetVars()
+        {
+            // todo
+            return ValueTask.FromResult(new VarBag());
         }
     }
 }

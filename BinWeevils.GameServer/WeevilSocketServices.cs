@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
+using BinWeevils.Protocol.KeyValue;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -283,25 +284,28 @@ namespace BinWeevils.GameServer
             return rowsUpdated != 0;
         }
         
-        public async Task InitPetData(WeevilData weevil)
+        public async Task<Dictionary<uint, PetDefVar>> GetPets(uint weevilIdx)
         {
-            if (!GetPetsSettings().Enabled) return;
+            if (!GetPetsSettings().Enabled) return [];
             
             using var activity = GameServerObservability.StartActivity("Init Pet Data");
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
 
             var pets = await context.m_pets
-                .Where(x => x.m_ownerIdx == weevil.m_idx.GetValue())
-                .Select(x => new
+                .Where(x => x.m_ownerIdx == weevilIdx)
+                .Select(x => new PetDefVar
                 {
-                    x.m_id,
-                    x.m_name
+                    m_id = x.m_id,
+                    m_name = x.m_name,
+                    m_bodyColor = x.m_bodyColor,
+                    m_antenna1Color = x.m_antenna1Color,
+                    m_antenna2Color = x.m_antenna2Color,
+                    m_eye1Color = x.m_eye1Color,
+                    m_eye2Color = x.m_eye2Color
                 })
-                .ToListAsync();
-            
-            weevil.m_myPetIDs.AddRange(pets.Select(x => x.m_id));
-            weevil.m_myPetNames.AddRange(pets.Select(x => x.m_name));
+                .ToDictionaryAsync(x => x.m_id, x => x);
+            return pets;
         }
     }
     

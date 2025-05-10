@@ -122,6 +122,11 @@ namespace BinWeevils.GameServer
                     HandleSfsSetUserVars(preRead.m_bodySpan);
                     break;
                 }
+                case "setRvars":
+                {
+                    HandleSfsSetRoomVars(preRead.m_bodySpan);
+                    break;
+                }
                 case "loadB":
                 {
                     HandleSfsLoadBuddyList(preRead.m_bodySpan);
@@ -226,8 +231,6 @@ namespace BinWeevils.GameServer
                     }
                 };
                 await this.BroadcastXtRes(loginResponse);
-                
-                await m_services.InitPetData(weevilData);
             });
         }
         

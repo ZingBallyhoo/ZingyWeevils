@@ -17,7 +17,7 @@ namespace BinWeevils.Common.Database
         public uint m_eye1Color { get; set; }
         public uint m_eye2Color { get; set; }
         
-        public byte m_mentalEnergy { get; set; } = 100; // max:100
+        public byte m_mentalEnergy { get; set; } = 50; // max:100. todo: decide default value. isn't shown ingame
         public byte m_fuel { get; set; } = 60; // max:100
         public byte m_health { get; set; } = 60; // max:100
         public byte m_fitness { get; set; } = 40; // min:35, max:100

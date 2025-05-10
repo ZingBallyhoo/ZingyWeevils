@@ -690,21 +690,27 @@ namespace BinWeevils.GameServer
             var setUvars = XmlReadBuffer.ReadStatic<SetUserVarsRequest>(body, CDataMode.On);
             m_services.GetLogger().LogDebug("Sfs - SetUserVars: {Vars}", setUvars.m_vars.m_vars);
             
-            // we need to handle y as the client uses it to get down from chairs and such
+            var user = GetUser();
+            var weevil = user.GetUserData<WeevilData>();
             
+            // we need to handle y as the client uses it to get down from chairs and such
             var yVar = setUvars.m_vars.m_vars.SingleOrDefault(x => x.m_name == "y");
             if (yVar.m_value != null && float.TryParse(yVar.m_value, out var newYValue))
             {
-                m_taskQueue.Enqueue(() =>
-                {
-                    var user = GetUser();
-                    var weevil = user.GetUserData<WeevilData>();
-                    
-                    weevil.m_y.SetValue(newYValue);
-                    
-                    return ValueTask.CompletedTask;
-                });
+                weevil.m_y.SetValue(newYValue);
             }
+            
+            m_services.GetActorSystem().Root.Send(weevil.GetUserAddress(), setUvars);
+        }
+        
+        private void HandleSfsSetRoomVars(ReadOnlySpan<char> body)
+        {
+            var setRvars = XmlReadBuffer.ReadStatic<SetRoomVarsRequest>(body, CDataMode.On);
+            m_services.GetLogger().LogDebug("Sfs - SetRoomVars: {Vars}", setRvars.m_varList.m_roomVars);
+            
+            var user = GetUser();
+            var weevil = user.GetUserData<WeevilData>();
+            m_services.GetActorSystem().Root.Send(weevil.GetUserAddress(), setRvars);
         }
     }
 }

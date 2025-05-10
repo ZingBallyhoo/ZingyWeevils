@@ -35,7 +35,7 @@ namespace BinWeevils.GameServer.Rooms
             //            ^ door closed
             // pool hall:
             //   p1-10: name of player on leaderboard
-            // weevil wheels:
+            // dirt valley:
             //   p1-10: name of player on leaderboard
             //   s1-10: leaderboard scores
             // diners:

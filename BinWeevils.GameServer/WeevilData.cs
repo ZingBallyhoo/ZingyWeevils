@@ -1,6 +1,7 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.KeyValue;
 using BinWeevils.Protocol.XmlMessages;
 using Proto;
 
@@ -23,13 +24,11 @@ namespace BinWeevils.GameServer
         public TypedVar<double> m_y;
         public TypedVar<double> m_z;
         public TypedVar<int> m_r;
+        // todo: king, but unused...
+        public TypedVar<string> m_petDef;
+        public TypedVar<string> m_petState;
         
         public string? m_buddyLocName = null;
-        
-        // todo: king, but unused...
-        
-        // todo: petDef
-        // todo: petState
         
         public HashSet<uint> m_myPetIDs = [];
         public HashSet<string> m_myPetNames = [];
@@ -51,6 +50,8 @@ namespace BinWeevils.GameServer
             m_y = new TypedVar<double>(this, "y", Var.TYPE_NUMBER);
             m_z = new TypedVar<double>(this, "z", Var.TYPE_NUMBER);
             m_r = new TypedVar<int>(this, "r", Var.TYPE_NUMBER);
+            m_petDef = new TypedVar<string>(this, "petDef", Var.TYPE_STRING);
+            m_petState = new TypedVar<string>(this, "petState", Var.TYPE_STRING);
             
             m_weevilDef.SetValue(WeevilDef.DEFAULT);
         }
@@ -70,6 +71,25 @@ namespace BinWeevils.GameServer
         public int CalculateNewDirection(double x, double z)
         {
             return CalculateNewDirection(m_x.GetValue(), m_z.GetValue(), x, z);
+        }
+        
+        public void AddPet(PetDefVar var)
+        {
+            m_petState.SetValue(new PetStateVar
+            {
+                m_pose = EPetAction.JUMP_ON
+            }.ToString());
+            m_petDef.SetValue(var.ToString());
+        }
+        
+        public void RemovePet()
+        {
+            m_petDef.SetValue("");
+        }
+        
+        public void SetPetState(PetStateVar state)
+        {
+            m_petState.SetValue(state.ToString());
         }
         
         public PID GetUserAddress()

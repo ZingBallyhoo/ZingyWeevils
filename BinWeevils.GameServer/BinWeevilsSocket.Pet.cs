@@ -21,10 +21,6 @@ namespace BinWeevils.GameServer
                     {
                         var user = GetUser();
                         var weevilData = user.GetUserDataAs<WeevilData>()!;
-
-                        var room = await user.GetRoomOrNull();
-                        if (room == null) return; // the client likes to send during init
-                        if (room.IsLimbo()) return;
                         
                         if (!weevilData.m_myPetIDs.Contains(action.m_petID))
                         {
@@ -32,6 +28,11 @@ namespace BinWeevils.GameServer
                         }
                         
                         m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
+                        
+                        var room = await user.GetRoomOrNull();
+                        if (room == null) return; // the client likes to send during init
+                        if (room.IsLimbo()) return;
+                        
                         
                     });
                     
