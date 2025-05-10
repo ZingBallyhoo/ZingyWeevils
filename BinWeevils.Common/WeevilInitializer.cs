@@ -11,10 +11,12 @@ namespace BinWeevils.Common
     public class WeevilInitializer
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly PetInitializer m_petInitializer;
         
-        public WeevilInitializer(WeevilDBContext dbContext)
+        public WeevilInitializer(WeevilDBContext dbContext, PetInitializer petInitializer)
         {
             m_dbContext = dbContext;
+            m_petInitializer = petInitializer;
         }
         
         public async Task<WeevilDB> Create(string name) 
@@ -33,6 +35,27 @@ namespace BinWeevils.Common
                 createParams.m_nestDef = ZINGY_NEST;
                 createParams.m_mulch = 209602;
                 createParams.m_xp = 146138;
+                createParams.m_pet = new PetCreateParams
+                {
+                    m_ownerIdx = 0, // filled internally
+                    m_nestID = 0, // filled internally
+                    m_name = name.Replace("zingy", "Hobbity"),
+                    m_bodyColor = 153,
+                    m_antenna1Color = 16777215,
+                    m_antenna2Color = 16777215,
+                    m_eye1Color = 16750848,
+                    m_eye2Color = 16750848,
+                    m_itemParams = new PetExistingItemParams
+                    {
+                        m_bowlItemID = 86821070, // updated internally
+                        m_bedItemID = 86821071, // updated internally
+                    },
+                    m_mentalEnergy = 100,
+                    m_fuel = 7,
+                    m_health = 70,
+                    m_fitness = 77,
+                    m_experience = 306
+                };
             } else if (name.Contains("scribbles"))
             {
                 createParams.m_weevilDef = WeevilDef.DEFINITELY_SCRIBBLES;
@@ -94,7 +117,7 @@ namespace BinWeevils.Common
             NestDB nest;
             if (createParams.m_nestDef != null)
             {
-                nest = await ImportNest(createParams.m_nestDef);
+                nest = await ImportNest(createParams.m_nestDef, createParams.m_pet);
             } else
             {
                 nest = await CreateStarterNest();
@@ -102,6 +125,17 @@ namespace BinWeevils.Common
             dbWeevil.m_nest = nest;
             
             await m_dbContext.m_weevilDBs.AddAsync(dbWeevil);
+            
+            if (createParams.m_pet != null)
+            {
+                // ensure nest/weevil identity set up
+                await m_dbContext.SaveChangesAsync();
+                
+                createParams.m_pet.m_ownerIdx = dbWeevil.m_idx;
+                createParams.m_pet.m_nestID = nest.m_id;
+                await m_petInitializer.CreatePet(createParams.m_pet);
+            }
+            
             return dbWeevil;
         }
         
@@ -139,7 +173,7 @@ namespace BinWeevils.Common
             return nest;
         }
         
-        private async Task<NestDB> ImportNest(string nestDef)
+        private async Task<NestDB> ImportNest(string nestDef, PetCreateParams? pet)
         {
             var nest = new NestDB 
             {
@@ -194,11 +228,11 @@ namespace BinWeevils.Common
                 if (isGardenItem)
                 {
                     var gardenItem = XmlReadBuffer.ReadStatic<GardenItem>(itemElement.ToString());;
+                    var itemTypeID = await m_dbContext.FindItemByConfigName(gardenItem.m_fileName);
                     
-                    // todo: item color(?)
                     nest.m_gardenItems.Add(new NestGardenItemDB
                     {
-                        m_itemTypeID = (await m_dbContext.FindItemByConfigName(gardenItem.m_fileName)).Value,
+                        m_itemTypeID = itemTypeID.Value,
                         m_color = gardenItem.m_color,
                         m_placedItem = new NestPlacedGardenItemDB
                         {
@@ -227,6 +261,12 @@ namespace BinWeevils.Common
                 var nestItem = XmlReadBuffer.ReadStatic<NestItem>(itemElement.ToString());
                 if (nestItem.m_placedOnFurnitureID == 0) continue;
                 await CreateNestItem(nestItem);
+            }
+            
+            if (pet != null && pet.m_itemParams is PetExistingItemParams existingItems)
+            {
+                existingItems.m_bedItemID = nestItemMap[existingItems.m_bedItemID].m_id;
+                existingItems.m_bowlItemID = nestItemMap[existingItems.m_bowlItemID].m_id;
             }
 
             return nest;

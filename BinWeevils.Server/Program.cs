@@ -53,6 +53,7 @@ internal static class Program
         });
         builder.Services.AddSingleton<LocNameMapper>();
         builder.Services.AddScoped<WeevilInitializer>();
+        builder.Services.AddScoped<PetInitializer>();
         builder.Services.AddSingleton<TimeProvider, UkTimeProvider>();
         
         builder.Services.AddSingleton<LocationDefinitions>(p => 

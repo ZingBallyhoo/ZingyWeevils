@@ -245,5 +245,6 @@ namespace BinWeevils.Common.Database
         public int? m_mulch;
         public uint? m_xp;
         public string? m_nestDef;
+        public PetCreateParams? m_pet;
     }
 }

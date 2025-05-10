@@ -9,6 +9,7 @@ namespace BinWeevils.Common.Database
     {
         [Key] public uint m_id { get; set; }
         public uint m_ownerIdx { get; set; }
+        public DateTime m_adoptedAt { get; set; }
         
         public string m_name { get; set; }
         public uint m_bodyColor { get; set; }
@@ -17,11 +18,11 @@ namespace BinWeevils.Common.Database
         public uint m_eye1Color { get; set; }
         public uint m_eye2Color { get; set; }
         
-        public byte m_mentalEnergy { get; set; } = 50; // max:100. todo: decide default value. isn't shown ingame
-        public byte m_fuel { get; set; } = 60; // max:100
-        public byte m_health { get; set; } = 60; // max:100
-        public byte m_fitness { get; set; } = 40; // min:35, max:100
-        public uint m_experience { get; set; } = 0;
+        public byte m_mentalEnergy { get; set; } // max:100
+        public byte m_fuel { get; set; } // max:100
+        public byte m_health { get; set; } // max:100
+        public byte m_fitness { get; set; } // min:35, max:100
+        public uint m_experience { get; set; }
         
         public virtual ICollection<PetSkillDB> m_skills { get; set; }
         

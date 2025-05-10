@@ -12,11 +12,13 @@ namespace BinWeevils.Server.Controllers
     public class PetAmfService
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly PetInitializer m_petInitializer;
         private readonly PetsSettings m_settings;
         
-        public PetAmfService(WeevilDBContext dbContext, IOptionsSnapshot<PetsSettings> settings)
+        public PetAmfService(WeevilDBContext dbContext, PetInitializer petInitializer, IOptionsSnapshot<PetsSettings> settings)
         {
             m_dbContext = dbContext;
+            m_petInitializer = petInitializer;
             m_settings = settings.Value;
         }
         
@@ -31,11 +33,6 @@ namespace BinWeevils.Server.Controllers
             }
             
             return m_dbContext.m_pets.CountAsync(x => x.m_owner.m_name == request.m_userID);
-        }
-        
-        private Task<int> GetPetCount(uint idx)
-        {
-            return m_dbContext.m_pets.CountAsync(x => x.m_ownerIdx == idx);
         }
         
         public Task<int> ValidatePetName(AmfGatewayContext context, ValidatePetNameRequest request)
@@ -76,21 +73,6 @@ namespace BinWeevils.Server.Controllers
                 return 0;
             }
             
-            if (!m_settings.Colors.Contains(request.m_bodyColor) || 
-                !m_settings.Colors.Contains(request.m_antenna1Color) ||
-                !m_settings.Colors.Contains(request.m_antenna2Color) ||
-                !m_settings.Colors.Contains(request.m_eye1Color) ||
-                !m_settings.Colors.Contains(request.m_eye2Color))
-            {
-                throw new InvalidDataException("invalid part color");
-            }
-            
-            if (!m_settings.ItemColors.Contains(request.m_bedColor) ||
-                !m_settings.BowlItemTypes.Contains(request.m_bowlItemTypeID))
-            {
-                throw new InvalidDataException("invalid item color");
-            }
-            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             var dto = await m_dbContext.m_weevilDBs
@@ -113,50 +95,22 @@ namespace BinWeevils.Server.Controllers
                 return 0;
             }
             
-            var bowlItem = new NestItemDB
-            {
-                m_itemTypeID = request.m_bowlItemTypeID,
-                m_nestID = dto.m_nestID
-            };
-            var bedItem = new NestItemDB
-            {
-                m_itemTypeID = (await m_dbContext.FindItemByConfigName(m_settings.BedItem))!.Value,
-                m_nestID = dto.m_nestID,
-                m_color = ItemColor.Parse($"0x{request.m_bedColor:X}", null)
-            };
-            await m_dbContext.m_nestItems.AddAsync(bowlItem);
-            await m_dbContext.m_nestItems.AddAsync(bedItem);
-            
-            await m_dbContext.m_pets.AddAsync(new PetDB
+            await m_petInitializer.CreatePet(new PetCreateParams
             {
                 m_ownerIdx = dto.m_idx,
+                m_nestID = dto.m_nestID,
                 m_name = request.m_name,
-                m_bodyColor = request.m_bodyColor,
                 m_antenna1Color = request.m_antenna1Color,
                 m_antenna2Color = request.m_antenna2Color,
                 m_eye1Color = request.m_eye1Color,
                 m_eye2Color = request.m_eye2Color,
-                m_bowlItem = bowlItem,
-                m_bedItem = bedItem,
-                m_skills = 
-                    Enumerable.Range(0, (int)EPetSkill.COUNT)
-                    .Where(x =>
-                    {
-                        var skill = (EPetSkill)x;
-                        return !skill.IsClientManaged();
-                    }).Select(x => new PetSkillDB
-                    {
-                        m_skillID = (EPetSkill)x
-                    })
-                    .ToList()
+                m_bodyColor = request.m_bodyColor,
+                m_itemParams = new PetNewItemParams 
+                {
+                    m_bowlItemTypeID = request.m_bowlItemTypeID,
+                    m_bedColor = request.m_bedColor
+                }
             });
-            
-            await m_dbContext.SaveChangesAsync();
-            
-            if (await GetPetCount(dto.m_idx) > m_settings.MaxUserPets)
-            {
-                throw new InvalidDataException("buying a pet would go over the owned pet limit");
-            }
             await transaction.CommitAsync();
             
             return m_settings.Cost;
