@@ -17,14 +17,8 @@ namespace BinWeevils.GameServer
                     var action = new ClientPetAction();
                     action.Deserialize(ref reader);
                     
-                    
                     var user = GetUser();
                     var weevilData = user.GetUserDataAs<WeevilData>()!;
-                    
-                    if (!weevilData.m_myPetIDs.Contains(action.m_petID))
-                    {
-                        throw new InvalidDataException("sending pet action for someone else's pet");
-                    }
                     
                     m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
                     m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), action);

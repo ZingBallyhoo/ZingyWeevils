@@ -86,7 +86,13 @@ namespace BinWeevils.GameServer.Actors
                 }
                 case ClientPetAction clientAction:
                 {
-                    // todo: validate action
+                    ValidatePetID(clientAction.m_petID);
+                    if (!Enum.IsDefined(typeof(EPetAction), clientAction.m_actionID))
+                    {
+                        throw new InvalidDataException($"invalid pet action: {clientAction.m_actionID}");
+                    }
+                    
+                    // todo: validate extra params
                     
                     var petInNest = clientAction.m_petID != m_equippedPet || await UserInNest();
                     if (petInNest != (clientAction.m_broadcastSwitch == 0))
@@ -99,11 +105,16 @@ namespace BinWeevils.GameServer.Actors
                         UpdatePetState(clientAction.m_petID, ParsePetState(clientAction.m_stateVars));
                     } 
                     
-                    // todo: can this work?
-                    /*else if (clientAction.m_actionID == (int)EPetAction.SIT)
+                    // sitting isn't synchronised, we can help
+                    // todo: when outside of a nest, clients ignore non-JUMP_ON poses
+                    var pet = m_pets[clientAction.m_petID];
+                    if (clientAction.m_actionID == (int)EPetAction.SIT && pet.m_state.m_pose != EPetAction.JUMP_ON)
                     {
-                        m_pets[clientAction.m_petID].m_state.m_pose = EPetAction.SIT;
-                    }*/
+                        UpdatePetState(clientAction.m_petID, pet.m_state with
+                        {
+                            m_pose = EPetAction.SIT
+                        });
+                    }
                     
                     var serverAction = new ServerPetAction
                     {
