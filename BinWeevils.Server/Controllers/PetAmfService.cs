@@ -1,8 +1,8 @@
 using ArcticFox.RPC.AmfGateway;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
-using BinWeevils.Protocol;
 using BinWeevils.Protocol.Amf;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

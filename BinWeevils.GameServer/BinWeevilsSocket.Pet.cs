@@ -1,6 +1,7 @@
 using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Pet;
 using Microsoft.Extensions.Logging;
@@ -14,14 +15,22 @@ namespace BinWeevils.GameServer
         {
             switch (message.m_command)
             {
+                case Modules.PET_MODULE_EXPRESSION: // 6#3
+                {
+                    var expression = new ClientPetExpression();
+                    expression.Deserialize(ref reader);
+                    
+                    var weevilData = GetWeevilData();
+                    m_services.GetLogger().LogDebug("Pet({PetID}) - Expression: {Expression}", expression.m_petID, (EPetExpression)expression.m_expressionID);
+                    m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), expression);
+                    break;
+                }
                 case Modules.PET_MODULE_ACTION: // 6#4
                 {
                     var action = new ClientPetAction();
                     action.Deserialize(ref reader);
                     
-                    var user = GetUser();
-                    var weevilData = user.GetUserDataAs<WeevilData>()!;
-                    
+                    var weevilData = GetWeevilData();
                     m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
                     m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), action);
                     break;
@@ -32,7 +41,7 @@ namespace BinWeevils.GameServer
                     petGotBall.Deserialize(ref reader);
                     
                     var user = GetUser();
-                    var weevilData = user.GetUserDataAs<WeevilData>()!;
+                    var weevilData = user.GetUserData<WeevilData>()!;
                     if (!weevilData.m_myPetIDs.Contains(petGotBall.m_petID)) 
                     {
                         throw new InvalidDataException("sending gotball for someone else's pet");
@@ -57,7 +66,7 @@ namespace BinWeevils.GameServer
                     returnToNest.Deserialize(ref reader);
                     
                     var user = GetUser();
-                    var weevilData = user.GetUserDataAs<WeevilData>()!;
+                    var weevilData = user.GetUserData<WeevilData>();
                     
                     m_services.GetLogger().LogDebug("Pet({PetID}) - ReturnToNest: {State}", returnToNest.m_petID, returnToNest.m_petState);
                     m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), returnToNest);
@@ -76,7 +85,7 @@ namespace BinWeevils.GameServer
                     m_taskQueue.Enqueue(async () =>
                     {
                         var user = GetUser();
-                        var weevilData = user.GetUserDataAs<WeevilData>()!;
+                        var weevilData = user.GetUserData<WeevilData>();
 
                         var room = await user.GetRoom();
                         if (room.IsLimbo()) return;

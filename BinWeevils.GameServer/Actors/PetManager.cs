@@ -3,6 +3,7 @@ using BinWeevils.GameServer.PolyType;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.KeyValue;
 using BinWeevils.Protocol.Str.Pet;
 using BinWeevils.Protocol.XmlMessages;
@@ -84,33 +85,45 @@ namespace BinWeevils.GameServer.Actors
                     HandleRoomVars(context, roomVars);
                     break;
                 }
-                case ClientPetAction clientAction:
+                case ClientPetExpression expression:
                 {
-                    ValidatePetID(clientAction.m_petID);
-                    if (!Enum.IsDefined(typeof(EPetAction), clientAction.m_actionID))
+                    ValidatePetID(expression.m_petID);
+                    if (!Enum.IsDefined(typeof(EPetExpression), expression.m_expressionID))
                     {
-                        throw new InvalidDataException($"invalid pet action: {clientAction.m_actionID}");
+                        throw new InvalidDataException($"invalid pet expression: {expression.m_expressionID}");
                     }
+                    var petInNest = await ValidateBroadcastSwitch(expression.m_petID, expression.m_broadcastSwitch);
+                    
+                    var serverExpression = new ServerPetExpression
+                    {
+                        m_petID = expression.m_petID,
+                        m_expressionID = expression.m_expressionID,
+                    };
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_EXPRESSION, serverExpression, petInNest));
+                    break;
+                }
+                case ClientPetAction action:
+                {
+                    ValidatePetID(action.m_petID);
+                    if (!Enum.IsDefined(typeof(EPetAction), action.m_actionID))
+                    {
+                        throw new InvalidDataException($"invalid pet action: {action.m_actionID}");
+                    }
+                    var petInNest = await ValidateBroadcastSwitch(action.m_petID, action.m_broadcastSwitch);
                     
                     // todo: validate extra params
                     
-                    var petInNest = clientAction.m_petID != m_equippedPet || await UserInNest();
-                    if (petInNest != (clientAction.m_broadcastSwitch == 0))
+                    if (action.m_stateVars != "-1") 
                     {
-                        throw new InvalidDataException("client disagrees on pet being in nest or not");
-                    }
-                    
-                    if (clientAction.m_stateVars != "-1") 
-                    {
-                        UpdatePetState(clientAction.m_petID, ParsePetState(clientAction.m_stateVars));
+                        UpdatePetState(action.m_petID, ParsePetState(action.m_stateVars));
                     } 
                     
                     // sitting isn't synchronised, we can help
                     // todo: when outside of a nest, clients ignore non-JUMP_ON poses
-                    var pet = m_pets[clientAction.m_petID];
-                    if (clientAction.m_actionID == (int)EPetAction.SIT && pet.m_state.m_pose != EPetAction.JUMP_ON)
+                    var pet = m_pets[action.m_petID];
+                    if (action.m_actionID == (int)EPetAction.SIT && pet.m_state.m_pose != EPetAction.JUMP_ON)
                     {
-                        UpdatePetState(clientAction.m_petID, pet.m_state with
+                        UpdatePetState(action.m_petID, pet.m_state with
                         {
                             m_pose = EPetAction.SIT
                         });
@@ -118,9 +131,9 @@ namespace BinWeevils.GameServer.Actors
                     
                     var serverAction = new ServerPetAction
                     {
-                        m_petID = clientAction.m_petID,
-                        m_actionID = clientAction.m_actionID,
-                        m_extraParams = clientAction.m_extraParams
+                        m_petID = action.m_petID,
+                        m_actionID = action.m_actionID,
+                        m_extraParams = action.m_extraParams
                     };
                     context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_ACTION, serverAction, petInNest));
                     break;
@@ -170,6 +183,16 @@ namespace BinWeevils.GameServer.Actors
                     break;
                 }
             }
+        }
+        
+        private async ValueTask<bool> ValidateBroadcastSwitch(uint petID, byte val) 
+        {
+            var petInNest = petID != m_equippedPet || await UserInNest();
+            if (petInNest != (val == 0))
+            {
+                throw new InvalidDataException("client disagrees on pet being in nest or not");
+            }
+            return petInNest;
         }
         
         private async ValueTask<bool> UserInNest()

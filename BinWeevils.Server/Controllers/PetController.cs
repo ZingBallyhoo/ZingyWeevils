@@ -1,7 +1,7 @@
 using System.Net.Mime;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
-using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Form.Pet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

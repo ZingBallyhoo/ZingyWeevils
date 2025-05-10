@@ -1,6 +1,7 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.KeyValue;
 using BinWeevils.Protocol.XmlMessages;
 using Proto;

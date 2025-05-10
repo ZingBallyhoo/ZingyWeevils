@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BinWeevils.Common.Database

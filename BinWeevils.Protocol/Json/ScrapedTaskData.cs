@@ -1,3 +1,5 @@
+using BinWeevils.Protocol.Enums;
+
 namespace BinWeevils.Protocol.Json
 {
     public class ScrapedManifest

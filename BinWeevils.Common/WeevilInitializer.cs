@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
 using StackXML;

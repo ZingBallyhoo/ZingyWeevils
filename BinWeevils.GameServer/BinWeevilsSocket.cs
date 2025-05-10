@@ -34,6 +34,8 @@ namespace BinWeevils.GameServer
                 .AddCodec(this);
         }
         
+        public WeevilData GetWeevilData() => GetUser().GetUserData<WeevilData>();
+        
         [GeneratedRegex(@"^\%xt\%login\%b\%[^%]+%p%")]
         private partial Regex KartPositionUpdateRegex { get ;}
 

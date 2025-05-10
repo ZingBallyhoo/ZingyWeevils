@@ -4,6 +4,7 @@ using BinWeevils.GameServer.Actors;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Actions;
 using BinWeevils.Protocol.XmlMessages;
@@ -185,7 +186,7 @@ namespace BinWeevils.GameServer
                     m_taskQueue.Enqueue(async () => 
                     {
                         var user = GetUser();
-                        var weevilData = user.GetUserDataAs<WeevilData>()!;
+                        var weevilData = user.GetUserData<WeevilData>();
                         
                         m_services.GetLogger().LogDebug("Ingame - AddApparel: {ID} - {Color}", addApparel.m_apparelID, addApparel.m_rgb);
                         
@@ -224,7 +225,7 @@ namespace BinWeevils.GameServer
                     m_taskQueue.Enqueue(async () => 
                     {
                         var user = GetUser();
-                        var weevilData = user.GetUserDataAs<WeevilData>()!;
+                        var weevilData = user.GetUserData<WeevilData>();
                         
                         m_services.GetLogger().LogDebug("Ingame - RemoveApparel: {Slot}", removeApparel.m_apparelSlotID);
                         
@@ -259,8 +260,7 @@ namespace BinWeevils.GameServer
                     
                     m_taskQueue.Enqueue(async () =>
                     {
-                        var user = GetUser();
-                        var weevilData = user.GetUserDataAs<WeevilData>();
+                        var weevilData = GetWeevilData();
                         
                         var dbDef = await m_services.GetWeevilDef(weevilData!.m_idx.GetValue());
                         if (dbDef != normalizedDefNum)

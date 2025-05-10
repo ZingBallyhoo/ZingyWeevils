@@ -1,3 +1,4 @@
+using BinWeevils.Protocol.Enums;
 using PolyType;
 
 namespace BinWeevils.Protocol.Form.Garden

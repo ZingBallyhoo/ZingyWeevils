@@ -1,4 +1,4 @@
-namespace BinWeevils.Protocol
+namespace BinWeevils.Protocol.Enums
 {
     public enum ENestRoom
     {
