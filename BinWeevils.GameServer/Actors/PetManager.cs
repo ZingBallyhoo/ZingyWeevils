@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using BinWeevils.GameServer.PolyType;
+using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.KeyValue;
@@ -44,6 +45,10 @@ namespace BinWeevils.GameServer.Actors
             // petStateN
             // petIDs
             
+            // returnToNest sequence:
+            // petStateN
+            // PET_GO_TO_NEST
+            
             switch (context.Message)
             {
                 case Started:
@@ -71,7 +76,7 @@ namespace BinWeevils.GameServer.Actors
                 }
                 case SetUserVarsRequest userVars:
                 {
-                    HandleUserVars(context, userVars);
+                    await HandleUserVars(context, userVars);
                     break;
                 }
                 case SetRoomVarsRequest roomVars:
@@ -83,7 +88,7 @@ namespace BinWeevils.GameServer.Actors
                 {
                     // todo: validate action
                     
-                    var petInNest = clientAction.m_petID != m_equippedPet;
+                    var petInNest = clientAction.m_petID != m_equippedPet || await UserInNest();
                     if (petInNest != (clientAction.m_broadcastSwitch == 0))
                     {
                         throw new InvalidDataException("client disagrees on pet being in nest or not");
@@ -92,7 +97,13 @@ namespace BinWeevils.GameServer.Actors
                     if (clientAction.m_stateVars != "-1") 
                     {
                         UpdatePetState(clientAction.m_petID, ParsePetState(clientAction.m_stateVars));
-                    }
+                    } 
+                    
+                    // todo: can this work?
+                    /*else if (clientAction.m_actionID == (int)EPetAction.SIT)
+                    {
+                        m_pets[clientAction.m_petID].m_state.m_pose = EPetAction.SIT;
+                    }*/
                     
                     var serverAction = new ServerPetAction
                     {
@@ -101,6 +112,34 @@ namespace BinWeevils.GameServer.Actors
                         m_extraParams = clientAction.m_extraParams
                     };
                     context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_ACTION, serverAction, petInNest));
+                    break;
+                }
+                case ClientPetGoHome petGoHome:
+                {
+                    if (m_equippedPet != petGoHome.m_petID)
+                    {
+                        throw new InvalidDataException("sending an unequipped pet home");
+                    }
+                    
+                    var newPetIDs = ParsePetIDsList(petGoHome.m_petIDsVar);
+                    if (!newPetIDs.SetEquals(m_pets.Keys.ToHashSet()))
+                    {
+                        throw new InvalidDataException("petgohome ids should be every pet");
+                    }
+                    
+                    var pet = m_pets[petGoHome.m_petID];
+                    var newState = ParsePetState(petGoHome.m_petState);
+                    if (newState != pet.m_state)
+                    {
+                        throw new InvalidDataException("client should have already sent new state (rvar) at this point");
+                    }
+                    
+                    UnequipPet();
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_RETURN_TO_NEST, new ServerPetGoHome
+                    {
+                        m_petDef = pet.m_def.ToString(),
+                        m_petState = pet.m_state.ToString(),
+                    }, true));
                     break;
                 }
                 
@@ -122,7 +161,18 @@ namespace BinWeevils.GameServer.Actors
             }
         }
         
-        private void HandleUserVars(IContext context, SetUserVarsRequest setUserVars)
+        private async ValueTask<bool> UserInNest()
+        {
+            var room = await m_weevilData.m_user.GetRoomOrNull();
+            if (room == null) return false;
+            
+            var nestRoom = room.GetDataAs<NestRoom>();
+            if (nestRoom == null) return false;
+            
+            return nestRoom.m_ownerWeevil.m_user.m_name == m_weevilData.m_user.m_name;
+        }
+        
+        private async ValueTask HandleUserVars(IContext context, SetUserVarsRequest setUserVars)
         {
             var petDefVar = setUserVars.m_vars.m_vars.SingleOrDefault(x => x.m_name == "petDef");
             if (petDefVar.m_value != null)
@@ -133,7 +183,7 @@ namespace BinWeevils.GameServer.Actors
                     parsedPetDef = ParsePetDef(petDefVar.m_value);
                 }
                 
-                UserPetDefChanged(parsedPetDef);
+                await UserPetDefChanged(parsedPetDef);
             }
             
             var petStateVar = setUserVars.m_vars.m_vars.SingleOrDefault(x => x.m_name == "petState");
@@ -151,8 +201,7 @@ namespace BinWeevils.GameServer.Actors
             var petIDsVar = setRoomVars.m_varList.m_roomVars.SingleOrDefault(x => x.m_name == "petIDs");
             if (petIDsVar.m_value != null)
             {
-                var idsInNest = petIDsVar.m_value.Length != 0 ? 
-                        petIDsVar.m_value.Split(',').Select(uint.Parse).ToHashSet() : [];
+                var idsInNest = ParsePetIDsList(petIDsVar.m_value);
                 if (idsInNest.Count != m_pets.Count && idsInNest.Count != m_pets.Count-1)
                 {
                     throw new InvalidDataException($"invalid pet-in-nest count: {idsInNest}. pet count: {m_pets.Count}");
@@ -187,10 +236,25 @@ namespace BinWeevils.GameServer.Actors
                     }
                     
                     var petID = uint.Parse(match.Groups[1].ValueSpan);
-                    ValidatePetRoomUpdate(petID);
-                    UpdatePetState(petID, ParsePetState(roomVar.m_value));
+                    
+                    var state = ParsePetState(roomVar.m_value);
+                    if (m_equippedPet == petID)
+                    {
+                        // sending home...
+                        ValidatePetID(petID);
+                    } else
+                    {
+                        ValidatePetRoomUpdate(petID);
+                    }
+                    UpdatePetState(petID, state);
                 }
             }
+        }
+        
+        private HashSet<uint> ParsePetIDsList(string text)
+        {
+            if (text.Length == 0) return [];
+            return text.Split(',').Select(uint.Parse).ToHashSet();
         }
         
         [GeneratedRegex(@"^petDef(\d+)$")]
@@ -199,15 +263,28 @@ namespace BinWeevils.GameServer.Actors
         [GeneratedRegex(@"^petState(\d+)$")]
         private partial Regex PetStateRoomVarRegex { get; }
         
-        private void UserPetDefChanged(PetDefVar? def)
+        private async Task UserPetDefChanged(PetDefVar? def)
         {
             // todo: validate we are in our nest
+            
+            if (!await UserInNest())
+            {
+                if (def == null)
+                {
+                    throw new InvalidDataException("can only unequip pets while in nest");
+                }
+                if (def.Value.m_id != m_equippedPet)
+                {
+                    throw new InvalidDataException("can only equip pets while in nest");
+                    // client sends when re-mounting
+                }
+                return;
+            }
             
             if (def != null)
             {
                 if (m_equippedPet != null)
                 {
-                    if (def.Value.m_id == m_equippedPet.Value) return;
                     throw new InvalidDataException("pet already equipped");
                 }
                 
@@ -264,16 +341,21 @@ namespace BinWeevils.GameServer.Actors
             }
         }
         
+        private void ValidatePetID(uint petID)
+        {
+            if (!m_pets.ContainsKey(petID))
+            {
+                throw new InvalidDataException("referenced pet does not exist");
+            }
+        }
+        
         private void ValidatePetRoomUpdate(uint petID)
         {
             if (m_equippedPet == petID)
             {
                 throw new InvalidDataException("trying to update pet in room, but pet is equipped");
             }
-            if (!m_pets.ContainsKey(petID))
-            {
-                throw new InvalidDataException("referenced pet does not exist");
-            }
+            ValidatePetID(petID);
         }
         
         private PetDefVar ParsePetDef(ReadOnlySpan<char> str)

@@ -17,20 +17,29 @@ namespace BinWeevils.GameServer
                     var action = new ClientPetAction();
                     action.Deserialize(ref reader);
                     
-                    m_taskQueue.Enqueue(async () =>
-                    {
-                        var user = GetUser();
-                        var weevilData = user.GetUserDataAs<WeevilData>()!;
-                        
-                        if (!weevilData.m_myPetIDs.Contains(action.m_petID))
-                        {
-                            throw new InvalidDataException("sending pet action for someone else's pet");
-                        }
-                        
-                        m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
-                        m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), action);
-                    });
                     
+                    var user = GetUser();
+                    var weevilData = user.GetUserDataAs<WeevilData>()!;
+                    
+                    if (!weevilData.m_myPetIDs.Contains(action.m_petID))
+                    {
+                        throw new InvalidDataException("sending pet action for someone else's pet");
+                    }
+                    
+                    m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
+                    m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), action);
+                    break;
+                }
+                case Modules.PET_MODULE_RETURN_TO_NEST: // 6#6
+                {
+                    var returnToNest = new ClientPetGoHome();
+                    returnToNest.Deserialize(ref reader);
+                    
+                    var user = GetUser();
+                    var weevilData = user.GetUserDataAs<WeevilData>()!;
+                    
+                    m_services.GetLogger().LogDebug("Pet({PetID}) - ReturnToNest: {State}", returnToNest.m_petID, returnToNest.m_petState);
+                    m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), returnToNest);
                     break;
                 }
                 case Modules.PET_MODULE_SEND_PET_COMMAND: // 6#7
