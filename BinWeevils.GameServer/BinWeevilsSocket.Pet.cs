@@ -1,3 +1,5 @@
+using ArcticFox.Net.Event;
+using ArcticFox.SmartFoxServer;
 using BinWeevils.Protocol;
 using BinWeevils.Protocol.Str;
 using BinWeevils.Protocol.Str.Pet;
@@ -22,6 +24,31 @@ namespace BinWeevils.GameServer
                     
                     m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
                     m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), action);
+                    break;
+                }
+                case Modules.PET_MODULE_GOT_BALL: // 6#5
+                {
+                    var petGotBall = new PetGotBall();
+                    petGotBall.Deserialize(ref reader);
+                    
+                    var user = GetUser();
+                    var weevilData = user.GetUserDataAs<WeevilData>()!;
+                    if (!weevilData.m_myPetIDs.Contains(petGotBall.m_petID)) 
+                    {
+                        throw new InvalidDataException("sending gotball for someone else's pet");
+                    }
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var room = await user.GetRoom();
+                        if (room.IsLimbo()) return;
+                        
+                        m_services.GetLogger().LogDebug("Pet({PetID}) - GotBall", petGotBall.m_petID);
+                        
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
+                        await broadcaster.BroadcastXtStr(Modules.PET_MODULE_GOT_BALL, petGotBall);
+                    });
+                    
                     break;
                 }
                 case Modules.PET_MODULE_RETURN_TO_NEST: // 6#6
