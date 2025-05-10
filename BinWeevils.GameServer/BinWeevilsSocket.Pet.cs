@@ -15,10 +15,20 @@ namespace BinWeevils.GameServer
         {
             switch (message.m_command)
             {
+                case Modules.PET_MODULE_JOIN_NEST_LOC: // 6#1
+                {
+                    var joinNestLoc = new ClientPetJoinNestLoc();
+                    joinNestLoc.FullyDeserialize(ref reader);
+                    
+                    var weevilData = GetWeevilData();
+                    m_services.GetLogger().LogDebug("Pet({PetID}) - JoinNestLoc: {LocID}", joinNestLoc.m_shared.m_petID, joinNestLoc.m_shared.m_locID);
+                    m_services.GetActorSystem().Root.Send(weevilData.GetPetManagerAddress(), joinNestLoc);
+                    break;
+                }
                 case Modules.PET_MODULE_EXPRESSION: // 6#3
                 {
                     var expression = new ClientPetExpression();
-                    expression.Deserialize(ref reader);
+                    expression.FullyDeserialize(ref reader);
                     
                     var weevilData = GetWeevilData();
                     m_services.GetLogger().LogDebug("Pet({PetID}) - Expression: {Expression}", expression.m_petID, (EPetExpression)expression.m_expressionID);
@@ -28,7 +38,7 @@ namespace BinWeevils.GameServer
                 case Modules.PET_MODULE_ACTION: // 6#4
                 {
                     var action = new ClientPetAction();
-                    action.Deserialize(ref reader);
+                    action.FullyDeserialize(ref reader);
                     
                     var weevilData = GetWeevilData();
                     m_services.GetLogger().LogDebug("Pet({PetID}) - Action: {Action} {ExtraParams} - {StateStr}", action.m_petID, (EPetAction)action.m_actionID, action.m_extraParams, action.m_stateVars);
@@ -38,7 +48,7 @@ namespace BinWeevils.GameServer
                 case Modules.PET_MODULE_GOT_BALL: // 6#5
                 {
                     var petGotBall = new PetGotBall();
-                    petGotBall.Deserialize(ref reader);
+                    petGotBall.FullyDeserialize(ref reader);
                     
                     var user = GetUser();
                     var weevilData = user.GetUserData<WeevilData>()!;
@@ -63,7 +73,7 @@ namespace BinWeevils.GameServer
                 case Modules.PET_MODULE_RETURN_TO_NEST: // 6#6
                 {
                     var returnToNest = new ClientPetGoHome();
-                    returnToNest.Deserialize(ref reader);
+                    returnToNest.FullyDeserialize(ref reader);
                     
                     var user = GetUser();
                     var weevilData = user.GetUserData<WeevilData>();
@@ -75,7 +85,7 @@ namespace BinWeevils.GameServer
                 case Modules.PET_MODULE_SEND_PET_COMMAND: // 6#7
                 {
                     var command = new ClientPetCommand();
-                    command.Deserialize(ref reader);
+                    command.FullyDeserialize(ref reader);
                     
                     if (!Enum.IsDefined(typeof(EPetSkill), command.m_commandID))
                     {

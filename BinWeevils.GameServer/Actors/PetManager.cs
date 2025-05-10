@@ -85,6 +85,28 @@ namespace BinWeevils.GameServer.Actors
                     HandleRoomVars(context, roomVars);
                     break;
                 }
+                case ClientPetJoinNestLoc joinNestLoc:
+                {
+                    ValidatePetID(joinNestLoc.m_shared.m_petID);
+                    var petInNest = await ValidateBroadcastSwitch(joinNestLoc.m_shared.m_petID, joinNestLoc.m_broadcastSwitch);
+                    if (!petInNest)
+                    {
+                        throw new InvalidDataException("how could a pet outside of the nest join a nest loc...?");
+                    }
+                    
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_JOIN_NEST_LOC, joinNestLoc.m_shared, petInNest));
+                    
+                    var pet = m_pets[joinNestLoc.m_shared.m_petID];
+                    UpdatePetState(joinNestLoc.m_shared.m_petID, pet.m_state with
+                    {
+                        m_locID = joinNestLoc.m_shared.m_locID,
+                        m_x = joinNestLoc.m_shared.m_x,
+                        m_y = joinNestLoc.m_shared.m_y,
+                        m_z = joinNestLoc.m_shared.m_z,
+                        m_r = joinNestLoc.m_shared.m_r,
+                    });
+                    break;
+                }
                 case ClientPetExpression expression:
                 {
                     ValidatePetID(expression.m_petID);

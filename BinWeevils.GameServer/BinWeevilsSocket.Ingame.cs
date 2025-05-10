@@ -24,7 +24,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_MOVE: // 2#1
                 {
                     var move = new ClientMove();
-                    move.Deserialize(ref reader);
+                    move.FullyDeserialize(ref reader);
                     
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -55,7 +55,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_EXPRESSION: // 2#2
                 {
                     var expression = new ClientExpression();
-                    expression.Deserialize(ref reader);
+                    expression.FullyDeserialize(ref reader);
                     
                     if (!Enum.IsDefined(typeof(EWeevilExpression), expression.m_expressionID))
                     {
@@ -90,7 +90,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_JOIN_ROOM: // 2#4
                 {
                     var joinRoomRequest = new JoinRoomRequest();
-                    joinRoomRequest.Deserialize(ref reader);
+                    joinRoomRequest.FullyDeserialize(ref reader);
                     
                     m_taskQueue.Enqueue(async () =>
                     {
