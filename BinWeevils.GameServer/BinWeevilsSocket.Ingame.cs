@@ -149,7 +149,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_ROOM_EVENT: // 2#5
                 {
                     var clientEvent = new ClientRoomEvent();
-                    clientEvent.Deserialize(ref reader);
+                    clientEvent.FullyDeserialize(ref reader);
                     
                     //Console.Out.WriteLine($"client sent room event: {clientEvent.m_a} {clientEvent.m_b}");
                     m_taskQueue.Enqueue(async () =>
@@ -181,7 +181,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_ADD_APPAREL: // 2#7
                 {
                     var addApparel = new ClientAddApparel();
-                    addApparel.Deserialize(ref reader);
+                    addApparel.FullyDeserialize(ref reader);
                     
                     m_taskQueue.Enqueue(async () => 
                     {
@@ -215,7 +215,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_REMOVE_APPAREL: // 2#8
                 {
                     var removeApparel = new ClientRemoveApparel();
-                    removeApparel.Deserialize(ref reader);
+                    removeApparel.FullyDeserialize(ref reader);
                     
                     if (removeApparel.m_apparelSlotID != 1)
                     {
@@ -253,7 +253,7 @@ namespace BinWeevils.GameServer
                 case Modules.INGAME_CHANGE_WEEVIL_DEF: // 2#10
                 {
                     var changeWeevilDef = new ChangeWeevilDef();
-                    changeWeevilDef.Deserialize(ref reader);
+                    changeWeevilDef.FullyDeserialize(ref reader);
                     
                     var normalizedDef = new WeevilDef(changeWeevilDef.m_weevilDef);
                     var normalizedDefNum = normalizedDef.AsNumber();
@@ -335,7 +335,7 @@ namespace BinWeevils.GameServer
         private void HandleInGameCommand_Action(ref StrReader reader)
         {
             var action = new ClientAction();
-            action.Deserialize(ref reader);
+            action.FullyDeserialize(ref reader);
             
             if (!Enum.IsDefined(typeof(EWeevilAction), action.m_actionID))
             {

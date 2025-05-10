@@ -15,7 +15,7 @@ namespace BinWeevils.GameServer
                 case Modules.DINER_GRAB_TRAY: // 9#1
                 {
                     var tray = new DinerTransferTray();
-                    tray.Deserialize(ref reader);
+                    tray.FullyDeserialize(ref reader);
                     
                     m_taskQueue.Enqueue(async () =>
                     {
@@ -32,7 +32,7 @@ namespace BinWeevils.GameServer
                 case Modules.DINER_DROP_TRAY: // 9#2
                 {
                     var tray = new DinerTransferTray();
-                    tray.Deserialize(ref reader);
+                    tray.FullyDeserialize(ref reader);
                     
                     m_taskQueue.Enqueue(async () =>
                     {

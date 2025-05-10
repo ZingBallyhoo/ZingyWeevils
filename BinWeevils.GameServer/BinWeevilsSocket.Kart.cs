@@ -12,7 +12,7 @@ namespace BinWeevils.GameServer
         private void HandleKartCommand(in XtClientMessage message, ref StrReader reader)
         {
             var clientMessage = new KartRequestHeader();
-            clientMessage.Deserialize(ref reader);
+            clientMessage.FullyDeserialize(ref reader);
 
             switch (clientMessage.m_command)
             {
@@ -60,14 +60,10 @@ namespace BinWeevils.GameServer
             }
         }
         
-        private void KartMessageHandler<T>(ref StrReader reader) where T : IStrClass, new()
+        private void KartMessageHandler<T>(ref StrReader reader) where T : struct, IStrClass
         {
             var packet = new T();
-            packet.Deserialize(ref reader);
-            if (reader.HasRemaining())
-            {
-                throw new Exception($"didn't fully parse kart message");
-            }
+            packet.FullyDeserialize(ref reader);
             
             if (packet is not KartPositionUpdate)
             {

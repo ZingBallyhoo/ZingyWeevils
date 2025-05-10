@@ -2,7 +2,7 @@ using StackXML.Str;
 
 namespace BinWeevils.Protocol.Str.WeevilKart
 {
-    public partial record KartJump
+    public partial record struct KartJump
     {
         [StrField] public byte m_kartID;
         [StrField] public uint m_time;

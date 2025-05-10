@@ -25,7 +25,7 @@ namespace BinWeevils.GameServer.Rooms
                 case DinerEventID.SET_FOOD:
                 {
                     var setFood = new DinerEventSetFood();
-                    setFood.Deserialize(ref eventReader);
+                    setFood.FullyDeserialize(ref eventReader);
                     
                     await TrySetFood(setFood);
                     break;
@@ -33,7 +33,7 @@ namespace BinWeevils.GameServer.Rooms
                 case DinerEventID.EAT:
                 {
                     var eatFood = new DinerEventEatFood();
-                    eatFood.Deserialize(ref eventReader);
+                    eatFood.FullyDeserialize(ref eventReader);
                     
                     await TryEatFood(eatFood);
                     break;
