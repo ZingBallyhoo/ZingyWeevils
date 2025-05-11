@@ -28,6 +28,7 @@ namespace BinWeevils.Server.Controllers
                     var request = ArrayMapper.ToObject<GetUserBuddyCountRequest>(context.m_message.m_data);
                     return "-1";
                 }
+                
                 case "weevilservices.cPetShop.getUserPetCount":
                 {
                     var petService = context.m_httpContext.RequestServices.GetRequiredService<PetAmfService>();
@@ -52,6 +53,14 @@ namespace BinWeevils.Server.Controllers
                     var request = ArrayMapper.ToObject<BuyPetFoodRequest>(context.m_message.m_data);
                     return await petService.BuyPetFood(context, request);
                 }
+                
+                case "weevilservices.cWeevilKartGameScores.submitSingleUserTimes":
+                {
+                    var kartService = context.m_httpContext.RequestServices.GetRequiredService<WeevilKartAmfService>();
+                    var request = ArrayMapper.ToObject<SubmitLapTimesRequest>(context.m_message.m_data);
+                    return await kartService.SubmitLapTimes(context, request);
+                }
+                
                 default:
                 {
                     throw new Exception($"Unknown AMF Target Uri: \"{context.m_message.m_targetUri}\"");
@@ -62,6 +71,7 @@ namespace BinWeevils.Server.Controllers
     
     [GenerateShape<object[]>]
     [GenerateShape<GetLoginDetailsResponse>]
+    [GenerateShape<SubmitLapTimesResponse>]
     internal partial class GatewayShapeWitness;
     
     /*[RpcMethod(typeof(AmfPassthroughRpcMethod<object, GetLoginDetailsResponse>), "h")]

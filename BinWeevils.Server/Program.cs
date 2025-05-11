@@ -41,6 +41,7 @@ internal static class Program
         });
         builder.Services.AddSingleton<IAmfGatewayRouter, WeevilGatewayRouter>();
         builder.Services.AddTransient<PetAmfService>();
+        builder.Services.AddTransient<WeevilKartAmfService>();
         
         builder.Services.AddSingleton<BinWeevilsSocketHost>();
         builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());
@@ -68,6 +69,10 @@ internal static class Program
         {
             return settings.ItemColors.Count == settings.BowlItemTypes.Count;
         }).ValidateOnStart();
+        builder.Services.AddOptions<WeevilWheelsSettings>().BindConfiguration("WeevilWheels").Validate(settings => 
+        {
+            return true;
+        }).ValidateOnStart();;
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
             options.UseSqlite("Filename=db.sqlite"));
@@ -151,6 +156,8 @@ internal static class Program
         
         var amfOptions = new AmfOptions();
         amfOptions.AddTypedObject<GetLoginDetailsResponse>();
+        amfOptions.AddTypedObject<SubmitLapTimesResponse>();
+        amfOptions.AddTypedObject<SubmitLapTimesResponse.MedalInfo>();
         app.MapAmfGateway("api/php/amfphp/gateway.php", new AmfGatewaySettings
         {
             m_options = amfOptions,
