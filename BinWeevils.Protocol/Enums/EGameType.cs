@@ -1,0 +1,81 @@
+namespace BinWeevils.Protocol.Enums
+{
+    public enum EGameType
+    {
+        MulchShoot = 1,
+        SpotTheDifference = 2,
+        BrainTrain = 4,
+        CatchBinKill = 5,
+        TinksBlocks = 6,
+        DrinkingGame = 7,
+        PirateCaptainPuzzle = 8,
+        PirateNestItem = 9,
+        PirateShipGame = 10,
+        SkullGame = 21,
+        RabbidsShoot = 22,
+        WeevilWheelsTrack2 = 23,
+        WeevilWheelsTrack1 = 24,
+        WeevilWheelsTrack3 = 25,
+        ArthurHunt = 27,
+        Maze = 31,
+        SkySlidePuzzle1 = 33,
+        MulchDigg = 34,
+        HorridHenryShoot = 38,
+        SkySlidePuzzle2 = 39,
+        InnocentSlidePuzzle = 54,
+        GraveyardGhouls = 62,
+        SpookyPairs = 63,
+        CheddsSlidePuzzle = 70,
+        CheddsBecomeAFan = 71,
+        RumsLuggage = 74,
+        LeapFrogSlidePuzzle = 75,
+        StarFightersSlidePuzzle = 76,
+        PiratePairs = 78,
+        SportsStarsPairs = 84,
+        SportsStarsShootOut = 97,
+        HotelTransylvaniaTrumps = 98,
+        SpookyPairs2013 = 100,
+        WhackAWeevilNew = 105,
+        PirateShipGame2013_1 = 107,
+        PirateShipGame2013_2 = 108,
+        PirateCaptainPuzzle2013_1 = 109,
+        PirateCaptainPuzzle2013_2 = 110,
+        PirateSlidePuzzle2013_1 = 111,
+        PirateSlidePuzzle2013_2 = 112,
+        PirateQuiz2013 = 113,
+        // todo: 114, also pirate quiz
+        TnmtGame1 = 115,
+        TnmtGame2 = 116,
+        TnmtGame3 = 117,
+        TheGruntsHunt = 131,
+        ConstructBots = 162,
+        DrinkingGameLounge = 217,
+        PirateShipGame2014_1 = 225,
+        PirateShipGame2014_2 = 226,
+        PirateCaptainPuzzle2014_1 = 227,
+        PirateCaptainPuzzle2014_2 = 228,
+        PirateSlidePuzzle2014_1 = 229,
+        PirateSlidePuzzle2014_2 = 230,
+        PirateQuiz2014 = 231,
+        BoomCoSlidePuzzle = 234,
+        PostmanPatSlidePuzzle = 236,
+    }
+    
+    public enum EGameLeaderboardType
+    {
+        HistoryHuntersDigSite1 = 117,
+        HistoryHuntersDigSite2 = 118,
+        HistoryHuntersDigSite3 = 119,
+        HistoryHuntersDigSite4 = 120,
+        HistoryHuntersDigSite5 = 121,
+        HistoryHuntersDigSite6 = 122,
+        HistoryHuntersDigSite7 = 123,
+    }
+    
+    public enum ETurnBasedGameType
+    {
+        Mulch4 = 1,
+        Reversi = 2,
+        Squares = 3,
+    }
+}

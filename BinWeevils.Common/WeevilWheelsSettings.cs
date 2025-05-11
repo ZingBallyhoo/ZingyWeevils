@@ -1,10 +1,12 @@
+using BinWeevils.Protocol.Enums;
+
 namespace BinWeevils.Common
 {
     public class WeevilWheelsSettings
     {
         public bool Enabled { get; set; }
         public Dictionary<WeevilWheelsTrophyType, uint> TrophyColors { get; set; }
-        public Dictionary<uint, WeevilWheelsTrackSettings> Tracks { get; set; }
+        public Dictionary<EGameType, WeevilWheelsTrackSettings> Tracks { get; set; }
     }
     
     public class WeevilWheelsTrackSettings

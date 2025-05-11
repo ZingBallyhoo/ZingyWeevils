@@ -39,6 +39,8 @@ namespace BinWeevils.Common.Database
         public virtual ICollection<IgnoreRecordDB> m_ignoredWeevils { get; set; }
         public virtual ICollection<WeevilSpecialMoveDB> m_specialMoves { get; set; }
         public virtual ICollection<PetDB> m_pets { get; set; }
+        public virtual ICollection<WeevilGamePlayedDB> m_gamesPlayed { get; set; }
+        //public virtual ICollection<WeevilTrackPersonalBestDB> m_trackPBs { get; set; }
     }
     
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_action))]
@@ -49,4 +51,29 @@ namespace BinWeevils.Common.Database
         
         [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }
+    
+    [PrimaryKey(nameof(m_weevilIdx), nameof(m_gameType))]
+    public class WeevilGamePlayedDB
+    {
+        [Key, Required] public uint m_weevilIdx { get; set; }
+        [Key, Required] public EGameType m_gameType { get; set; }
+        
+        public DateTime m_lastPlayed { get; set; }
+        
+        [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+    }
+    
+    /*public class WeevilTrackPersonalBestDB
+    {
+        [Key, Required] public uint m_weevilIdx { get; set; }
+        [Key, Required] public EGameType m_gameType { get; set; }
+        
+        public double m_lap1 { get; set; }
+        public double m_lap2 { get; set; }
+        public double m_lap3 { get; set; }
+        
+        [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+        
+        public double m_total => m_lap1 + m_lap2 + m_lap3;
+    }*/
 }

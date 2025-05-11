@@ -72,7 +72,11 @@ internal static class Program
         builder.Services.AddOptions<WeevilWheelsSettings>().BindConfiguration("WeevilWheels").Validate(settings => 
         {
             return true;
-        }).ValidateOnStart();;
+        }).ValidateOnStart();
+        builder.Services.AddOptions<SinglePlayerGamesSettings>().BindConfiguration("SinglePlayerGames").Validate(settings => 
+        {
+            return true;
+        }).ValidateOnStart();
         
         builder.Services.AddDbContext<WeevilDBContext>(options =>
             options.UseSqlite("Filename=db.sqlite"));

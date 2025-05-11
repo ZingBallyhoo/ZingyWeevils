@@ -1,3 +1,4 @@
+using BinWeevils.Protocol.Enums;
 using PolyType;
 
 namespace BinWeevils.Protocol.Form.Game
@@ -5,10 +6,8 @@ namespace BinWeevils.Protocol.Form.Game
     [GenerateShape]
     public partial class SubmitScoreRequest
     {
-        [PropertyShape(Name = "gameID")] public uint m_gameID { get; set; }
+        [PropertyShape(Name = "gameID")] public EGameType m_gameID { get; set; }
         [PropertyShape(Name = "score")] public uint m_score { get; set; }
-        
-        public const int GAME_SPOTDIFFERENCE = 2;
     }
     
     [GenerateShape]

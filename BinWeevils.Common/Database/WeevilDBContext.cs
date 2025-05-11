@@ -9,6 +9,7 @@ namespace BinWeevils.Common.Database
     {
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<WeevilSpecialMoveDB> m_weevilSpecialMoves { get; set; }
+        public DbSet<WeevilGamePlayedDB> m_weevilGamesPlayed { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<BuddyMessageDB> m_buddyMesssages { get; set; }
         public DbSet<IgnoreRecordDB> m_ignoreRecords { get; set; }
@@ -53,6 +54,10 @@ namespace BinWeevils.Common.Database
             modelBuilder.Entity<WeevilSpecialMoveDB>(b =>
             {
                 b.ToTable("WeevilSpecialMoveDB");
+            });
+            modelBuilder.Entity<WeevilGamePlayedDB>(b =>
+            {
+                b.ToTable("WeevilGamePlayedDB");
             });
             
             modelBuilder.Entity<BuddyRecordDB>(b =>
