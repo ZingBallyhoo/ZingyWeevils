@@ -85,7 +85,7 @@ namespace WeevilWorld.Server.Net
                             Name = user.m_name,
                             Idx = (long) user.m_id,
                             Tycoon = true,
-                            Def = def,
+                            Def = $"{def}",
                             NestStatus = NestStatus.Open,
                             RoomPosition = null,
                             MoveAction = null,
@@ -481,9 +481,9 @@ namespace WeevilWorld.Server.Net
                         var user = GetUser();
                         var weevil = user.GetWeevil();
 
-                        var def = request.Def;
+                        var def = ulong.Parse(request.Def);
                         FixWeevilDef(ref def);
-                        weevil.Def = def;
+                        weevil.Def = $"{def}";
                         
                         await this.Broadcast(PacketIDs.WEEVIL_CHANGE_DEF_RESPONSE, new WeevilWorldProtobuf.Responses.WeevilChangeDef
                         {
@@ -800,7 +800,7 @@ namespace WeevilWorld.Server.Net
             }
         }
 
-        private void FixWeevilDef(ref string defString)
+        private void FixWeevilDef(ref ulong defString)
         {
             // see #2
             
@@ -819,7 +819,7 @@ namespace WeevilWorld.Server.Net
                 parsedDef.m_antennaType = WeevilDef.AntennaType.TripleLarge;
             }
             
-            defString = parsedDef.AsString();
+            defString = parsedDef.AsNumber();
         }
 
         private static async ValueTask<Weevil[]> JoinRoomCore(User user, string roomName)
