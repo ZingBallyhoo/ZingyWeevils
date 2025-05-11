@@ -8,9 +8,10 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BinWeevils.Server/BinWeevils.Server.csproj", "BinWeevils.Server/"]
 COPY ["ArcticFox/ArcticFox.PolyType.Amf/ArcticFox.PolyType.Amf.csproj", "ArcticFox/ArcticFox.PolyType.Amf/"]
+COPY ["ArcticFox/ArcticFox.PolyType.FormEncoded/ArcticFox.PolyType.FormEncoded.csproj", "ArcticFox/ArcticFox.PolyType.FormEncoded/"]
 COPY ["ArcticFox/ArcticFox.Codec/ArcticFox.Codec.csproj", "ArcticFox/ArcticFox.Codec/"]
 COPY ["ArcticFox/ArcticFox.RPC.AmfGateway/ArcticFox.RPC.AmfGateway.csproj", "ArcticFox/ArcticFox.RPC.AmfGateway/"]
-COPY ["BinWeevils.Database/BinWeevils.Database.csproj", "BinWeevils.Database/"]
+COPY ["BinWeevils.Common/BinWeevils.Common.csproj", "BinWeevils.Common/"]
 COPY ["BinWeevils.Protocol/BinWeevils.Protocol.csproj", "BinWeevils.Protocol/"]
 COPY ["StackXML/StackXML/StackXML.csproj", "StackXML/StackXML/"]
 COPY ["StackXML/StackXML.Generator/StackXML.Generator.csproj", "StackXML/StackXML.Generator/"]
