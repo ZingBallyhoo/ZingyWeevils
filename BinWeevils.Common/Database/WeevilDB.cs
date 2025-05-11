@@ -46,21 +46,21 @@ namespace BinWeevils.Common.Database
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_action))]
     public class WeevilSpecialMoveDB
     {
-        [Key, Required] public uint m_weevilIdx { get; set; }
-        [Key, Required] public EWeevilAction m_action { get; set; }
+        [Key] public uint m_weevilIdx { get; set; }
+        [Key] public EWeevilAction m_action { get; set; }
         
-        [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+        [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }
     
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_gameType))]
     public class WeevilGamePlayedDB
     {
-        [Key, Required] public uint m_weevilIdx { get; set; }
-        [Key, Required] public EGameType m_gameType { get; set; }
+        [Key] public uint m_weevilIdx { get; set; }
+        [Key] public EGameType m_gameType { get; set; }
         
         public DateTime m_lastPlayed { get; set; }
         
-        [Required, ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+        [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }
     
     /*public class WeevilTrackPersonalBestDB

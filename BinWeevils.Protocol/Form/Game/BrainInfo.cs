@@ -6,6 +6,6 @@ namespace BinWeevils.Protocol.Form.Game
     public partial class BrainInfo
     {
         [PropertyShape(Name = "levels")] public List<string> m_levels { get; set; }
-        [PropertyShape(Name = "modes")] public byte m_modes { get; set; }
+        [PropertyShape(Name = "modes")] public int m_modes { get; set; }
     }
 }

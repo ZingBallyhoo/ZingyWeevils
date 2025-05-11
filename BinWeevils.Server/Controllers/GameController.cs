@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Form.Game;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,33 @@ namespace BinWeevils.Server.Controllers
             m_economy = economy.Value;   
         }
         
+        private async Task<uint> GetIdx()
+        {
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_idx
+                })
+                .SingleAsync();
+            return dto.m_idx;
+        }
+        
+        private async Task<bool> UpsertGame(uint weevilIdx, EGameType gameType)
+        {
+            var now = DateTime.UtcNow;
+            var rowsUpserted = await m_dbContext.m_weevilGamesPlayed
+                .Upsert(new WeevilGamePlayedDB
+                {
+                    m_gameType = gameType,
+                    m_lastPlayed = DateTime.UtcNow,
+                    m_weevilIdx = weevilIdx
+                })
+                .UpdateIf(x => now-x.m_lastPlayed >= m_settings.Cooldown)
+                .RunAsync();
+            return rowsUpserted != 0;
+        }
+        
         [StructuredFormPost("submit-single")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<SubmitScoreResponse> SubmitSingle([FromBody] SubmitScoreRequest request)
@@ -42,26 +70,8 @@ namespace BinWeevils.Server.Controllers
             }
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
-            
-            var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Select(x => new
-                {
-                    x.m_idx
-                })
-                .SingleAsync();
-
-            var now = DateTime.UtcNow;
-            var rowsUpserted = await m_dbContext.m_weevilGamesPlayed
-                .Upsert(new WeevilGamePlayedDB
-                {
-                    m_gameType = request.m_gameID,
-                    m_lastPlayed = DateTime.UtcNow,
-                    m_weevilIdx = dto.m_idx
-                })
-                .UpdateIf(x => now-x.m_lastPlayed >= m_settings.Cooldown)
-                .RunAsync();
-            if (rowsUpserted == 0)
+            var idx = await GetIdx();
+            if (!await UpsertGame(idx, request.m_gameID))
             {
                 return new SubmitScoreResponse
                 {
@@ -73,7 +83,7 @@ namespace BinWeevils.Server.Controllers
             var rewardXp = (uint)Math.Min(request.m_score * m_economy.GameScoreToXp, m_economy.MaxXpPerGame);
             
             await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == dto.m_idx)
+                .Where(x => x.m_idx == idx)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_mulch, x => x.m_mulch + rewardMulch)
                     .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
@@ -93,10 +103,19 @@ namespace BinWeevils.Server.Controllers
         public async Task<BrainInfo> GetBrainTrainingInfo()
         {
             using var activity = ApiServerObservability.StartActivity("GameController.GetBrainTrainingInfo");
+            
+            var deadline = DateTime.UtcNow - m_settings.Cooldown; 
+            // (efcore cant eval arithmetic on datetime)
+            // https://github.com/dotnet/efcore/issues/6025
+            var onCooldown = await m_dbContext.m_weevilGamesPlayed
+                .Where(x => x.m_weevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_gameType == EGameType.BrainTrain)
+                .Where(x => x.m_lastPlayed > deadline)
+                .AnyAsync();
 
             return new BrainInfo
             {
-                m_modes = 2
+                m_modes = onCooldown ? 1 : 2
             };
         }
         
@@ -108,33 +127,43 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("score", request.m_score);
             activity?.SetTag("levels", request.m_levels);
             
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var idx = await GetIdx();
+            
             var score = Math.Min(request.m_score, m_economy.DailyBrainMaxScore);
             var scoreFac = (float)score/m_economy.DailyBrainMaxScore;
             
             var rewardMulch = (uint)(scoreFac * m_economy.DailyBrainMaxMulch);
             var rewardXp = (uint)(scoreFac * m_economy.DailyBrainMaxXp);
             
+            if (!await UpsertGame(idx, EGameType.BrainTrain))
+            {
+                rewardMulch = 0;
+                rewardXp = 0;
+            }
+            
             await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_idx == idx)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_mulch, x => x.m_mulch + rewardMulch)
                     .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
                 );
             
             var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_idx == idx)
                 .Select(x => new
                 {
                     x.m_mulch,
                     x.m_xp
                 })
                 .SingleAsync();
+            await transaction.CommitAsync();
             
             return new SubmitDailyBrainResponse
             {
-                m_modes = 2,
+                m_modes = 1, // we are definitely on cooldown
                 m_mulchEarned = rewardMulch,
-                m_xpEarned =rewardXp,
+                m_xpEarned = rewardXp,
                 m_mulch = dto.m_mulch,
                 m_xp = dto.m_xp
             };
