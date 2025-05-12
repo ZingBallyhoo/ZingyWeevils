@@ -69,6 +69,9 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
+            var tag = new KeyValuePair<string, object?>("game", request.m_gameID);
+            ApiServerObservability.s_gamesPlayedTotal.Add(1, tag);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var idx = await GetIdx();
             if (!await UpsertGame(idx, request.m_gameID))
@@ -89,6 +92,8 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
                 );
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_gamesPlayedGivingRewards.Add(1, tag);
             
             return new SubmitScoreResponse
             {
@@ -158,6 +163,13 @@ namespace BinWeevils.Server.Controllers
                 })
                 .SingleAsync();
             await transaction.CommitAsync();
+            
+            var tag = new KeyValuePair<string, object?>("game", EGameType.BrainTrain);
+            ApiServerObservability.s_gamesPlayedTotal.Add(1, tag);
+            if (rewardMulch > 0)
+            {
+                ApiServerObservability.s_gamesPlayedGivingRewards.Add(1, tag);
+            }
             
             return new SubmitDailyBrainResponse
             {
