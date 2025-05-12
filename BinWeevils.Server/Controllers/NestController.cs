@@ -172,8 +172,9 @@ namespace BinWeevils.Server.Controllers
                 response.m_xpUpperThreshold,
                 response.m_serverTime
             ]);
-            
             response.m_hash = Rssmv.Hash(hashStr);
+            
+            ApiServerObservability.s_levelUpsProcessed.Add(1);
             return response;
         }
         
@@ -480,8 +481,9 @@ namespace BinWeevils.Server.Controllers
             };
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_nestItemsPlaced.Add(1);
         }
         
         private class NormalizeItemParams
@@ -643,8 +645,9 @@ namespace BinWeevils.Server.Controllers
             
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_nestItemsMoved.Add(1);
         }
         
         [StructuredFormPost("php/removeItemFromNest.php")]
@@ -680,8 +683,9 @@ namespace BinWeevils.Server.Controllers
             
             nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_nestItemsRemoved.Add(1);
         }
         
         [StructuredFormPost("php/setLocColour.php")]
@@ -786,6 +790,8 @@ namespace BinWeevils.Server.Controllers
                     x.m_xp
                 })
                 .SingleAsync();
+            
+            ApiServerObservability.s_nestRoomsBought.Add(1, new KeyValuePair<string, object?>("type", request.m_roomType));
             return new PurchaseNestRoomResponse
             {
                 m_error = PurchaseNestRoomResponse.ERROR_OK,
@@ -859,8 +865,9 @@ namespace BinWeevils.Server.Controllers
                     x.m_nest.m_fuel
                 })
                 .SingleAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_nestFuelBought.Add(fuelToAdd);
             return new BuyNestFuelResponse
             {
                 m_success = true,

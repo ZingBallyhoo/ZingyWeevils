@@ -124,6 +124,7 @@ namespace BinWeevils.Server.Controllers
             };
             nest.m_rooms.Add(newRoom);
             await m_dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
             
             var result = new BuyPremisesResponse
             {
@@ -132,7 +133,7 @@ namespace BinWeevils.Server.Controllers
                 m_locTypeID = request.m_locTypeID
             };
             
-            await transaction.CommitAsync();
+            ApiServerObservability.s_businessLocationsBought.Add(1, new KeyValuePair<string, object?>("type", businessType));
             return result;
         }
         
