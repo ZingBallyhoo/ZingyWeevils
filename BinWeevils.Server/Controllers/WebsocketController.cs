@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ArcticFox.Net.Sockets;
 using BinWeevils.GameServer;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,8 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
+            var startTime = DateTime.UtcNow;
+            
             ApiServerObservability.s_connectionAttempts.Add(1);
             ApiServerObservability.s_activeConnections.Add(1);
             try
@@ -32,6 +35,9 @@ namespace BinWeevils.Server.Controllers
             } finally
             {
                 ApiServerObservability.s_activeConnections.Add(-1);
+                
+                var sessionDuration = DateTime.UtcNow - startTime;
+                ApiServerObservability.s_timePlayed.Add(sessionDuration.TotalSeconds);
             }
         }
         
