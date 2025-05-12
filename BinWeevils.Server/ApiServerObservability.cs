@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
 using BinWeevils.Protocol.Sql;
 
 namespace BinWeevils.Server
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class ApiServerObservability
     {
         public static readonly ActivitySource s_source = new ActivitySource("BinWeevils.Server");
@@ -60,6 +62,11 @@ namespace BinWeevils.Server
         public static readonly Counter<int> s_tasksSpecialMovesRewarded = s_meter.CreateCounter<int>("bw_tasks_special_moves_rewarded");
         public static readonly Counter<int> s_questsCompleted = s_meter.CreateCounter<int>("bw_quests_completed");
         public static readonly Counter<int> s_questsRestarted = s_meter.CreateCounter<int>("bw_quests_restarted");
+        
+        public static readonly Counter<int> s_petsBought = s_meter.CreateCounter<int>("bw_pets_bought");
+        public static readonly Counter<int> s_petsFed = s_meter.CreateCounter<int>("bw_pets_fed");
+        public static readonly Counter<int> s_petsFoodPacksBought = s_meter.CreateCounter<int>("bw_pet_food_packs_bought");
+        public static readonly Counter<double> s_petFoodBought = s_meter.CreateCounter<double>("bw_pet_food_bought");
         
         public static Activity? StartActivity(string name)
         {

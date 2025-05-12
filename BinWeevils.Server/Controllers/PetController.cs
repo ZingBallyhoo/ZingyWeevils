@@ -293,6 +293,11 @@ namespace BinWeevils.Server.Controllers
                 }
             }
             
+            if (result > 0) 
+            {
+                ApiServerObservability.s_petsFed.Add(1);
+            }
+            
             return new GetPetFoodStockResponse 
             {
                 m_result = result

@@ -2,8 +2,6 @@ using ArcticFox.RPC.AmfGateway;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Amf;
-using BinWeevils.Protocol.Enums;
-using BinWeevils.Protocol.Xml;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -113,6 +111,8 @@ namespace BinWeevils.Server.Controllers
             });
             await transaction.CommitAsync();
             
+            ApiServerObservability.s_petsBought.Add(1);
+            
             return m_settings.Cost;
         }
         
@@ -141,6 +141,9 @@ namespace BinWeevils.Server.Controllers
             {
                 return 0;
             }
+            
+            ApiServerObservability.s_petsFoodPacksBought.Add(1, new KeyValuePair<string, object?>("type", request.m_type));
+            ApiServerObservability.s_petFoodBought.Add(foodPack.Feeds);
             
             return foodPack.Cost;
         }
