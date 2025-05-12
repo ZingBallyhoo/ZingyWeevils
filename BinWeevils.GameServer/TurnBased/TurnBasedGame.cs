@@ -128,6 +128,7 @@ namespace BinWeevils.GameServer.TurnBased
             if (!data.m_gameStarted && joinedAsPlayer && data.m_player1 != null && data.m_player2 != null)
             {
                 // starting
+                GameServerObservability.s_turnBasedGamesStarted.Add(1, new KeyValuePair<string, object?>("class", GetType().Name));
                 data.m_currentPlayer = data.m_player1;
             }
             
@@ -176,6 +177,7 @@ namespace BinWeevils.GameServer.TurnBased
             
             if (response.m_staleMate || response.m_winnerFound)
             {
+                GameServerObservability.s_turnBasedGamesFinished.Add(1, new KeyValuePair<string, object?>("class", GetType().Name));
                 await Recycle(data);
             }
         }
@@ -214,6 +216,8 @@ namespace BinWeevils.GameServer.TurnBased
                 if (data.m_player2 == user.m_name) data.m_player2 = null;
                 return;
             }
+            
+            GameServerObservability.s_turnBasedGamesAbandoned.Add(1, new KeyValuePair<string, object?>("class", GetType().Name));
 
             await m_room.BroadcastXtRes(new TurnBasedGameNotification
             {

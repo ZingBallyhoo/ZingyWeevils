@@ -115,7 +115,7 @@ namespace BinWeevils.GameServer
                         {
                             throw new InvalidDataException("invalid pet name hash");
                         }
-                        if (!weevilData.m_myPetNames.Contains(command.m_petName!))
+                        if (!weevilData.m_myPetNames.Contains(command.m_petName))
                         {
                             throw new InvalidDataException("sending pet command for someone else's pet");
                         }
@@ -128,6 +128,8 @@ namespace BinWeevils.GameServer
                             m_petName = command.m_petName!,
                             m_commandID = command.m_commandID
                         });
+                        
+                        GameServerObservability.s_petCommandsSent.Add(1);
                     });
                     break;
                 }

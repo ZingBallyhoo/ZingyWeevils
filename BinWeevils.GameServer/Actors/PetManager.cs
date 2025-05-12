@@ -129,6 +129,7 @@ namespace BinWeevils.GameServer.Actors
                     var petInNest = await ValidateBroadcastSwitch(expression.m_shared.m_petID, expression.m_broadcastSwitch);
                     
                     context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_EXPRESSION, expression.m_shared, petInNest));
+                    GameServerObservability.s_petExpressionsSent.Add(1);
                     break;
                 }
                 case ClientPetAction action:
@@ -165,6 +166,7 @@ namespace BinWeevils.GameServer.Actors
                         m_extraParams = action.m_extraParams
                     };
                     context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_ACTION, serverAction, petInNest));
+                    GameServerObservability.s_petActionsSent.Add(1);
                     break;
                 }
                 case ClientPetGoHome petGoHome:

@@ -30,6 +30,7 @@ namespace BinWeevils.GameServer.Actors
             if (m_notifiedDriveOff) return;
             
             m_logger.LogInformation("Kart/{PID}: notifying drive off", context.Self);
+            GameServerObservability.s_kartGamesStarted.Add(1, new KeyValuePair<string, object?>("players", m_slots.Length));
             
             m_notifiedDriveOff = true;
             await m_locRoom.BroadcastXtRes(new KartDriveOffNotification

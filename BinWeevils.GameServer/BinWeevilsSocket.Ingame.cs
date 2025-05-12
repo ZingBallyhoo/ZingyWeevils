@@ -49,6 +49,8 @@ namespace BinWeevils.GameServer
                             m_z = weevil.m_z,
                             m_dir = weevil.m_r
                         }, checked((int)room.m_id));
+                        
+                        GameServerObservability.s_movesSent.Add(1);
                     });
                     break;
                 }
@@ -162,6 +164,8 @@ namespace BinWeevils.GameServer
                         var roomData = room.GetDataAs<IWeevilRoomEventHandler>();
                         if (roomData == null) return;
                         await roomData.ClientSentRoomEvent(user, clientEvent);
+                        
+                        GameServerObservability.s_roomEventsSent.Add(1);
                     });
                     break;
                 }
@@ -308,6 +312,8 @@ namespace BinWeevils.GameServer
                 throw new InvalidDataException($"trying to join a room that doesn't exist: {roomName}");
             }
             await user.MoveTo(newRoom);
+            
+            GameServerObservability.s_roomsJoined.Add(1, new KeyValuePair<string, object?>("name", roomName));
             return newRoom;
         }
         
@@ -377,6 +383,8 @@ namespace BinWeevils.GameServer
                 m_actionID = action.m_actionID,
                 m_extraParams = action.m_extraParams
             });
+            
+            GameServerObservability.s_actionsSent.Add(1, new KeyValuePair<string, object?>("id", (EWeevilAction)action.m_actionID));
         }
 
         private void HandleInGameCommand_Action_UpdateVars(ClientAction action, WeevilData weevil)

@@ -62,6 +62,8 @@ namespace BinWeevils.GameServer
                     throw new InvalidDataException("chat message contains invalid characters");
                 }
                 
+                GameServerObservability.s_chatMessagesSent.Add(1);
+                
                 await room.BroadcastSys(new ServerPubMsgBody
                 {
                     m_action = "pubMsg",

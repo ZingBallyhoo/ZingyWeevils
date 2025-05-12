@@ -1,3 +1,4 @@
+using ArcticFox.PolyType.FormEncoded;
 using BinWeevils.GameServer.PolyType;
 using BinWeevils.GameServer.TurnBased;
 using BinWeevils.Protocol;
@@ -34,15 +35,10 @@ namespace BinWeevils.GameServer
             
             // todo: just search..?
 
-            foreach (var varRange in request.Split(','))
+            foreach (var varRange in new FormEnumerator(request, ',', ':'))
             {
-                var varSpan = request[varRange];
-                if (varSpan.Length == 0) continue; // trailing comma
-                
-                var indexOfColon = varSpan.IndexOf(':');
-                
-                var nameSpan = varSpan.Slice(0, indexOfColon);
-                var valueSpan = varSpan.Slice(indexOfColon+1);
+                var nameSpan = request[varRange.m_name];
+                var valueSpan = request[varRange.m_value];
                 
                 if (nameSpan is "gameTypeID")
                 {

@@ -58,6 +58,7 @@ namespace BinWeevils.GameServer.Rooms
             }
             
             await SetChef(data, userName);
+            GameServerObservability.s_dinerChefsStarted.Add(1);
             return true;
         }
         
@@ -88,6 +89,7 @@ namespace BinWeevils.GameServer.Rooms
             }
             
             await TransferTray(data, id, userName);
+            GameServerObservability.s_dinerTraysGrabbed.Add(1);
         }
         
         public async ValueTask TryDropTray(int id, string userName)
@@ -120,6 +122,7 @@ namespace BinWeevils.GameServer.Rooms
             
             plateVar.SetValue(setFood.m_foodId);
             await m_room.BroadcastRoomEvent((int)DinerEventID.SET_FOOD, setFood);
+            GameServerObservability.s_dinerTraysGrabbed.Add(1);
         }
         
         private async ValueTask TryEatFood(DinerEventEatFood eatFood)
@@ -136,6 +139,7 @@ namespace BinWeevils.GameServer.Rooms
             
             plateVar.SetValue(0);
             await m_room.BroadcastRoomEvent((int)DinerEventID.EAT, eatFood);
+            GameServerObservability.s_dinerFoodEaten.Add(1);
         }
         
         private async ValueTask SetChef(DinerRoomData data, string? weevilName)
