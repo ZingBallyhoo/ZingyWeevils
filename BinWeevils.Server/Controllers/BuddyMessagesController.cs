@@ -77,6 +77,8 @@ namespace BinWeevils.Server.Controllers
                 m_read = false
             });
             await m_dbContext.SaveChangesAsync();
+            
+            ApiServerObservability.s_buddyMessagesSent.Add(1);
         }
         
         [HttpGet("php/hasUnreadBuddyMsg.php")]
@@ -155,6 +157,8 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new Exception("failed to mark read");
             }
+            
+            ApiServerObservability.s_buddyMessagesRead.Add(1);
         }
         
         [StructuredFormPost("buddy-messages/delete")]
@@ -173,6 +177,8 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new Exception("failed to delete");
             }
+            
+            ApiServerObservability.s_buddyMessagesDeleted.Add(1);
         }
         
         [StructuredFormPost("buddy-messages/delete-no-from-buddy")]
@@ -182,10 +188,11 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.DeleteNonBuddyMessages");
             activity?.SetTag("ids", request.m_ids);
             
-            await m_dbContext.m_buddyMesssages
+            var rowsDeleted = await m_dbContext.m_buddyMesssages
                 .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => request.m_ids.Contains(x.m_id))
                 .ExecuteDeleteAsync();
+            ApiServerObservability.s_buddyMessagesDeletedSys.Add(rowsDeleted);
             
             return await GetBuddyMessages();
         }
