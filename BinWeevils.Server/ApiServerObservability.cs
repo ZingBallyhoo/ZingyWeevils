@@ -43,6 +43,17 @@ namespace BinWeevils.Server
         public static readonly Counter<int> s_gamesPlayedGivingRewards = s_meter.CreateCounter<int>("bw_games_played_giving_rewards");
         public static readonly Counter<int> s_gamesPlayedTotal = s_meter.CreateCounter<int>("bw_games_played_total");
         
+        public static readonly Counter<int> s_tasksCompleted = s_meter.CreateCounter<int>("bw_tasks_completed");
+        public static readonly Counter<int> s_tasksRewarded = s_meter.CreateCounter<int>("bw_tasks_rewarded");
+        public static readonly Counter<double> s_tasksMulchRewarded = s_meter.CreateCounter<double>("bw_tasks_mulch_rewarded");
+        public static readonly Counter<double> s_tasksXpRewarded = s_meter.CreateCounter<double>("bw_tasks_xp_rewarded");
+        public static readonly Counter<int> s_tasksNestItemsRewarded = s_meter.CreateCounter<int>("bw_tasks_nest_items_rewarded");
+        public static readonly Counter<int> s_tasksGardenItemsRewarded = s_meter.CreateCounter<int>("bw_tasks_garden_items_rewarded");
+        public static readonly Counter<int> s_tasksSeedsRewarded = s_meter.CreateCounter<int>("bw_tasks_seeds_rewarded");
+        public static readonly Counter<int> s_tasksSpecialMovesRewarded = s_meter.CreateCounter<int>("bw_tasks_special_moves_rewarded");
+        public static readonly Counter<int> s_questsCompleted = s_meter.CreateCounter<int>("bw_quests_completed");
+        public static readonly Counter<int> s_questsRestarted = s_meter.CreateCounter<int>("bw_quests_restarted");
+        
         public static Activity? StartActivity(string name)
         {
             return s_source.StartActivity(name);

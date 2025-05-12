@@ -121,6 +121,8 @@ namespace BinWeevils.Server.Controllers
                     return overrideResponse;
                 }
                 
+                ApiServerObservability.s_tasksCompleted.Add(1);
+                
                 // we can't reward anything so don't try :)
                 await AddCommonCompletedData(weevilIdx, response);
                 return response;
@@ -128,6 +130,8 @@ namespace BinWeevils.Server.Controllers
 
             await TryReward(weevilIdx, task, response);
             await AddCommonCompletedData(weevilIdx, response);
+            
+            ApiServerObservability.s_tasksCompleted.Add(1);
             
             await transaction.CommitAsync();
             return response;
@@ -160,6 +164,14 @@ namespace BinWeevils.Server.Controllers
             await RewardSpecialMoves(weevilIdx, task, response);
             
             await m_dbContext.SaveChangesAsync();
+            
+            ApiServerObservability.s_tasksRewarded.Add(1);
+            ApiServerObservability.s_tasksMulchRewarded.Add(task.m_scrapedData.m_rewardMulch);
+            ApiServerObservability.s_tasksXpRewarded.Add(task.m_scrapedData.m_rewardXp);
+            if (task.m_isMissionComplete)
+            {
+                ApiServerObservability.s_questsCompleted.Add(1, new KeyValuePair<string, object?>("quest", task.m_scrapedData.m_questID));
+            }
         }
         
         private async Task RewardItems(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
@@ -201,6 +213,8 @@ namespace BinWeevils.Server.Controllers
                         });
                         response.m_itemName.Add(itemType.m_name);
                     }
+                    
+                    ApiServerObservability.s_tasksNestItemsRewarded.Add(rewardItem.m_count);
                 }
             }
             
@@ -228,6 +242,8 @@ namespace BinWeevils.Server.Controllers
                         });
                         response.m_gardenItemName.Add(itemType.m_name);
                     }
+                    
+                    ApiServerObservability.s_tasksNestItemsRewarded.Add(rewardGardenItem.m_count);
                 }
             }
             
@@ -254,6 +270,8 @@ namespace BinWeevils.Server.Controllers
                             m_seedTypeID = seedType.m_id
                         });
                     }
+                    
+                    ApiServerObservability.s_tasksSeedsRewarded.Add(rewardGardenSeed.Value);
                 }
             }
         }
@@ -275,7 +293,9 @@ namespace BinWeevils.Server.Controllers
                     .NoUpdate()
                     .RunAsync();
                 response.m_move.Add((int)rewardMove); // todo: does the game even support a list.. and what delimiter
-            }   
+            }
+            
+            ApiServerObservability.s_tasksSpecialMovesRewarded.Add(task.m_scrapedData.m_rewardMoves.Count);
         }
         
         private async Task AddCommonCompletedData(uint weevilIdx, TaskCompletedResponse resp)
@@ -314,6 +334,10 @@ namespace BinWeevils.Server.Controllers
                     m_logger.LogTrace("Restarted child task {TaskID}", deletedTask);
                     response.m_deletedTasks.Add(deletedTask);
                 }
+            }
+            if (response.m_deletedTasks.Count > 0 && task.m_scrapedData.m_questID != null)
+            {
+                ApiServerObservability.s_questsRestarted.Add(1, new KeyValuePair<string, object?>("quest", task.m_scrapedData.m_questID));
             }
             return null;
         }
