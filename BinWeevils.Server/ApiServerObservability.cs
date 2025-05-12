@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using BinWeevils.Protocol.Sql;
 
 namespace BinWeevils.Server
 {
@@ -30,12 +31,40 @@ namespace BinWeevils.Server
         public static readonly Counter<int> s_nestItemsRemoved = s_meter.CreateCounter<int>("bw_nest_items_removed");
         public static readonly Counter<int> s_levelUpsProcessed = s_meter.CreateCounter<int>("bw_level_ups_processed");
         
+        public static readonly Counter<int> s_gardenItemsPlaced = s_meter.CreateCounter<int>("bw_garden_items_placed");
+        public static readonly Counter<int> s_gardenItemsMoved = s_meter.CreateCounter<int>("bw_garden_items_moved");
+        public static readonly Counter<int> s_gardenItemsRemoved = s_meter.CreateCounter<int>("bw_garden_items_removed");
+        public static readonly Counter<int> s_gardenPlantsPlaced = s_meter.CreateCounter<int>("bw_garden_plants_placed");
+        public static readonly Counter<int> s_gardenPlantsMoved = s_meter.CreateCounter<int>("bw_garden_plants_moved");
+        public static readonly Counter<int> s_gardenPlantsWatered = s_meter.CreateCounter<int>("bw_garden_plants_watered");
+        public static readonly Counter<int> s_gardenPlantsRemoved = s_meter.CreateCounter<int>("bw_garden_plants_removed");
+        
         public static readonly Counter<int> s_gamesPlayedGivingRewards = s_meter.CreateCounter<int>("bw_games_played_giving_rewards");
         public static readonly Counter<int> s_gamesPlayedTotal = s_meter.CreateCounter<int>("bw_games_played_total");
         
         public static Activity? StartActivity(string name)
         {
             return s_source.StartActivity(name);
+        }
+        
+        private static KeyValuePair<string, object?> GetSeedCategoryTag(SeedCategory category)
+        {
+            return new KeyValuePair<string,object?>("category", category);
+        }
+        
+        public static void AddPlantPlaced(SeedCategory category)
+        {
+            s_gardenPlantsPlaced.Add(1, GetSeedCategoryTag(category));
+        }
+        
+        public static void AddPlantHarvest(SeedCategory category)
+        {
+            s_gardenPlantsWatered.Add(1, GetSeedCategoryTag(category));
+        }
+        
+        public static void AddPlantRemoved(SeedCategory category)
+        {
+            s_gardenPlantsRemoved.Add(1, GetSeedCategoryTag(category));
         }
     }
 }

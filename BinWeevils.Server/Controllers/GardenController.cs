@@ -185,8 +185,9 @@ namespace BinWeevils.Server.Controllers
             
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_gardenItemsPlaced.Add(1);
         }
         
         [StructuredFormPost("move-item")]
@@ -232,8 +233,9 @@ namespace BinWeevils.Server.Controllers
             dto.m_placedItem.m_z = request.m_z;
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_gardenItemsMoved.Add(1);
         }
         
         [StructuredFormPost("remove-item")]
@@ -257,8 +259,9 @@ namespace BinWeevils.Server.Controllers
             
             nest.m_itemsLastUpdated = DateTime.UtcNow;
             await m_dbContext.SaveChangesAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_gardenItemsRemoved.Add(1);
         }
         
         [StructuredFormPost("add-plant")]
@@ -279,6 +282,7 @@ namespace BinWeevils.Server.Controllers
                 .Where(seed => seed.m_placedItem == null)
                 .Select(x => new 
                 {
+                    x.m_seedType.m_category,
                     x.m_seedType.m_radius,
                     x.m_nest,
                 })
@@ -304,6 +308,8 @@ namespace BinWeevils.Server.Controllers
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow; // concurrency check
             await m_dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
+            
+            ApiServerObservability.AddPlantPlaced(dto.m_category);
             
             // client checks that xp field is valid so don't even need to set...
             return new AddPlantResponse();
@@ -356,6 +362,8 @@ namespace BinWeevils.Server.Controllers
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow; // concurrency check
             await m_dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_gardenPlantsMoved.Add(1);
         }
         
         [StructuredFormPost("water-plant")]
@@ -412,6 +420,8 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new InvalidDataException("plant to water doesn't exist (race)");
             }
+            
+            ApiServerObservability.s_gardenPlantsWatered.Add(1);
         }
         
         [StructuredFormPost("harvest-plant")]
@@ -507,8 +517,9 @@ namespace BinWeevils.Server.Controllers
                     x.m_xp
                 })
                 .SingleAsync();
-            
             await transaction.CommitAsync();
+            
+            ApiServerObservability.AddPlantHarvest(dto.m_plant.m_category);
             
             return new HarvestPlantResponse 
             {
@@ -522,20 +533,31 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task RemovePlant([FromBody] HarvestPlantRequest request)
         {
-            var validCheck = await m_dbContext.m_weevilDBs
+            var dto = await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .SelectMany(weev => weev.m_nest.m_gardenSeeds)
                 .Where(x => x.m_id == request.m_plantID)
                 .Where(x => x.m_placedItem != null)
-                .AnyAsync();
-            if (!validCheck)
+                .Select(x => new
+                {
+                    x.m_seedType.m_category
+                })
+                .SingleOrDefaultAsync();
+            if (dto == null)
             {
                 throw new Exception("invalid remove plant request");
             }
             
-            await m_dbContext.m_nestGardenSeeds
+            var rowsDeleted = await m_dbContext.m_nestGardenSeeds
                 .Where(x => x.m_id == request.m_plantID)
                 .ExecuteDeleteAsync();
+            
+            if (rowsDeleted == 0)
+            {
+                throw new InvalidDataException("plant not actually removed (race)");
+            }
+            
+            ApiServerObservability.AddPlantRemoved(dto.m_category);
         }
         
         private struct PlantStateData
