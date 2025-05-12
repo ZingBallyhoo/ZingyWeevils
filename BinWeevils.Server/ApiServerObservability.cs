@@ -43,6 +43,9 @@ namespace BinWeevils.Server
         
         public static readonly Counter<int> s_gamesPlayedGivingRewards = s_meter.CreateCounter<int>("bw_games_played_giving_rewards");
         public static readonly Counter<int> s_gamesPlayedTotal = s_meter.CreateCounter<int>("bw_games_played_total");
+        public static readonly Counter<int> s_gamesScoreTotal = s_meter.CreateCounter<int>("bw_games_score_total");
+        public static readonly Counter<int> s_gamesMulchRewarded = s_meter.CreateCounter<int>("bw_games_mulch_rewarded");
+        public static readonly Counter<int> s_gamesXpRewarded = s_meter.CreateCounter<int>("bw_games_xp_rewarded");
         
         public static readonly Counter<int> s_tasksCompleted = s_meter.CreateCounter<int>("bw_tasks_completed");
         public static readonly Counter<int> s_tasksRewarded = s_meter.CreateCounter<int>("bw_tasks_rewarded");
