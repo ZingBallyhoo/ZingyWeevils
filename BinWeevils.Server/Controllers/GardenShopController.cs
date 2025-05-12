@@ -85,6 +85,7 @@ namespace BinWeevils.Server.Controllers
                 .Where(x => x.m_price > 0)
                 .Select(x => new
                 {
+                    x.m_configLocation,
                     x.m_paletteID,
                     m_price = m_economySettings.Value.GetItemCost(x.m_price, x.m_currency),
                     m_expPoints = m_economySettings.Value.GetItemXp(x.m_expPoints),
@@ -129,6 +130,7 @@ namespace BinWeevils.Server.Controllers
                 m_color = itemColor,
             });
             await m_dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
             
             var resp = new BuyGardenItemResponse
             {
@@ -137,7 +139,7 @@ namespace BinWeevils.Server.Controllers
                 m_error = 1
             };
             
-            await transaction.CommitAsync();
+            ApiServerObservability.s_gardenItemsBought.Add(1, new KeyValuePair<string, object?>("name", item.m_configLocation));
             return resp;
         }
         
@@ -219,6 +221,7 @@ namespace BinWeevils.Server.Controllers
                 });
             }
             await m_dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
             
             var resp = new BuyGardenItemResponse
             {
@@ -227,7 +230,7 @@ namespace BinWeevils.Server.Controllers
                 m_error = 1
             };
             
-            await transaction.CommitAsync();
+            ApiServerObservability.s_seedsBought.Add((int)request.m_quantity, new KeyValuePair<string, object?>("name", seed.m_fileName));
             return resp;
         }
         

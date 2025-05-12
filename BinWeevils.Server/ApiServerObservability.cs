@@ -10,6 +10,9 @@ namespace BinWeevils.Server
         
         public static readonly Counter<int> s_connectionAttempts = s_meter.CreateCounter<int>("bw_connection_attempts");
         public static readonly UpDownCounter<int> s_activeConnections = s_meter.CreateUpDownCounter<int>("bw_active_connections");
+        public static readonly Counter<int> s_nestItemsBought = s_meter.CreateCounter<int>("bw_nest_items_bought");
+        public static readonly Counter<int> s_gardenItemsBought = s_meter.CreateCounter<int>("bw_garden_items_bought");
+        public static readonly Counter<int> s_seedsBought = s_meter.CreateCounter<int>("bw_seeds_bought");
         public static readonly Counter<int> s_haggleItemsSold = s_meter.CreateCounter<int>("bw_haggle_items_sold");
         public static readonly Counter<double> s_haggleTotalPayout = s_meter.CreateCounter<double>("bw_haggle_total_payout");
         
