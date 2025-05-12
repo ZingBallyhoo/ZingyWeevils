@@ -30,7 +30,7 @@ namespace BinWeevils.Server.Controllers
                 m_medalInfo = new SubmitLapTimesResponse.MedalInfo
                 {
                     m_hasWonMedal = true,
-                    m_medalType = "gold",
+                    m_medalType = "(fake this is not implemented yet)",
                     m_color = 0xFFFFB0
                 }
             };

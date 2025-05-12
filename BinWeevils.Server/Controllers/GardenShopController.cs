@@ -251,7 +251,7 @@ namespace BinWeevils.Server.Controllers
                  .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                  .Select(x => new
                  {
-                     m_idx = x.m_idx,
+                     x.m_idx,
                      m_nestID = x.m_nest.m_id,
                      x.m_nest.m_gardenSize,
                  })
@@ -313,6 +313,8 @@ namespace BinWeevils.Server.Controllers
              
              await m_dbContext.SetNestUpdatedNoConcurrency(dto.m_nestID);
              await transaction.CommitAsync();
+             
+             ApiServerObservability.s_gardenUpgradesBought.Add(1, new KeyValuePair<string, object?>("size", request.m_size));
              
              return new BuyGardenItemResponse 
              {
