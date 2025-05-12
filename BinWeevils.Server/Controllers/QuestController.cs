@@ -172,6 +172,9 @@ namespace BinWeevils.Server.Controllers
             {
                 ApiServerObservability.s_questsCompleted.Add(1, new KeyValuePair<string, object?>("quest", task.m_scrapedData.m_questID));
             }
+            ApiServerObservability.s_tasksNestItemsRewarded.Add(response.m_itemName.Count);
+            ApiServerObservability.s_tasksGardenItemsRewarded.Add(response.m_gardenItemName.Count);
+            ApiServerObservability.s_tasksSpecialMovesRewarded.Add(response.m_move.Count);
         }
         
         private async Task RewardItems(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
@@ -213,8 +216,6 @@ namespace BinWeevils.Server.Controllers
                         });
                         response.m_itemName.Add(itemType.m_name);
                     }
-                    
-                    ApiServerObservability.s_tasksNestItemsRewarded.Add(rewardItem.m_count);
                 }
             }
             
@@ -242,8 +243,6 @@ namespace BinWeevils.Server.Controllers
                         });
                         response.m_gardenItemName.Add(itemType.m_name);
                     }
-                    
-                    ApiServerObservability.s_tasksNestItemsRewarded.Add(rewardGardenItem.m_count);
                 }
             }
             
@@ -271,6 +270,7 @@ namespace BinWeevils.Server.Controllers
                         });
                     }
                     
+                    // has to be done here as we don't store in response...
                     ApiServerObservability.s_tasksSeedsRewarded.Add(rewardGardenSeed.Value);
                 }
             }
@@ -294,8 +294,6 @@ namespace BinWeevils.Server.Controllers
                     .RunAsync();
                 response.m_move.Add((int)rewardMove); // todo: does the game even support a list.. and what delimiter
             }
-            
-            ApiServerObservability.s_tasksSpecialMovesRewarded.Add(task.m_scrapedData.m_rewardMoves.Count);
         }
         
         private async Task AddCommonCompletedData(uint weevilIdx, TaskCompletedResponse resp)
