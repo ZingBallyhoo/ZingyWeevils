@@ -93,10 +93,10 @@ namespace BinWeevils.Server.Controllers
                 );
             await transaction.CommitAsync();
             
-            ApiServerObservability.s_gamesScoreTotal.Add((int)request.m_score, tag);
+            ApiServerObservability.s_gamesScoreTotal.Add(request.m_score, tag);
             ApiServerObservability.s_gamesPlayedGivingRewards.Add(1, tag);
-            ApiServerObservability.s_gamesMulchRewarded.Add((int)rewardMulch, tag);
-            ApiServerObservability.s_gamesXpRewarded.Add((int)rewardXp, tag);
+            ApiServerObservability.s_gamesMulchRewarded.Add(rewardMulch, tag);
+            ApiServerObservability.s_gamesXpRewarded.Add(rewardXp, tag);
             
             return new SubmitScoreResponse
             {

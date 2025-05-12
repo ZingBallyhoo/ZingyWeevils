@@ -38,14 +38,17 @@ namespace BinWeevils.Server
         public static readonly Counter<int> s_gardenPlantsPlaced = s_meter.CreateCounter<int>("bw_garden_plants_placed");
         public static readonly Counter<int> s_gardenPlantsMoved = s_meter.CreateCounter<int>("bw_garden_plants_moved");
         public static readonly Counter<int> s_gardenPlantsWatered = s_meter.CreateCounter<int>("bw_garden_plants_watered");
+        public static readonly Counter<int> s_gardenPlantsHarvested = s_meter.CreateCounter<int>("bw_garden_plants_harvested");
+        public static readonly Counter<double> s_gardenPlantsMulchRewarded = s_meter.CreateCounter<double>("bw_garden_plants_mulch_rewarded");
+        public static readonly Counter<double> s_gardenPlantsXpRewarded = s_meter.CreateCounter<double>("bw_garden_plants_xp_rewarded");
         public static readonly Counter<int> s_gardenPlantsRemoved = s_meter.CreateCounter<int>("bw_garden_plants_removed");
         public static readonly Counter<int> s_gardenUpgradesBought = s_meter.CreateCounter<int>("bw_garden_upgrades_bought");
         
         public static readonly Counter<int> s_gamesPlayedGivingRewards = s_meter.CreateCounter<int>("bw_games_played_giving_rewards");
         public static readonly Counter<int> s_gamesPlayedTotal = s_meter.CreateCounter<int>("bw_games_played_total");
-        public static readonly Counter<int> s_gamesScoreTotal = s_meter.CreateCounter<int>("bw_games_score_total");
-        public static readonly Counter<int> s_gamesMulchRewarded = s_meter.CreateCounter<int>("bw_games_mulch_rewarded");
-        public static readonly Counter<int> s_gamesXpRewarded = s_meter.CreateCounter<int>("bw_games_xp_rewarded");
+        public static readonly Counter<double> s_gamesScoreTotal = s_meter.CreateCounter<double>("bw_games_score_total");
+        public static readonly Counter<double> s_gamesMulchRewarded = s_meter.CreateCounter<double>("bw_games_mulch_rewarded");
+        public static readonly Counter<double> s_gamesXpRewarded = s_meter.CreateCounter<double>("bw_games_xp_rewarded");
         
         public static readonly Counter<int> s_tasksCompleted = s_meter.CreateCounter<int>("bw_tasks_completed");
         public static readonly Counter<int> s_tasksRewarded = s_meter.CreateCounter<int>("bw_tasks_rewarded");
@@ -63,7 +66,7 @@ namespace BinWeevils.Server
             return s_source.StartActivity(name);
         }
         
-        private static KeyValuePair<string, object?> GetSeedCategoryTag(SeedCategory category)
+        public static KeyValuePair<string, object?> GetSeedCategoryTag(SeedCategory category)
         {
             return new KeyValuePair<string,object?>("category", category);
         }
@@ -71,11 +74,6 @@ namespace BinWeevils.Server
         public static void AddPlantPlaced(SeedCategory category)
         {
             s_gardenPlantsPlaced.Add(1, GetSeedCategoryTag(category));
-        }
-        
-        public static void AddPlantHarvest(SeedCategory category)
-        {
-            s_gardenPlantsWatered.Add(1, GetSeedCategoryTag(category));
         }
         
         public static void AddPlantRemoved(SeedCategory category)

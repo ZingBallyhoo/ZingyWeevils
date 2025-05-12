@@ -519,7 +519,10 @@ namespace BinWeevils.Server.Controllers
                 .SingleAsync();
             await transaction.CommitAsync();
             
-            ApiServerObservability.AddPlantHarvest(dto.m_plant.m_category);
+            var tag = ApiServerObservability.GetSeedCategoryTag(dto.m_plant.m_category);
+            ApiServerObservability.s_gardenPlantsHarvested.Add(1, tag);
+            ApiServerObservability.s_gardenPlantsMulchRewarded.Add(dto.m_plant.m_mulchYield, tag);
+            ApiServerObservability.s_gardenPlantsXpRewarded.Add(dto.m_plant.m_xpYield, tag);
             
             return new HarvestPlantResponse 
             {
