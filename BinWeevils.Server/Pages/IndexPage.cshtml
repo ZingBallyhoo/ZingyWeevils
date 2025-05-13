@@ -15,9 +15,9 @@
     <title>Bin Weevils by Zingy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.ico" asp-append-version="true">
-    <meta property="og:title" content="Weevil World" />
+    <meta property="og:title" content="Bin Weevils" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="@HttpContext.AddFileVersionToPath("images/logo.jpg")"  />
+    <meta property="og:image" content="@HttpContext.AddFileVersionToPath("images/logo.jpg")" />
     <meta property="og:description" content="Bin Weevils by Zingy" />
     <meta name="description" content="Bin Weevils by Zingy">
     <style>
@@ -27,7 +27,7 @@
         }
         body {
             margin-bottom: 70px !important; /* Margin bottom by footer height */
-            background-image: linear-gradient(rgb(0 0 0 / 80%), rgb(0 0 0 / 90%)), url('images/bg.jpg');
+            background-image: linear-gradient(rgb(0 0 0 / 80%), rgb(0 0 0 / 90%)), url(@HttpContext.AddFileVersionToPath("images/bg.jpg"));
             background-position: center top;
             background-size: cover;
         }
@@ -90,7 +90,8 @@
         </div>
     </div>
     <div class="row-auto text-center p-5" style="font-size: 1.25rem">
-        There is no account system, simply choose a username. All data is discarded after you log out.
+        There is no proper account system, simply choose a username.<br>
+        NOTE: Account data may not be kept forever.
     </div>
     <div class="row no-gutters justify-content-center p-5">
         <form class="col-auto" method="post" asp-antiforgery="false" autocomplete="off">
@@ -102,6 +103,14 @@
                 <button type="submit" class="btn btn-block btn-primary mb-2">Play</button>
             </div>
         </form>
+    </div>
+    <div class="row-auto text-center p-5" style="font-size: 1rem">
+        Current Quirks:<br>
+        Some sounds can be way too loud. (e.g gaining mulch)<br>
+        Weevil Wheels racing is super slow. <a href="https://github.com/ruffle-rs/ruffle/pull/20054">Pending Ruffle fix.</a><br>
+        Weevil Wheels multiplayer is not finished.<br>
+        Finishing a game of Spot the Difference will permanently break your client.<br>
+        Clicking a news stand will crash the game.<br>
     </div>
 </div>
 <div class="footer">
