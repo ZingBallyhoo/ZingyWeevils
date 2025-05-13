@@ -21,7 +21,7 @@ namespace BinWeevils.Server.Services
         
         public async Task Seed()
         {
-            /*if (m_settings.ResetOnStartup)
+            if (m_settings.ResetOnStartup)
             {
                 await m_dbContext.Database.EnsureDeletedAsync(); 
                 
@@ -33,10 +33,7 @@ namespace BinWeevils.Server.Services
             } else
             {
                 await m_dbContext.Database.MigrateAsync();
-            }*/
-            
-            await m_dbContext.Database.EnsureDeletedAsync(); 
-            await m_dbContext.Database.EnsureCreatedAsync();
+            }
             
             var itemSql = await File.ReadAllTextAsync(Path.Combine("Data", "itemType.sql"));
             await m_dbContext.Database.ExecuteSqlRawAsync(itemSql.Replace("INSERT INTO", "INSERT OR REPLACE INTO"));
