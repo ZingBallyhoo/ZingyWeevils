@@ -68,6 +68,10 @@ namespace BinWeevils.Server
         public static readonly Counter<int> s_petsFoodPacksBought = s_meter.CreateCounter<int>("bw_pet_food_packs_bought");
         public static readonly Counter<double> s_petFoodBought = s_meter.CreateCounter<double>("bw_pet_food_bought");
         
+        public static readonly Counter<double> s_foodBought = s_meter.CreateCounter<double>("bw_food_bought");
+        public static readonly Counter<double> s_foodItemsBought = s_meter.CreateCounter<double>("bw_food_items_bought");
+        public static readonly Counter<double> s_foodItemsCost = s_meter.CreateCounter<double>("bw_food_items_cost");
+        
         public static Activity? StartActivity(string name)
         {
             return s_source.StartActivity(name);

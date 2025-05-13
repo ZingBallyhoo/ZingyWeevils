@@ -53,7 +53,6 @@ namespace BinWeevils.Server.Controllers
                 };
             }
             
-            // todo: local time?
             return new WeevilDataResponse
             {
                 m_result = 1,
@@ -92,6 +91,11 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("cost", request.m_cost);
             activity?.SetTag("energyValue", request.m_energyValue);
             
+            if (request.m_cost > 25 || request.m_energyValue > 45) 
+            {
+                throw new InvalidDataException("food value out of range");
+            }
+            
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_mulch >= request.m_cost)
@@ -115,6 +119,10 @@ namespace BinWeevils.Server.Controllers
                     x.m_mulch
                 })
                 .SingleAsync();
+            
+            ApiServerObservability.s_foodItemsBought.Add(1);
+            ApiServerObservability.s_foodItemsCost.Add(request.m_cost);
+            ApiServerObservability.s_foodBought.Add(request.m_energyValue);
             
             return new BuyFoodResponse
             {
