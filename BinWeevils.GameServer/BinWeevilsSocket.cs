@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using ArcticFox.Codec;
@@ -365,7 +366,7 @@ namespace BinWeevils.GameServer
 
         public override void HandleException(Exception e)
         {
-            if (e is SocketException)
+            if (e is SocketException || e is WebSocketException)
             {
                 return;
             }
