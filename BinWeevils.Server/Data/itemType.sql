@@ -282,8 +282,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (363, 1, 'deskFan', 'nestco', -1, '-1', 'mulch', 250, 'mulch', 250, 0, 'Desk Fan', 'For when it gets hot in your nest!', 0, 8, 2, 0, 0, 1, 0, 1, 1, 1, 'available', 200, 0),
 (364, 1, 'electricBall', 'nestco', -1, '-1', 'dosh', 1, 'dosh', 1, 0, 'Plasma Ball', 'Streaming purple light!', 0, 15, 1, 0, 0, 17, 0, 1, 1, 1, 'available', 200, 0),
 (365, 1, 'fishPlaque', 'nestco', -1, '-1', 'mulch', 297, 'mulch', 595, 0, 'Fish On A Wall', 'Entertain your friends with this singing fish!', 0, 9, 1, 0, 0, 8, 0, 1, 1, 1, 'available', 300, 0),
-(366, 1, 'f_toilet_golden', 'nestco', -1, '-1', 'dosh', 20, 'dosh', 3, 0, 'Golden Toilet', 'Bling up your bathroom!', 0, 300, 1, 0, 0, 30, 0, 1, 1, 1, 'available', 400, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(366, 1, 'f_toilet_golden', 'nestco', -1, '-1', 'dosh', 20, 'dosh', 3, 0, 'Golden Toilet', 'Bling up your bathroom!', 0, 300, 1, 0, 0, 30, 0, 1, 1, 1, 'available', 400, 0),
 (367, 1, 'f_clock_grandfather', 'nestco', -1, '-1', 'mulch', 910, 'mulch', 910, 0, 'Grandfather Clock', 'With an added spooky suprise!', 0, 28, 1, 0, 0, 29, 0, 1, 1, 1, 'available', 300, 0),
 (369, 1, 'o_Rotating_Light_Ball', 'nestco', -1, '-1', 'mulch', 550, 'mulch', 550, 0, 'Rotating Light Ball', 'It''s bright, colourful and spins around!', 0, 17, 1, 0, 0, 6, 0, 1, 1, 1, 'available', 300, 0),
 (370, 1, 'helicopter', 'nestco', -1, '-1', 'dosh', 10, 'mulch', 695, 0, 'Helicopter', 'Any bigger and you could get inside it!', 0, 150, 1, 0, 0, 1, 0, 1, 1, 1, 'available', 300, 0),
@@ -564,8 +563,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (692, 1, 'o_levelTrophy7', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, '''7'' Silver level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
 (693, 1, 'o_levelTrophy8', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Strawberry Sundae level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
 (694, 1, 'o_levelTrophy9', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Blue Candy level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
-(695, 1, 'o_levelTrophy10', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, '''10'' Gold level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(695, 1, 'o_levelTrophy10', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, '''10'' Gold level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
 (696, 1, 'o_levelTrophy11', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Tiger level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
 (697, 1, 'o_levelTrophy12', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Eyeball level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
 (698, 1, 'o_levelTrophy13', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Orange Peel level trophy', 'Level-up trophy', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'trophy', 100, 0),
@@ -853,8 +851,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (994, 1, 'f_sofa_biscuit', 'nestco', -1, '-1', 'dosh', 20, 'dosh', 8, 0, 'Biscuit Sofa', 'It''s crunchy and sweet!', 0, 300, 1, 0, 0, 27, 0, 1, 1, 1, 'available', 900, 0),
 (995, 1, 'f_chair_icecream', 'nestco', -1, '-1', 'mulch', 850, 'mulch', 850, 0, 'Ice Cream Chair', 'A chair made of ice cream!', 0, 27, 1, 0, 0, 8, 0, 1, 1, 1, 'available', 300, 0),
 (996, 1, 'o_cupcakeGold', '', -1, '-1', 'dosh', 10, 'mulch', 0, 0, 'Golden Cupcake', 'You''re a superstar!', 0, 150, 1, 0, 0, 5, 0, 1, 1, 0, 'unavailable', 900, 0),
-(997, 4, 'ps_rigg_barrier', 'photoStudio', -1, '-1', 'mulch', 375, 'mulch', 375, 30, 'Construction Barrier', 'You can sit on it, too!', 0, 11, 1, 0, 0, 14, 1, 1, 1, 1, '', 0, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(997, 4, 'ps_rigg_barrier', 'photoStudio', -1, '-1', 'mulch', 375, 'mulch', 375, 30, 'Construction Barrier', 'You can sit on it, too!', 0, 11, 1, 0, 0, 14, 1, 1, 1, 1, '', 0, 0),
 (998, 4, 'ps_rigg_mixer', 'photoStudio', -1, '-1', 'mulch', 500, 'mulch', 500, 30, 'Rigg''s Cement Mixer', 'Hands off, Clott!', 0, 15, 1, 0, 0, 12, 1, 1, 1, 1, '', 0, 0),
 (999, 4, 'ps_rigg2', 'photoStudio', -1, '-1', 'mulch', 2000, 'mulch', 2000, 20, 'Rigg Cutout #2', 'Rigg with a wrench!', 0, 60, 1, 0, 0, 38, 1, 1, 1, 1, '', 0, 0),
 (1000, 4, 'ps_rigg1', 'photoStudio', -1, '-1', 'mulch', 1450, 'mulch', 1450, 20, 'Rigg Cutout #1', 'Rigg with a shovel!', 0, 44, 1, 0, 0, 25, 1, 1, 1, 1, '', 0, 0),
@@ -1138,8 +1135,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (1285, 1, 'f_celebrity_picFrameTink1_v2', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, '', '', 15, 0, 1, 0, 0, 0, 0, 1, 0, 0, 'unavailable', 100, 0),
 (1286, 1, 'f_celebrity_picFrameTink2_v3', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, '', '', 15, 0, 1, 0, 0, 0, 0, 1, 0, 0, 'unavailable', 100, 0),
 (1287, 1, 'f_celebrity_picFrameTink3_v2', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, '', '', 15, 0, 1, 0, 0, 0, 0, 1, 0, 0, 'unavailable', 100, 0),
-(1288, 1, 'f_pirates_mulch2', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Pirates AdCampaign', 'Free Campaign Item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'campaign', 100, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(1288, 1, 'f_pirates_mulch2', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Pirates AdCampaign', 'Free Campaign Item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'campaign', 100, 0),
 (1289, 1, 'f_pirates_poster', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Pirates adCampaign', 'Free Campaign Item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'campaign', 100, 0),
 (1290, 1, 'f_DM_doshStatue', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Golden Dosh Statue', 'BW Magazine Issue #2', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'unavailable', 100, 0),
 (1291, 1, 'wallpaper_DM_bling', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Dosh''s Bling Wallpaper', 'BW Magazine Issue #2', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'unavailable', 100, 0),
@@ -1414,8 +1410,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (1567, 1, 'f_panini_Table', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Panini Card Table', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1568, 1, 'f_panini_trophy_Card', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Panini Card Trophy', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1569, 1, 'ceiling_paniniThemedRoom', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Ceiling Panini Room', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
-(1570, 1, 'f_cannonPaniniConfetti', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Cannon Panini Confetti', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(1570, 1, 'f_cannonPaniniConfetti', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Cannon Panini Confetti', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1571, 1, 'f_posterPaniniSWS', 'nestco', -1, '-1', 'mulch', 1500, 'mulch', 0, 0, 'SWS Poster', 'Featuring our top SWS agents!', 0, 45, 1, 0, 0, 15, 1, 1, 1, 1, 'available', 300, 0),
 (1572, 1, 'f_panini_Chair', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Panini Chair', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1573, 1, 'f_panini_HouseOfCards', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'House of Cards', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
@@ -1686,8 +1681,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (1849, 1, 'o_XPpotion500', '', -1, '-1', 'dosh', 100, 'mulch', 0, 0, 'Flash XP Potion', 'Very limited stock! Get it while it lasts & level up!', 1, 7000, 1, 0, 0, 5, 1, 1, 1, 0, 'unavailable', 100, 0),
 (1850, 1, 'f_HotelTransylvania', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Hotel Transylvania Statue', 'Free Campaign Item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'campaign', 100, 0),
 (1851, 1, 'f_hotelTPoster', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Hotel Transylvania Poster', 'Free Campaign Item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'campaign', 100, 0),
-(1852, 1, 'o_Barfbot_bronze', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Bronze Barf Bot Figure', 'Character code item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(1852, 1, 'o_Barfbot_bronze', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Bronze Barf Bot Figure', 'Character code item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1853, 1, 'o_Barfbot_gold', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Gold Barf Bot Figure', 'Character code item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1854, 1, 'o_Barfbot_silver', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Silver Barf Bot Figure', 'Character code item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
 (1855, 1, 'o_Barfbot', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Barf Bot Figure', 'Character code item', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 100, 0),
@@ -1978,8 +1972,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (2144, 1, 'f_BinPetWW_HangingBauble2', 'nestco', -1, '-1', 'dosh', 2, 'mulch', 0, 0, 'Bin Pet Bauble', 'It''s an orange Bin Pet!', 15, 45, 1, 0, 0, 12, 1, 1, 1, 0, 'xmas', 250, 0),
 (2145, 1, 'f_BinPetWW_HangingBauble3', 'nestco', -1, '-1', 'dosh', 2, 'mulch', 0, 0, 'Bin Pet Bauble', 'It''s a blue Bin Pet!', 15, 45, 1, 0, 0, 17, 1, 1, 1, 0, 'xmas', 250, 0),
 (2146, 1, 'wallpaper_BinPetWW_BinPetCookie', 'nestco', -1, '-1', 'mulch', 1825, 'mulch', 3650, 0, 'Bin Pet Cookie Wallpaper', 'They look delicious!', 0, 57, 1, 0, 0, 15, 0, 1, 1, 1, 'available', 500, 0),
-(2147, 1, 'wallpaper_BinPetWW_BinPetSantaHat', 'nestco', -1, '-1', 'dosh', 6, 'mulch', 0, 0, 'Bin Pet Santa Wall', 'Colourful Bin Pets wearing Santa hats!', 0, 270, 1, 0, 0, 8, 1, 1, 1, 0, 'xmas', 1000, 1);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(2147, 1, 'wallpaper_BinPetWW_BinPetSantaHat', 'nestco', -1, '-1', 'dosh', 6, 'mulch', 0, 0, 'Bin Pet Santa Wall', 'Colourful Bin Pets wearing Santa hats!', 0, 270, 1, 0, 0, 8, 1, 1, 1, 0, 'xmas', 1000, 1),
 (2148, 1, 'rug_BinPetWW_Wonderland', '', -1, '-1', 'dosh', 6, 'mulch', 0, 0, 'Festive Bin Pet Rug', 'A Bin Pet dressed as Santa!', 30, 180, 1, 0, 0, 12, 1, 1, 1, 1, 'available', 600, 0),
 (2149, 1, 'f_FestiveFrame_Bing', '', -1, '-1', 'mulch', 400, 'mulch', 0, 0, 'Bing''s Picture!', 'It''s Bing with a Christmas pudding!', 30, 24, 1, 0, 0, 15, 0, 1, 1, 1, 'available', 200, 0),
 (2150, 1, 'f_FestiveFrame_ClottScribblesSnow', 'nestco', -1, '-1', 'mulch', 600, 'mulch', 1200, 0, 'Celebrity Snow Fight!', 'All your favourite Bin Weevils!', 0, 18, 1, 0, 0, 19, 0, 1, 1, 0, 'unavailable', 200, 0),
@@ -2263,8 +2256,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (2435, 1, 'f_explodingLabsLab', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'WeEvil Exploding Labs Lab', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 300, 0),
 (2436, 1, 'f_lamp_weEvil', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'WeEvil lamp', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 300, 0),
 (2437, 1, 'f_mirrorWeEvilreflection', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'WeEvil Mirror', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 300, 0),
-(2438, 1, 'f_slime', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'WeEvil Ceiling Slime', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 300, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(2438, 1, 'f_slime', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'WeEvil Ceiling Slime', 'Panini Card Prize', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'merch', 300, 0),
 (2439, 1, 'f_voodooNab', '', -1, '-1', 'mulch', 750, 'mulch', 0, 0, 'WeEvil Nab Doll', 'Spooky doll that sits on the floor.', 0, 23, 1, 0, 0, 2, 0, 1, 1, 0, 'halloween', 150, 0),
 (2440, 1, 'f_voodooOcteelia', '', -1, '-1', 'mulch', 750, 'mulch', 0, 0, 'WeEvil Octeelia Doll', 'Spooky doll that sits on the floor.', 0, 23, 1, 0, 0, 4, 0, 1, 1, 0, 'halloween', 150, 0),
 (2441, 1, 'f_voodooTab', '', -1, '-1', 'mulch', 750, 'mulch', 0, 0, 'WeEvil Tab Doll', 'Spooky doll that sits on the floor.', 0, 23, 1, 0, 0, 6, 0, 1, 1, 0, 'halloween', 150, 0),
@@ -2548,8 +2540,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (2735, 1, 'wallpaper_tycoonReward', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Disco Wallpaper', 'PRIZE: Disco Event', 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 'prize', 500, 0),
 (2736, 1, 'f_tycoonReward_speakers2', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Disco Speakers', 'PRIZE: Disco Event', 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 'prize', 500, 0),
 (2737, 1, 'f_tycoonReward_firesticks', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Disco Fireworks', 'PRIZE: Disco Event', 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 'prize', 500, 0),
-(2738, 1, 'f_issue23_binpetLamp', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Bin Pet Stack Lamp', 'BW Mag Issue #23', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 900, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(2738, 1, 'f_issue23_binpetLamp', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Bin Pet Stack Lamp', 'BW Mag Issue #23', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 900, 0),
 (2739, 1, 'f_issue23_garbageBinBot', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Garbage Bot Kitchen Bin', 'Tycoon Prize - BW Mag Issue #23', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 400, 0),
 (2740, 1, 'f_issue23_poster', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Issue #23 Poster', 'BW Mag Issue #23', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 200, 0),
 (2741, 5, 'Issue23_Snowman', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Garden Snowman', 'BW Mag Issue #23', 0, 0, 1, 40, 0, 0, 0, 1, 1, 0, '', 0, 0),
@@ -2829,8 +2820,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (3019, 1, 'o_carrot', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Christmas Carrot', 'Christmas Eve gift for Santa', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 300, 0),
 (3020, 1, 'o_cookies', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Christmas Cookies', 'Christmas Eve gift for Santa', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 300, 0),
 (3021, 1, 'o_milkGlass', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Christmas Milk', 'Christmas Eve gift for Santa', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 300, 0),
-(3022, 1, 'f_happyNewYear2015', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Happy New Year Wall Sticker', '2015 New Year Set', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 500, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(3022, 1, 'f_happyNewYear2015', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Happy New Year Wall Sticker', '2015 New Year Set', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'prize', 500, 0),
 (3023, 1, 'f_saferInternet_hologram', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Safer Internet Day Hologram', 'Safer Internet Day 2015', 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 'unavailable', 100, 0),
 (3024, 1, 'f_binPet_tropicalTreats', 'binPetShop', -1, '-1', 'dosh', 7, 'mulch', 0, 0, 'Tropical Treats', 'A totally tropical taste!', 0, 110, 1, 0, 0, 0, 0, 1, 1, 1, 'unavailable', 800, 0),
 (3025, 1, 'f_tropical_scratching_post', 'binPetShop', -1, '-1', 'dosh', 15, 'mulch', 0, 0, 'Tropical Scratching Post', 'Scratch away  in the shade!', 0, 250, 1, 0, 0, 0, 0, 1, 1, 1, 'unavailable', 1500, 0),
@@ -3081,8 +3071,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (3277, 1, 'f_xmas15_ginger_bread_man', 'nestco', -1, '-1', 'dosh', 3, 'mulch', 0, 0, 'Ginger Bread Man', 'A festive wall decoration.', 0, 45, 1, 0, 0, 4, 0, 1, 1, 0, 'xmas', 300, 0),
 (3278, 1, 'f_xmas15_large_window', 'nestco', -1, '-1', 'dosh', 100, 'mulch', 0, 0, 'Winter Window', 'A grand winter window.', 0, 1515, 1, 0, 0, 30, 0, 1, 1, 0, 'xmas', 10000, 0),
 (3279, 1, 'f_xmas15_loginCabinBinPetHut', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Log Cabin Bin Pet Hut', 'Advent 2015', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 'xmas', 100, 0),
-(3280, 1, 'f_xmas15_wreath_big_weevil', 'nestco', -1, '-1', 'mulch', 4000, 'mulch', 0, 0, 'Wreath', 'Inpired by Big Weevil!', 0, 121, 1, 0, 0, 16, 1, 1, 1, 0, 'xmas', 800, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(3280, 1, 'f_xmas15_wreath_big_weevil', 'nestco', -1, '-1', 'mulch', 4000, 'mulch', 0, 0, 'Wreath', 'Inpired by Big Weevil!', 0, 121, 1, 0, 0, 16, 1, 1, 1, 0, 'xmas', 800, 0),
 (3281, 1, 'f_xmas15_wreath_nest_inspector', 'nestco', -1, '-1', 'mulch', 4000, 'mulch', 0, 0, 'Wreath', 'Inspired by Nest Inspector!', 0, 121, 1, 0, 0, 20, 1, 1, 1, 0, 'xmas', 800, 0),
 (3282, 1, 'f_xmas15_fully_dressed_table', 'nestco', -1, '-1', 'mulch', 9000, 'mulch', 0, 0, 'Festive Table', 'Everything you see you get!', 0, 273, 1, 0, 0, 45, 0, 1, 1, 0, 'xmas', 1800, 0),
 (3283, 1, 'f_xmas15_snow_globe_bunty', 'nestco', -1, '-1', 'dosh', 6, 'mulch', 0, 0, 'Snow Globe', 'With Bunty inside!', 0, 91, 1, 0, 0, 12, 0, 1, 1, 0, 'xmas', 600, 0),
@@ -3337,8 +3326,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (3536, 1, 'f_underthesea_lamp_green', 'nestco', -1, '-1', 'mulch', 850, 'mulch', 0, 0, 'Jellyfish Lamp', 'An elegant lamp in the colour green!', 0, 26, 1, 0, 0, 10, 1, 1, 1, 1, 'available', 170, 0),
 (3537, 1, 'f_underthesea_lamp_purple', 'nestco', -1, '-1', 'mulch', 850, 'mulch', 0, 0, 'Jellyfish Lamp', 'An elegant lamp in the colour purple!', 0, 26, 1, 0, 0, 15, 0, 1, 1, 1, 'available', 170, 0),
 (3538, 1, 'f_underthesea_lamp_red', 'nestco', -1, '-1', 'mulch', 850, 'mulch', 0, 0, 'Jellyfish Lamp', 'An elegant lamp in the colour red!', 0, 26, 1, 0, 0, 20, 1, 1, 1, 1, 'available', 170, 0),
-(3539, 1, 'f_underthesea_lamp_yellow', 'nestco', -1, '-1', 'mulch', 850, 'mulch', 0, 0, 'Jellyfish Lamp', 'An elegant lamp in the colour yellow!', 0, 26, 1, 0, 0, 25, 0, 1, 1, 1, 'available', 170, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(3539, 1, 'f_underthesea_lamp_yellow', 'nestco', -1, '-1', 'mulch', 850, 'mulch', 0, 0, 'Jellyfish Lamp', 'An elegant lamp in the colour yellow!', 0, 26, 1, 0, 0, 25, 0, 1, 1, 1, 'available', 170, 0),
 (3540, 1, 'f_underthesea_roomdivider', 'nestco', -1, '-1', 'dosh', 100, 'mulch', 0, 0, 'Coral Reef Divider', 'Use this Coral Reef Divider to create more depth and colour in your nest!', 0, 1515, 1, 0, 0, 30, 0, 1, 1, 1, 'available', 10000, 0),
 (3541, 1, 'f_underthesea_sculpture', 'nestco', -1, '-1', 'dosh', 140, 'mulch', 0, 0, 'Coral Reef Tower', 'Add this Coral Reef Tower to add a splash of colour to your nest!', 0, 2121, 1, 0, 0, 5, 1, 1, 1, 1, 'available', 14000, 0),
 (3542, 1, 'f_underthesea_shelf', 'nestco', -1, '-1', 'dosh', 7, 'mulch', 0, 0, 'Coral Shelf', 'A sturdy and stylish shelf!', 0, 106, 1, 0, 0, 10, 0, 1, 1, 1, 'available', 700, 0),
@@ -3608,8 +3596,7 @@ INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, 
 (5117, 1, 'f_statue_transformersPH_optimusPrime', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Transformers Power Heroes Optimus Prime Statue', 'Transformers Power Heroes Optimus Prime Statue', 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, '', 100, 0),
 (5118, 1, 'f_statue_transformersPH_sideswipe', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Transformers Power Heroes Sideswipe Statue', 'Transformers Power Heroes Sideswipe Statue', 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, '', 100, 0),
 (5119, 1, 'wallpaper_doawkDoubleDown', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'DOAWK Double Down Wallpaper', 'DOAWK Double Down Wallpaper', 0, 0, 1, 0, NULL, 0, 0, 1, 0, 1, '', 100, 0),
-(5120, 1, 'wallpaper_jakeAtlas', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Jake Atlas Wallpaper', 'Jake Atlas Wallpaper', 0, 0, 1, 0, NULL, 0, 0, 1, 0, 1, '', 100, 0);
-INSERT INTO `itemType` (`itemTypeID`, `category`, `configLocation`, `shopType`, `paletteId`, `defaultHexcolour`, `currency`, `price`, `previousCurrency`, `previousPrice`, `probability`, `name`, `description`, `deliveryTime`, `expPoints`, `powerConsumption`, `boundRadius`, `collectionID`, `minLevel`, `tycoonOnly`, `canDelete`, `canGroup`, `isLive`, `internalCategory`, `coolness`, `ordering`) VALUES
+(5120, 1, 'wallpaper_jakeAtlas', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Jake Atlas Wallpaper', 'Jake Atlas Wallpaper', 0, 0, 1, 0, NULL, 0, 0, 1, 0, 1, '', 100, 0),
 (5121, 1, 'f_wallTorch_jakeAtlas', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'Jake Atlas Wall Torch', 'Jake Atlas Wall Torch', 0, 0, 1, 0, NULL, 0, 0, 1, 0, 1, '', 100, 0),
 (5122, 1, 'f_statue_LEGOFriends_1_Guitar', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'LEGO Friends 2017 P1 - Guitar Statue', 'LEGO Friends 2017 P1 - Guitar Statue', 0, 0, 1, 0, NULL, 0, 0, 1, 0, 1, '', 100, 0),
 (5123, 1, 'f_statue_LEGOFriends_2_Cupcake', '', -1, '-1', 'mulch', 0, 'mulch', 0, 0, 'LEGO Friends 2017 P1 - Cupcake Statue', 'LEGO Friends 2017 P1 - Cupcake Statue', 0, 0, 1, 0, NULL, 0, 0, 1, 0, 1, '', 100, 0),
