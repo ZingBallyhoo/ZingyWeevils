@@ -74,7 +74,7 @@ namespace WeevilWorld.Server
 
             var webSocketOptions = new WebSocketOptions
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(15)
+                KeepAliveTimeout = TimeSpan.FromSeconds(15)
             };
             if (env.IsProduction()) webSocketOptions.AllowedOrigins.Add($"https://{c_domain}");
             app.UseWebSockets(webSocketOptions);
