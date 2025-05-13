@@ -64,6 +64,7 @@ internal static class Program
         builder.Services.AddSingleton<ItemConfigRepository>();
         builder.Services.AddSingleton<QuestRepository>();
         builder.Services.AddSingleton<TrackRepository>();
+        builder.Services.AddOptions<DatabaseSettings>().BindConfiguration("Database");
         builder.Services.AddOptions<EconomySettings>();
         builder.Services.AddOptions<PetsSettings>().BindConfiguration("Pets").Validate(settings =>
         {
@@ -78,8 +79,11 @@ internal static class Program
             return true;
         }).ValidateOnStart();
         
+        var connectionString = builder.Configuration.GetRequiredSection("Database")["ConnectionString"];
         builder.Services.AddDbContext<WeevilDBContext>(options =>
-            options.UseSqlite("Filename=db.sqlite"));
+        {
+            options.UseSqlite(connectionString);
+        });
         builder.Services.AddScoped<DatabaseSeeding>();
         builder.Services.AddIdentity<WeevilAccount, IdentityRole>(options =>
             {
