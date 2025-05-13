@@ -359,5 +359,42 @@ namespace BinWeevils.Server.Controllers
             
             return rowsDeleted != 0;
         }
+        
+        // fp uses GET, ruffle uses POST
+        // todo: (the code intends to use POST but fp behaviour falls back to GET when no body)
+        // fixed by https://github.com/ruffle-rs/ruffle/pull/20242 but not in local build
+        [HttpPost("php/getMissionList.php")]
+        [HttpGet("php/getMissionList.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<MissionList> GetMissionList()
+        {
+            var missions = m_questRepository.GetQuests()
+                .Where(x => x.m_showInList)
+                .ToArray();
+            
+            var dto = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Select(x => new
+                {
+                    x.m_idx,
+                })
+                .SingleAsync();
+            
+            var isComplete = await missions
+                .ToAsyncEnumerable()
+                .SelectAwait(async x => await IsMissionComplete(dto.m_idx, x.m_id))
+                .ToArrayAsync();
+            
+            return new MissionList
+            {
+                m_responseCode = 1,
+                m_ids = string.Join('|', missions.Select(x => x.m_id)), 
+                m_names = string.Join('|', missions.Select(x => x.m_name)),
+                m_paths = string.Join('|', missions.Select(x => x.m_swfPath)),
+                m_levels = string.Join('|', missions.Select(x => 0)),
+                m_completed = string.Join('|', isComplete.Select(x => x ? 1 : 0)),
+                m_tycoon = string.Join('|', missions.Select(x => 0)),
+            };
+        }
     }
 }
