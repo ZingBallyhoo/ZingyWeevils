@@ -1,5 +1,12 @@
 @{
-    <script src="https://unpkg.com/@@ruffle-rs/ruffle" async></script>
+    if (false)
+    {
+        // run with local version for testing
+        <script src="ruffle/ruffle.js" asp-append-version="true" async></script>
+    } else
+    {
+        <script src="https://unpkg.com/@@ruffle-rs/ruffle" async></script>
+    }
     <script type="text/javascript">
     window.RufflePlayer = window.RufflePlayer || {};
     window.RufflePlayer.config = {
