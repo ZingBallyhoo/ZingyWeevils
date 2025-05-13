@@ -16,6 +16,6 @@ namespace BinWeevils.Common.Database
         public int m_signTextColor { get; set; } = 0;
         public PlayListIDs m_playList { get; set; } = new PlayListIDs();
         
-        [Required, ForeignKey(nameof(m_id))] public virtual NestRoomDB m_room { get; set; }
+        [ForeignKey(nameof(m_id))] public virtual NestRoomDB m_room { get; set; }
     }
 }

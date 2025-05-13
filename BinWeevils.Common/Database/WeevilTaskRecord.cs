@@ -7,10 +7,10 @@ namespace BinWeevils.Common.Database
     [PrimaryKey(nameof(m_weevilID), nameof(m_taskID))]
     public class WeevilTaskRecord
     {
-        [Required, Key] public uint m_weevilID { get; set; }
-        [Required, ForeignKey(nameof(m_weevilID))] public virtual WeevilDB m_weevil { get; set; }
-        
-        [Required, Key] public int m_taskID { get; set; }
+        [Key] public uint m_weevilID { get; set; }
+        [Key] public int m_taskID { get; set; }
+
+        [ForeignKey(nameof(m_weevilID))] public virtual WeevilDB m_weevil { get; set; }
     }
     
     public class CompletedTaskDB : WeevilTaskRecord

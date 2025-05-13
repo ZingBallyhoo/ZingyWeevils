@@ -98,6 +98,10 @@ namespace BinWeevils.Common.Database
                 b.ToTable("PetJugglingTrickDB");
             });
             
+            modelBuilder.Entity<NestDB>(b =>
+            {
+                b.ToTable("NestDB");
+            });
             modelBuilder.Entity<NestRoomDB>(b =>
             {
                 b.ToTable("NestRoomDB");

@@ -8,10 +8,10 @@ namespace BinWeevils.Common.Database
         // two users can both block, the block records have no relation to each-other
         [Key] public int m_id { get; set; }
         
-        [Required] public uint m_forWeevilIdx { get; set; }
-        [Required] public uint m_ignoredWeevilIdx { get; set; }
+        public uint m_forWeevilIdx { get; set; } 
+        public uint m_ignoredWeevilIdx { get; set; }
 
-        [Required, ForeignKey(nameof(m_forWeevilIdx))] public WeevilDB m_forWeevil { get; set; }
-        [Required, ForeignKey(nameof(m_ignoredWeevilIdx))] public WeevilDB m_ignoredWeevil { get; set; }
+        [ForeignKey(nameof(m_forWeevilIdx))] public WeevilDB m_forWeevil { get; set; }
+        [ForeignKey(nameof(m_ignoredWeevilIdx))] public WeevilDB m_ignoredWeevil { get; set; }
     }
 }
