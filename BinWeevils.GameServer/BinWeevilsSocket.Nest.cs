@@ -14,6 +14,27 @@ namespace BinWeevils.GameServer
         {
             switch (message.m_command)
             {
+                case Modules.NEST_SET_DOOR: // 5#1
+                {
+                    var setDoor = new ClientNestSetDoor();
+                    setDoor.FullyDeserialize(ref reader);
+                    
+                    m_taskQueue.Enqueue(async () =>
+                    {
+                        var us = GetUser();
+                        var room = await us.GetRoom();
+                        
+                        m_services.GetLogger().LogDebug("Nest - SetDoor: {DoorID}", setDoor.m_doorID);
+                        
+                        var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, us);
+                        await broadcaster.BroadcastXtStr(Modules.NEST_SET_DOOR, new ServerNestSetDoor
+                        {
+                            m_userID = us.m_id,
+                            m_doorID = setDoor.m_doorID
+                        });
+                    });
+                    break;
+                }
                 case Modules.NEST_JOIN_LOCATION: // 5#2
                 {
                     var joinLocRequest = new NestJoinLocRequest();
@@ -31,7 +52,7 @@ namespace BinWeevils.GameServer
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, us);
                         await broadcaster.BroadcastXtStr(Modules.NEST_JOIN_LOCATION, new NestJoinedLocNotification
                         {
-                            m_userID = checked((int)us.m_id),
+                            m_userID = us.m_id,
                             m_body = joinLocRequest
                         });
                     });

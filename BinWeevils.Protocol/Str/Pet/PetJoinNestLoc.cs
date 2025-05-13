@@ -12,7 +12,7 @@ namespace BinWeevils.Protocol.Str.Pet
     {
         [StrField] public uint m_petID;
         [StrField] public int m_locID;
-        [StrField] public uint m_doorID;
+        [StrField] public byte m_doorID;
         [StrField] public double m_x;
         [StrField] public double m_y;
         [StrField] public double m_z;

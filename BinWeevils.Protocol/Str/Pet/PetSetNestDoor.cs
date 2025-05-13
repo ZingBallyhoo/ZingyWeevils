@@ -11,6 +11,6 @@ namespace BinWeevils.Protocol.Str.Pet
     public partial record struct ServerPetSetNestDoor
     {
         [StrField] public uint m_petID;
-        [StrField] public int m_doorID;
+        [StrField] public byte m_doorID;
     }
 }
