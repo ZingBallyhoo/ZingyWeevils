@@ -330,8 +330,6 @@ namespace BinWeevils.GameServer.Actors
         
         private async Task UserPetDefChanged(PetDefVar? def)
         {
-            // todo: validate we are in our nest
-            
             if (!await UserInNest())
             {
                 if (def == null)

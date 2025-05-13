@@ -45,7 +45,7 @@ namespace BinWeevils.Server.Controllers
         {
             if (!m_settings.Enabled) return 0;
             if (name.Length > m_settings.MaxNameLength) return 0;
-            // todo: validate allowed characters
+            if (name.AsSpan().ContainsAnyExcept(m_settings.NameAllowedCharacters)) return 0;
             return 1;
         }
         

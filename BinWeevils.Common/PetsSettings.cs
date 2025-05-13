@@ -8,6 +8,7 @@ namespace BinWeevils.Common
         public bool Enabled { get; set; }
         public bool SpawnFullyLevelled { get; set; }
         public int MaxNameLength { get; set; }
+        public string NameAllowedCharacters { get; set; }
         public string NameHashSalt { get; set; } = "";
         public uint Cost { get; set; }
         public int MaxUserPets { get; set; }
