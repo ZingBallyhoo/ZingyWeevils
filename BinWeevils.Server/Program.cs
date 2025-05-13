@@ -159,6 +159,7 @@ internal static class Program
         app.MapRazorPages().WithStaticAssets().Finally(DisableTracing);
         app.UseWebSockets(new WebSocketOptions
         {
+            KeepAliveInterval = TimeSpan.FromSeconds(15),
             KeepAliveTimeout = TimeSpan.FromSeconds(15)
         });
         
