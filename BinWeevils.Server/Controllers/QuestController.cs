@@ -153,12 +153,16 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("QuestController.Reward");
             m_logger.LogTrace("Granting rewards for task {TaskID}", task.m_scrapedData.m_id);
             
-            await m_dbContext.m_weevilDBs
+            var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_idx == weevilIdx)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(x => x.m_mulch, x => x.m_mulch + task.m_scrapedData.m_rewardMulch)
                     .SetProperty(x => x.m_xp, x => x.m_xp + task.m_scrapedData.m_rewardXp)
                 );
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("failed to award mulch & xp");
+            }
             
             await RewardItems(weevilIdx, task, response);
             await RewardSpecialMoves(weevilIdx, task, response);
