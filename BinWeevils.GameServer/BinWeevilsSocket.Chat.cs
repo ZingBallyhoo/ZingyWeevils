@@ -55,7 +55,7 @@ namespace BinWeevils.GameServer
                 if (room == null) return;
                 if (room.IsLimbo()) return;
                 
-                m_services.GetLogger().LogDebug("Chat - Send: {Message}", pubMsg.m_text);
+                m_services.GetLogger().LogDebug("Chat - Send");
                 
                 if (!ChatMessageRegex.IsMatch(pubMsg.m_text))
                 {
