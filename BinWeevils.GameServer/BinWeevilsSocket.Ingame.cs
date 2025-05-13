@@ -44,7 +44,7 @@ namespace BinWeevils.GameServer
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
                         await broadcaster.BroadcastXtStr(Modules.INGAME_MOVE, new ServerMove
                         {
-                            m_uid = checked((int)weevil.m_user.m_id),
+                            m_uid = weevil.m_user.m_id,
                             m_x = weevil.m_x,
                             m_z = weevil.m_z,
                             m_dir = weevil.m_r
@@ -78,7 +78,7 @@ namespace BinWeevils.GameServer
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
                         await broadcaster.BroadcastXtStr(Modules.INGAME_EXPRESSION, new ServerExpression
                         {
-                            m_uid = checked((int)weevil.m_user.m_id),
+                            m_uid = weevil.m_user.m_id,
                             m_expressionID = weevil.m_expressionID
                         }, checked((int)room.m_id));
                     });
@@ -137,7 +137,7 @@ namespace BinWeevils.GameServer
                                 m_players = allWeevils.Select(x => new RoomPlayer
                                 {
                                     m_name = x.m_user.m_name,
-                                    m_uid = checked((int)x.m_user.m_id),
+                                    m_uid = x.m_user.m_id,
                                     m_vars = new VarList
                                     {
                                         m_vars = x.GetVars()
@@ -379,7 +379,7 @@ namespace BinWeevils.GameServer
             var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, user);
             await broadcaster.BroadcastXtStr(Modules.INGAME_ACTION, new ServerAction
             {
-                m_userID = checked((int)weevil.m_user.m_id),
+                m_userID = weevil.m_user.m_id,
                 m_actionID = action.m_actionID,
                 m_extraParams = action.m_extraParams
             });

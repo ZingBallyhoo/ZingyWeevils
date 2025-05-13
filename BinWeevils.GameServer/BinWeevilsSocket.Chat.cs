@@ -71,7 +71,7 @@ namespace BinWeevils.GameServer
                     m_text = pubMsg.m_text,
                     m_user = new UserRecord
                     {
-                        m_id = checked((int)user.m_id)
+                        m_id = user.m_id
                     }
                 }, CDataMode.OnEncoded);
                 
@@ -89,7 +89,7 @@ namespace BinWeevils.GameServer
                     writer.Put(room.m_id);
                     new ServerAction
                     {
-                        m_userID = checked((int)user.m_id),
+                        m_userID = user.m_id,
                         m_actionID = (int)EWeevilAction.TELEPORT_OUT,
                         m_extraParams = extraParamsWriter.ToString()
                     }.Serialize(ref writer);

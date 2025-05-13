@@ -11,7 +11,7 @@ namespace BinWeevils.Protocol.Str
     
     public partial struct ServerAction
     {
-        [StrField] public int m_userID;
+        [StrField] public ulong m_userID;
         [StrField] public int m_actionID;
         [StrField] public string m_extraParams;
     }

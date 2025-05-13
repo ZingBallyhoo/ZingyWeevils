@@ -1,6 +1,6 @@
 namespace BinWeevils.Protocol.Enums
 {
-    public enum EWeevilExpression
+    public enum EWeevilExpression : byte
     {
         HAPPY, // 0
         YIKES, // 1

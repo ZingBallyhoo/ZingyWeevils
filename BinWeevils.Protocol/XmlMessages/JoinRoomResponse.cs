@@ -22,7 +22,7 @@ namespace BinWeevils.Protocol.XmlMessages
     [DebuggerDisplay("RoomPlayer: {m_name}")]
     public partial struct RoomPlayer
     {
-        [XmlField("i")] public int m_uid;
+        [XmlField("i")] public ulong m_uid;
         [XmlField("m")] public int m_moderator;
         
         [XmlBody("n")] public string m_name;

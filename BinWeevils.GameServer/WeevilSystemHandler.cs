@@ -19,7 +19,7 @@ namespace BinWeevils.GameServer
                 m_room = checked((int)room.m_id),
                 m_user = new UserJoinRecord
                 {
-                    m_uid = checked((int)user.m_id),
+                    m_uid = user.m_id,
                     m_name = user.m_name,
                     m_isModerator = false,
                     m_vars = new VarList
@@ -41,7 +41,7 @@ namespace BinWeevils.GameServer
                 m_room = checked((int)room.m_id),
                 m_user = new UserRecord
                 {
-                    m_id = checked((int)user.m_id)
+                    m_id = user.m_id
                 }
             });
         }

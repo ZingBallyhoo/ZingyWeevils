@@ -11,7 +11,7 @@ namespace BinWeevils.Protocol.XmlMessages
     [XmlCls("u")]
     public partial struct UserJoinRecord
     {
-        [XmlField("i")] public int m_uid;
+        [XmlField("i")] public ulong m_uid;
         [XmlField("m")] public bool m_isModerator;
         [XmlBody("n")] public string m_name;
         [XmlBody] public VarList m_vars;
