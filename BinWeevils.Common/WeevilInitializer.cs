@@ -21,6 +21,12 @@ namespace BinWeevils.Common
         
         public async Task<WeevilDB> Create(string name) 
         {
+            var createParams = MakeCreateParams(name);
+            return await Create(createParams);
+        }
+        
+        public WeevilCreateParams MakeCreateParams(string name)
+        {
             var createParams = new WeevilCreateParams
             {
                 m_name = name,
@@ -84,8 +90,7 @@ namespace BinWeevils.Common
                 }
                 createParams.m_weevilDef = def.AsNumber();
             }
-            
-            return await Create(createParams);
+            return createParams;
         }
         
         public async Task<WeevilDB> Create(WeevilCreateParams createParams)

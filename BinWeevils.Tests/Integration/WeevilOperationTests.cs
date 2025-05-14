@@ -19,6 +19,12 @@ namespace BinWeevils.Tests.Integration
         }
         
         [Fact]
+        public async Task CreateImportedAccount()
+        {
+            await m_factory.CreateAccount("importedzingyaccount");
+        }
+        
+        [Fact]
         public async Task FetchData()
         {
             var account = await m_factory.CreateAccount(nameof(FetchData));

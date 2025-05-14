@@ -38,11 +38,10 @@ namespace BinWeevils.Tests.Integration
             
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
             var initializer = scope.ServiceProvider.GetRequiredService<WeevilInitializer>();
-            var weevil = await initializer.Create(new WeevilCreateParams
-            {
-                m_name = username,
-                m_weevilDef = WeevilDef.DEFAULT
-            });
+            
+            var createParams = initializer.MakeCreateParams(username);
+            // .. change data if needed
+            var weevil = await initializer.Create(createParams);
             
             var account = new WeevilAccount
             {
