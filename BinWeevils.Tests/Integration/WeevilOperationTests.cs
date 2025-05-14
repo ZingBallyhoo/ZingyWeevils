@@ -1,4 +1,3 @@
-using ArcticFox.PolyType.FormEncoded;
 using BinWeevils.Protocol.Form.Weevil;
 
 namespace BinWeevils.Tests.Integration
@@ -25,12 +24,13 @@ namespace BinWeevils.Tests.Integration
             m_factory.SetAccount(account.UserName!);
             
             var client = m_factory.CreateClient();
-            var response = await client.PostAsync("/api/weevil/data", new FormUrlEncodedContent(new []{new KeyValuePair<string, string>("id", account.UserName!)}));
-            response.EnsureSuccessStatusCode();
+            var response = await client.PostSimpleFormAsync<WeevilDataRequest, WeevilDataResponse>("/api/weevil/data", new WeevilDataRequest
+            {
+                m_name = account.UserName!
+            });
             
-            var weevilData = new FormOptions().Deserialize<WeevilDataResponse>(await response.Content.ReadAsStringAsync());
-            Assert.Equal(account.m_weevil.m_idx, weevilData.m_idx);
-            Assert.Equal(account.m_weevil.m_weevilDef, weevilData.m_weevilDef);
+            Assert.Equal(account.m_weevil.m_idx, response.m_idx);
+            Assert.Equal(account.m_weevil.m_weevilDef, response.m_weevilDef);
         }
     }
 }
