@@ -234,7 +234,7 @@ namespace BinWeevils.Server.Controllers
             return resp;
         }
         
-        [StructuredFormPost("upgrade-garden/")]
+        [StructuredFormPost("upgrade-garden")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
          public async Task<BuyGardenItemResponse> UpgradeGarden([FromBody] UpgradeGardenRequest request)
          {

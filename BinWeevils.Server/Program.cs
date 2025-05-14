@@ -27,7 +27,7 @@ using StackXML;
 using Stl.DependencyInjection;
 using WeevilWorld.Server;
 
-internal static class Program
+public class Program
 {
     public static async Task Main(string[] args)
     {
@@ -125,29 +125,14 @@ internal static class Program
             });
         });
         
-        builder.Services
-            .AddOpenTelemetry()
-            .WithTracing(tracing =>
-            {
-                tracing.AddAspNetCoreInstrumentation();
-                tracing.AddSource(GameServerObservability.s_source.Name);
-                tracing.AddSource(ApiServerObservability.s_source.Name);
-                tracing.UseGrafana();
-            })
-            .WithMetrics(metrics =>
-            {
-                metrics.AddAspNetCoreInstrumentation();
-                metrics.AddMeter(GameServerObservability.s_meter.Name);
-                metrics.AddMeter(ApiServerObservability.s_meter.Name);
-                metrics.UseGrafana();
-            });
-        builder.Logging
-            .AddOpenTelemetry(logging =>
-            {
-                logging.UseGrafana();
-            });
+        var enableObservability = builder.Configuration.GetRequiredSection("Observability").GetValue<bool>("Enabled");
+        if (enableObservability)
+        {
+            // for some reason otel causes slow shutdowns in tests... so needs to be disabled
+            ConfigureObservability(builder);
+        }
         
-        var app = builder.Build();
+        await using var app = builder.Build();
 
         app.UseRouting();
         app.UseAuthentication();
@@ -237,6 +222,31 @@ internal static class Program
         }
         
         await app.WaitForShutdownAsync();
+    }
+    
+    private static void ConfigureObservability(WebApplicationBuilder builder)
+    {
+        builder.Services
+            .AddOpenTelemetry()
+            .WithTracing(tracing =>
+            {
+                tracing.AddAspNetCoreInstrumentation();
+                tracing.AddSource(GameServerObservability.s_source.Name);
+                tracing.AddSource(ApiServerObservability.s_source.Name);
+                tracing.UseGrafana();
+            })
+            .WithMetrics(metrics =>
+            {
+                metrics.AddAspNetCoreInstrumentation();
+                metrics.AddMeter(GameServerObservability.s_meter.Name);
+                metrics.AddMeter(ApiServerObservability.s_meter.Name);
+                metrics.UseGrafana();
+            });
+        builder.Logging
+            .AddOpenTelemetry(logging =>
+            {
+                logging.UseGrafana();
+            });
     }
     
     private static void DisableTracing(EndpointBuilder b)
