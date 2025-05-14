@@ -24,6 +24,13 @@ namespace BinWeevils.Tests.Integration
             return FormOptions.Default.Deserialize<T>(str);
         }
         
+        public static async Task PostSimpleFormAsync<TReq>(this HttpClient client, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, TReq body) where TReq : IShapeable<TReq>
+        {
+            // no response body
+            var response = await client.PostFormAsync(uri, body);
+            response.EnsureSuccessStatusCode();
+        }
+        
         public static async Task<TResp> PostSimpleFormAsync<TReq, TResp>(this HttpClient client, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, TReq body) where TReq : IShapeable<TReq> where TResp : IShapeable<TResp>
         {
             var response = await client.PostFormAsync(uri, body);

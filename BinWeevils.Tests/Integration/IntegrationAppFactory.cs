@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Time.Testing;
 
 namespace BinWeevils.Tests.Integration
 {
@@ -25,13 +26,15 @@ namespace BinWeevils.Tests.Integration
                         .RequireAuthenticatedUser()
                         .AddAuthenticationSchemes("Integration")
                         .Build());
+                
+                services.AddSingleton<TimeProvider, FakeTimeProvider>();
             });
             base.ConfigureWebHost(builder);
         }
 
         public async Task<WeevilAccount> CreateAccount(string username)
         {
-            await using var scope = Server.Services.CreateAsyncScope();
+            await using var scope = Services.CreateAsyncScope();
             
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
             var initializer = scope.ServiceProvider.GetRequiredService<WeevilInitializer>();
@@ -52,13 +55,13 @@ namespace BinWeevils.Tests.Integration
         
         public void SetAccount(string username)
         {
-            var authHandler = Server.Services.GetRequiredService<IntegrationAuthStorage>();
+            var authHandler = Services.GetRequiredService<IntegrationAuthStorage>();
             authHandler.UserName = username;
         }
         
         public async Task<uint> FindSeedByConfigName(string configName)
         {
-            await using var scope = Server.Services.CreateAsyncScope();
+            await using var scope = Services.CreateAsyncScope();
             var dbc = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             
             var seed = await dbc.FindSeedByConfigName(configName);
@@ -67,6 +70,12 @@ namespace BinWeevils.Tests.Integration
                 throw new NullReferenceException($"unable to find seed: {configName}");
             }
             return seed.Value;
+        }
+        
+        public void AdvanceTime(TimeSpan delta)
+        {
+            var timeProvider = (FakeTimeProvider)Services.GetRequiredService<TimeProvider>();
+            timeProvider.Advance(delta);
         }
     }
     
