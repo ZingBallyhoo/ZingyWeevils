@@ -55,5 +55,23 @@ namespace BinWeevils.Tests.Integration
             var authHandler = Server.Services.GetRequiredService<IntegrationAuthStorage>();
             authHandler.UserName = username;
         }
+        
+        public async Task<uint> FindSeedByConfigName(string configName)
+        {
+            await using var scope = Server.Services.CreateAsyncScope();
+            var dbc = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            var seed = await dbc.FindSeedByConfigName(configName);
+            if (seed == null)
+            {
+                throw new NullReferenceException($"unable to find seed: {configName}");
+            }
+            return seed.Value;
+        }
+    }
+    
+    [CollectionDefinition("Integration")]
+    public class IntegrationCollection : ICollectionFixture<IntegrationAppFactory>
+    {
     }
 }

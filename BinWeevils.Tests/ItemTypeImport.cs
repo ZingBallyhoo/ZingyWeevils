@@ -1,30 +1,44 @@
+using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.Server.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BinWeevils.Tests
 {
     public class ItemDatabaseFixture : IAsyncLifetime
     {
+        private readonly ServiceProvider m_provider;
         public readonly WeevilDBContext m_dbContext;
         
         public ItemDatabaseFixture()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<WeevilDBContext>();
-            optionsBuilder.UseSqlite("Filename=itemImport.sqlite");
+            var builder = new ServiceCollection();
+            builder.AddOptions<DatabaseSettings>().Configure(h =>
+            {
+                h.ConnectionString = "Filename=itemImport.sqlite";
+                h.ResetOnStartup = true;
+            });
+            builder.AddDbContext<WeevilDBContext>((provider, options) =>
+            {
+                var settings = provider.GetRequiredService<IOptionsSnapshot<DatabaseSettings>>().Value;
+                options.UseSqlite(settings.ConnectionString);
+            });
+            builder.AddSingleton<DatabaseSeeding>();
             
-            m_dbContext = new WeevilDBContext(optionsBuilder.Options);
+            m_provider = builder.BuildServiceProvider();
+            m_dbContext = m_provider.GetRequiredService<WeevilDBContext>();
         }
         
         public async Task InitializeAsync()
         {
-            var seeding = new DatabaseSeeding(null!, m_dbContext);
+            var seeding = m_provider.GetRequiredService<DatabaseSeeding>();
             await seeding.Seed();
         }
 
         public async Task DisposeAsync()
         {
-            await m_dbContext.DisposeAsync();
+            await m_provider.DisposeAsync();
         }
     }
     

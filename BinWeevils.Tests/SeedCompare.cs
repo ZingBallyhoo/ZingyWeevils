@@ -1,28 +1,42 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Server.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BinWeevils.Tests
 {
     public class SeedDatabaseFixture : IAsyncLifetime
     {
+        private readonly ServiceProvider m_provider;
         public readonly WeevilDBContext m_dbContext;
         public readonly Dictionary<string, uint> m_prices = [];
         
         public SeedDatabaseFixture()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<WeevilDBContext>();
-            optionsBuilder.UseSqlite("Filename=seedCompare.sqlite");
+            var builder = new ServiceCollection();
+            builder.AddOptions<DatabaseSettings>().Configure(h =>
+            {
+                h.ConnectionString = "Filename=seedCompare.sqlite";
+                h.ResetOnStartup = true;
+            });
+            builder.AddDbContext<WeevilDBContext>((provider, options) =>
+            {
+                var settings = provider.GetRequiredService<IOptionsSnapshot<DatabaseSettings>>().Value;
+                options.UseSqlite(settings.ConnectionString);
+            });
+            builder.AddSingleton<DatabaseSeeding>();
             
-            m_dbContext = new WeevilDBContext(optionsBuilder.Options);
+            m_provider = builder.BuildServiceProvider();
+            m_dbContext = m_provider.GetRequiredService<WeevilDBContext>();
         }
         
         public async Task InitializeAsync()
         {
-            var seeding = new DatabaseSeeding(null!, m_dbContext);
+            var seeding = m_provider.GetRequiredService<DatabaseSeeding>();
             await seeding.Seed();
             
             foreach (Match match in Regex.Matches(await File.ReadAllTextAsync(@"D:\re\bw\archive\lb.binweevils.com\gardenshop\fetch"), """
@@ -37,7 +51,7 @@ namespace BinWeevils.Tests
 
         public async Task DisposeAsync()
         {
-            await m_dbContext.DisposeAsync();
+            await m_provider.DisposeAsync();
         }
     }
     

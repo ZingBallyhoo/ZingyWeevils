@@ -2,7 +2,8 @@ using BinWeevils.Protocol.Form.Weevil;
 
 namespace BinWeevils.Tests.Integration
 {
-    public class WeevilOperationTests : IClassFixture<IntegrationAppFactory>
+    [Collection("Integration")]
+    public class WeevilOperationTests
     {
         private readonly IntegrationAppFactory m_factory;
 
