@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Proto;
@@ -79,10 +80,11 @@ public class Program
             return true;
         }).ValidateOnStart();
         
-        var connectionString = builder.Configuration.GetRequiredSection("Database")["ConnectionString"];
-        builder.Services.AddDbContext<WeevilDBContext>(options =>
+        
+        builder.Services.AddDbContext<WeevilDBContext>((provider, options) =>
         {
-            options.UseSqlite(connectionString);
+            var settings = provider.GetRequiredService<IOptionsSnapshot<DatabaseSettings>>().Value;
+            options.UseSqlite(settings.ConnectionString);
         });
         builder.Services.AddScoped<DatabaseSeeding>();
         builder.Services.AddIdentity<WeevilAccount, IdentityRole>(options =>
