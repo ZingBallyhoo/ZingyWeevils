@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BinWeevils.Common.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BinWeevils.Common.Migrations
 {
     [DbContext(typeof(WeevilDBContext))]
-    partial class WeevilDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250515230356_AddTrackPBs")]
+    partial class AddTrackPBs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");

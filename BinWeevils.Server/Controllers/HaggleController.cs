@@ -91,14 +91,7 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
 
-            var initDto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Select(x => new 
-                {
-                    x.m_idx,
-                    m_nestID = x.m_nest.m_id
-                })
-                .SingleAsync();
+            var initDto = await m_dbContext.GetIdxAndNestID(ControllerContext.HttpContext.User.Identity!.Name!);
             
             var totalValue = 0u;
             foreach (var itemID in request.m_nestItems)

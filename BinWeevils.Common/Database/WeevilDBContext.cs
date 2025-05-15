@@ -10,6 +10,7 @@ namespace BinWeevils.Common.Database
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<WeevilSpecialMoveDB> m_weevilSpecialMoves { get; set; }
         public DbSet<WeevilGamePlayedDB> m_weevilGamesPlayed { get; set; }
+        public DbSet<WeevilTrackPersonalBestDB> m_trackPersonalBests { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<BuddyMessageDB> m_buddyMesssages { get; set; }
         public DbSet<IgnoreRecordDB> m_ignoreRecords { get; set; }
@@ -58,6 +59,10 @@ namespace BinWeevils.Common.Database
             modelBuilder.Entity<WeevilGamePlayedDB>(b =>
             {
                 b.ToTable("WeevilGamePlayedDB");
+            });
+            modelBuilder.Entity<WeevilTrackPersonalBestDB>(b =>
+            {
+                b.ToTable("WeevilTrackPersonalBestDB");
             });
             
             modelBuilder.Entity<BuddyRecordDB>(b =>
@@ -262,6 +267,24 @@ namespace BinWeevils.Common.Database
             
             return parsedColor;
         }
+        
+        public Task<IdxAndNestID> GetIdxAndNestID(string name)
+        {
+            return m_weevilDBs
+                .Where(x => x.m_name == name)
+                .Select(x => new IdxAndNestID
+                {
+                    m_idx = x.m_idx,
+                    m_nestID = x.m_nest.m_id
+                })
+                .SingleAsync();
+        }
+    }
+    
+    public class IdxAndNestID
+    {
+        public uint m_idx;
+        public uint m_nestID;
     }
     
     public class WeevilCreateParams

@@ -1,3 +1,4 @@
+using ArcticFox.PolyType.Amf;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol;
@@ -30,6 +31,11 @@ namespace BinWeevils.Tests.Integration
                 services.AddSingleton<TimeProvider, FakeTimeProvider>();
             });
             base.ConfigureWebHost(builder);
+        }
+        
+        public AmfOptions GetAmfOptions()
+        {
+            return Services.GetRequiredService<AmfOptions>();
         }
 
         public async Task<WeevilAccount> CreateAccount(string username)

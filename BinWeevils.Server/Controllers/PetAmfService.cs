@@ -73,14 +73,7 @@ namespace BinWeevils.Server.Controllers
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
-            var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == request.m_userID)
-                .Select(x => new
-                {
-                    x.m_idx,
-                    m_nestID = x.m_nest.m_id
-                })
-                .SingleAsync();
+            var dto = await m_dbContext.GetIdxAndNestID(request.m_userID);
             
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_idx == dto.m_idx)

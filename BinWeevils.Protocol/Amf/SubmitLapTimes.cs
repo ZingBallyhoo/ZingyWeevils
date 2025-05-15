@@ -1,3 +1,4 @@
+using BinWeevils.Protocol.Enums;
 using PolyType;
 
 namespace BinWeevils.Protocol.Amf
@@ -9,7 +10,7 @@ namespace BinWeevils.Protocol.Amf
         public double m_lap1;
         public double m_lap2;
         public double m_lap3;
-        public byte m_trackID;
+        public EGameType m_trackID;
     }
     
     [GenerateShape]

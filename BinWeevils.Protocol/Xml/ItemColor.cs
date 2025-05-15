@@ -18,7 +18,7 @@ namespace BinWeevils.Protocol.Xml
             m_b = 0;
         }
         
-        private ItemColor(uint value)
+        public ItemColor(uint value)
         {
             m_b = (byte)(value & 0xFF);
             m_g = (byte)((value >> 8) & 0xFF);

@@ -40,6 +40,13 @@ public class Program
             options.OutputFormatters.Add(new FormOutputFormatter());
             options.OutputFormatters.Add(new StackXMLOutputFormatter());
         });
+        {
+            var amfOptions = new AmfOptions();
+            amfOptions.AddTypedObject<GetLoginDetailsResponse>();
+            amfOptions.AddTypedObject<SubmitLapTimesResponse>();
+            amfOptions.AddTypedObject<SubmitLapTimesResponse.MedalInfo>();
+            builder.Services.AddSingleton(amfOptions); // expose to tests
+        }
         builder.Services.AddSingleton<IAmfGatewayRouter, WeevilGatewayRouter>();
         builder.Services.AddTransient<PetAmfService>();
         builder.Services.AddTransient<WeevilKartAmfService>();
@@ -150,13 +157,10 @@ public class Program
             KeepAliveTimeout = TimeSpan.FromSeconds(15)
         });
         
-        var amfOptions = new AmfOptions();
-        amfOptions.AddTypedObject<GetLoginDetailsResponse>();
-        amfOptions.AddTypedObject<SubmitLapTimesResponse>();
-        amfOptions.AddTypedObject<SubmitLapTimesResponse.MedalInfo>();
+        ;
         app.MapAmfGateway("api/php/amfphp/gateway.php", new AmfGatewaySettings
         {
-            m_options = amfOptions,
+            m_options = app.Services.GetRequiredService<AmfOptions>(),
             m_shapeProvider = GatewayShapeWitness.ShapeProvider,
             m_swallowExceptions = false,
         }).RequireAuthorization();

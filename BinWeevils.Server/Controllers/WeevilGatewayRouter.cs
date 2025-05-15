@@ -71,8 +71,9 @@ namespace BinWeevils.Server.Controllers
     
     [GenerateShape<object[]>]
     [GenerateShape<GetLoginDetailsResponse>]
+    [GenerateShape<SubmitLapTimesRequest>] // for tests
     [GenerateShape<SubmitLapTimesResponse>]
-    internal partial class GatewayShapeWitness;
+    public partial class GatewayShapeWitness;
     
     /*[RpcMethod(typeof(AmfPassthroughRpcMethod<object, GetLoginDetailsResponse>), "h")]
     public partial class LoginServiceAmf
