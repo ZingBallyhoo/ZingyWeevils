@@ -16,13 +16,19 @@ namespace BinWeevils.GameServer.Actors
             public string m_kartColor;
             
             public PID? m_user;
-            public int m_userID;
+            public int m_userID = -1;
             public bool m_userReady;
             public bool m_drivenOff;
+            
+            public ushort m_nextWeaponID = 1;
             
             public bool m_pingPending;
             public uint? m_finishTime;
             public int? m_ranking;
+
+            public KartSlot()
+            {
+            }
         }
         
         private readonly ILogger<KartGame> m_logger;
@@ -47,9 +53,11 @@ namespace BinWeevils.GameServer.Actors
             m_slots = new KartSlot[kartColors.Length];
             for (byte i = 0; i < m_slots.Length; i++)
             {
-                m_slots[i].m_index = i;
-                m_slots[i].m_kartColor = kartColors[i];
-                m_slots[i].m_userID = -1;
+                m_slots[i] = new KartSlot
+                {
+                    m_index = i,
+                    m_kartColor = kartColors[i]
+                };
             }
             m_playerToSlot = new Dictionary<PID, int>(m_slots.Length);
         }
@@ -117,6 +125,21 @@ namespace BinWeevils.GameServer.Actors
                 case KartJump jump:
                 {
                     await HandleJump(context, slot, jump);
+                    break;
+                }
+                case KartSpinOut spinOut:
+                {
+                    await HandleSpinOut(context, slot, spinOut);
+                    break;
+                }
+                case KartMulchBomb mulchBomb:
+                {
+                    await HandleMulchBomb(context, slot, mulchBomb);
+                    break;
+                }
+                case KartDetonateMulchBomb detonateMulchBomb:
+                {
+                    await HandleDetonateMulchBomb(context, slot, detonateMulchBomb);
                     break;
                 }
                 
@@ -222,6 +245,11 @@ namespace BinWeevils.GameServer.Actors
         
         private void NotifyAll<T>(IContext context, string type, T obj) where T : IStrClass
         {
+            NotifyAllExcept(context, -1, type, obj);
+        }
+        
+        private void NotifyAllExcept<T>(IContext context, int idx, string type, T obj) where T : IStrClass
+        {
             // todo: this is not great but i'd really like for this to use the serialize-once pattern so...
             var serialized = BroadcasterExtensions.SerializeKartEvent(type, obj);
             var sererEvent = new SocketActor.KartServerEvent(serialized);
@@ -229,6 +257,7 @@ namespace BinWeevils.GameServer.Actors
             foreach (var slot in m_slots)
             {
                 if (slot.m_user == null) continue;
+                if (slot.m_index == idx) continue;
                 context.Send(slot.m_user, sererEvent);
             }
         }

@@ -157,6 +157,7 @@ namespace BinWeevils.GameServer.Actors
             {
                 return;
             }
+            // yes, original server would forward this to yourself...
             NotifyAll(context, Modules.KART_POSITION_UPDATE, update);
         }
         
@@ -173,7 +174,41 @@ namespace BinWeevils.GameServer.Actors
             {
                 return;
             }
+            // yes, original server would forward this to yourself...
             NotifyAll(context, Modules.KART_JUMP, jump);
+        }
+        
+        private async ValueTask HandleSpinOut(IContext context, int index, KartSpinOut spinOut)
+        {
+            if (index != spinOut.m_kartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending spin out for someone else", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            if (!await ValidatePosition(context, index, spinOut.m_x, spinOut.m_z))
+            {
+                return;
+            }
+            NotifyAll(context, Modules.KART_SPIN_OUT, spinOut);
+        }
+        
+        private async ValueTask HandleMulchBomb(IContext context, int index, KartMulchBomb mulchBomb)
+        {
+            if (index != mulchBomb.m_id.m_kartID || m_slots[index].m_nextWeaponID++ != mulchBomb.m_id.m_weaponID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending invalid mulch bomb", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAllExcept(context, index, Modules.KART_MULCH_BOMB, mulchBomb);
+        }
+        
+        private async ValueTask HandleDetonateMulchBomb(IContext context, int index, KartDetonateMulchBomb detonateMulchBomb)
+        {
+            NotifyAllExcept(context, index, Modules.KART_DETONATE_MULCH_BOMB, detonateMulchBomb);
         }
     }
 }

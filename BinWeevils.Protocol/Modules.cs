@@ -69,6 +69,15 @@ namespace BinWeevils.Protocol
         
         public const string KART_POSITION_UPDATE = "p";
         public const string KART_JUMP = "j";
+        public const string KART_SPIN_OUT = "sp";
+        public const string KART_MULCH_BOMB = "mb";
+        public const string KART_DETONATE_MULCH_BOMB = "dmb";
+        public const string KART_HOMING_MULCH = "hm";
+        public const string KART_DEPLOY_HOMING_MULCH = "dhm";
+        public const string KART_EXPLODE_HOMING_MULCH = "ehm";
+        public const string KART_PLUNGE_HOMING_MULCH = "phm";
+        public const string KART_EXPLODING_MULCH = "em";
+        public const string KART_DETONATE_EXPLODING_MULCH = "dem";
         
         public const string KART_FINISH_LINE = "finishLine";
         public const string KART_PING = "ping";

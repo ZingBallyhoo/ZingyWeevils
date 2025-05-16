@@ -12,7 +12,7 @@ namespace BinWeevils.GameServer
         private void HandleKartCommand(in XtClientMessage message, ref StrReader reader)
         {
             var clientMessage = new KartRequestHeader();
-            clientMessage.FullyDeserialize(ref reader);
+            clientMessage.Deserialize(ref reader);
 
             switch (clientMessage.m_command)
             {
@@ -47,6 +47,22 @@ namespace BinWeevils.GameServer
                     KartMessageHandler<KartJump>(ref reader);
                     break;
                 }
+                case Modules.KART_SPIN_OUT:
+                {
+                    KartMessageHandler<KartSpinOut>(ref reader);
+                    break;
+                }
+                case Modules.KART_MULCH_BOMB:
+                {
+                    KartMessageHandler<KartMulchBomb>(ref reader);
+                    break;
+                }
+                case Modules.KART_DETONATE_MULCH_BOMB:
+                {
+                    KartMessageHandler<KartDetonateMulchBomb>(ref reader);
+                    break;
+                }
+                
                 case Modules.KART_FINISH_LINE:
                 {
                     KartMessageHandler<KartFinishLineRequest>(ref reader);

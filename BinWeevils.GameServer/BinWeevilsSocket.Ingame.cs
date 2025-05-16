@@ -355,6 +355,7 @@ namespace BinWeevils.GameServer
                     EWeevilAction.WALK => true,
                     EWeevilAction.STAND_TALL => true,
                     EWeevilAction.SQUAT => true,
+                    EWeevilAction.SIT_IN_CAR => true,
                     _ => false
                 };
                 if (!validPose)
