@@ -211,6 +211,49 @@ namespace BinWeevils.GameServer.Actors
             NotifyAllExcept(context, index, Modules.KART_DETONATE_MULCH_BOMB, detonateMulchBomb);
         }
         
+        private async ValueTask HandleHomingMulch(IContext context, int index, KartHomingMulch homingMulch)
+        {
+            if (index != homingMulch.m_id.m_kartID || index != homingMulch.m_creatorKartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending invalid homing mulch", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAllExcept(context, index, Modules.KART_HOMING_MULCH, homingMulch);
+        }
+        
+        private async ValueTask HandleDeployHomingMulch(IContext context, int index, KartDeployHomingMulch deployHomingMulch)
+        {
+            if (index != deployHomingMulch.m_id.m_kartID || index == deployHomingMulch.m_targetKartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending invalid deploy homing mulch", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAllExcept(context, index, Modules.KART_DEPLOY_HOMING_MULCH, deployHomingMulch);
+        }
+        
+        private async ValueTask HandleExplodeHomingMulch(IContext context, int index, KartExplodeHomingMulch explodeHomingMulch)
+        {
+            // sent by the victim
+            // about both ems
+            NotifyAllExcept(context, index, Modules.KART_EXPLODE_HOMING_MULCH, explodeHomingMulch);
+        }
+        
+        private async ValueTask HandlePlungeHomingMulch(IContext context, int index, KartPlungeHomingMulch plungeHomingMulch)
+        {
+            if (index != plungeHomingMulch.m_targetKartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending invalid plunge homing mulch", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAllExcept(context, index, Modules.KART_PLUNGE_HOMING_MULCH, plungeHomingMulch);
+        }
+        
         private async ValueTask HandleExplodingMulch(IContext context, int index, KartExplodingMulch mulchBomb)
         {
             if (index != mulchBomb.m_same.m_id.m_kartID)

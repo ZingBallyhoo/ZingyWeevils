@@ -57,6 +57,26 @@ namespace BinWeevils.GameServer
                     KartMessageHandler<KartMulchBomb>(ref reader);
                     break;
                 }
+                case Modules.KART_HOMING_MULCH:
+                {
+                    KartMessageHandler<KartHomingMulch>(ref reader); 
+                    break;
+                }
+                case Modules.KART_DEPLOY_HOMING_MULCH:
+                {
+                    KartMessageHandler<KartDeployHomingMulch>(ref reader); 
+                    break;
+                }
+                case Modules.KART_EXPLODE_HOMING_MULCH:
+                {
+                    KartMessageHandler<KartExplodeHomingMulch>(ref reader); 
+                    break;
+                }
+                case Modules.KART_PLUNGE_HOMING_MULCH:
+                {
+                    KartMessageHandler<KartPlungeHomingMulch>(ref reader); 
+                    break;
+                }
                 case Modules.KART_DETONATE_MULCH_BOMB:
                 {
                     KartMessageHandler<KartDetonateMulchBomb>(ref reader);

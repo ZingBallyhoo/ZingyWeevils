@@ -108,10 +108,18 @@ namespace BinWeevils.GameServer.Actors
                     case KartPositionUpdate:
                     case KartJump:
                     case KartSpinOut:
+                        
                     case KartMulchBomb:
                     case KartDetonateMulchBomb:
+                        
+                    case KartHomingMulch:
+                    case KartDeployHomingMulch:
+                    case KartExplodeHomingMulch:
+                    case KartPlungeHomingMulch:
+                        
                     case KartExplodingMulch:
                     case KartDetonateExplodingMulch:
+                        
                     case KartFinishLineRequest:
                     case KartPing:
                     {
@@ -162,6 +170,26 @@ namespace BinWeevils.GameServer.Actors
                 case KartDetonateMulchBomb detonateMulchBomb:
                 {
                     await HandleDetonateMulchBomb(context, slot, detonateMulchBomb);
+                    break;
+                }
+                case KartHomingMulch homingMulch:
+                {
+                    await HandleHomingMulch(context, slot, homingMulch);
+                    break;
+                }
+                case KartDeployHomingMulch deployHomingMulch:
+                {
+                    await HandleDeployHomingMulch(context, slot, deployHomingMulch);
+                    break;
+                }
+                case KartExplodeHomingMulch explodeHomingMulch:
+                {
+                    await HandleExplodeHomingMulch(context, slot, explodeHomingMulch);
+                    break;
+                }
+                case KartPlungeHomingMulch plungeHomingMulch:
+                {
+                    await HandlePlungeHomingMulch(context, slot, plungeHomingMulch);
                     break;
                 }
                 case KartExplodingMulch explodingMulch:
