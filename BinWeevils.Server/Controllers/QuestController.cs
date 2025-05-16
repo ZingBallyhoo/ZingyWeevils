@@ -321,7 +321,7 @@ namespace BinWeevils.Server.Controllers
             {
                 if (!await IsMissionComplete(weevilIdx, task.m_scrapedData.m_questID.Value))
                 {
-                    m_logger.LogWarning("Trying to start a missing that is already active");
+                    m_logger.LogWarning("Trying to start a mission that is already active");
                     return new TaskCompletedResponse
                     {
                         m_responseCode = TaskCompletedResponse.RESPONSE_MISSION_ALREADY_ACTIVE
@@ -384,6 +384,8 @@ namespace BinWeevils.Server.Controllers
                 })
                 .SingleAsync();
             
+            // todo: should this check "is completed ever"? (rewarded)
+            // either way, restarting quests is unused
             var isComplete = await missions
                 .ToAsyncEnumerable()
                 .SelectAwait(async x => await IsMissionComplete(dto.m_idx, x.m_id))

@@ -43,6 +43,12 @@ namespace BinWeevils.Tests.Integration
             return await response.DecodeFormResponse<TResp>();
         }
         
+        public static async Task<TResp> GetFormAsync<TResp>(this HttpClient client, [StringSyntax(StringSyntaxAttribute.Uri)] string uri) where TResp : IShapeable<TResp>
+        {
+            var response = await client.GetAsync(uri);
+            return await response.DecodeFormResponse<TResp>();
+        }
+        
         public static async Task<TResp> PostAmfAsync<TReq, TResp>(this HttpClient client, AmfOptions options, string targetUri, TReq request) where TReq : IShapeable<TReq> where TResp : IShapeable<TResp>
         {
             var requestParamsArray = ArrayMapper.ToArray(request);
