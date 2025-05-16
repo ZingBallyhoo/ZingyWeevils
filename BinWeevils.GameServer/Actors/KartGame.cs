@@ -20,7 +20,8 @@ namespace BinWeevils.GameServer.Actors
             public bool m_userReady;
             public bool m_drivenOff;
             
-            public ushort m_nextWeaponID = 1;
+            // todo: we can't validate weapon ids as the client can pick them up and use in any order...
+            // public ushort m_nextWeaponID = 1
             
             public bool m_pingPending;
             public uint? m_finishTime;
@@ -100,6 +101,26 @@ namespace BinWeevils.GameServer.Actors
                 return;
             }
             
+            if (!m_raceSequenceStarted)
+            {
+                switch (message)
+                {
+                    case KartPositionUpdate:
+                    case KartJump:
+                    case KartSpinOut:
+                    case KartMulchBomb:
+                    case KartDetonateMulchBomb:
+                    case KartExplodingMulch:
+                    case KartDetonateExplodingMulch:
+                    case KartFinishLineRequest:
+                    case KartPing:
+                    {
+                        await ForceDisconnectPlayer(context, slot);
+                        return;
+                    }
+                }
+            }
+            
             switch (message)
             {
                 case KartUserReadyRequest: 
@@ -117,6 +138,7 @@ namespace BinWeevils.GameServer.Actors
                     await PlayerLeftSlot(context, slot);
                     break;
                 }
+                
                 case KartPositionUpdate update:
                 {
                     await HandlePositionUpdate(context, slot, update);
@@ -140,6 +162,16 @@ namespace BinWeevils.GameServer.Actors
                 case KartDetonateMulchBomb detonateMulchBomb:
                 {
                     await HandleDetonateMulchBomb(context, slot, detonateMulchBomb);
+                    break;
+                }
+                case KartExplodingMulch explodingMulch:
+                {
+                    await HandleExplodingMulch(context, slot, explodingMulch);
+                    break;
+                }
+                case KartDetonateExplodingMulch detonateExplodingMulch:
+                {
+                    await HandleDetonateExplodingMulch(context, slot, detonateExplodingMulch);
                     break;
                 }
                 

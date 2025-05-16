@@ -196,7 +196,7 @@ namespace BinWeevils.GameServer.Actors
         
         private async ValueTask HandleMulchBomb(IContext context, int index, KartMulchBomb mulchBomb)
         {
-            if (index != mulchBomb.m_id.m_kartID || m_slots[index].m_nextWeaponID++ != mulchBomb.m_id.m_weaponID)
+            if (index != mulchBomb.m_id.m_kartID)
             {
                 m_logger.LogError("Kart/{PID}: player {PID} sending invalid mulch bomb", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
@@ -209,6 +209,30 @@ namespace BinWeevils.GameServer.Actors
         private async ValueTask HandleDetonateMulchBomb(IContext context, int index, KartDetonateMulchBomb detonateMulchBomb)
         {
             NotifyAllExcept(context, index, Modules.KART_DETONATE_MULCH_BOMB, detonateMulchBomb);
+        }
+        
+        private async ValueTask HandleExplodingMulch(IContext context, int index, KartExplodingMulch mulchBomb)
+        {
+            if (index != mulchBomb.m_same.m_id.m_kartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending invalid exploding mulch", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAllExcept(context, index, Modules.KART_EXPLODING_MULCH, mulchBomb);
+        }
+        
+        private async ValueTask HandleDetonateExplodingMulch(IContext context, int index, KartDetonateExplodingMulch detonateExplodingMulch)
+        {
+            if (index != detonateExplodingMulch.m_id.m_kartID)
+            {
+                m_logger.LogError("Kart/{PID}: player {PID} sending detonate exploding mulch for someone else", context.Self, m_slots[index].m_user);
+                await ForceDisconnectPlayer(context, index);
+                return;
+            }
+            
+            NotifyAllExcept(context, index, Modules.KART_DETONATE_EXPLODING_MULCH, detonateExplodingMulch);
         }
     }
 }
