@@ -96,9 +96,10 @@ namespace BinWeevils.GameServer.Actors
         private async Task StartRaceSequence(IContext context) 
         {
             if (m_raceSequenceStarted) return;
-            m_raceSequenceStarted = true;
             
             m_logger.LogInformation("Kart/{PID}: starting race sequence", context.Self);
+            m_raceSequenceStarted = true;
+            m_raceSequenceStartTime = DateTime.UtcNow;
             
             // start rendering
             NotifyAll(context, new KartNotification 
@@ -127,6 +128,17 @@ namespace BinWeevils.GameServer.Actors
                     m_commandType = Modules.KART,
                     m_command = Modules.KART_START_RACE_NOTIFICATION
                 });
+            });
+        }
+        
+        private void HandleGetStartTime(IContext context, int index)
+        {
+            if (!m_raceSequenceStarted) return;
+            if (m_raceStarted) return;
+            
+            Notify(context, index, Modules.KART_GET_START_TIME, new KartGetStartTimeResponse
+            {
+                m_time = (uint)(DateTime.UtcNow - m_raceSequenceStartTime).TotalMilliseconds
             });
         }
         

@@ -39,6 +39,7 @@ namespace BinWeevils.GameServer.Actors
         private bool m_gameReady;
         private bool m_notifiedDriveOff;
         private bool m_raceSequenceStarted;
+        private DateTime m_raceSequenceStartTime;
         private bool m_raceStarted;
         
         private bool m_pingPending;
@@ -139,6 +140,11 @@ namespace BinWeevils.GameServer.Actors
                 case KartDrivenOffRequest: 
                 {
                     await UserInSlotDrivenOff(context, slot);
+                    break;
+                }
+                case KartGetStartTimeRequest:
+                {
+                    HandleGetStartTime(context, slot);
                     break;
                 }
                 case KartLeaveGameRequest:

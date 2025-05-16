@@ -36,6 +36,11 @@ namespace BinWeevils.GameServer
                     KartMessageHandler<KartDrivenOffRequest>(ref reader); // empty
                     break;
                 }
+                case Modules.KART_GET_START_TIME:
+                {
+                    KartMessageHandler<KartGetStartTimeRequest>(ref reader); // empty
+                    break;
+                }
                 
                 case Modules.KART_POSITION_UPDATE:
                 {
