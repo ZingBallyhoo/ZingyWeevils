@@ -28,6 +28,8 @@ namespace BinWeevils.GameServer
         public static readonly Counter<int> s_turnBasedGamesAbandoned = s_meter.CreateCounter<int>("bw_turn_based_games_abandoned");
         
         public static readonly Counter<int> s_kartGamesStarted = s_meter.CreateCounter<int>("bw_kart_games_started");
+        public static readonly Counter<int> s_kartPlayersAbandoned = s_meter.CreateCounter<int>("bw_kart_players_abandoned");
+        public static readonly Counter<int> s_kartPlayersCompleted = s_meter.CreateCounter<int>("bw_kart_players_completed");
         
         public static readonly Counter<int> s_dinerTraysGrabbed = s_meter.CreateCounter<int>("bw_diner_trays_grabbed");
         public static readonly Counter<int> s_dinerChefsStarted = s_meter.CreateCounter<int>("bw_diner_chefs_started");

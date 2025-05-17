@@ -368,6 +368,8 @@ namespace BinWeevils.Server.Controllers
                 throw new InvalidDataException("invalid track id");
             }
             
+            ApiServerObservability.s_kartTimeTrialsFinished.Add(1, new KeyValuePair<string, object?>("track", gameID));
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var idx = await GetIdx();
             if (!await UpsertGame(idx, gameID))
@@ -390,6 +392,9 @@ namespace BinWeevils.Server.Controllers
             await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
             var dto = await m_dbContext.GetMulchAndXp(idx);
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_kartTrialMulchRewarded.Add(rewardMulch);
+            ApiServerObservability.s_kartTrialXpRewarded.Add(rewardXp);
             
             return new SubmitTurnBasedResponse
             {
@@ -453,6 +458,9 @@ namespace BinWeevils.Server.Controllers
             await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
             var dto = await m_dbContext.GetMulchAndXp(idx);
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_kartMultiplayerMulchRewarded.Add(rewardMulch);
+            ApiServerObservability.s_kartMultiplayerXpRewarded.Add(rewardXp);
             
             return new SubmitTurnBasedResponse
             {

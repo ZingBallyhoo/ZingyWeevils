@@ -73,6 +73,14 @@ namespace BinWeevils.Server
         public static readonly Counter<double> s_foodItemsBought = s_meter.CreateCounter<double>("bw_food_items_bought");
         public static readonly Counter<double> s_foodItemsCost = s_meter.CreateCounter<double>("bw_food_items_cost");
         
+        public static readonly Counter<int> s_kartTimeTrialsFinished = s_meter.CreateCounter<int>("bw_kart_time_trials_finished");
+        public static readonly Counter<int> s_kartTrophiesAwarded = s_meter.CreateCounter<int>("bw_kart_trophies_awarded");
+        public static readonly Counter<int> s_kartPersonalBestsBeaten = s_meter.CreateCounter<int>("bw_kart_personal_bests_beaten");
+        public static readonly Counter<double> s_kartTrialMulchRewarded = s_meter.CreateCounter<double>("bw_kart_trial_mulch_rewarded");
+        public static readonly Counter<double> s_kartTrialXpRewarded = s_meter.CreateCounter<double>("bw_kart_trial_xp_rewarded");
+        public static readonly Counter<double> s_kartMultiplayerMulchRewarded = s_meter.CreateCounter<double>("bw_kart_multiplayer_mulch_rewarded");
+        public static readonly Counter<double> s_kartMultiplayerXpRewarded = s_meter.CreateCounter<double>("bw_kart_multiplayer_xp_rewarded");
+        
         public static Activity? StartActivity(string name)
         {
             return s_source.StartActivity(name);

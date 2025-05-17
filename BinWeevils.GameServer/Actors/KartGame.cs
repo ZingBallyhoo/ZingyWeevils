@@ -240,6 +240,17 @@ namespace BinWeevils.GameServer.Actors
                 m_kartID = slot.m_index
             });
             
+            if (m_raceSequenceStarted && slot.m_ranking == null)
+            {
+                if (slot.m_ranking == null)
+                {
+                    GameServerObservability.s_kartPlayersAbandoned.Add(1);
+                } else
+                {
+                    GameServerObservability.s_kartPlayersCompleted.Add(1);
+                }
+            }
+            
             if (TryRecycle(context))
             {
                 return;

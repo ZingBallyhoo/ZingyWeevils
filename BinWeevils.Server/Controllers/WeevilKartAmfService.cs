@@ -52,6 +52,11 @@ namespace BinWeevils.Server.Controllers
                 if (await TryAwardTrophy(trophy, track, dto.m_nestID))
                 {
                     awardedTrophy = true;
+                    
+                    ApiServerObservability.s_kartTrophiesAwarded.Add(1, [
+                        new KeyValuePair<string, object?>("track", request.m_trackID),
+                        new KeyValuePair<string, object?>("trophy", trophy)
+                    ]);
                 }
             }
             
@@ -87,6 +92,8 @@ namespace BinWeevils.Server.Controllers
                 {
                     throw new Exception("race updating pb");
                 }
+                
+                ApiServerObservability.s_kartPersonalBestsBeaten.Add(1, new KeyValuePair<string, object?>("track", request.m_trackID));
             }
             
             await transaction.CommitAsync();
