@@ -17,6 +17,8 @@ namespace BinWeevils.GameServer
 {
     public partial class BinWeevilsSocket
     {
+        private bool m_hasSeenKartVolumeWarning;
+        
         private void HandleInGameCommand(in XtClientMessage message, ref StrReader reader)
         {
             switch (message.m_command)
@@ -145,6 +147,19 @@ namespace BinWeevils.GameServer
                                 }).ToList()
                             }
                         });
+                        
+                        if (!m_hasSeenKartVolumeWarning && newRoom.m_name.StartsWith("DirtValley"))
+                        {
+                            m_hasSeenKartVolumeWarning = true;
+                            await this.BroadcastSys(new ModMsgBody
+                            {
+                                m_action = "modMsg",
+                                m_text = """
+                                         Note: this game is extremely loud (worse than the original game)
+                                         Right Click -> Volume Controls (resets on reload)
+                                         """
+                            }, CDataMode.OnEncoded);
+                        }
                     });
                     break;
                 }
