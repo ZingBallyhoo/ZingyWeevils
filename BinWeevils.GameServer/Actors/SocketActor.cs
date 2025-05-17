@@ -109,12 +109,6 @@ namespace BinWeevils.GameServer.Actors
                     break;
                 }
                 
-                case SetUserVarsRequest:
-                case SetRoomVarsRequest:
-                {
-                    context.Forward(m_petManager);
-                    break;
-                }
                 case PetManager.PetNotification petNotification:
                 {
                     var room = petNotification.inNest ? m_nestRoom : await m_user.GetRoomOrNull();

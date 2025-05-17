@@ -724,7 +724,7 @@ namespace BinWeevils.GameServer
                 weevil.m_y.SetValue(newYValue);
             }
             
-            m_services.GetActorSystem().Root.Send(weevil.GetUserAddress(), setUvars);
+            m_services.GetActorSystem().Root.Send(weevil.GetPetManagerAddress(), setUvars);
         }
         
         private void HandleSfsSetRoomVars(ReadOnlySpan<char> body)
@@ -734,7 +734,7 @@ namespace BinWeevils.GameServer
             
             var user = GetUser();
             var weevil = user.GetUserData<WeevilData>();
-            m_services.GetActorSystem().Root.Send(weevil.GetUserAddress(), setRvars);
+            m_services.GetActorSystem().Root.Send(weevil.GetPetManagerAddress(), setRvars);
         }
     }
 }
