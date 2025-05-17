@@ -1,4 +1,5 @@
 using ArcticFox.SmartFoxServer;
+using BinWeevils.Protocol;
 using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.Xml;
 using Proto;
@@ -30,7 +31,7 @@ namespace BinWeevils.GameServer.Actors
                 case Started:
                 case CreateNewGameRequest:
                 {
-                    CreateNewGame(context);
+                    await CreateNewGame(context);
                     break;
                 }
                 case JoinRequest joinRequest:
@@ -45,23 +46,31 @@ namespace BinWeevils.GameServer.Actors
                     }, CancellationTokens.FromSeconds(5));
                     break;
                 }
-                case Terminated:
+                case Terminated childTerminated:
                 {
-                    // our pending game failed... make a new one
-                    CreateNewGame(context);
+                    if (childTerminated.Who.Equals(m_currentGame))
+                    {
+                        // our pending game failed... make a new one
+                        await CreateNewGame(context);
+                    }
                     break;
                 }
             }
         }
         
-        private void CreateNewGame(IContext context) 
+        private async Task CreateNewGame(IContext context) 
         {
-            if (m_currentGame != null) context.Unwatch(m_currentGame);
-
             var props = context.System.DI().PropsFor<KartGame>(m_locRoom, m_kartColors);
             m_currentGame = context.Spawn(props);
             
-            context.Watch(m_currentGame);
+            context.ReenterAfter(Task.Delay(TimeSpan.FromSeconds(1)), async _ => 
+            {
+                await m_locRoom.BroadcastXtRes(new KartDriveOffNotification
+                {
+                    m_commandType = Modules.KART_RESET_GAME_NOTIFICATION, // !! type
+                    m_playerCount = m_kartColors.Length
+                });
+            });
         }
     }
 }

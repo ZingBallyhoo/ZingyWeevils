@@ -122,7 +122,7 @@ namespace BinWeevils.GameServer.Rooms
             
             plateVar.SetValue(setFood.m_foodId);
             await m_room.BroadcastRoomEvent((int)DinerEventID.SET_FOOD, setFood);
-            GameServerObservability.s_dinerTraysGrabbed.Add(1);
+            GameServerObservability.s_dinerFoodSet.Add(1);
         }
         
         private async ValueTask TryEatFood(DinerEventEatFood eatFood)

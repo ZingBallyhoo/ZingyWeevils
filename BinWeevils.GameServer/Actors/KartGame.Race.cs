@@ -97,6 +97,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (m_raceSequenceStarted) return;
             
+            context.Send(context.Parent!, new KartGameSlot.CreateNewGameRequest());
             m_logger.LogInformation("Kart/{PID}: starting race sequence", context.Self);
             m_raceSequenceStarted = true;
             m_raceSequenceStartTime = DateTime.UtcNow;

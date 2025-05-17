@@ -63,6 +63,7 @@ namespace BinWeevils.Protocol
         
         public const string KART_DRIVE_OFF_NOTIFICATION = "driveOff";
         public const string KART_DRIVEN_OFF = "drivenOff";
+        public const string KART_RESET_GAME_NOTIFICATION = "resetGame";
         public const string KART_PREPARE_GAME_NOTIFICATION = "prepareGame";
         public const string KART_GET_START_TIME = "gst";
         public const string KART_GET_READY_NOTIFICATION = "getReady";

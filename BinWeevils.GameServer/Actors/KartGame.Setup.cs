@@ -74,7 +74,6 @@ namespace BinWeevils.GameServer.Actors
             m_gameReady = ready;
             if (!m_gameReady) return;
             
-            context.Send(context.Parent!, new KartGameSlot.CreateNewGameRequest());
             context.ReenterAfter(Task.Delay(TimeSpan.FromSeconds(3)), async _ => 
             {
                 await KickNonReadyUsers(context);
