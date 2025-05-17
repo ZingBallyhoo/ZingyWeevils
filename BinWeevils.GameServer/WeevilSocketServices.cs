@@ -107,7 +107,7 @@ namespace BinWeevils.GameServer
                 UserName = name,
                 Email = $"{name}@weevilmail.net",
                 m_weevil = dbWeevil
-            }, "h");
+            });
             if (!result.Succeeded) throw new Exception($"Create account failed: {result}");
             
             account = await identityManager.FindByNameAsync(name);
