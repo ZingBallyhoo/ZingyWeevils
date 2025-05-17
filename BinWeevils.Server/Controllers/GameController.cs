@@ -16,18 +16,21 @@ namespace BinWeevils.Server.Controllers
     public class GameController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
+        private readonly TimeProvider m_timeProvider;
         private readonly SinglePlayerGamesSettings m_singlePlayerSettings;
         private readonly TurnBasedGamesSettings m_turnBasedSettings;
         private readonly WeevilWheelsSettings m_kartSettings;
         private readonly EconomySettings m_economy;
         
         public GameController(WeevilDBContext dbContext, 
+            TimeProvider timeProvider,
             IOptionsSnapshot<SinglePlayerGamesSettings> singlePlayerSettings, 
             IOptionsSnapshot<TurnBasedGamesSettings> turnBasedSettings, 
             IOptionsSnapshot<WeevilWheelsSettings> kartSettings, 
             IOptionsSnapshot<EconomySettings> economy)
         {
             m_dbContext = dbContext;
+            m_timeProvider = timeProvider;
             m_singlePlayerSettings = singlePlayerSettings.Value;
             m_turnBasedSettings = turnBasedSettings.Value;
             m_kartSettings = kartSettings.Value;
@@ -48,15 +51,17 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> UpsertGame(uint weevilIdx, EGameType gameType)
         {
-            var now = DateTime.UtcNow;
+            var now = m_timeProvider.GetUtcNow().UtcDateTime;
+            var deadline = now - m_singlePlayerSettings.Cooldown; 
+
             var rowsUpserted = await m_dbContext.m_weevilGamesPlayed
                 .Upsert(new WeevilGamePlayedDB
                 {
                     m_gameType = gameType,
-                    m_lastPlayed = DateTime.UtcNow,
+                    m_lastPlayed = now,
                     m_weevilIdx = weevilIdx
                 })
-                .UpdateIf(x => now-x.m_lastPlayed >= m_singlePlayerSettings.Cooldown)
+                .UpdateIf(x => x.m_lastPlayed <= deadline)
                 .RunAsync();
             return rowsUpserted != 0;
         }
@@ -81,15 +86,17 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> UpsertGame(uint weevilIdx, ETurnBasedGameType gameType)
         {
-            var now = DateTime.UtcNow;
+            var now = m_timeProvider.GetUtcNow().UtcDateTime;
+            var deadline = now - m_turnBasedSettings.Cooldown; 
+            
             var rowsUpserted = await m_dbContext.m_weevilTurnBasedGamesPlayed
                 .Upsert(new WeevilTurnBasedGamePlayedDB
                 {
                     m_gameType = gameType,
-                    m_lastPlayed = DateTime.UtcNow,
+                    m_lastPlayed = now,
                     m_weevilIdx = weevilIdx
                 })
-                .UpdateIf(x => now-x.m_lastPlayed >= m_turnBasedSettings.Cooldown)
+                .UpdateIf(x => x.m_lastPlayed <= deadline)
                 .RunAsync();
             return rowsUpserted != 0;
         }
@@ -226,7 +233,7 @@ namespace BinWeevils.Server.Controllers
         {
             using var activity = ApiServerObservability.StartActivity("GameController.GetBrainTrainingInfo");
             
-            var deadline = DateTime.UtcNow - m_singlePlayerSettings.Cooldown; 
+            var deadline = m_timeProvider.GetUtcNow().UtcDateTime - m_singlePlayerSettings.Cooldown; 
             // (efcore cant eval arithmetic on datetime)
             // https://github.com/dotnet/efcore/issues/6025
             var onCooldown = await m_dbContext.m_weevilGamesPlayed

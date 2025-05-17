@@ -15,6 +15,32 @@ namespace BinWeevils.Tests.Integration
         }
         
         [Fact]
+        public async Task GameCooldown()
+        {
+            var account = await m_factory.CreateAccount(nameof(OneTimeAward));
+            m_factory.SetAccount(account.UserName!);
+            
+            var client = m_factory.CreateClient();
+            
+            var req = new SubmitScoreRequest
+            {
+                m_gameID = EGameType.MulchShoot,
+                m_score = 100
+            };
+            
+            var resp = await client.PostSimpleFormAsync<SubmitScoreRequest, SubmitScoreResponse>("api/game/submit-single", req);
+            Assert.Equal(SubmitScoreResponse.ERR_OK, resp.m_result);
+            
+            resp = await client.PostSimpleFormAsync<SubmitScoreRequest, SubmitScoreResponse>("api/game/submit-single", req);
+            Assert.Equal(SubmitScoreResponse.ERR_PLAYED_ALREADY, resp.m_result);
+            
+            m_factory.AdvanceTime(TimeSpan.FromMinutes(10));
+            
+            resp = await client.PostSimpleFormAsync<SubmitScoreRequest, SubmitScoreResponse>("api/game/submit-single", req);
+            Assert.Equal(SubmitScoreResponse.ERR_OK, resp.m_result);
+        }
+        
+        [Fact]
         public async Task OneTimeAward()
         {
             var account = await m_factory.CreateAccount(nameof(OneTimeAward));
