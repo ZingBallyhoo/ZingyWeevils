@@ -68,9 +68,9 @@ namespace BinWeevils.Tests.Integration
             var tooSlow = await SubmitTimes(client, new SubmitLapTimesRequest
             {
                 m_userID = account.UserName!,
-                m_lap1 = 50,
-                m_lap2 = 50,
-                m_lap3 = 50,
+                m_lap1 = 50_000,
+                m_lap2 = 50_000,
+                m_lap3 = 50_000,
                 m_trackID = EGameType.WeevilWheelsTrack1
             });
             Assert.Equal(0, tooSlow.m_pbTotal);
@@ -79,15 +79,15 @@ namespace BinWeevils.Tests.Integration
             var response = await SubmitTimes(client, new SubmitLapTimesRequest
             {
                 m_userID = account.UserName!,
-                m_lap1 = 10,
-                m_lap2 = 10,
-                m_lap3 = 10,
+                m_lap1 = 10_000,
+                m_lap2 = 10_000,
+                m_lap3 = 10_000,
                 m_trackID = EGameType.WeevilWheelsTrack1
             });
             
             Assert.True(response.m_medalInfo.m_hasWonMedal);
             Assert.Equal("gold", response.m_medalInfo.m_medalType);
-            Assert.Equal(50, response.m_pbLap1);
+            Assert.Equal(50_000, response.m_pbLap1);
             
             var storedItems = await client.GetStoredItems(account.UserName!);
             Assert.Equal(3, storedItems.m_items.Count(x => x.m_configName == "o_wwTrophy1"));
@@ -104,9 +104,9 @@ namespace BinWeevils.Tests.Integration
             var bronzeTime = new SubmitLapTimesRequest
             {
                 m_userID = account.UserName!,
-                m_lap1 = 15,
-                m_lap2 = 15,
-                m_lap3 = 15,
+                m_lap1 = 15_000,
+                m_lap2 = 15_000,
+                m_lap3 = 15_000,
                 m_trackID = EGameType.WeevilWheelsTrack1
             };
             var getBronze = await SubmitTimes(client, bronzeTime);
@@ -121,9 +121,9 @@ namespace BinWeevils.Tests.Integration
             var goldTime = new SubmitLapTimesRequest
             {
                 m_userID = account.UserName!,
-                m_lap1 = 10,
-                m_lap2 = 10,
-                m_lap3 = 10,
+                m_lap1 = 10_000,
+                m_lap2 = 10_000,
+                m_lap3 = 10_000,
                 m_trackID = EGameType.WeevilWheelsTrack1
             };
             var getGold = await SubmitTimes(client, goldTime);

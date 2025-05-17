@@ -31,7 +31,7 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new InvalidDataException("submitting lap times for somebody else");
             }
-            if (request.m_lap1 <= 5 || request.m_lap2 <= 1 || request.m_lap3 <= 5)
+            if (request.m_lap1 <= 5000 || request.m_lap2 <= 5000 || request.m_lap3 <= 5000)
             {
                 throw new InvalidDataException("invalid lap time");
             }
@@ -43,7 +43,7 @@ namespace BinWeevils.Server.Controllers
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var dto = await m_dbContext.GetIdxAndNestID(request.m_userID);
             
-            var totalTime = TimeSpan.FromSeconds(request.m_lap1 + request.m_lap2 + request.m_lap3);
+            var totalTime = TimeSpan.FromMilliseconds(request.m_lap1 + request.m_lap2 + request.m_lap3);
             var highestTrophy = GetTrophyForTime(totalTime, track);
             var awardedTrophy = false;
 
@@ -152,7 +152,7 @@ namespace BinWeevils.Server.Controllers
             {
                 if (!track.TrophyTimes.TryGetValue(type, out var trophyTime)) continue;
                 
-                if (trophyTime >= time)
+                if (time <= trophyTime)
                 {
                     return type;
                 }
