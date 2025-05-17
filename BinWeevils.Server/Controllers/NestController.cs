@@ -931,5 +931,30 @@ namespace BinWeevils.Server.Controllers
             
             await transaction.CommitAsync();
         }
+        
+        [HttpGet("nest/get-rooms-rated-today")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public GetRoomsRatedTodayResponse GetRoomsRatedToday()
+        {
+            using var activity = ApiServerObservability.StartActivity("NestController.GetRoomsRatedToday");
+
+            return new GetRoomsRatedTodayResponse();
+        }
+        
+        [StructuredFormPost("nest/rate-nest-room")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public void RateRoom([FromBody] RateNestRoomRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("NestController.RateNestRoomRequest");
+            activity?.AddTag("locID", request.m_locID);
+            activity?.AddTag("rating", request.m_rating);
+            
+            if (request.m_rating < 1 || request.m_rating > 5)
+            {
+                throw new InvalidDataException("invalid rating value");
+            }
+            
+            ApiServerObservability.s_nestRoomsRated.Add(1, new KeyValuePair<string, object?>("stars", request.m_rating));
+        }
     }
 }

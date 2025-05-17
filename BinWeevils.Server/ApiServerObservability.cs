@@ -33,6 +33,7 @@ namespace BinWeevils.Server
         public static readonly Counter<int> s_nestItemsMoved = s_meter.CreateCounter<int>("bw_nest_items_moved");
         public static readonly Counter<int> s_nestItemsRemoved = s_meter.CreateCounter<int>("bw_nest_items_removed");
         public static readonly Counter<int> s_levelUpsProcessed = s_meter.CreateCounter<int>("bw_level_ups_processed");
+        public static readonly Counter<int> s_nestRoomsRated = s_meter.CreateCounter<int>("bw_nest_rooms_rated");
         
         public static readonly Counter<int> s_gardenItemsPlaced = s_meter.CreateCounter<int>("bw_garden_items_placed");
         public static readonly Counter<int> s_gardenItemsMoved = s_meter.CreateCounter<int>("bw_garden_items_moved");
