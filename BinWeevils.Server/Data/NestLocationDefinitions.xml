@@ -1,0 +1,125 @@
+<nestLocDefs version='4'>
+    <location id='1' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='9,10,19,20' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room1.swf'/>
+        <door id='1' toLoc='5' toDoor='5' x1='154' z1='142' x2='240' z2='142'/>
+    </location>
+    <location id='2' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='1,2,41,42' camPos='0,190,-330' camAim='0,90,260' entryPos='0,150' weevilScale='0.5'>
+        <roomBG path='assetsNest/room2.swf'/>
+        <door id='1' toLoc='5' toDoor='3' x1='-150' z1='140' x2='-140' z2='-40'/>
+    </location>
+    <location id='3' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='1,2,11,12' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room3.swf'/>
+        <door id='1' toLoc='5' toDoor='6' x1='-154' z1='142' x2='-240' z2='142'/>
+    </location>
+    <location id='4' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='8,9,10,19,20' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room4.swf'/>
+        <door id='1' toLoc='5' toDoor='1' x1='150' z1='140' x2='240' z2='140'/>
+        <door id='2' toLoc='7' toDoor='1' x1='150' z1='140' x2='140' z2='-40'/>
+    </location>
+    <location id='5' name='nest' type='3' cat='0' boundType='rad' boundary='0,185,168' keepFree='1,6,5,10' camPos='0,145,-115' camAim='0,15,500' entryPos='0,200' weevilScale='0.45' noZoom='yes'>
+        <roomBG path='assetsNest/nestHall_4.swf'/>
+        <door id='1' toLoc='4' toDoor='1' x1='-160' z1='190' x2='-240' z2='190'/>
+        <door id='2' toLoc='6' toDoor='1' x1='160 ' z1='190' x2='240' z2='190'/>
+        <door id='3' toLoc='2' toDoor='1' x1='-15 ' z1='360' x2='-15' z2='480'/>
+        <door id='4' toLoc='8' toDoor='1' x1='0 ' z1='160' x2='0' z2='10'/>
+        <door id='5' toLoc='1' toDoor='1' x1='-131 ' z1='266' x2='-235' z2='325'/>
+        <door id='6' toLoc='3' toDoor='1' x1='155' z1='245' x2='240' z2='262'/>
+        <door id='7' toLoc='7' toDoor='2' x1='-64' z1='150' x2='-157' z2='10'/>
+        <door id='8' toLoc='9' toDoor='2' x1='50 ' z1='150' x2='140' z2='10'/>
+        <door id='9' toLoc='20' toDoor='1' x1='-100' z1='220' x2='-101' y2='500' z2='220'/>
+        <door id='10' toLoc='10' toDoor='1' x1='155' z1='130' x2='155' y2='-150' z2='130'/>
+        <interactive type="door" path='portalFront_mc.blades_mc' actRect='-130,300,90,100'/>
+        <interactive type="door" path='portal_mc' actRect='-200,450,80,100'/>
+        <object name='portalFront_mc' x='0' y='0' z='400'/>
+        <object name='msgBox' x='-180' y='0' z='90'/>
+    </location>
+    <location id='6' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='1,2,3,11,12' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room6.swf'/>
+        <door id='1' toLoc='5' toDoor='2' x1='-150' z1='140' x2='-240' z2='140'/>
+        <door id='2' toLoc='9' toDoor='1' x1='-150' z1='140' x2='-140' z2='-40'/>
+    </location>
+    <location id='7' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='9,10,19,20,28,29,38,39,40' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room7.swf'/>
+        <door id='1' toLoc='4' toDoor='2' x1='150 ' z1='360' x2='150' z2='490'/>
+        <door id='2' toLoc='5' toDoor='7' x1='154' z1='142' x2='240' z2='142'/>
+    </location>
+    <location id='8' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='25,26,35,36' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room8.swf'/>
+        <door id='1' toLoc='5' toDoor='4' x1='0 ' z1='360' x2='0' z2='490'/>
+    </location>
+    <location id='9' name='nest' type='3' cat='1' boundary='-170,30,340,340' bounds='-200,0,0,200,240,400' keepFree='1,2,11,12,22,23,31,32,33' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsNest/room9.swf'/>
+        <door id='1' toLoc='6' toDoor='2' x1='-150 ' z1='360' x2='-150' z2='490'/>
+        <door id='2' toLoc='5' toDoor='8' x1='-154' z1='142' x2='-240' z2='142'/>
+    </location>
+    <location id='10' name='nest' type='3' cat='6' boundary='-170,80,340,220' keepFree='' camPos='0,145,-115' camAim='0,15,500' entryPos='0,200' weevilScale='0.45' noZoom='yes'>
+        <roomBG path='assetsTycoon/VODroom.swf'/>
+        <door id='1' toLoc='5' toDoor='10' x1='160' z1='174' x2='300' y2='500' z2='100'/>
+        <object name='blankScreen_spr' x='0' y='0' z='390'/>
+        <object name='defaultSkin_spr' x='0' y='0' z='395'/>
+        <object name='playerHolder_spr' x='0' y='0' z='380'/>
+        <object name='menuTab_spr' x='0' y='200' z='5'/>
+        <object name='menuHolder_spr' x='0' y='200' z='0'/>
+        <object name='fullScreenHolder_spr' x='0' y='0' z='-10'/>
+    </location>
+    <location id='20' name='nest' type='3' cat='5' boundType='rad' boundary='-3,360,197' keepFree='' camPos='-880,870,-680' camAim='10,108,200' entryPos='16,429' weevilScale='0.16' noZoom='yes'>
+        <roomBG path='assetsGarden/gardenBG_3.swf'/>
+        <noGoArea type='rad' x='5' z='505' r='94'/>
+        <door id='1' toLoc='5' toDoor='9' x1='12' z1='378' x2='20' z2='480'/>
+        <door id='2' toLoc='104' toDoor='4' x1='0 ' z1='360' x2='-3' z2='360' y2='1800' entryDir='0'/>
+        <object name='door1_mc' x='8' y='0' z='408'/>
+        <object name='nest' x='45' y='0' z='450'/>
+        <object name='buySeedsSign_mc' x='-200' y='0' z='0'/>
+        <object name='fenceFrontHolder' x='-80' y='0' z='80'/>
+        <object name='fenceBackHolder' x='415' y='0' z='615'/>
+        <object name='plantInfo_spr' x='-200' y='0' z='-100'/>
+        <object name='plantActions1a_spr' x='-200' y='0' z='-100'/>
+        <object name='plantActions1_spr' x='-200' y='0' z='-101'/>
+        <object name='plantActions2_spr' x='-200' y='0' z='-102'/>
+        <object name='plantWithered_spr' x='-200' y='0' z='-103'/>
+        <object name='harvesting_spr' x='-200' y='0' z='-104'/>
+    </location>
+    <location id='50' name='nest' type='3' cat='3' boundary='-170,-100,275,400' bounds='-200,0,0,200,240,400' keepFree='21,22,23,24,5,10,15,20' camPos='-300,261,-100' camAim='0,32,200' entryPos='-100,147' weevilScale='0.23'>
+        <roomBG path='assetsTycoon/plaza.swf'/>
+        <door id='1' toLoc='51' toDoor='1' x1='-160' z1='295' x2='-160' z2='390'/>
+        <door id='2' toLoc='52' toDoor='1' x1='-10' z1='295' x2='-10' z2='390'/>
+        <door id='3' toLoc='53' toDoor='1' x1='88 ' z1='188' x2='190' z2='188'/>
+        <door id='4' toLoc='54' toDoor='1' x1='88 ' z1='40' x2='190' z2='40'/>
+        <door id='5' toLoc='55' toDoor='1' x1='-179 ' z1='160' x2='-215' z2='250'/>
+        <object name='closed1' x='-157' y='0' z='300'/>
+        <object name='closed2' x='-20' y='0' z='300'/>
+        <object name='closed3' x='100' y='0' z='180'/>
+        <object name='closed4' x='100' y='0' z='38'/>
+        <object name='forSale1' x='-20 ' y='100' z='320'/>
+        <object name='forSale2' x='170' y='100' z='320'/>
+        <object name='forSale3' x='120' y='100' z='280'/>
+        <object name='forSale4' x='120' y='100' z='150'/>
+        <object name='forSale5' x='-145' y='0' z='178'/>
+        <object name='cameraSign' x='-145' y='0' z='179'/>
+        <object name='openClosePlaza' x='-7' y='0' z='-20'/>
+    </location>
+    <location id='51' name='nest' type='3' cat='2' boundary='-270,-100,470,500' bounds='-200,0,0,200,240,400' keepFree='3' camPos='-300,261,-100' camAim='0,32,200' entryPos='-100,147' weevilScale='0.23'>
+        <roomBG path='assetsTycoon/room_left.swf'/>
+        <door id='1' toLoc='50' toDoor='1' x1='4' z1='28' x2='4' z2='-50'/>
+    </location>
+    <location id='52' name='nest' type='3' cat='2' boundary='-270,-100,470,500' bounds='-200,0,0,200,240,400' keepFree='3' camPos='-300,261,-100' camAim='0,32,200' entryPos='-100,147' weevilScale='0.23'>
+        <roomBG path='assetsTycoon/room_left.swf'/>
+        <door id='1' toLoc='50' toDoor='2' x1='4' z1='28' x2='4' z2='-50'/>
+    </location>
+    <location id='53' name='nest' type='3' cat='2' boundary='-270,-100,470,500' bounds='-200,0,0,200,240,400' keepFree='11' camPos='-300,261,-100' camAim='0,32,200' entryPos='-100,147' weevilScale='0.23'>
+        <roomBG path='assetsTycoon/room_right.swf'/>
+        <door id='1' toLoc='50' toDoor='3' x1='-165' z1='210' x2='-260' z2='210'/>
+    </location>
+    <location id='54' name='nest' type='3' cat='2' boundary='-270,-100,470,500' bounds='-200,0,0,200,240,400' keepFree='11' camPos='-300,261,-100' camAim='0,32,200' entryPos='-100,147' weevilScale='0.23'>
+        <roomBG path='assetsTycoon/room_right.swf'/>
+        <door id='1' toLoc='50' toDoor='4' x1='-165' z1='210' x2='-260' z2='210'/>
+    </location>
+    <location id='55' name='nest' type='3' cat='4' boundary='-170,100,340,270' bounds='-200,0,0,200,240,400' keepFree='11' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.5'>
+        <roomBG path='assetsTycoon/room_photoStudio.swf'/>
+        <door id='1' toLoc='50' toDoor='5' x1='130' z1='70' x2='300' y2='500' z2='80'/>
+        <object name='light' x='0' y='0' z='170'/>
+        <object name='camera' x='0' y='0' z='100'/>
+        <object name='howToPoster_btn' x='0' y='0' z='400'/>
+        <object name='instructions' x='0' y='0' z='-10'/>
+    </location>
+</nestLocDefs>

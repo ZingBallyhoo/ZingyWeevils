@@ -76,7 +76,7 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public IResult GetNestLocationDefinitions()
         {
-            return Results.File(m_configuration["NestLocationDefinitions"]!);
+            return Results.File(Path.GetFullPath(m_configuration["NestLocationDefinitions"]!));
         }
         
         [StructuredFormPost("php/getAdPaths.php")]
