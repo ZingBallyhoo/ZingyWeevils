@@ -153,16 +153,9 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("QuestController.Reward");
             m_logger.LogTrace("Granting rewards for task {TaskID}", task.m_scrapedData.m_id);
             
-            var rowsUpdated = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == weevilIdx)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch + task.m_scrapedData.m_rewardMulch)
-                    .SetProperty(x => x.m_xp, x => x.m_xp + task.m_scrapedData.m_rewardXp)
-                );
-            if (rowsUpdated == 0)
-            {
-                throw new Exception("failed to award mulch & xp");
-            }
+            await m_dbContext.GiveMulchAndXp(weevilIdx, 
+                (uint)task.m_scrapedData.m_rewardMulch, 
+                (uint)task.m_scrapedData.m_rewardXp);
             
             await RewardItems(weevilIdx, task, response);
             await RewardSpecialMoves(weevilIdx, task, response);
@@ -302,14 +295,7 @@ namespace BinWeevils.Server.Controllers
         
         private async Task AddCommonCompletedData(uint weevilIdx, TaskCompletedResponse resp)
         {
-            var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == weevilIdx)
-                .Select(x => new
-                {
-                    x.m_mulch,
-                    x.m_xp,
-                })
-                .SingleAsync();
+            var dto = await m_dbContext.GetMulchAndXp(weevilIdx);
             
             resp.m_mulch = dto.m_mulch;
             resp.m_xp = dto.m_xp;

@@ -279,12 +279,44 @@ namespace BinWeevils.Common.Database
                 })
                 .SingleAsync();
         }
+        
+        public async Task GiveMulchAndXp(uint idx, uint mulch, uint xp)
+        {
+            var rowsUpdated = await m_weevilDBs
+                .Where(x => x.m_idx == idx)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.m_mulch, x => x.m_mulch + mulch)
+                    .SetProperty(x => x.m_xp, x => x.m_xp + xp)
+                );
+            if (rowsUpdated == 0)
+            {
+                throw new Exception("GiveMulchAndXp failed");
+            }
+        }
+        
+        public Task<MulchAndXpDto> GetMulchAndXp(uint idx)
+        {
+            return m_weevilDBs
+                .Where(x => x.m_idx == idx)
+                .Select(x => new MulchAndXpDto
+                {
+                    m_mulch = x.m_mulch,
+                    m_xp = x.m_xp
+                })
+                .SingleAsync();
+        }
     }
     
     public class IdxAndNestID
     {
         public uint m_idx;
         public uint m_nestID;
+    }
+    
+    public class MulchAndXpDto
+    {
+        public int m_mulch;
+        public uint m_xp;
     }
     
     public class WeevilCreateParams

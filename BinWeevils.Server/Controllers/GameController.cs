@@ -17,12 +17,17 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly WeevilDBContext m_dbContext;
         private readonly SinglePlayerGamesSettings m_settings;
+        private readonly WeevilWheelsSettings m_kartSettings;
         private readonly EconomySettings m_economy;
         
-        public GameController(WeevilDBContext dbContext,  IOptionsSnapshot<SinglePlayerGamesSettings> settings, IOptionsSnapshot<EconomySettings> economy)
+        public GameController(WeevilDBContext dbContext, 
+            IOptionsSnapshot<SinglePlayerGamesSettings> settings, 
+            IOptionsSnapshot<WeevilWheelsSettings> kartSettings, 
+            IOptionsSnapshot<EconomySettings> economy)
         {
             m_dbContext = dbContext;
             m_settings = settings.Value;
+            m_kartSettings = kartSettings.Value;
             m_economy = economy.Value;   
         }
         
@@ -85,12 +90,7 @@ namespace BinWeevils.Server.Controllers
             var rewardMulch = (uint)Math.Min(request.m_score * m_economy.GameScoreToMulch, m_economy.MaxMulchPerGame);
             var rewardXp = (uint)Math.Min(request.m_score * m_economy.GameScoreToXp, m_economy.MaxXpPerGame);
             
-            await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == idx)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch + rewardMulch)
-                    .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
-                );
+            await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
             await transaction.CommitAsync();
             
             ApiServerObservability.s_gamesScoreTotal.Add(request.m_score, tag);
@@ -150,21 +150,8 @@ namespace BinWeevils.Server.Controllers
                 rewardXp = 0;
             }
             
-            await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == idx)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch + rewardMulch)
-                    .SetProperty(x => x.m_xp, x => x.m_xp + rewardXp)
-                );
-            
-            var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == idx)
-                .Select(x => new
-                {
-                    x.m_mulch,
-                    x.m_xp
-                })
-                .SingleAsync();
+            await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
+            var dto = await m_dbContext.GetMulchAndXp(idx);
             await transaction.CommitAsync();
             
             var tag = new KeyValuePair<string, object?>("game", EGameType.BrainTrain);
@@ -179,6 +166,60 @@ namespace BinWeevils.Server.Controllers
             return new SubmitDailyBrainResponse
             {
                 m_modes = 1, // we are definitely on cooldown
+                m_mulchEarned = rewardMulch,
+                m_xpEarned = rewardXp,
+                m_mulch = dto.m_mulch,
+                m_xp = dto.m_xp
+            };
+        }
+        
+        [StructuredFormPost("submit-trial")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SubmitTurnBasedResponse> SubmitTimeTrial([FromBody] SubmitTimeTrialRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.SubmitTimeTrial");
+            activity?.SetTag("trackID", request.m_trackID);
+            activity?.SetTag("time", request.m_time);
+                        
+            if (!m_kartSettings.Enabled)
+            {
+                throw new Exception("not enabled");
+            }
+            
+            // todo: config...
+            var gameID = request.m_trackID switch 
+            {
+                1 => EGameType.WeevilWheelsTrack1,
+                2 => EGameType.WeevilWheelsTrack2,
+                3 => EGameType.WeevilWheelsTrack3,
+                _ => throw new InvalidDataException("unknown track id")
+            };
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var idx = await GetIdx();
+            if (!await UpsertGame(idx, gameID))
+            {
+                return new SubmitTurnBasedResponse();
+            }
+            
+            var track = m_kartSettings.Tracks[gameID];
+            var completeTime = TimeSpan.FromMilliseconds(request.m_time);
+            
+            var interpProgress = track.TrophyTimes[WeevilWheelsTrophyType.Gold] / completeTime;
+            interpProgress = Math.Min(interpProgress, 1);
+            interpProgress = Math.Max(interpProgress, 0);
+            var rewardMulch = (uint)double.Lerp(
+                m_kartSettings.MinTimeTrialMulch, 
+                m_kartSettings.GoldTimeTrialMulch, 
+                interpProgress);
+            const uint rewardXp = 0u;
+            
+            await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
+            var dto = await m_dbContext.GetMulchAndXp(idx);
+            await transaction.CommitAsync();
+            
+            return new SubmitTurnBasedResponse
+            {
                 m_mulchEarned = rewardMulch,
                 m_xpEarned = rewardXp,
                 m_mulch = dto.m_mulch,

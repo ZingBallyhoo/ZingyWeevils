@@ -12,9 +12,9 @@ namespace BinWeevils.Protocol.Form.Game
     [GenerateShape]
     public partial class SubmitTurnBasedResponse
     {
-        [PropertyShape(Name = "mulchEarned")] public int m_mulchEarned { get; set; }
-        [PropertyShape(Name = "xpEarned")] public int m_xpEarned { get; set; }
+        [PropertyShape(Name = "mulchEarned")] public uint m_mulchEarned { get; set; }
+        [PropertyShape(Name = "xpEarned")] public uint m_xpEarned { get; set; }
         [PropertyShape(Name = "mulch")] public int m_mulch { get; set; }
-        [PropertyShape(Name = "xp")] public int m_xp { get; set; }
+        [PropertyShape(Name = "xp")] public uint m_xp { get; set; }
     }
 }

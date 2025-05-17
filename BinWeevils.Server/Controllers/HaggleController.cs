@@ -149,14 +149,7 @@ namespace BinWeevils.Server.Controllers
             var hagglePrice = (uint)Math.Floor(hagglePriceDecimal);
             activity?.SetTag("hagglePrice", hagglePrice);
             
-            var rowsUpdated = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_idx == initDto.m_idx)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch + hagglePrice));
-            if (rowsUpdated == 0) 
-            {
-                throw new Exception("unable to give haggle mulch");
-            }
+            await m_dbContext.GiveMulchAndXp(initDto.m_idx, hagglePrice, 0);
             
             var resultDto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_idx == initDto.m_idx)

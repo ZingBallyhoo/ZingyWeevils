@@ -437,6 +437,7 @@ namespace BinWeevils.Server.Controllers
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(weev => new 
                 {
+                    weev.m_idx,
                     weev.m_happiness,
                     m_plant = weev.m_nest.m_gardenSeeds
                         .Where(plant => plant.m_id == request.m_plantID)
@@ -496,27 +497,12 @@ namespace BinWeevils.Server.Controllers
                 }
             }
             
-            var weevRowsUpdated = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.m_mulch, x => x.m_mulch + dto.m_plant.m_mulchYield)
-                    .SetProperty(x => x.m_xp, x => x.m_xp + dto.m_plant.m_xpYield));
-            if (weevRowsUpdated == 0)
-            {
-                throw new Exception("unable to add harvest rewards");
-            }
+            await m_dbContext.GiveMulchAndXp(dto.m_idx, dto.m_plant.m_mulchYield, dto.m_plant.m_xpYield);
             
             // todo: the client won't reload other's plant configs so...
             //await m_dbContext.SetNestUpdatedNoConcurrency(nestID);
             
-            var resultDto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
-                .Select(x => new
-                {
-                    x.m_mulch,
-                    x.m_xp
-                })
-                .SingleAsync();
+            var resultDto = await m_dbContext.GetMulchAndXp(dto.m_idx);
             await transaction.CommitAsync();
             
             var tag = ApiServerObservability.GetSeedCategoryTag(dto.m_plant.m_category);

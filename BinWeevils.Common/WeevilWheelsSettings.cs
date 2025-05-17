@@ -5,6 +5,8 @@ namespace BinWeevils.Common
     public class WeevilWheelsSettings
     {
         public bool Enabled { get; set; }
+        public int MinTimeTrialMulch { get; set; }
+        public int GoldTimeTrialMulch { get; set; }
         public Dictionary<WeevilWheelsTrophyType, uint> TrophyColors { get; set; }
         public Dictionary<EGameType, WeevilWheelsTrackSettings> Tracks { get; set; }
     }

@@ -302,15 +302,7 @@ namespace BinWeevils.Server.Controllers
                  throw new Exception("concurrency check on set garden size failed");
              }
              
-             var resultDto = await m_dbContext.m_weevilDBs
-                 .Where(x => x.m_idx == dto.m_idx)
-                 .Select(x => new
-                 {
-                     x.m_mulch,
-                     x.m_xp
-                 })
-                 .SingleAsync();
-             
+             var resultDto = await m_dbContext.GetMulchAndXp(dto.m_idx);
              await m_dbContext.SetNestUpdatedNoConcurrency(dto.m_nestID);
              await transaction.CommitAsync();
              
