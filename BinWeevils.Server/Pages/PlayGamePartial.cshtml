@@ -14,13 +14,7 @@
 <div id="container">
     <img id="frameLeft" src="/images/frameLeft_old.jpg" height="99.5275%" asp-append-version="true">
     <img id="logo" src="/images/logo_on_gradBG_70.jpg" height="22.6771%">
-    <object type="application/x-shockwave-flash" id="nav" data="/navbar_logout.swf" width="85.4166%" height="10.3937%">
-        <param name='FlashVars' value="user="/>
-
-        <param name='quality' value="high"/>
-        <param name='bgcolor' value="#4F95FF"/>
-        <param name='wmode' value="transparent"/>
-    </object>
+    <!-- ordered this way because the first ruffle instance will load quicker -->
     <object type="application/x-shockwave-flash" id="flash" data="/main.swf" width="97.9166%" height="88.1889%">
         <param name='FlashVars' value="cluster=h&loginPath=&zone="/>
 
@@ -30,6 +24,13 @@
         <param name='wmode' value="window"/>
         <param name='allowScriptAccess' value="always"/>
     </object>
+    <object type="application/x-shockwave-flash" id="nav" data="/navbar_logout.swf" width="85.4166%" height="10.3937%">
+        <param name='FlashVars' value="user="/>
+
+        <param name='quality' value="high"/>
+        <param name='bgcolor' value="#4F95FF"/>
+        <param name='wmode' value="transparent"/>
+    </object>   
 </div>
 
 </body>
