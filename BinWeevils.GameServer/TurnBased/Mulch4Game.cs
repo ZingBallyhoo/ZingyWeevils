@@ -38,7 +38,7 @@ namespace BinWeevils.GameServer.TurnBased
             var winningSlots = data.FindWinningSlots(request.m_column, firstEmptyRow);
             turnResponse.m_winnerFound = winningSlots != null;
             turnResponse.m_winningSlots = winningSlots == null ? null : string.Join(',', winningSlots);
-            turnResponse.m_staleMate = !data.m_columns.All(x => x.All(y => y != TileBasedGameData.TileState.Empty));
+            turnResponse.m_staleMate = data.m_columns.SelectMany(x => x).All(y => y != TileBasedGameData.TileState.Empty);
             
             return turnResponse;
         }
