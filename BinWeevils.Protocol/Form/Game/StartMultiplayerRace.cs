@@ -7,10 +7,4 @@ namespace BinWeevils.Protocol.Form.Game
     {
         [PropertyShape(Name = "trackId")] public byte m_trackID;
     }
-    
-    [GenerateShape]
-    public partial class StartMultiplayerRaceResponse
-    {
-        [PropertyShape(Name = "key")] public string m_key;
-    }
 }

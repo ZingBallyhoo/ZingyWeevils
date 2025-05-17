@@ -16,17 +16,20 @@ namespace BinWeevils.Server.Controllers
     public class GameController : Controller
     {
         private readonly WeevilDBContext m_dbContext;
-        private readonly SinglePlayerGamesSettings m_settings;
+        private readonly SinglePlayerGamesSettings m_singlePlayerSettings;
+        private readonly TurnBasedGamesSettings m_turnBasedSettings;
         private readonly WeevilWheelsSettings m_kartSettings;
         private readonly EconomySettings m_economy;
         
         public GameController(WeevilDBContext dbContext, 
-            IOptionsSnapshot<SinglePlayerGamesSettings> settings, 
+            IOptionsSnapshot<SinglePlayerGamesSettings> singlePlayerSettings, 
+            IOptionsSnapshot<TurnBasedGamesSettings> turnBasedSettings, 
             IOptionsSnapshot<WeevilWheelsSettings> kartSettings, 
             IOptionsSnapshot<EconomySettings> economy)
         {
             m_dbContext = dbContext;
-            m_settings = settings.Value;
+            m_singlePlayerSettings = singlePlayerSettings.Value;
+            m_turnBasedSettings = turnBasedSettings.Value;
             m_kartSettings = kartSettings.Value;
             m_economy = economy.Value;   
         }
@@ -53,7 +56,22 @@ namespace BinWeevils.Server.Controllers
                     m_lastPlayed = DateTime.UtcNow,
                     m_weevilIdx = weevilIdx
                 })
-                .UpdateIf(x => now-x.m_lastPlayed >= m_settings.Cooldown)
+                .UpdateIf(x => now-x.m_lastPlayed >= m_singlePlayerSettings.Cooldown)
+                .RunAsync();
+            return rowsUpserted != 0;
+        }
+        
+        private async Task<bool> UpsertGame(uint weevilIdx, ETurnBasedGameType gameType)
+        {
+            var now = DateTime.UtcNow;
+            var rowsUpserted = await m_dbContext.m_weevilTurnBasedGamesPlayed
+                .Upsert(new WeevilTurnBasedGamePlayedDB
+                {
+                    m_gameType = gameType,
+                    m_lastPlayed = DateTime.UtcNow,
+                    m_weevilIdx = weevilIdx
+                })
+                .UpdateIf(x => now-x.m_lastPlayed >= m_turnBasedSettings.Cooldown)
                 .RunAsync();
             return rowsUpserted != 0;
         }
@@ -66,7 +84,7 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("gameID", request.m_gameID);
             activity?.SetTag("score", request.m_score);
             
-            if (!m_settings.Games.TryGetValue(request.m_gameID, out var gameSettings) || gameSettings.OneTimeAward != null)
+            if (!m_singlePlayerSettings.Games.TryGetValue(request.m_gameID, out var gameSettings) || gameSettings.OneTimeAward != null)
             {
                 return new SubmitScoreResponse
                 {
@@ -112,7 +130,7 @@ namespace BinWeevils.Server.Controllers
         {
             using var activity = ApiServerObservability.StartActivity("GameController.GetBrainTrainingInfo");
             
-            var deadline = DateTime.UtcNow - m_settings.Cooldown; 
+            var deadline = DateTime.UtcNow - m_singlePlayerSettings.Cooldown; 
             // (efcore cant eval arithmetic on datetime)
             // https://github.com/dotnet/efcore/issues/6025
             var onCooldown = await m_dbContext.m_weevilGamesPlayed
@@ -173,6 +191,70 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
+        [StructuredFormPost("start")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public StartTurnBasedResponse StartTurnBased([FromBody] StartTurnBasedRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.SubmitTimeTrial");
+            activity?.SetTag("gameID", request.m_gameID);
+            
+            if (!Enum.IsDefined(request.m_gameID))
+            {
+                throw new InvalidDataException("invalid game id");
+            }
+            
+            // what this does doesn't actually matter...
+            // the checks will all happen on submit
+            return new StartTurnBasedResponse
+            {
+                m_key = $"{(int)request.m_gameID}"
+            };
+        }
+        
+        [StructuredFormPost("submit-turn")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SubmitTurnBasedResponse> SubmitTurnBased([FromBody] SubmitTurnBasedRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.SubmitTurnBased");
+            activity?.SetTag("authKey", request.m_authKey);
+            activity?.SetTag("gameResult", request.m_gameResult);
+            
+            if (request.m_gameResult != 0 && request.m_gameResult != 1)
+            {
+                throw new InvalidDataException("invalid game result");
+            }
+            if (!Enum.TryParse<ETurnBasedGameType>(request.m_authKey, out var gameID))
+            {
+                throw new InvalidDataException("invalid key");
+            }
+            if (!m_turnBasedSettings.Games.TryGetValue(gameID, out var game))
+            {
+                throw new InvalidDataException("invalid game id");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var idx = await GetIdx();
+            if (!await UpsertGame(idx, gameID))
+            {
+                return new SubmitTurnBasedResponse();
+            }
+            
+            var rewardMulch = m_turnBasedSettings.BaseMulch + request.m_gameResult * m_turnBasedSettings.WinMulch;
+            var rewardXp = m_turnBasedSettings.BaseXp + request.m_gameResult * m_turnBasedSettings.WinXp;
+            
+            await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
+            var dto = await m_dbContext.GetMulchAndXp(idx);
+            await transaction.CommitAsync();
+            
+            return new SubmitTurnBasedResponse
+            {
+                m_mulchEarned = rewardMulch,
+                m_xpEarned = rewardXp,
+                m_mulch = dto.m_mulch,
+                m_xp = dto.m_xp
+            };
+        }
+        
         [StructuredFormPost("submit-trial")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<SubmitTurnBasedResponse> SubmitTimeTrial([FromBody] SubmitTimeTrialRequest request)
@@ -224,14 +306,14 @@ namespace BinWeevils.Server.Controllers
         
         [StructuredFormPost("start-race")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public StartMultiplayerRaceResponse StartMultiplayerRace([FromBody] StartMultiplayerRaceRequest request)
+        public StartTurnBasedResponse StartMultiplayerRace([FromBody] StartMultiplayerRaceRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("GameController.StartMultiplayerRace");
             activity?.SetTag("trackID", request.m_trackID);
             
             // what this does doesn't actually matter...
             // the checks will all happen on submit
-            return new StartMultiplayerRaceResponse
+            return new StartTurnBasedResponse
             {
                 m_key = $"{request.m_trackID}"
             };
@@ -242,7 +324,7 @@ namespace BinWeevils.Server.Controllers
         public async Task<SubmitTurnBasedResponse> SubmitMultiplayerRace([FromBody] SubmitMultiplayerRaceRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("GameController.SubmitMultiplayerRace");
-            activity?.SetTag("key", request.m_key);
+            activity?.SetTag("authKey", request.m_authKey);
             activity?.SetTag("numBeaten", request.m_numBeaten);
             
             if (!m_kartSettings.Enabled)
@@ -253,7 +335,7 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new InvalidDataException("invalid numBeaten");
             }
-            if (!byte.TryParse(request.m_key, out var trackID))
+            if (!byte.TryParse(request.m_authKey, out var trackID))
             {
                 throw new InvalidDataException("invalid key");
             }

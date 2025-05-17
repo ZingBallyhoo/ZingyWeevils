@@ -68,7 +68,7 @@ namespace BinWeevils.Server.Controllers
                 throw new InvalidDataException("can't send buddy message - not buddies");
             }
             
-            await m_dbContext.m_buddyMesssages.AddAsync(new BuddyMessageDB
+            await m_dbContext.m_buddyMessages.AddAsync(new BuddyMessageDB
             {
                 m_to = request.m_recipientIdx,
                 m_from = checkDto.m_idx,
@@ -87,7 +87,7 @@ namespace BinWeevils.Server.Controllers
         {
             using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.HasUnreadBuddyMessage");
             
-            var count = await m_dbContext.m_buddyMesssages
+            var count = await m_dbContext.m_buddyMessages
                 .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => !x.m_read)
                 .CountAsync();
@@ -107,7 +107,7 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.GetBuddyMessages");
             var dict = new Dictionary<string, string>();
             
-            var messages = await m_dbContext.m_buddyMesssages
+            var messages = await m_dbContext.m_buddyMessages
                 .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => new 
                 {
@@ -146,7 +146,7 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.MarkRead");
             activity?.SetTag("id", request.m_id);
 
-            var rowsUpdated = await m_dbContext.m_buddyMesssages
+            var rowsUpdated = await m_dbContext.m_buddyMessages
                 .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_id == request.m_id)
                 .Where(x => !x.m_read)
@@ -168,7 +168,7 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.Delete");
             activity?.SetTag("id", request.m_id);
 
-            var rowsDeleted = await m_dbContext.m_buddyMesssages
+            var rowsDeleted = await m_dbContext.m_buddyMessages
                 .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => x.m_id == request.m_id)
                 .ExecuteDeleteAsync();
@@ -188,7 +188,7 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("BuddyMessagesController.DeleteNonBuddyMessages");
             activity?.SetTag("ids", request.m_ids);
             
-            var rowsDeleted = await m_dbContext.m_buddyMesssages
+            var rowsDeleted = await m_dbContext.m_buddyMessages
                 .Where(x => x.m_toWeevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(x => request.m_ids.Contains(x.m_id))
                 .ExecuteDeleteAsync();

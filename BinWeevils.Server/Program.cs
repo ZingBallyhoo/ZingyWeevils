@@ -92,6 +92,10 @@ public class Program
         {
             return true;
         }).ValidateOnStart();
+        builder.Services.AddOptions<TurnBasedGamesSettings>().BindConfiguration("TurnBasedGames").Validate(settings => 
+        {
+            return true;
+        }).ValidateOnStart();
         
         
         builder.Services.AddDbContext<WeevilDBContext>((provider, options) =>

@@ -11,6 +11,16 @@ namespace BinWeevils.Protocol.Enums
         PirateCaptainPuzzle = 8,
         PirateNestItem = 9,
         PirateShipGame = 10,
+        HalloweenBanquet22 = 11, // each day is a different game id...
+        HalloweenBanquet23 = 12,
+        HalloweenBanquet24 = 13,
+        HalloweenBanquet25 = 14,
+        HalloweenBanquet26 = 15,
+        HalloweenBanquet27 = 16,
+        HalloweenBanquet28 = 17,
+        HalloweenBanquet29 = 18,
+        HalloweenBanquet30 = 19,
+        HalloweenBanquet31 = 20,
         SkullGame = 21,
         RabbidsShoot = 22,
         WeevilWheelsTrack2 = 23,
@@ -77,5 +87,9 @@ namespace BinWeevils.Protocol.Enums
         Mulch4 = 1,
         Reversi = 2,
         Squares = 3,
+        Ball2 = 4,
+        Ball6 = 5,
+        Ball12 = 6,
+        Battleship = 7,
     }
 }

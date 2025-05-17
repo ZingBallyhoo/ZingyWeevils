@@ -6,7 +6,7 @@ namespace BinWeevils.Protocol.Form.Game
     public partial class SubmitTurnBasedRequest
     {
         [PropertyShape(Name = "key")] public string m_authKey { get; set; }
-        [PropertyShape(Name = "result")] public int m_gameResult { get; set; }
+        [PropertyShape(Name = "result")] public byte m_gameResult { get; set; }
     }
     
     [GenerateShape]

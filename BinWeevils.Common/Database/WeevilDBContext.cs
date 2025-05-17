@@ -10,9 +10,10 @@ namespace BinWeevils.Common.Database
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<WeevilSpecialMoveDB> m_weevilSpecialMoves { get; set; }
         public DbSet<WeevilGamePlayedDB> m_weevilGamesPlayed { get; set; }
+        public DbSet<WeevilTurnBasedGamePlayedDB> m_weevilTurnBasedGamesPlayed { get; set; }
         public DbSet<WeevilTrackPersonalBestDB> m_trackPersonalBests { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
-        public DbSet<BuddyMessageDB> m_buddyMesssages { get; set; }
+        public DbSet<BuddyMessageDB> m_buddyMessages { get; set; }
         public DbSet<IgnoreRecordDB> m_ignoreRecords { get; set; }
         public DbSet<CompletedTaskDB> m_completedTasks { get; set; }
         public DbSet<RewardedTaskDB> m_rewardedTasks { get; set; }
@@ -59,6 +60,10 @@ namespace BinWeevils.Common.Database
             modelBuilder.Entity<WeevilGamePlayedDB>(b =>
             {
                 b.ToTable("WeevilGamePlayedDB");
+            });
+            modelBuilder.Entity<WeevilTurnBasedGamePlayedDB>(b =>
+            {
+                b.ToTable("WeevilTurnBasedGamePlayedDB");
             });
             modelBuilder.Entity<WeevilTrackPersonalBestDB>(b =>
             {
