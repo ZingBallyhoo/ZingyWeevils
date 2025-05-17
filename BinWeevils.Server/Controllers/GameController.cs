@@ -328,6 +328,9 @@ namespace BinWeevils.Server.Controllers
                 throw new InvalidDataException("invalid game id");
             }
             
+            var tag = new KeyValuePair<string, object?>("game", gameID);
+            ApiServerObservability.s_gamesPlayedTotal.Add(1, tag);
+            
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var idx = await GetIdx();
             if (!await UpsertGame(idx, gameID))
@@ -341,6 +344,10 @@ namespace BinWeevils.Server.Controllers
             await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
             var dto = await m_dbContext.GetMulchAndXp(idx);
             await transaction.CommitAsync();
+            
+            ApiServerObservability.s_gamesPlayedGivingRewards.Add(1, tag);
+            ApiServerObservability.s_gamesMulchRewarded.Add(rewardMulch, tag);
+            ApiServerObservability.s_gamesXpRewarded.Add(rewardXp, tag);
             
             return new SubmitTurnBasedResponse
             {
