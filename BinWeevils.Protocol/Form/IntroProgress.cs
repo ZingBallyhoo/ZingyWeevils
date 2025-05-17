@@ -49,9 +49,7 @@ namespace BinWeevils.Protocol.Form
             } else if (str is "1")
             {
                 m_bits = ushort.MaxValue;
-            }
-            
-            if (str.Length != (int)IntroProgressBit.COUNT)
+            } else if (str.Length != (int)IntroProgressBit.COUNT)
             {
                 throw new InvalidDataException($"wrong length for intro progress bits: \"{str}\"");
             }
