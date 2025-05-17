@@ -87,5 +87,11 @@ namespace BinWeevils.Server.Controllers
             // todo: stubbed just to prevent 404s
             return Task.CompletedTask;
         }
+        
+        [HttpGet("api/weevil/remaining-revenue")]
+        public string GetRemainingRevenue()
+        {
+            return "res=0";
+        }
     }
 }

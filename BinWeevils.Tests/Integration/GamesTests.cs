@@ -1,5 +1,6 @@
 using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Enums;
+using BinWeevils.Protocol.Form.Game;
 
 namespace BinWeevils.Tests.Integration
 {
@@ -11,6 +12,41 @@ namespace BinWeevils.Tests.Integration
         public GamesTests(IntegrationAppFactory factory)
         {
             m_factory = factory;
+        }
+        
+        [Fact]
+        public async Task OneTimeAward()
+        {
+            var account = await m_factory.CreateAccount(nameof(OneTimeAward));
+            m_factory.SetAccount(account.UserName!);
+            
+            var client = m_factory.CreateClient();
+            
+            var hasPlayed = await client.PostSimpleFormAsync<HasTheUserPlayedRequest, HasTheUserPlayedResponse>("api/game/has-the-user-played", new HasTheUserPlayedRequest
+            {
+                m_gameID = EGameType.SkullGame
+            });
+            Assert.Equal(0, hasPlayed.m_hasPlayed);
+            
+            var awardResp = await client.PostSimpleFormAsync<SaveGameStatsRequest, SaveGameStatsResponse>("api/game/save-game-stats", new SaveGameStatsRequest
+            {
+                m_gameID = EGameType.SkullGame,
+                m_awardGiven = true
+            });
+            Assert.Equal(SaveGameStatsResponse.ERROR_SUCCESS, awardResp.m_error);
+            
+            hasPlayed = await client.PostSimpleFormAsync<HasTheUserPlayedRequest, HasTheUserPlayedResponse>("api/game/has-the-user-played", new HasTheUserPlayedRequest
+            {
+                m_gameID = EGameType.SkullGame
+            });
+            Assert.Equal(1, hasPlayed.m_hasPlayed);
+            
+            var tryingAgainResp = await client.PostFormAsync("api/game/save-game-stats", new SaveGameStatsRequest
+            {
+                m_gameID = EGameType.SkullGame,
+                m_awardGiven = true
+            });
+            Assert.False(tryingAgainResp.IsSuccessStatusCode);
         }
         
         private async Task<SubmitLapTimesResponse> SubmitTimes(HttpClient client, SubmitLapTimesRequest request)

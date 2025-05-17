@@ -61,6 +61,24 @@ namespace BinWeevils.Server.Controllers
             return rowsUpserted != 0;
         }
         
+        private async Task<bool> UpsertGameAwardGiven(uint weevilIdx, EGameType gameType)
+        {
+            var rowsUpserted = await m_dbContext.m_weevilGamesPlayed
+                .Upsert(new WeevilGamePlayedDB
+                {
+                    m_gameType = gameType,
+                    m_weevilIdx = weevilIdx,
+                    m_awardGiven = true // for insert
+                })
+                .UpdateIf(x => x.m_awardGiven == false)
+                .WhenMatched(h => new WeevilGamePlayedDB
+                {
+                    m_awardGiven = true
+                })
+                .RunAsync();
+            return rowsUpserted != 0;
+        }
+        
         private async Task<bool> UpsertGame(uint weevilIdx, ETurnBasedGameType gameType)
         {
             var now = DateTime.UtcNow;
@@ -121,6 +139,84 @@ namespace BinWeevils.Server.Controllers
                 m_result = SubmitScoreResponse.ERR_OK,
                 m_mulchEarned = rewardMulch,
                 m_xpEarned = rewardXp
+            };
+        }
+        
+        [StructuredFormPost("has-the-user-played")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<HasTheUserPlayedResponse> HasPlayed([FromBody] HasTheUserPlayedRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.HasPlayed");
+            activity?.SetTag("gameID", request.m_gameID);
+            
+            if (request.m_gameID == EGameType.Invalid)
+            {
+                // halloween_banquetRoom.swf sends 0 for unknown days...
+                // don't let the user play
+                return new HasTheUserPlayedResponse
+                {
+                    m_hasPlayed = 1
+                };
+            }
+            
+            if (!m_singlePlayerSettings.Games.TryGetValue(request.m_gameID, out var gameSettings) || gameSettings.OneTimeAward == null)
+            {
+                throw new InvalidDataException("invalid game for HasPlayed");
+            }
+            
+            var hasPlayed = await m_dbContext.m_weevilGamesPlayed
+                .Where(x => x.m_weevil.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_gameType == request.m_gameID)
+                .AnyAsync();
+            
+            return new HasTheUserPlayedResponse
+            {
+                m_hasPlayed = hasPlayed ? 1 : 0
+            };
+        }
+        
+        [StructuredFormPost("save-game-stats")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SaveGameStatsResponse> SaveGameStats([FromBody] SaveGameStatsRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.SaveGameStats");
+            activity?.SetTag("gameID", request.m_gameID);
+            activity?.SetTag("awardGiven", request.m_awardGiven);
+            activity?.SetTag("awardedMulch", request.m_awardedMulch);
+            
+            if (!request.m_awardGiven)
+            {
+                // ... okay? i wont
+                return new SaveGameStatsResponse();
+            }
+            
+            if (!m_singlePlayerSettings.Games.TryGetValue(request.m_gameID, out var gameSettings) || gameSettings.OneTimeAward == null)
+            {
+                throw new InvalidDataException("invalid game for SaveGameStats");
+            }
+            
+            if (request.m_awardedMulch != 0 && request.m_awardedMulch != gameSettings.OneTimeAward.Mulch)
+            {
+                throw new InvalidDataException("client specified incorrect awardedMulch");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var idx = await GetIdx();
+            if (!await UpsertGameAwardGiven(idx, request.m_gameID))
+            {
+                throw new Exception("was already awarded");
+            }
+            
+            await m_dbContext.GiveMulchAndXp(idx, 
+                gameSettings.OneTimeAward.Mulch ?? 0,
+                0);
+            await transaction.CommitAsync();
+            
+            // todo: should probably expand this to give items etc...
+            
+            return new SaveGameStatsResponse
+            {
+                m_error = SaveGameStatsResponse.ERROR_SUCCESS
             };
         }
         

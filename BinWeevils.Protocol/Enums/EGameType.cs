@@ -2,6 +2,7 @@ namespace BinWeevils.Protocol.Enums
 {
     public enum EGameType
     {
+        Invalid,
         MulchShoot = 1,
         SpotTheDifference = 2,
         BrainTrain = 4,

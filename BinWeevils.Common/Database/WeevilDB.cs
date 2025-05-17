@@ -60,6 +60,7 @@ namespace BinWeevils.Common.Database
         [Key] public EGameType m_gameType { get; set; }
         
         public DateTime m_lastPlayed { get; set; }
+        public bool m_awardGiven { get; set; }
         
         [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }

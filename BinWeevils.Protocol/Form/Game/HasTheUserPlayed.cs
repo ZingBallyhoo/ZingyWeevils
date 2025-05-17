@@ -10,10 +10,8 @@ namespace BinWeevils.Protocol.Form.Game
     }
     
     [GenerateShape]
-    public partial class SaveGameStatsRequest 
+    public partial class HasTheUserPlayedResponse
     {
-        [PropertyShape(Name = "gameID")] public EGameType m_gameID;
-        [PropertyShape(Name = "awardGiven")] public bool m_awardGiven;
-        [PropertyShape(Name = "awardedMulch")] public uint? m_awardedMulch;
+        [PropertyShape(Name = "hasPlayed")] public int m_hasPlayed;
     }
 }

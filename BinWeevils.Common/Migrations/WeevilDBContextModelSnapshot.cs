@@ -666,6 +666,9 @@ namespace BinWeevils.Common.Migrations
                     b.Property<int>("m_gameType")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("m_awardGiven")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("m_lastPlayed")
                         .HasColumnType("TEXT");
 
