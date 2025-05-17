@@ -185,15 +185,10 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new Exception("not enabled");
             }
-            
-            // todo: config...
-            var gameID = request.m_trackID switch 
+            if (!m_kartSettings.TrackIDToGame.TryGetValue(request.m_trackID, out var gameID))
             {
-                1 => EGameType.WeevilWheelsTrack1,
-                2 => EGameType.WeevilWheelsTrack2,
-                3 => EGameType.WeevilWheelsTrack3,
-                _ => throw new InvalidDataException("unknown track id")
-            };
+                throw new InvalidDataException("invalid track id");
+            }
             
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var idx = await GetIdx();
@@ -213,6 +208,69 @@ namespace BinWeevils.Server.Controllers
                 m_kartSettings.GoldTimeTrialMulch, 
                 interpProgress);
             const uint rewardXp = 0u;
+            
+            await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
+            var dto = await m_dbContext.GetMulchAndXp(idx);
+            await transaction.CommitAsync();
+            
+            return new SubmitTurnBasedResponse
+            {
+                m_mulchEarned = rewardMulch,
+                m_xpEarned = rewardXp,
+                m_mulch = dto.m_mulch,
+                m_xp = dto.m_xp
+            };
+        }
+        
+        [StructuredFormPost("start-race")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public StartMultiplayerRaceResponse StartMultiplayerRace([FromBody] StartMultiplayerRaceRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.StartMultiplayerRace");
+            activity?.SetTag("trackID", request.m_trackID);
+            
+            // what this does doesn't actually matter...
+            // the checks will all happen on submit
+            return new StartMultiplayerRaceResponse
+            {
+                m_key = $"{request.m_trackID}"
+            };
+        }
+        
+        [StructuredFormPost("submit-race")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SubmitTurnBasedResponse> SubmitMultiplayerRace([FromBody] SubmitMultiplayerRaceRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("GameController.SubmitMultiplayerRace");
+            activity?.SetTag("key", request.m_key);
+            activity?.SetTag("numBeaten", request.m_numBeaten);
+            
+            if (!m_kartSettings.Enabled)
+            {
+                throw new Exception("not enabled");
+            }
+            if (request.m_numBeaten >= 4)
+            {
+                throw new InvalidDataException("invalid numBeaten");
+            }
+            if (!byte.TryParse(request.m_key, out var trackID))
+            {
+                throw new InvalidDataException("invalid key");
+            }
+            if (!m_kartSettings.TrackIDToGame.TryGetValue(trackID, out var gameID))
+            {
+                throw new InvalidDataException("invalid track id");
+            }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            var idx = await GetIdx();
+            if (!await UpsertGame(idx, gameID))
+            {
+                return new SubmitTurnBasedResponse();
+            }
+            
+            var rewardMulch = m_kartSettings.MultiplayerMulchPerBeaten * request.m_numBeaten + m_kartSettings.MinMultiplayerMulch;
+            var rewardXp = m_kartSettings.MultiplayerXpPerBeaten * request.m_numBeaten + m_kartSettings.MinMultiplayerXp;
             
             await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
             var dto = await m_dbContext.GetMulchAndXp(idx);

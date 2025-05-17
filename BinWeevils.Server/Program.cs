@@ -81,6 +81,12 @@ public class Program
         builder.Services.AddOptions<WeevilWheelsSettings>().BindConfiguration("WeevilWheels").Validate(settings => 
         {
             return true;
+        }).Configure(o =>
+        {
+            foreach (var trackPair in o.Tracks)
+            {
+                o.TrackIDToGame.Add(trackPair.Value.ID, trackPair.Key);
+            }
         }).ValidateOnStart();
         builder.Services.AddOptions<SinglePlayerGamesSettings>().BindConfiguration("SinglePlayerGames").Validate(settings => 
         {
