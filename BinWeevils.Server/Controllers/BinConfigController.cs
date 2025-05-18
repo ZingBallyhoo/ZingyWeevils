@@ -36,6 +36,7 @@ namespace BinWeevils.Server.Controllers
                 m_coreVersionNumber = 30,
                 m_vodPlayerVersion = 15,
                 m_vodContentVersion = 2,
+                m_locDefVersion = 1, // fixed gongs->rums
             };
         }
         
@@ -63,16 +64,16 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [HttpGet("binConfig/getFile/0/locationDefinitions.xml")]
-        [HttpGet("binConfig/getFile/0/{cluster}/locationDefinitions.xml")]
+        [HttpGet("binConfig/getFile/{revision}/locationDefinitions.xml")]
+        [HttpGet("binConfig/getFile/{revision}/{cluster}/locationDefinitions.xml")]
         [Produces(MediaTypeNames.Application.Xml)]
         public IResult GetLocationDefinitions()
         {
             return Results.File(Path.GetFullPath(m_configuration["LocationDefinitions"]!));
         }
         
-        [HttpGet("binConfig/getFile/0/nestLocDefs.xml")]
-        [HttpGet("binConfig/getFile/0/{cluster}/nestLocDefs.xml")]
+        [HttpGet("binConfig/getFile/{revision}/nestLocDefs.xml")]
+        [HttpGet("binConfig/getFile/{revision}/{cluster}/nestLocDefs.xml")]
         [Produces(MediaTypeNames.Application.Xml)]
         public IResult GetNestLocationDefinitions()
         {

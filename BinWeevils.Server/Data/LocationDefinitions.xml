@@ -510,7 +510,7 @@
 
     <location id='103' name='GongsPipenest' type='2' boundType='rad' boundary='0,280,130' camPos='0,261,-231' camAim='0,32,144' entryPos='-10,190' entryDir='-160' weevilScale='0.26'>
         <roomBG path='fixedCam/pipeNest_noComps.swf'/>
-        <door id='1' toLoc='102' toDoor='2' x1='-165' z1='272' x2='-340' z2='359' entryDir='-90'/>
+        <door id='1' toLoc='129' toDoor='2' x1='-165' z1='272' x2='-340' z2='359' entryDir='-90'/>
         <door id='2' toLoc='104' toDoor='2' x1='165' z1='272' x2='340' z2='359' entryDir='90'/>
         <door id='4' extUIData="locName:HaggleHut,path:externalUIs/HaggleHut.swf" x1='10' z1='390' x2='-30' z2='490' entryDir='-90'/>
         <object name='overlay' x='0' y='0' z='0'/>
