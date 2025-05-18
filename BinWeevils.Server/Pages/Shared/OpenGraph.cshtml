@@ -1,0 +1,12 @@
+@using WeevilWorld.Server
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    <title>Bin Weevils by Zingy</title>
+    <link rel="shortcut icon" href="favicon.ico" asp-append-version="true">
+    <meta property="og:title" content="Bin Weevils" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/@HttpContextAccessor.HttpContext!.AddFileVersionToPath("images/logo.png")" />
+    <meta property="og:description" content="Bin Weevils by Zingy" />
+    <meta name="description" content="Bin Weevils by Zingy">
+}
