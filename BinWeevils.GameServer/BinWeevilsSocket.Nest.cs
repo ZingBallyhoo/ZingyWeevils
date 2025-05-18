@@ -2,6 +2,7 @@ using ArcticFox.Net.Event;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Rooms;
 using BinWeevils.Protocol;
+using BinWeevils.Protocol.Enums;
 using BinWeevils.Protocol.Str;
 using Microsoft.Extensions.Logging;
 using StackXML.Str;
@@ -47,7 +48,23 @@ namespace BinWeevils.GameServer
                         
                         m_services.GetLogger().LogDebug("Nest - JoinLocation: {LocID}", joinLocRequest.m_locID);
                         
-                        us.GetUserData<WeevilData>().m_locID.SetValue(joinLocRequest.m_locID);
+                        if (room.GetDataAs<NestRoom>() == null)
+                        {
+                            return;
+                        }
+                        
+                        var weevil = us.GetUserData<WeevilData>();
+                        
+                        var switchingPlaza = 
+                            (joinLocRequest.m_locID == -(int)ENestRoom.Plaza && weevil.m_locID.GetValue() == -(int)ENestRoom.Hall) ||
+                            (joinLocRequest.m_locID == -(int)ENestRoom.Hall && weevil.m_locID.GetValue() == -(int)ENestRoom.Plaza);
+                        
+                        weevil.m_x.SetValue(joinLocRequest.m_x);
+                        weevil.m_y.SetValue(joinLocRequest.m_y);
+                        weevil.m_z.SetValue(joinLocRequest.m_z);
+                        weevil.m_r.SetValue((int)joinLocRequest.m_r);
+                        weevil.m_locID.SetValue(joinLocRequest.m_locID);
+                        weevil.m_doorID.SetValue(joinLocRequest.m_doorID);
                         
                         var broadcaster = new FilterBroadcaster<User>(room.m_userExcludeFilter, us);
                         await broadcaster.BroadcastXtStr(Modules.NEST_JOIN_LOCATION, new NestJoinedLocNotification
@@ -55,6 +72,23 @@ namespace BinWeevils.GameServer
                             m_userID = us.m_id,
                             m_body = joinLocRequest
                         });
+                        
+                        if (switchingPlaza)
+                        {
+                            // enter or leave a plaza, the client uses TELEPORT_OUT
+                            // when the client arrives, it's supposed to send TELEPORT_IN
+                            
+                            // however, the teleporting check is reset before that can happen...
+                            // (in this core  its also checking for == 0 which is not always the case)
+                            // the weevil ends up invisible on everyone else's screens
+                            
+                            // we can fix this by forcing other clients to call defaultPose
+                            await broadcaster.BroadcastXtStr(Modules.INGAME_ACTION, new ServerAction
+                            {
+                                m_userID = us.m_id,
+                                m_actionID = (int)EWeevilAction.WALK
+                            });
+                        }
                     });
                     break;
                 }

@@ -30,7 +30,7 @@ namespace BinWeevils.Protocol.Enums
         HOLD_ITEM = 25,
         ADD_ITEM_TO_TRAY = 26,
         REMOVE_ITEM_FROM_TRAY = 27,
-        TELEPORT_OUT  = 28,
+        TELEPORT_OUT = 28,
         TELEPORT_IN = 29,
         GET_SPUN = 30,
         FLY_OUT = 31,
