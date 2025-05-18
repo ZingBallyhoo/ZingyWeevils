@@ -64,6 +64,19 @@ namespace BinWeevils.Tests.Integration
             authHandler.UserName = username;
         }
         
+        public async Task<uint> FindItemByConfigName(string configName)
+        {
+            await using var scope = Services.CreateAsyncScope();
+            var dbc = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
+            
+            var item = await dbc.FindItemByConfigName(configName);
+            if (item == null)
+            {
+                throw new NullReferenceException($"unable to find item: {configName}");
+            }
+            return item.Value;
+        }
+        
         public async Task<uint> FindSeedByConfigName(string configName)
         {
             await using var scope = Services.CreateAsyncScope();

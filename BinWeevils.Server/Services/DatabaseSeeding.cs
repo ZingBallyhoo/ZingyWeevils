@@ -103,11 +103,8 @@ namespace BinWeevils.Server.Services
         
         private async Task SeedPalettes()
         {
-            if (await m_dbContext.m_paletteEntries.AnyAsync()) 
-            {
-                // todo: upsert needs support for complex types
-                return;
-            }
+            // todo: upsert needs support for complex types
+            await m_dbContext.m_paletteEntries.ExecuteDeleteAsync();
             
             var jsonText = await File.ReadAllTextAsync(Path.Combine("Data", "getAvailablePalettes.php"));
             var json = JsonSerializer.Deserialize<AvailablePalettes>(jsonText);

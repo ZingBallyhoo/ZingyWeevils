@@ -86,14 +86,15 @@ namespace BinWeevils.Protocol.Xml
                 result = new ItemColor(delimited);
                 return true;
             }
-            
-            // todo: this could go wrong of course..
-            // but we need to parse decimal from original game nest configs
-            if (uint.TryParse(s, null, out var parsedDecimal))
+        
+            // todo: nest configs from the original game contain decimal numbers
+            // however, parsing this is ambiguous. i have manually removed the decimal colors from the imported nest
+            /*if (uint.TryParse(s, null, out var parsedDecimal))
             {
                 result = new ItemColor(parsedDecimal);
                 return true;
-            }
+            }*/
+            
             if (uint.TryParse(s, NumberStyles.HexNumber, null, out var parsedHex))
             {
                 result = new ItemColor(parsedHex);

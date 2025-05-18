@@ -262,9 +262,9 @@ namespace BinWeevils.Common.Database
             var valid = await m_paletteEntries
                 .Where(x => x.m_paletteID == paletteID)
                 .AnyAsync(x => 
-                    x.m_color.m_r  == parsedColor.m_r &&
-                    x.m_color.m_g  == parsedColor.m_g &&
-                    x.m_color.m_b  == parsedColor.m_b);
+                    x.m_color.m_r == parsedColor.m_r &&
+                    x.m_color.m_g == parsedColor.m_g &&
+                    x.m_color.m_b == parsedColor.m_b);
             if (!valid)
             {
                 throw new InvalidDataException("color not allowed by palette");
