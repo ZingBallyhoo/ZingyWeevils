@@ -45,11 +45,15 @@ public class Program
             amfOptions.AddTypedObject<GetLoginDetailsResponse>();
             amfOptions.AddTypedObject<SubmitLapTimesResponse>();
             amfOptions.AddTypedObject<SubmitLapTimesResponse.MedalInfo>();
+            amfOptions.AddTypedObject<MessageBoardResponse>();
+            amfOptions.AddTypedObject<MessageBoardResultObject>();
+            amfOptions.AddTypedObject<MessageBoardServerInfo>();
             builder.Services.AddSingleton(amfOptions); // expose to tests
         }
         builder.Services.AddSingleton<IAmfGatewayRouter, WeevilGatewayRouter>();
         builder.Services.AddTransient<PetAmfService>();
         builder.Services.AddTransient<WeevilKartAmfService>();
+        builder.Services.AddTransient<MessageBoardAmfService>();
         
         builder.Services.AddSingleton<BinWeevilsSocketHost>();
         builder.Services.AddSingleton<IHostedService>(p => p.GetRequiredService<BinWeevilsSocketHost>());

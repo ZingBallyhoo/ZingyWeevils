@@ -61,6 +61,37 @@ namespace BinWeevils.Server.Controllers
                     return await kartService.SubmitLapTimes(context, request);
                 }
                 
+                case "weevilservices.cMessageBoard.getExistingTopics":
+                {
+                    var messageBoardService = context.m_httpContext.RequestServices.GetRequiredService<MessageBoardAmfService>();
+                    // todo: request
+                    return await messageBoardService.GetExistingTopics(context);
+                }
+                case "weevilservices.cMessageBoard.getTopicExistingMessages":
+                {
+                    // todo: request
+                    return new MessageBoardResponse
+                    {
+                        m_resultObject = new MessageBoardResultObject
+                        {
+                            m_serverInfo = new MessageBoardServerInfo()
+                        }
+                    };
+                }
+                case "weevilservices.cMessageBoard.getWeevilDefs":
+                {
+                    var messageBoardService = context.m_httpContext.RequestServices.GetRequiredService<MessageBoardAmfService>();
+                    var request = ArrayMapper.ToObject<MessageBoardGetWeevilDefsRequest>(context.m_message.m_data);
+                    return await messageBoardService.GetWeevilDefs(context, request);
+                }
+                case "weevilservices.cMessageBoard.addTopicView":
+                case "weevilservices.cMessageBoard.submitNewMessage":
+                case "weevilservices.cMessageBoard.submitNewTopic":
+                {
+                    // todo: all
+                    return null!;
+                }
+                
                 default:
                 {
                     throw new Exception($"Unknown AMF Target Uri: \"{context.m_message.m_targetUri}\"");
@@ -73,6 +104,7 @@ namespace BinWeevils.Server.Controllers
     [GenerateShape<GetLoginDetailsResponse>]
     [GenerateShape<SubmitLapTimesRequest>] // for tests
     [GenerateShape<SubmitLapTimesResponse>]
+    [GenerateShape<MessageBoardResponse>]
     public partial class GatewayShapeWitness;
     
     /*[RpcMethod(typeof(AmfPassthroughRpcMethod<object, GetLoginDetailsResponse>), "h")]
