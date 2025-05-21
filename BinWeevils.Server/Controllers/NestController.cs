@@ -9,6 +9,8 @@ using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Polly;
+using Polly.Retry;
 
 namespace BinWeevils.Server.Controllers
 {
@@ -21,6 +23,13 @@ namespace BinWeevils.Server.Controllers
         private readonly WeevilDBContext m_dbContext;
         private readonly ItemConfigRepository m_configRepo;
         private readonly NestLocationDefinitions m_locations;
+        
+        // the client will wait up to 3 seconds before sending a move of a nest item
+        // during this time another item could be placed in the old spot (which will fail)
+        private static readonly AsyncRetryPolicy NestPlaceRetryPolicy = Policy
+            .Handle<InvalidOperationException>() // select 0 elements
+            .Or<DbUpdateException>() // constraint fail
+            .WaitAndRetryAsync(1, static _ => TimeSpan.FromSeconds(4));
         
         private const int MIN_FUEL = 2000;
         private const int MAX_FUEL = 80000;
@@ -399,6 +408,11 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("furnitureID", request.m_furnitureID);
             activity?.SetTag("spot", request.m_spot);
             
+            await NestPlaceRetryPolicy.ExecuteAsync(() => AddItemToNestInternal(request));
+        }
+        
+        private async Task AddItemToNestInternal(AddItemToNestRequest request)
+        {
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
@@ -436,7 +450,6 @@ namespace BinWeevils.Server.Controllers
                         .Where(item => item.m_id == request.m_itemID && item.m_placedItem == null)
                         .Select(item => new
                         {
-                            m_item = item,
                             item.m_itemType.m_itemTypeID,
                             item.m_itemType.m_category,
                             item.m_itemType.m_configLocation,
@@ -468,8 +481,9 @@ namespace BinWeevils.Server.Controllers
                 throw new InvalidDataException($"trying to place {dto.m_itemData.m_configLocation} in wrong room type. {locCategory} vs {dto.m_itemData.m_category}");
             }
             
-            dto.m_itemData.m_item.m_placedItem = new NestPlacedItemDB
+            var placedItem = new NestPlacedItemDB
             {
+                m_id = request.m_itemID,
                 m_roomID = request.m_locationID,
                 m_posAnimationFrame = validateParams.m_posAnimationFrame,
                 m_placedOnFurnitureID = validateParams.m_placedOnFurnitureID != 0 ? 
@@ -479,9 +493,19 @@ namespace BinWeevils.Server.Controllers
                     validateParams.m_placedOnFurnitureID : dto.m_itemData.m_itemTypeID,
                 m_spotOnFurniture = validateParams.m_spot
             };
+            await m_dbContext.m_nestPlacedItems.AddAsync(placedItem);
             dto.m_nest.m_itemsLastUpdated = DateTime.UtcNow;
-            await m_dbContext.SaveChangesAsync();
-            await transaction.CommitAsync();
+            try
+            {
+                await m_dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+            } catch (DbUpdateException)
+            {
+                // reset all dbcontext state
+                // (nest data, added item)
+                m_dbContext.ChangeTracker.Clear();
+                throw;
+            }
             
             ApiServerObservability.s_nestItemsPlaced.Add(1);
         }
@@ -566,6 +590,11 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("furnitureID", request.m_furnitureID);
             activity?.SetTag("spot", request.m_spot);
             
+            await NestPlaceRetryPolicy.ExecuteAsync(() => UpdateItemPositionInternal(request));
+        }
+        
+        private async Task UpdateItemPositionInternal(UpdateNestItemPositionRequest request)
+        {
             await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             if (request.m_itemType == "null")
@@ -657,13 +686,13 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("userName", request.m_userName);
             activity?.SetTag("nestID", request.m_nestID);
             activity?.SetTag("itemID", request.m_itemID);
-            
-            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
 
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
             {
                 throw new Exception("trying to remove an item from someone else's nest");
             }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             
             // todo: use a claim for nest too?
             var nest = await m_dbContext.m_weevilDBs
