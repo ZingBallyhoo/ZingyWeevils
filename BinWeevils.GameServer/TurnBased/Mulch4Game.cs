@@ -16,10 +16,10 @@ namespace BinWeevils.GameServer.TurnBased
             var request = (Mulch4TakeTurnRequest)baseRequest;
             
             var columnData = data.m_columns[request.m_column];
-            // todo: why is cast required :(
             
             var turnResponse = MakeResponse<Mulch4TurnResponse>(request, data);
             
+            // todo: why is cast required :(
             var firstEmptyRow = columnData.AsSpan().Cast<TileBasedGameData.TileState, byte>().IndexOf((byte)TileBasedGameData.TileState.Empty);
             if (firstEmptyRow == -1)
             {
