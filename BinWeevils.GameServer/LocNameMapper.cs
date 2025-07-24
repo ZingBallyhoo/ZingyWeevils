@@ -62,7 +62,7 @@ namespace BinWeevils.GameServer
             {
                 if (extUIData.Contains("locName:"))
                 {
-                    throw new InvalidDataException("sanity");
+                    throw new InvalidDataException("ext ui regex is wrong");
                 }
                 return;
             }
@@ -115,7 +115,7 @@ namespace BinWeevils.GameServer
                     return text;
                 }
 
-                throw new InvalidDataException($"user gave invalid owner \"{ownerMatch.Groups[1].Value}\" for nest bVar loCame");
+                throw new InvalidDataException($"user gave invalid owner \"{ownerMatch.Groups[1].Value}\" for nest bVar locName");
             }
             
             throw new InvalidDataException($"unknown locName: {text}");
