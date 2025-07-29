@@ -37,7 +37,7 @@ namespace BinWeevils.Server
             return context.HttpContext.Response.WriteAsync(encoded, selectedEncoding);
         }
         
-        [GenerateShape<Dictionary<string, string>>]
+        [GenerateShapeFor<Dictionary<string, string>>]
         private partial class DictWitness
         {
         }
