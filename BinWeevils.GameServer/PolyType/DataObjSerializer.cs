@@ -77,7 +77,7 @@ namespace BinWeevils.GameServer.PolyType
         
         public static ActionScriptObject ToXml<T>(T data) where T : IShapeable<T>
         {
-            return ToXml(data, T.GetShape().Provider);
+            return ToXml(data, T.GetTypeShape().Provider);
         }
         
         private static ActionScriptObject ToXml(object data, ITypeShapeProvider provider)

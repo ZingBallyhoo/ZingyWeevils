@@ -175,7 +175,7 @@ public class Program
         app.MapAmfGateway("api/php/amfphp/gateway.php", new AmfGatewaySettings
         {
             m_options = app.Services.GetRequiredService<AmfOptions>(),
-            m_shapeProvider = GatewayShapeWitness.ShapeProvider,
+            m_shapeProvider = GatewayShapeWitness.GeneratedTypeShapeProvider,
             m_swallowExceptions = false,
         }).RequireAuthorization();
         

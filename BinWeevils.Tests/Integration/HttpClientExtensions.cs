@@ -63,7 +63,7 @@ namespace BinWeevils.Tests.Integration
                 m_messages = [requestMessage]
             };
             
-            var body = AmfPolyType.Serialize(requestPacket, options, GatewayShapeWitness.ShapeProvider);
+            var body = AmfPolyType.Serialize(requestPacket, options, GatewayShapeWitness.GeneratedTypeShapeProvider);
             var bodyContent = new ByteArrayContent(body);
             bodyContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-amf");
             
@@ -71,7 +71,7 @@ namespace BinWeevils.Tests.Integration
             httpResponse.EnsureSuccessStatusCode();
             
             var responseBody = await httpResponse.Content.ReadAsByteArrayAsync();
-            var responsePacket = AmfPolyType.Deserialize<AmfPacket>(responseBody, options, GatewayShapeWitness.ShapeProvider);
+            var responsePacket = AmfPolyType.Deserialize<AmfPacket>(responseBody, options, GatewayShapeWitness.GeneratedTypeShapeProvider);
             var responseMessage = responsePacket.m_messages.Single();
             
             return (TResp)responseMessage.m_data!;
