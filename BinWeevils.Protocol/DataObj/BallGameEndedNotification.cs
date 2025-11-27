@@ -8,6 +8,6 @@ namespace BinWeevils.Protocol.DataObj
         [PropertyShape(Name = "userWinner")] public string m_userWinner;
         [PropertyShape(Name = "userLoser")] public string m_userLoser;
         [PropertyShape(Name = "winnerPoints")] public int m_winnerMulch;
-        [PropertyShape(Name = "winnerPoints")] public int m_loserMulch;
+        [PropertyShape(Name = "loserPoints")] public int m_loserMulch;
     }
 }
