@@ -330,14 +330,15 @@ namespace BinWeevils.Server.Controllers
             return null;
         }
         
-        private async Task<bool> IsMissionComplete(uint weevilIdx, int questID)
+        private async ValueTask<bool> IsMissionComplete(uint weevilIdx, int questID, CancellationToken cancellationToken=default)
         {
             var quest = m_questRepository.GetQuest(questID);
             if (quest.m_completeTask == null) return false;
             
             return await m_dbContext.m_completedTasks.AnyAsync(x => 
                 x.m_weevilID == weevilIdx && 
-                x.m_taskID == quest.m_completeTask);
+                x.m_taskID == quest.m_completeTask,
+                cancellationToken);
         }
         
         private async Task<bool> TryRestartTask(uint weevilIdx, int taskID)
@@ -374,7 +375,7 @@ namespace BinWeevils.Server.Controllers
             // either way, restarting quests is unused
             var isComplete = await missions
                 .ToAsyncEnumerable()
-                .SelectAwait(async x => await IsMissionComplete(dto.m_idx, x.m_id))
+                .Select((quest, ct) => IsMissionComplete(dto.m_idx, quest.m_id, ct))
                 .ToArrayAsync();
             
             return new MissionList
