@@ -27,7 +27,7 @@ namespace BinWeevils.Server.Controllers
 
             if (context.m_httpContext.User.Identity!.Name != request.m_userID)
             {
-                throw new InvalidDataException("trying to buy a pet for somebody else");
+                throw new InvalidDataException("get somebody else's pet count");
             }
             
             return m_dbContext.m_pets.CountAsync(x => x.m_owner.m_name == request.m_userID);

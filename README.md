@@ -58,3 +58,5 @@ Notes
 - Create a migration
   - `cd BinWeevils.Server`
   - `dotnet ef migrations add <name> --project ../BinWeevils.Common`
+- Rebuild one service in prod
+  - `docker-compose up -d --no-deps --build binweevils`

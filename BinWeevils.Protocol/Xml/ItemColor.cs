@@ -69,7 +69,7 @@ namespace BinWeevils.Protocol.Xml
             
             if (s.StartsWith("0x"))
             {
-                if (!uint.TryParse(s.Slice(2), NumberStyles.HexNumber, null, out var parsedHexEarly))
+                if (!uint.TryParse(s.Slice(2), NumberStyles.HexNumber, provider, out var parsedHexEarly))
                 {
                     return false;
                 }
