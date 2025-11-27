@@ -51,3 +51,10 @@ Ruffle Todo:
   - Panic on opeing external browser window
   - Moving objects don't cause the cursor to change
   - LocalConnection for populating username in menu bar
+
+---- 
+
+Notes
+- Create a migration
+  - `cd BinWeevils.Server`
+  - `dotnet ef migrations add <name> --project ../BinWeevils.Common`
