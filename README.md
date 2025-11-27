@@ -6,6 +6,13 @@ Live instances:
 
 ----------------------
 
+How to run:
+- Update archive path in BinWeevils.Server/appsettings.Development.json
+- `cd BinWeevils.Server`
+- `dotnet run`
+
+----------------------
+
 Game TODO:
 - Word search, cross words (missing data)
 - Nest score calculation isn't the same

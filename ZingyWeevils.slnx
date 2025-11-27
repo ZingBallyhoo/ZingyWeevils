@@ -1,0 +1,33 @@
+<Solution>
+  <Folder Name="/ArcticFox/">
+    <Project Path="ArcticFox/ArcticFox.Codec/ArcticFox.Codec.csproj" />
+    <Project Path="ArcticFox/ArcticFox.Net/ArcticFox.Net.csproj" />
+    <Project Path="ArcticFox/ArcticFox.Perf/ArcticFox.Perf.csproj" />
+    <Project Path="ArcticFox/ArcticFox.PolyType.Amf/ArcticFox.PolyType.Amf.csproj" />
+    <Project Path="ArcticFox/ArcticFox.PolyType.FormEncoded/ArcticFox.PolyType.FormEncoded.csproj" />
+    <Project Path="ArcticFox/ArcticFox.RPC.AmfGateway/ArcticFox.RPC.AmfGateway.csproj" />
+    <Project Path="ArcticFox/ArcticFox.RPC.Generator/ArcticFox.RPC.Generator.csproj" />
+    <Project Path="ArcticFox/ArcticFox.RPC/ArcticFox.RPC.csproj" />
+    <Project Path="ArcticFox/ArcticFox.SmartFoxServer/ArcticFox.SmartFoxServer.csproj" />
+    <Project Path="ArcticFox/ArcticFox.Tests.SmartFoxServer/ArcticFox.Tests.SmartFoxServer.csproj" />
+    <Project Path="ArcticFox/ArcticFox.Tests/ArcticFox.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Patcher/">
+    <Project Path="UtinyRipper/uTinyRipperCore/uTinyRipperCore.csproj" />
+    <Project Path="WeevilWorld.Patcher/WeevilWorld.Patcher.csproj" />
+  </Folder>
+  <Folder Name="/StackXML/">
+    <Project Path="StackXML/StackXML.Generator/StackXML.Generator.csproj" />
+    <Project Path="StackXML/StackXML.Tests/StackXML.Tests.csproj" />
+    <Project Path="StackXML/StackXML/StackXML.csproj" />
+  </Folder>
+  <Project Path="BinWeevils.Common/BinWeevils.Common.csproj" />
+  <Project Path="BinWeevils.GameServer/BinWeevils.GameServer.csproj" />
+  <Project Path="BinWeevils.Protocol/BinWeevils.Protocol.csproj" />
+  <Project Path="BinWeevils.Server/BinWeevils.Server.csproj" />
+  <Project Path="BinWeevils.Tests/BinWeevils.Tests.csproj" />
+  <Project Path="BinWeevils.Tools.CdnUpload/BinWeevils.Tools.CdnUpload.csproj" />
+  <Project Path="BinWeevils.Tools.CoreDiff/BinWeevils.Tools.CoreDiff.csproj" />
+  <Project Path="WeevilWorld.Protocol/WeevilWorld.Protocol.csproj" />
+  <Project Path="WeevilWorld.Server/WeevilWorld.Server.csproj" />
+</Solution>
