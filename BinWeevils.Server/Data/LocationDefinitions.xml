@@ -3,7 +3,7 @@
     <!-- based off locationDefinitions03_12_10.xml -->
 
     <location id='104' name='ShoppingMall' type='2' boundType='rect' boundary='-185,0,351,177' camPos='258,219,-271' camAim='-62,20,284' entryPos='0,80' weevilScale='0.28'>
-        <roomBG path='fixedCam/shoppingMall_dynamAds.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/shoppingMall_dynamAds_US.swf'/>
         <cta id='1' extUIData='path:externalUIs/tycoonBusinesses.swf' x='99' z='120'/>
         <door id='1' toLoc='101' toDoor='2' x1='-32' z1='13' x2='-32' z2='-90' entryDir='180'/>
         <door id='2' toLoc='103' toDoor='2' x1='170' z1='171' x2='235' z2='50' entryDir='180'/>
@@ -16,7 +16,6 @@
         <object name='cta1_btn' x='64' y='0' z='141'/>
         <object name='door3_mc' x='-31' y='0' z='199'/>
         <object name='safetyRope' x='205' y='0' z='50'/>
-        <object name='adBoard_left_mc' x='-128' y='0' z='48'/>
         <object name='adBoard_right_mc' x='170' y='0' z='190'/>
         <object name='door4_mc' x='-74' y='0' z='104'/>
         <object name='pipeFront' x='-76' y='0' z='112'/>
@@ -28,7 +27,7 @@
 
 
     <location id='105' name='ShoppingMallInside' type='2' boundType='rect' boundary='-10,65,240,205' camPos='250,157,-106' camAim='-20,24,357' entryPos='60,118' entryDir='180' weevilScale='0.2' maintainY='yes'>
-        <roomBG path='fixedCam/shoppingMall_inside2.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/shoppingMall_inside2.swf'/>
         <door id='1' toLoc='104' toDoor='3' x1='10' z1='125' x2='10' z2='0' entryDir='180'/>
         <door id='2' extUIData="locName:FurnitureShop,path:externalUIs/FurnitureShop.swf"  x1='-12' z1='140' x2='-100' z2='170' entryDir='0'/>
         <door id='3' extUIData="locName:GadgetShop,path:externalUIs/GadgetShop.swf"  x1='-15' z1='235' x2='-100' z2='275' entryDir='0'/>
@@ -82,7 +81,7 @@
 
 
     <location id='154' name='Diner' type='2' boundType='rect' boundary='-220,20,520,380' camPos='0,190,-330' camAim='0,90,260' entryPos='0,266' entryDir='-15' weevilScale='0.32' roomEvents='yes'>
-        <roomBG path='fixedCam/diner.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/diner_christmas2010.swf'/>
         <door id='1' toLoc='129' toDoor='4' x1='-220' z1='260' x2='-290' z2='320' entryDir='-90'/>
         <interactive type="door" path='slidingDoorAnim' actRect='-350,245,150,100'/>
         <object name='door1_mc' x='30' y='0' z='200'/>
@@ -117,13 +116,14 @@
 
 
     <location id='111' name='Palladium' type='2' boundType='rect' boundary='-250,-8,394,269' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.26'>
-        <roomBG path='fixedCam/RiggsPalladium_delete.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/riggsMultiplex_dynamAds.swf'/>
         <cta id='1' extUIData='path:externalUIs/tycoonRevenue.swf' x='128' z='78'/>
         <door id='1' toLoc='112' toDoor='5' x1='5' z1='255' x2='5' z2='445' entryDir='0'/>
         <door id='2' toLoc='110' toDoor='1' x1='-150' z1='82' x2='-270' z2='82' entryDir='-90'/>
         <door id='3' toLoc='120' toDoor='1' x1='148' z1='19' x2='230' z2='19' entryDir='90'/>
         <door id='4' toLoc='156' toDoor='1' x1='160' z1='210' x2='320' z2='210' entryDir='90'/>
         <object name='FG' x='-100' y='0' z='-20'/>
+        <object name='snowman_mc' x='-100' y='0' z='-50'/>
         <object name='popcorn' x='-177' y='0' z='167'/>
         <object name='weevilPostFront' x='150' y='0' z='7'/>
         <object name='weevilPostBack' x='160' y='0' z='135'/>
@@ -212,7 +212,7 @@
 
 
     <location id='156' name='FiggsCafeTerrace' type='2' boundType='rect' boundary='-230,-24,560,404' camPos='-276,240,-246' camAim='10,32,174' entryPos='32,174' weevilScale='0.4' roomEvents='yes'>
-        <roomBG path='fixedCam/FiggsCafe_terrace.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/FiggsCafe_terrace.swf'/>
         <door id='1' toLoc='111' toDoor='4' x1='-168' z1='224' x2='-255' z2='224' entryDir='0'/>
         <door id='2' toLoc='109' toDoor='6' x1='335' z1='285' x2='710' z2='285' entryDir='0'/>
         <object name='frontVerge' x='-47' y='0' z='-32'/>
@@ -403,7 +403,7 @@
 
 
     <location id='102' name='DoshPalace' type='2' boundType='rect' boundary='-170,105,340,205' camPos='0,145,-115' camAim='0,15,500' entryPos='0,210' weevilScale='0.19' entryDir='180' noZoom='yes'>
-        <roomBG path='fixedCam/doshsPalace.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/DoshsPalace.swf'/>
         <door id='1' toLoc='169' toDoor='1' x1='0 ' z1='320' x2='0' z2='430' entryDir='0'/>
         <door id='2' extUIData='path:externalUIs/mulchShoot.swf' x1='-132' z1='312' x2='-300' z2='398' entryDir='180'/>
         <door id='3' toLoc='101' toDoor='1' x1='132 ' z1='310' x2='400' z2='460' entryDir='0'/>
@@ -424,7 +424,7 @@
     </location>
 
     <location id='169' name='DoshPalaceInside' type='2' boundType='rect' boundary='-240,100,440,200' camPos='0,145,-115' camAim='0,15,500' entryPos='-60,160' weevilScale='0.2' entryDir='180' roomEvents='yes' noZoom='yes'>
-        <roomBG path='fixedCam/doshsPalace_inside3.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/doshsPalace_inside_christmas2010.swf'/>
         <door id='1' toLoc='102' toDoor='1' x1='0 ' z1='140' x2='0' z2='10' entryDir='180'/>
         <door id='2' extUIData="locName:wevMod,path:externalUIs/Register.swf" x1='130' z1='145' x2='200' z2='160' entryDir='90'/>
         <door id='3' extUIData="locName:wevMod,path:externalUIs/ChangeWeevil5.swf" x1='0' z1='195' x2='200' z2='50' y2='600' entryDir='90'/>
@@ -509,13 +509,14 @@
 
 
     <location id='103' name='GongsPipenest' type='2' boundType='rad' boundary='0,280,130' camPos='0,261,-231' camAim='0,32,144' entryPos='-10,190' entryDir='-160' weevilScale='0.26'>
-        <roomBG path='fixedCam/pipeNest_noComps.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/pipeNest.swf'/>
         <door id='1' toLoc='129' toDoor='2' x1='-165' z1='272' x2='-340' z2='359' entryDir='-90'/>
         <door id='2' toLoc='104' toDoor='2' x1='165' z1='272' x2='340' z2='359' entryDir='90'/>
         <door id='4' extUIData="locName:HaggleHut,path:externalUIs/HaggleHut.swf" x1='10' z1='390' x2='-30' z2='490' entryDir='-90'/>
         <object name='overlay' x='0' y='0' z='0'/>
         <object name='hutOverlay' x='0' y='0' z='400'/>
         <object name='ad_mc' x='42' y='0' z='-400'/>
+        <object name='door3_mc' x='130' y='0' z='358'/>
         <object name='tube1Front' x='-130' y='0' z='369'/>
         <object name='tube3Front' x='130' y='0' z='369'/>
 
@@ -791,7 +792,7 @@
 
 
     <location id='123' name='DirtValley2' type='2' boundType='rect' boundary='-170,40,370,265' camPos='-276,240,-246' camAim='10,32,174' entryPos='0,80' weevilScale='0.15' roomEvents='yes'>
-        <roomBG path='fixedCam/DirtValley2_trophy.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/DirtValley2_xmas2_christmas2010.swf'/>
 
         <door id='1' toLoc='800' toDoor='1' x1='203' z1='26' x2='203' z2='-30' entryDir='180'/>
         <door id='2' toLoc='121' toDoor='4' x1='-180' z1='317' x2='-225' z2='317' entryDir='-90'/>
@@ -898,7 +899,7 @@
 
 
     <location id='127' name='PartyBox' type='2' boundType='rect' boundary='-180,20,600,280' camPos='-276,240,-246' camAim='10,32,174' entryPos='53,3' weevilScale='0.22'>
-        <roomBG path='fixedCam/partyBox_open_halloween.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/partyBoxClosed_countdown.swf'/>
         <door id='1' toLoc='125' toDoor='2' x1='-56' z1='-15' x2='-160' z2='-35' entryDir='0'/>
         <door id='2' toLoc='129' toDoor='1' x1='134' z1='1' x2='261' z2='-26' entryDir='0'/>
         <door id='3' extUIData="locName:at Slam's Party Box, getting a mulch-tastic ticket for the next mulch give-away,path:externalUIs/lotto.swf" x1='270' z1='136' x2='270' z2='175' entryDir='0'/>
@@ -906,6 +907,7 @@
         <object name='door1_mc' x='-69' y='0' z='-1'/>
         <object name='door2_mc' x='186' y='53' z='-1'/>
         <object name='door3_mc' x='250' y='0' z='150'/>
+        <object name='door4_mc' x='-70' y='0' z='225'/>
         <interactive type="door" path='door4_mc' actRect='120,250,80,150'/>
         <object name='mulchtasticBooth' x='238' y='0' z='219'/>
 
@@ -914,72 +916,49 @@
 
 
 
-    <location id='128' name='PartyBoxInside' type='2' boundType='rect' boundary='-220,10,420,310' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20'  noZoom='yes' playList='38,39,40'>
-        <roomBG path='fixedCam/partyBox/halloween/halloween_entrance.swf'/>
-        <door id='1' toLoc='127' toDoor='4' x1='0' z1='110' x2='0' z2='0' y='0' entryDir='0'/>
-        <door id='2' toLoc='130' toDoor='1' x1='-180' z1='230' x2='-200' z2='230' y='0' entryDir='0'/>
-        <door id='3' toLoc='131' toDoor='1' x1='180' z1='230' x2='200' z2='230' y='0' entryDir='0'/>
-        <object name='doorOverlay1' x='-200' y='0' z='0'/>
-        <object name='doorOverlay2' x='200' y='0' z='0'/>
-        <object name='seatBacks' x='0' y='0' z='0'/>
-        <!--<object name='bedFront' x='0' y='0' z='129'/>
-        <noGoArea type='rect' x='-90' z='130' w='180' h='270'/>
-        <object name='bed_btn' x='0' y='16' z='0'/>-->
+    <location id='128' name='PartyBoxInside' type='2' boundType='rect' boundary='-200,20,440,400' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' timerID='38' playList='24'>
+        <roomBG path='fixedCam/seasons/christmas/2010/partyBox_xmas_ice1.swf'/>
+        <door id='1' toLoc='127' toDoor='4' x1='0' z1='125' x2='0' z2='-50' entryDir='180'/>
+        <door id='2' toLoc='130' toDoor='1' x1='-180' z1='100' x2='-250' z2='30' entryDir='90'/>
+        <door id='3' toLoc='131' toDoor='1' x1='240' z1='340' x2='360' z2='340' entryDir='-90'/>
+        <object name='door2_mc' x='-200' y='0' z='150'/>
+        <object name='treeOverlay' x='250' y='0' z='280'/>
+    </location>
+
+    <location id='130' name='PartyBoxInside2' type='2' boundType='rect' boundary='-160,20,320,310' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' timerID='38' playList='22'>
+        <roomBG path='fixedCam/seasons/christmas/2010/partyBox_xmas_cabin.swf'/>
+        <door id='1' toLoc='128' toDoor='2' x1='180' z1='130' x2='320' z2='130' entryDir='90'/>
+        <object name='doorOverlay_mc' x='170' y='0' z='90'/>
+        <object name='tableLeft_mc' x='-111' y='0' z='85'/>
+        <object name='tableRight_mc' x='111' y='0' z='85'/>
+        <noGoArea type='rect' x='-120' z='320' w='240' h='80'/>
     </location>
 
 
-    <location id='130' name='PartyBoxInside2' type='2' boundType='rect' boundary='-220,10,440,310' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.20'  noZoom='yes' playList='39,40,38'>
-        <roomBG path='fixedCam/partyBox/halloween/halloween_bedroom.swf'/>
-        <door id='1' toLoc='128' toDoor='2' x1='130' z1='230' x2='200' z2='230' y='0' entryDir='0'/>
-        <object name='bedFront' x='0' y='0' z='129'/>
-        <noGoArea type='rect' x='-90' z='130' w='180' h='270'/>
-        <!--<object name='bedding' x='0' y='0' z='130'/>
-        <object name='pillows' x='0' y='0' z='130'/>-->
-        <object name='bed_btn' x='0' y='16' z='0'/>
-        <object name='doorOverlay' x='200' y='0' z='0'/>
-        <object name='lightAnim' x='0' y='10' z='0'/>
+    <location id='131' name='PartyBoxInside3' type='2' boundType='rect' boundary='-290,20,580,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.20' timerID='38' playList='23'>
+        <roomBG path='fixedCam/seasons/christmas/2010/xmasParty_winterWonderland.swf'/>
+        <door id='1' toLoc='128' toDoor='3' x1='-250' z1='320' x2='-350' z2='340' y='0' entryDir='0'/>
+        <door id='2' toLoc='140' toDoor='1' x1='0' z1='70' x2='80' z2='20' y='0' entryDir='0'/>
+        <object name='messagePopup' x='0' y='0' z='-4'/>
+        <object name='door2_mc' x='0' y='0' z='-3'/>
+        <object name='doorMC' x='0' y='0' z='-2'/>
+        <object name='star' x='0' y='0' z='-1'/>
+        <object name='tap' x='0' y='0' z='90'/>
+        <object name='snowstorm' x='0' y='0' z='80'/>
+        <object name='railing' x='0' y='0' z='100'/>
     </location>
 
-
-    <location id='131' name='PartyBoxInside3' type='2' boundType='rect' boundary='-200,-10,400,400' camPos='0,145,-115' camAim='0,15,500' entryPos='0,80' weevilScale='0.15' noZoom='yes' playList='40,38,39'>
-        <roomBG path='fixedCam/partyBox/halloween/halloween_banquetRoom.swf'/>
-        <door id='1' toLoc='128' toDoor='3' x1='-180' z1='230' x2='-200' z2='230' y='0' entryDir='0'/>
-        <object name='ing1' x='0' y='0' z='136'/>
-        <object name='ing2' x='0' y='0' z='136'/>
-        <object name='ing3' x='0' y='0' z='136'/>
-        <object name='ing4' x='0' y='0' z='136'/>
-        <object name='ing5' x='0' y='0' z='136'/>
-        <object name='ing6' x='0' y='0' z='136'/>
-        <object name='ing7' x='0' y='0' z='136'/>
-        <object name='ing8' x='0' y='0' z='136'/>
-        <object name='ing9' x='0' y='0' z='136'/>
-        <object name='ing10' x='0' y='0' z='136'/>
-        <object name='ing11' x='0' y='0' z='136'/>
-        <object name='ing12' x='0' y='0' z='136'/>
-        <object name='ing13' x='0' y='0' z='136'/>
-        <object name='ing14' x='0' y='0' z='136'/>
-        <object name='ing15' x='0' y='0' z='136'/>
-        <object name='ing16' x='0' y='0' z='136'/>
-        <object name='menu' x='0' y='0' z='139'/>
-        <object name='table_mc' x='0' y='0' z='140'/>
-        <object name='stools_mc' x='0' y='0' z='125'/>
-        <object name='everythingOnTable' x='0' y='0' z='137'/>
-        <object name='seat1' x='0' y='0' z='0'/>
-        <object name='seat2' x='0' y='0' z='0'/>
-        <object name='seat3' x='0' y='0' z='0'/>
-        <object name='seat4' x='0' y='0' z='0'/>
-        <object name='seat5' x='0' y='0' z='0'/>
-        <object name='seat6' x='0' y='0' z='0'/>
-        <object name='seat7' x='0' y='0' z='0'/>
-        <object name='plate' x='0' y='0' z='137'/>
-        <object name='ghostDelivering' x='0' y='0' z='0'/>
+    <location id='140' name='PartyBoxInside4' type='2' boundType='rect' boundary='-240,20,480,480' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' slippery='yes' timerID='38' playList='21'>
+        <roomBG path='fixedCam/seasons/christmas/2010/partyBox_xmas_ice2.swf'/>
+        <door id='1' toLoc='128' toDoor='3' x1='-240' z1='320' x2='-360' z2='320' entryDir='-90'/>
+        <object name='rail' x='-240' y='0' z='250'/>
     </location>
 
     <location id='144' name='FlemManorLobby' type='2' boundType='rect' boundary='-170,80,340,250' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.22' maintainY='yes'>
-        <roomBG path='fixedCam/FlemManor_lobby.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/FlemManor_christmas2010.swf'/>
         <door id='1' toLoc='125' toDoor='3' x1='0 ' z1='125' x2='0' z2='-50' entryDir='180'/>
         <door id='2' toLoc='145' toDoor='1' x1='-170' z1='102' x2='-240' z2='102' entryDir='180'/>
-        <door id='3' toLoc='149' toDoor='1' x1='-137' z1='253' x2='-112' z2='253' entryDir='90'/>
+
         <door id='4' toLoc='152' toDoor='1' x1='-205' z1='440' x2='-255' z2='448' y='155' entryDir='0'/>
         <door id='5' toLoc='167' toDoor='1' x1='170' z1='80' x2='240' z2='80' entryDir='0'/>
         <door id='6' toLoc='168' toDoor='1' x1='205' z1='440' x2='255' z2='448' y='155' entryDir='0'/>
@@ -1000,7 +979,6 @@
         <object name='step3' x='0' y='0' z='290'/>
         <object name='step4' x='0' y='0' z='310'/>
         <object name='statues' x='0' y='0' z='240'/>
-        <object name='door3_mc' x='0' y='0' z='0'/>
     </location>
 
     <location id='145' name='FlemManorRoom2' type='2' boundType='rect' boundary='-170,80,340,290' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.24' playList='33'>
@@ -1094,7 +1072,7 @@
 
 
     <location id='133' name='MulchIsland' type='2' boundType='rect' boundary='-226,75,710,600' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' entryDir='180' weevilScale='0.28' hasAudio='yes' playList='35'>
-        <roomBG path='fixedCam/mulchIsland_hub.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/mulchIsland.swf'/>
         <door id='1' toLoc='132' toDoor='2' x1='-240' z1='266' x2='-256' z2='317' entryDir='0'/>
         <door id='2' toLoc='137' toDoor='1' x1='119' z1='105' x2='180' z2='20' entryDir='180'/>
         <door id='3' extUIData="locName:playing Tink's Blocks at Mulch Island,path:externalUIs/TinksBlocks.swf,area:Mulch Island" x1='394' z1='670' x2='402' z2='780' entryDir='90'/>
@@ -1102,6 +1080,7 @@
         <object name='door1_mc' x='0' y='0' z='545'/>
         <object name='door2_mc' x='166' y='0' z='90'/>
         <object name='door3_mc' x='290' y='0' z='700'/>
+        <object name='snowman_mc' x='240' y='0' z='670'/>
         <anim path='redTop.crab'/>
         <anim path='whiteTop.crab'/>
         <object name='whiteTop' x='32' y='0' z='96'/>
@@ -1424,7 +1403,7 @@
 
 
     <location id='173' name='TycoonIslandHeliport' type='2' boundType='rad' boundary='0,200,180' camPos='0,145,-115' camAim='0,15,500' entryPos='5,182' entryDir='50' weevilScale='0.22' noZoom='yes'>
-        <roomBG path='fixedCam/tycoonIslandHeliport2.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/tycoonIslandHeliport2_UK.swf'/>
         <door id='1' toLoc='174' toDoor='1' x1='-105' z1='146' x2='-145' z2='143' entryDir='180'/>
         <door id='2' toLoc='175' toDoor='1' x1='105' z1='146' x2='145' z2='143' entryDir='180'/>
         <door id='3' toLoc='300' toDoor='1' x1='-60' z1='300' x2='-110' z2='350' entryDir='280'/>
@@ -1435,7 +1414,7 @@
         <object name='door3_mc' x='0' y='0' z='300'/>
         <object name='sign_mc' x='0' y='0' z='290'/>
         <object name='door3Back_mc' x='0' y='0' z='350'/>
-        <object name='helicopter_mc' x='0' y='0' z='200'/>
+        <object name='snowman_mc' x='0' y='0' z='200'/>
         <object name='foliage_mc' x='0' y='0' z='170'/>
         <anim path='bank_mc'/>
         <anim path='hotel_mc'/>
@@ -1450,7 +1429,7 @@
 
 
     <location id='174' name='TycoonIslandSlides' type='2' boundType='rect' boundary='-120,100,300,250' camPos='0,145,-115' camAim='0,15,500' entryPos='0,140' weevilScale='0.21' maintainY='yes' noZoom='yes'>
-        <roomBG path='fixedCam/tycoonIsland_slimePool.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/tycoonIsland_slimePool_christ2010.swf'/>
         <door id='1' toLoc='173' toDoor='1' x1='-105' z1='102' x2='-150' z2='102' entryDir='180'/>
         <door id='2' toLoc='176' toDoor='1' x1='262' z1='502' x2='253' z2='512' y='180' entryDir='0'/>
         <anim path='tubeRedFront'/>
@@ -1472,7 +1451,7 @@
     </location>
 
     <location id='175' name='TycoonIslandShops' type='2' boundType='rad' boundary='0,200,180' camPos='0,145,-115' camAim='0,15,500' entryPos='0,140' weevilScale='0.22' noZoom='yes'>
-        <roomBG path='fixedCam/tycoonIslandShops_2.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/tycoonIslandShops_2.swf'/>
         <door id='1' toLoc='173' toDoor='2' x1='-90' z1='90' x2='-150' z2='90' entryDir='180'/>
         <object name='palmL' x='0' y='0' z='78'/>
         <object name='door1_mc' x='0' y='0' z='70'/>
@@ -1488,11 +1467,6 @@
         <object name='fountain2' x='0' y='0' z='240'/>
         <object name='piller_mc' x='0' y='0' z='210'/>
         <object name='sideBit_mc' x='0' y='0' z='50'/>
-        <anim path='statue_mc.statue.dosh.twinkle1'/>
-        <anim path='statue_mc.statue.dosh.twinkle2'/>
-        <anim path='statue_mc.bass.twinkle1'/>
-        <anim path='statue_mc.bass.twinkle2'/>
-        <anim path='statue_mc.bass.twinkle3'/>
         <anim path='door4_mc.twinkle1'/>
         <anim path='door4_mc.twinkle2'/>
         <door id='2' extUIData="locName:PhotoStudioShop,path:externalUIs/Photoshop.swf"  x1='-160' z1='240' x2='-210' z2='280' entryDir='20'/>
@@ -1508,7 +1482,7 @@
     </location>
 
     <location id='176' name='TycoonIslandSmoothieBar' type='2' boundType='rect' boundary='-200,100,400,200' camPos='0,145,-115' camAim='0,15,500' entryPos='120,120' weevilScale='0.26' noZoom='yes' maintainY='yes' roomEvents='yes'>
-        <roomBG path='fixedCam/tycoonIslandSmoothieBar.swf'/>
+        <roomBG path='fixedCam/seasons/christmas/2010/tycoonIslandSmoothieBar.swf'/>
         <door id='1' toLoc='174' toDoor='2' x1='140' z1='120' x2='220' z2='80' entryDir='180'/>
         <object name='shack' x='0' y='0' z='208'/>
         <object name='shackBack_mc' x='0' y='0' z='250'/>
@@ -1614,7 +1588,7 @@
 
     <location id='183' name='AztecRoomFinal' type='2' boundType='rect' boundary='-180,20,360,360' camPos='0,190,-330' camAim='0,90,260' entryPos='0,80' weevilScale='0.28' noZoom='yes'>
         <roomBG path='fixedCam/quests/aztec/AztecRoomFinal.swf'/>
-        <door id='1' toLoc='180' toDoor='4' x1='0' z1='0' x2='0' z2='0' y2='1500'entryDir='0'/>
+        <door id='1' toLoc='180' toDoor='4' x1='0' z1='0' x2='0' z2='0' y2='1500' entryDir='0'/>
         <door id='2' toLoc='142' toDoor='2' x1='-180' z1='40' x2='-200' z2='-40' entryDir='180'/>
 
         <object name='arrows_mc' x='0' y='0' z='-100'/>
