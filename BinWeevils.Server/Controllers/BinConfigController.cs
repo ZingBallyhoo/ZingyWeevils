@@ -36,7 +36,7 @@ namespace BinWeevils.Server.Controllers
                 m_coreVersionNumber = 30,
                 m_vodPlayerVersion = 15,
                 m_vodContentVersion = 2,
-                m_locDefVersion = 1, // fixed gongs->rums
+                m_locDefVersion = 2, // christmas
             };
         }
         
