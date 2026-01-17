@@ -18,11 +18,11 @@
     <ItemGroup>
       <PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="10.0.0-beta1" />
       <PackageReference Include="Grafana.OpenTelemetry" Version="1.3.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.2" />
       <PackageReference Include="Polly" Version="8.6.5" />
 
       <!-- https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/10.0/asyncenumerable -->  
