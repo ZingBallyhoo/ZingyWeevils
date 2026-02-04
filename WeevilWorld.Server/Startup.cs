@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using ArcticFox.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -14,15 +11,6 @@ namespace WeevilWorld.Server
 {
     public class Startup
     {
-        public const string c_domain = "ww.zingy.dev";
-        
-        public readonly IConfiguration m_configuration;
-
-        public Startup(IConfiguration configuration)
-        {
-            m_configuration = configuration;
-        }
-        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -30,12 +18,6 @@ namespace WeevilWorld.Server
             
             services.AddSingleton<SocketHostService>();
             services.AddSingleton<IHostedService>(p => p.GetRequiredService<SocketHostService>());
-            
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                options.AllowedHosts = new List<string> { c_domain };
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,17 +27,8 @@ namespace WeevilWorld.Server
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseForwardedHeaders();
-                
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
 
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
@@ -72,13 +45,11 @@ namespace WeevilWorld.Server
                 }
             });
 
-            var webSocketOptions = new WebSocketOptions
+            app.UseWebSockets(new WebSocketOptions
             {
                 KeepAliveInterval = TimeSpan.FromSeconds(15),
                 KeepAliveTimeout = TimeSpan.FromSeconds(15)
-            };
-            if (env.IsProduction()) webSocketOptions.AllowedOrigins.Add($"https://{c_domain}");
-            app.UseWebSockets(webSocketOptions);
+            });
             app.Use(async (context, next) =>
             {
                 if (context.Request.Path != "/ws")
