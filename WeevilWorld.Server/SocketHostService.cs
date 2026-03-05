@@ -7,7 +7,7 @@ using WeevilWorld.Server.Net;
 
 namespace WeevilWorld.Server
 {
-    public class SocketHostService : IHostedService
+    public class SocketHostService : IHostedLifecycleService
     {
         public readonly WeevilWorldSocketHost m_host;
         public readonly TcpServer m_tcpServer;
@@ -22,13 +22,33 @@ namespace WeevilWorld.Server
         {
             await m_host.StartZone();
             
-            await m_host.StartAsync();
+            await m_host.StartAsync(cancellationToken);
             m_tcpServer.StartAcceptWorker();
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            await m_host.StopAsync();
+            return Task.CompletedTask;
+        }
+
+        public Task StartingAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task StartedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public async Task StoppingAsync(CancellationToken cancellationToken)
+        {
+            await m_host.StopAsync(cancellationToken);
+        }
+
+        public Task StoppedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

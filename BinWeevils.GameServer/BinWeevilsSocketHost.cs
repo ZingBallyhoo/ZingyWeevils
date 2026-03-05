@@ -12,7 +12,7 @@ using Proto;
 
 namespace BinWeevils.GameServer
 {
-    public class BinWeevilsSocketHost : SocketHost, IHostedService
+    public class BinWeevilsSocketHost : SocketHost, IHostedLifecycleService
     {
         private readonly SmartFoxManager m_manager;
         private readonly ActorSystem m_actorSystem;
@@ -147,7 +147,7 @@ namespace BinWeevils.GameServer
             gameRoom.SetData(game);
         }
 
-        public override async Task StartAsync(CancellationToken cancellationToken=default)
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await StartZone(ZONE);
             
@@ -155,10 +155,25 @@ namespace BinWeevils.GameServer
             m_tcpServer.StartAcceptWorker();
         }
 
-        public override async Task StopAsync(CancellationToken cancellationToken=default)
+        public Task StartingAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task StartedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public async Task StoppingAsync(CancellationToken cancellationToken)
         {
             await base.StopAsync(cancellationToken);
             m_tcpServer.Dispose();
+        }
+
+        public Task StoppedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

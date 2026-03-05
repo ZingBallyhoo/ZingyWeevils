@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ArcticFox.Codec;
 using ArcticFox.Net;
-using ArcticFox.Net.Batching;
+using ArcticFox.Net.Event;
 using ArcticFox.Net.Sockets;
 using ArcticFox.SmartFoxServer;
 using BinWeevils.GameServer.Actors;
@@ -346,11 +346,10 @@ namespace BinWeevils.GameServer
             m_services.GetLogger().LogWarning("Unknown command: {Command} - {Args}", message.m_command.ToString(), string.Join(" ", reader.ReadToEnd()));
         }
         
-        public override async ValueTask<int> HandlePendingSendEvents(ISendContext ctx)
+        public override ValueTask BroadcastEvent(NetEvent ev)
         {
-            var count = await base.HandlePendingSendEvents(ctx);
-            GameServerObservability.s_packetsSent.Add(count);
-            return count;
+            GameServerObservability.s_packetsSent.Add(1);
+            return base.BroadcastEvent(ev);
         }
 
         public override ValueTask CleanupAsync()
@@ -366,7 +365,7 @@ namespace BinWeevils.GameServer
 
         public override void HandleException(Exception e)
         {
-            if (e is SocketException || e is WebSocketException)
+            if (e is SocketException || e is WebSocketException || e is OperationCanceledException)
             {
                 return;
             }
