@@ -8,6 +8,7 @@ Live instances:
 
 How to run:
 - Update archive path in BinWeevils.Server/appsettings.Development.json
+  - https://archive.org/details/bin-weevils-game-assets
 - `cd BinWeevils.Server`
 - `dotnet run`
 
