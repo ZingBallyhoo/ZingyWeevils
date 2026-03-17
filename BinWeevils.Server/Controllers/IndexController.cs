@@ -1,3 +1,5 @@
+using BinWeevils.Common.Database;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PolyType;
 
@@ -5,6 +7,13 @@ namespace BinWeevils.Server.Controllers
 {
     public partial class IndexController : Controller
     {
+        private readonly UserManager<WeevilAccount> m_identityManager;
+        
+        public IndexController(UserManager<WeevilAccount> identityManager)
+        {
+            m_identityManager = identityManager;
+        }
+        
         [HttpGet("index.php")]
         public IResult IndexRedirect()
         {
@@ -12,12 +21,20 @@ namespace BinWeevils.Server.Controllers
         }
         
         [StructuredFormPost("")]
-        public IResult PostUsername([FromBody] UsernameForm form)
+        public async Task<IResult> PostUsername([FromBody] UsernameForm form)
         {
             var username = form.m_username.Trim().Replace('+', ' ');
             if (string.IsNullOrWhiteSpace(username))
             {
                 return Results.Redirect("/");
+            }
+            
+            // look up the username in the database to try and get the correct casing for the username
+            // this can race if two people create the same normalized name at the same time
+            var foundUser = await m_identityManager.FindByNameAsync(username);
+            if (foundUser != null)
+            {
+                username = foundUser.UserName!;
             }
             
             Response.Cookies.Append("username", username, new CookieOptions

@@ -85,7 +85,7 @@ namespace BinWeevils.GameServer
                 throw new InvalidDataException("invalid username");
             }
             
-            using var loginActivity = GameServerObservability.s_source.StartActivity("Attempt Login");
+            using var loginActivity = GameServerObservability.StartActivity("Attempt Login");
             loginActivity?.SetTag("userName", name);
             GameServerObservability.s_loginAttempts.Add(1);
             
