@@ -50,8 +50,15 @@ namespace BinWeevils.Server.Controllers
         {
             using var activity = ApiServerObservability.StartActivity("NestController.GetWeevilStats");
             
+            var weevilName = ControllerContext.HttpContext.User.Identity!.Name;
             var weevil = await m_dbContext.m_weevilDBs
-                .SingleAsync(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name);
+                .SingleOrDefaultAsync(x => x.m_name == weevilName);
+
+            if (weevil == null)
+            {
+                activity?.SetTag("name", weevilName);
+                throw new InvalidDataException($"can't find weevil {weevilName}");
+            }
             
             WeevilLevels.GetLevelThresholds(weevil.m_lastAcknowledgedLevel, 
                 out var xpLowerThreshold, 
