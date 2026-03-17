@@ -26,7 +26,15 @@ namespace BinWeevils.Server
             var polyTypeMethod = typeof(FormOptions)
                 .GetMethod(nameof(FormOptions.Deserialize), BindingFlags.Instance | BindingFlags.Public, [typeof(string)])!
                 .MakeGenericMethod(context.ModelType);
-            var result = polyTypeMethod.Invoke(options, [bodyText]);
+
+            object? result;
+            try
+            { 
+                result = polyTypeMethod.Invoke(options, [bodyText]);
+            } catch (Exception e)
+            {
+                throw new AggregateException($"Error parsing {context.ModelType} from form data", e);
+            }
             return await InputFormatterResult.SuccessAsync(result);
         }
     }
