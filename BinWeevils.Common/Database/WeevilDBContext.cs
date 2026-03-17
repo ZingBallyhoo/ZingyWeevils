@@ -1,12 +1,15 @@
 using BinWeevils.Protocol.Sql;
 using BinWeevils.Protocol.Xml;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BinWeevils.Common.Database
 {
-    public class WeevilDBContext : IdentityDbContext<WeevilAccount>
+    public class WeevilDBContext : IdentityDbContext<WeevilAccount>, IDataProtectionKeyContext
     {
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
+        
         public DbSet<WeevilDB> m_weevilDBs { get; set; }
         public DbSet<WeevilSpecialMoveDB> m_weevilSpecialMoves { get; set; }
         public DbSet<WeevilGamePlayedDB> m_weevilGamesPlayed { get; set; }

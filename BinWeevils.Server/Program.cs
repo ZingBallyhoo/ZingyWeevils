@@ -13,6 +13,7 @@ using BinWeevils.Server.Services;
 using Grafana.OpenTelemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
@@ -120,6 +121,9 @@ public class Program
             })
             .AddEntityFrameworkStores<WeevilDBContext>()
             .AddDefaultTokenProviders();
+        
+        builder.Services.AddDataProtection()
+            .PersistKeysToDbContext<WeevilDBContext>();
         
         builder.Services
             .AddAuthentication()
