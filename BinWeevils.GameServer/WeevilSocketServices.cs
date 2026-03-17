@@ -91,11 +91,16 @@ namespace BinWeevils.GameServer
             
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
             var account = await identityManager.FindByNameAsync(name);
-            if (account != null)
+            if (account == null)
             {
-                return account.m_weevilIdx;
+                return await CreateNewWeevil(scope, identityManager, name);
             }
             
+            return account.m_weevilIdx;
+        }
+
+        private async Task<uint> CreateNewWeevil(AsyncServiceScope scope, UserManager<WeevilAccount> identityManager, string name)
+        {
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             var initializer = scope.ServiceProvider.GetRequiredService<WeevilInitializer>();
             await using var transaction = await context.Database.BeginTransactionAsync();
@@ -110,11 +115,12 @@ namespace BinWeevils.GameServer
             });
             if (!result.Succeeded) throw new Exception($"Create account failed: {result}");
             
-            account = await identityManager.FindByNameAsync(name);
+            var account = await identityManager.FindByNameAsync(name);
             if (account == null) throw new NullReferenceException(nameof(account));
             
-            GameServerObservability.s_usersCreated.Add(1);
             await transaction.CommitAsync();
+            GameServerObservability.s_usersCreated.Add(1);
+            
             return account.m_weevilIdx;
         }
         
