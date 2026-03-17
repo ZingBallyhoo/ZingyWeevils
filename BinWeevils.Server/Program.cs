@@ -120,7 +120,8 @@ public class Program
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ";
             })
             .AddEntityFrameworkStores<WeevilDBContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<SfsTokenProvider>(nameof(SfsTokenProvider));
         
         builder.Services.AddDataProtection()
             .PersistKeysToDbContext<WeevilDBContext>();

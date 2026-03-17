@@ -56,10 +56,10 @@ namespace BinWeevils.GameServer
             return m_rootProvider.GetRequiredService<IOptionsMonitor<PetsSettings>>().CurrentValue;
         }
         
-        public async Task<uint> Login(string name)
+        public async Task<uint> Login(string name, string token)
         {
             await using var scope = m_rootProvider.CreateAsyncScope();
-            var idx = await LoginInternal(scope, name);
+            var idx = await LoginInternal(scope, name, token);
             if (idx == 0)
             {
                 throw new Exception("failed to log in");
@@ -76,7 +76,7 @@ namespace BinWeevils.GameServer
             return idx;
         }
         
-        private async Task<uint> LoginInternal(AsyncServiceScope scope, string name)
+        private async Task<uint> LoginInternal(AsyncServiceScope scope, string name, string token)
         {
             name = name.Trim();
             if (name.Length > 20)
@@ -96,6 +96,16 @@ namespace BinWeevils.GameServer
                 return await CreateNewWeevil(scope, identityManager, name);
             }
             
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new InvalidDataException("Sfs login token is empty");
+            }
+
+            var tokenValid = await identityManager.VerifyUserTokenAsync(account, "SfsTokenProvider", "SfsLogin", token);
+            if (!tokenValid)
+            {
+                throw new InvalidDataException("Sfs login token is invalid");
+            }
             return account.m_weevilIdx;
         }
 

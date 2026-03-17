@@ -1,6 +1,9 @@
 using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Amf;
+using BinWeevils.Server.Services;
+using Microsoft.AspNetCore.Identity;
 using PolyType;
 
 namespace BinWeevils.Server.Controllers
@@ -13,14 +16,27 @@ namespace BinWeevils.Server.Controllers
             {
                 case "weevilservices.cWeevilLoginService.getLoginDetails":
                 {
-                    var username = context.m_httpContext.User.Identity!.Name;
+                    var username = context.m_httpContext.User.Identity!.Name!;
+                    var identityManager = context.m_httpContext.RequestServices.GetRequiredService<UserManager<WeevilAccount>>();
+                    var foundUser = await identityManager.FindByNameAsync(username);
+
+                    var token = "";
+                    if (foundUser != null)
+                    {
+                        // if the user account has been created (logged into the socket before)
+                        // create a short-lived auth token to validate their socket connection
+                        token = await identityManager.GenerateUserTokenAsync(foundUser, nameof(SfsTokenProvider), "SfsLogin");
+                        
+                        // sanity, fix casing if we really need it
+                        username = foundUser.UserName!;
+                    }
                     
                     return new GetLoginDetailsResponse
                     {
                         m_userName = username,
                         m_userIdx = 0, // todo: we can't get this here...
                         m_tycoon = 1,
-                        m_loginKey = ""
+                        m_loginKey = token
                     };
                 }
                 case "weevilservices.cWeevilLoginService.getUserBuddyCount":
