@@ -18,7 +18,7 @@ namespace BinWeevils.GameServer
             {
                 case Modules.KART_JOIN_GAME:
                 {
-                    KartMessageHandler<KartJoinGameRequest>(ref reader); // empty
+                    KartMessageHandler<KartJoinGameRequest>(ref reader);
                     break;
                 }
                 case Modules.KART_LEFT_GAME:

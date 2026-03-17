@@ -2,7 +2,7 @@ using StackXML.Str;
 
 namespace BinWeevils.Protocol.Str.WeevilKart
 {
-    public partial record struct  KartGetStartTimeRequest : IStrClass
+    public partial record struct KartGetStartTimeRequest : IStrClass
     {
         public void Serialize(ref StrWriter writer)
         {
