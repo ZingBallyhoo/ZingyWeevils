@@ -56,7 +56,9 @@ namespace BinWeevils.Server.Controllers
                 "nightClub" => itemQuery
                     .Where(x => x.m_shopType == ItemShopType.nightClub),
                 "photoStudio" => itemQuery
-                    .Where(x => x.m_shopType == ItemShopType.photoStudio)
+                    .Where(x => x.m_shopType == ItemShopType.photoStudio),
+                
+                "bathroomAndKitchen" => itemQuery.Take(0) // not implemented
             };
             
             var items = await itemQuery
