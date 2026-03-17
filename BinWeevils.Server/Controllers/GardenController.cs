@@ -456,7 +456,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (dto == null || dto.m_plant == null)
             {
-                throw new Exception("invalid harvest plant request");
+                throw new Exception("invalid harvest plant request. no result from db");
             }
             
             var state = GetPlantState(new PlantStateData
