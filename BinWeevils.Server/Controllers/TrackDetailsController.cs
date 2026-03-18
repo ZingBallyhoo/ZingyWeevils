@@ -22,7 +22,7 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public TrackDetailsResponse GetTrackDetails([FromBody] TrackDetailsRequest request)
         {
-            if (!m_repository.m_tracks.TryGetValue(request.m_trackID, out var track))
+            if (!m_repository.TryGetTrack(request.m_trackID, out var track))
             {
                 return new TrackDetailsResponse
                 {
@@ -44,7 +44,7 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public Dictionary<string, string> GetBinTunes()
         {
-            var binTunes = m_repository.m_tracks.Values.Where(x => m_repository.IsBinTune(x)).ToArray();
+            var binTunes = m_repository.GetBinTunes().ToArray();
             var resp = new Dictionary<string, string>
             {
                 {"success", "1"},
