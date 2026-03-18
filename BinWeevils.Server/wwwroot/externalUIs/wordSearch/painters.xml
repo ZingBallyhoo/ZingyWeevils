@@ -1,0 +1,44 @@
+<wordSearch id='73' hideWords='false' heading='Can you find all 20 Painter words hidden in the grid?'>
+
+<row id='0'>EOLEGNALEHCIMEDO</row>
+<row id='1'>NAIRDNOMPCMOSAVL</row>
+<row id='2'>KNLIRSIIORMUVTEH</row>
+<row id='3'>RCVEEHCFFUOIFTRA</row>
+<row id='4'>EAODAAAACHNTERMK</row>
+<row id='5'>SSBLSHCORCRIONER</row>
+<row id='6'>WWSSLEPEIAETTLEF</row>
+<row id='7'>RAOIZOTADTVISDRI</row>
+<row id='8'>RRRATAPCREEAMIFA</row>
+<row id='9'>ASNHWADOETGNGZAL</row>
+<row id='10'>ENOAOFMIBEOALGCT</row>
+<row id='11'>ETOEFLTENOMISOIT</row>
+<row id='12'>MAGRITTEMHALTIOO</row>
+<row id='13'>ISCTVFNENEHAONLR</row>
+<row id='14'>ANIFCTOTPECDYMTT</row>
+<row id='15'>HGOGNAVLRHECGION</row>
+
+
+<word>CARAVAGGIO</word>
+<word>CEZANNE</word>
+<word>DA VINCI</word>
+<word>DALI</word>
+<word>DEGAS</word>
+<word>KAHLO</word>
+<word>MAGRITTE</word>
+<word>MATISSE</word>
+<word>MICHELANGELO</word>
+<word>MONDRIAN</word>
+<word>MONET</word>
+<word>PICASSO</word>
+<word>POLLOCK</word>
+<word>RAPHAEL</word>
+<word>RENOIR</word>
+<word>TITIAN</word>
+<word>VAN GOGH</word>
+<word>VERMEER</word>
+<word>WARHOL</word>
+<word>WATERHOUSE</word>
+
+
+
+</wordSearch>

@@ -166,7 +166,21 @@ public class Program
             new PhysicalFileProvider(archivePath),
             new PhysicalFileProvider(Path.Combine(archivePath, "play"))
         );
-        builder.Services.AddSingleton<IFileProvider>(archiveFileProvider);
+        
+        // expose archived data to services that need it locally
+        builder.Services.AddSingleton<IFileProvider>(serviceProvider =>
+        {
+            var hostEnvironment = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+
+            // we need to include wwwroot files explicitly, only for local
+            // remote requests will get via standard routing
+            // todo: i don't like how this is inconsistent.. play/externalUIs/... works for remote but not locally
+            // cdn/LoaderContent works for remote but not locally
+            return new CompositeFileProvider(
+                hostEnvironment.WebRootFileProvider,
+                archiveFileProvider
+            );
+        });
         
         await using var app = builder.Build();
 

@@ -1,0 +1,44 @@
+<wordSearch id='59' hideWords='false' heading='Can you find all 20 Space words hidden in the grid?'>
+
+<row id='0'>KLRNIORTILHAEIIT</row>
+<row id='1'>LISHRFWEIGHTLESS</row>
+<row id='2'>ATEBTOTGTARBRATS</row>
+<row id='3'>WSILFCHAKOLDCETA</row>
+<row id='4'>NTNUTTEAHALOIFTR</row>
+<row id='5'>OAAESTIUSECAPSED</row>
+<row id='6'>ONSPIGUTESREVINU</row>
+<row id='7'>MHETNLOHKPSXATAR</row>
+<row id='8'>NETTRFACSONPDCLT</row>
+<row id='9'>DLIMFOAONNILSMPE</row>
+<row id='10'>NMRLCPNNOMOOIATG</row>
+<row id='11'>NEBLTIIAIWRRMFET</row>
+<row id='12'>CTREOOAAUTIEROHN</row>
+<row id='13'>OUJSOMSOCTYXALAG</row>
+<row id='14'>SUPERNOVAROCKETE</row>
+<row id='15'>ATTGCNDESRAFWUPE</row>
+
+
+<word>ALIENS</word>
+<word>ASTRONAUT</word>
+<word>BLASTOFF</word>
+<word>COSMOS</word>
+<word>EXPLORE</word>
+<word>GALAXY</word>
+<word>HELMET</word>
+<word>JETPACK</word>
+<word>LIGHTSPEED</word>
+<word>MOONWALK</word>
+<word>ORBIT</word>
+<word>PLANET</word>
+<word>ROCKET</word>
+<word>SHUTTLE</word>
+<word>SPACESUIT</word>
+<word>STAR</word>
+<word>SUPERNOVA</word>
+<word>UFO</word>
+<word>UNIVERSE</word>
+<word>WEIGHTLESS</word>
+
+
+
+</wordSearch>

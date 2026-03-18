@@ -1,0 +1,44 @@
+<wordSearch id='74' hideWords='false' heading='Can you find all 20 skateboarding words hidden in the grid?'>
+
+<row id='0'>HWDECKNSSTDATQOS</row>
+<row id='1'>AHNRSODKTSRIREVO</row>
+<row id='2'>LERAILAAAOASITSI</row>
+<row id='3'>FEASOTIAAGOMETNR</row>
+<row id='4'>PLELELRCHOBYAGRK</row>
+<row id='5'>ISLPSHLTEEDLRCHP</row>
+<row id='6'>PIALIEKARTRIRAMP</row>
+<row id='7'>ERINPLTIBIPIRROP</row>
+<row id='8'>KDVEAMFTCTCEAVEP</row>
+<row id='9'>EHSTLEILAKOKGESW</row>
+<row id='10'>EGSLBTNPERFHTYWI</row>
+<row id='11'>HLONFTEENEELMIIV</row>
+<row id='12'>OOXAHDNIRGHNITTT</row>
+<row id='13'>RHKATEAEHSTIOPCC</row>
+<row id='14'>AIHENSBEKRHERTHN</row>
+<row id='15'>EOIHDIAOIHHMHFML</row>
+
+
+<word>AIR</word>
+<word>AXLE</word>
+<word>BOARD</word>
+<word>CARVE</word>
+<word>DECK</word>
+<word>FAKIE</word>
+<word>GRIND</word>
+<word>GRIP TAPE</word>
+<word>HALFPIPE</word>
+<word>HEELFLIP</word>
+<word>HELMET</word>
+<word>KICKFLIP</word>
+<word>OLLIE</word>
+<word>RAIL</word>
+<word>RAMP</word>
+<word>SKATEPARK</word>
+<word>SWITCH</word>
+<word>TAILSLIDE</word>
+<word>TRICK</word>
+<word>WHEELS</word>
+
+
+
+</wordSearch>
