@@ -1,7 +1,20 @@
 using PolyType;
 
-namespace BinWeevils.Protocol.Form
+namespace BinWeevils.Protocol.Form.Puzzle
 {
+    [GenerateShape]
+    public partial class GetPuzzleListRequest
+    {
+        [PropertyShape(Name = "userID")] public string m_userID { get; set; }
+        [PropertyShape(Name = "typeID")] public PuzzleTypeID m_typeID { get; set; }
+    }
+
+    public enum PuzzleTypeID
+    {
+        WordSearch = 1,
+        Crossword = 2,
+    }
+    
     [GenerateShape]
     public partial class GetPuzzleListResponse
     {

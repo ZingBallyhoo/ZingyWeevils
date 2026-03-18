@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Text;
 using StackXML;
 
 namespace BinWeevils.Protocol.Xml.Puzzle
@@ -12,6 +14,16 @@ namespace BinWeevils.Protocol.Xml.Puzzle
         [XmlBody] public CrosswordClueListAcross m_across;
         [XmlBody] public CrosswordClueListDown m_down;
         
+        public string GetSolutionText()
+        {
+            var sb = new StringBuilder();
+            foreach (var row in m_rows)
+            {
+                sb.Append(row.m_text);
+            }
+
+            return sb.ToString();
+        }
     }
 
     [XmlCls("across")]

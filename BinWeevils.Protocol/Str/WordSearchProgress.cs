@@ -23,7 +23,7 @@ namespace BinWeevils.Protocol.Str
         {
             if (!TryParse(s, provider, out var result))
             {
-                throw new InvalidDataException();
+                throw new InvalidDataException($"invalid word search progress: {s}");
             }
             return result;
         }
@@ -49,6 +49,7 @@ namespace BinWeevils.Protocol.Str
                 span.FullyDeserialize(ref spanReader);
                 
                 span.Normalize();
+                span.Validate();
                 result.m_spans.Add(span);
             }
             

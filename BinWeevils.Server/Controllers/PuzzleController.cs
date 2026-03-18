@@ -1,6 +1,6 @@
 using System.Net.Mime;
-using BinWeevils.Protocol.Form;
-using BinWeevils.Protocol.Xml;
+using BinWeevils.Protocol.Form.Puzzle;
+using BinWeevils.Protocol.Xml.Puzzle;
 using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,22 +20,17 @@ namespace BinWeevils.Server.Controllers
             m_repository = repository;
         }
         
-        [HttpPost("php/getPuzzleList.php")]
+        [StructuredFormPost("php/getPuzzleList.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public GetPuzzleListResponse GetPuzzleList()
+        public GetPuzzleListResponse GetPuzzleList([FromBody] GetPuzzleListRequest request)
         {
-            // params: userID, typeID
-            
-            // 1 = ws
-            // 2 = cw
-            
             IPuzzleConfigRepository configRepo;
             string typeName;
             string gamePath;
             string locName;
-            switch (1)
+            switch (request.m_typeID)
             {
-                case 1:
+                case PuzzleTypeID.WordSearch:
                 {
                     configRepo = m_repository.WordSearches;
                     typeName = "wordsearch";
@@ -43,7 +38,7 @@ namespace BinWeevils.Server.Controllers
                     locName = "doing a wordsearch";
                     break;
                 }
-                case 2:
+                case PuzzleTypeID.Crossword:
                 {
                     configRepo = m_repository.Crosswords;
                     typeName = "crossword";
@@ -53,7 +48,7 @@ namespace BinWeevils.Server.Controllers
                 }
                 default:
                 {
-                    throw new InvalidDataException("invalid puzzle type");
+                    throw new InvalidDataException($"invalid puzzle type: {request.m_typeID}");
                 }
             }
 
@@ -105,11 +100,38 @@ namespace BinWeevils.Server.Controllers
             return "";
         }
         
-        // todo:
-        // php/saveCrosswordProgress.php
-        // gridID	"91"
-        // completed	"1"
-        // progress	".....S...........PILOT....S.W.C..R...AUTUMN.H.A.BARK.M....O.E.N..N...P..C.W.E.D..K......O.F.L.L.......SUNGLASSES......A.E.A...S...SEVEN...K........A..D...E........S..W...S........T..I.S.............CROWN...........H.C...............K...............S......."
-        // userID	"zingy"
+        [StructuredFormPost("php/saveCrosswordProgress.php")]
+        public string SaveCrosswordProgress([FromBody] SaveCrosswordProgressRequest request)
+        {
+            if (!m_repository.Crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossWord))
+            {
+                throw new InvalidDataException("trying to solve a crossword that doesn't exist");
+            }
+
+            var completedText = crossWord.GetSolutionText();
+            if (request.m_progress.Length != completedText.Length)
+            {
+                throw new InvalidDataException($"wrong crossword solution length. got {request.m_progress.Length}, expected {completedText.Length}");
+            }
+
+            for (var i = 0; i < completedText.Length; i++)
+            {
+                if (char.IsAsciiLetterUpper(request.m_progress[i]))
+                {
+                    if (completedText[i] == '-') throw new InvalidDataException("attempt to save into blank space of crossword solution");
+                } else if (request.m_progress[i] != '.') 
+                {
+                    throw new InvalidDataException($"invalid char \"{request.m_progress[i]}\" in crossword solution");
+                }
+            }
+
+            var actuallyCompleted = completedText.Equals(request.m_progress, StringComparison.InvariantCultureIgnoreCase);
+            if (actuallyCompleted != request.m_completed)
+            {
+                throw new InvalidDataException("completed status of request doesn't match expected");
+            }
+            
+            return "";
+        }
     }
 }

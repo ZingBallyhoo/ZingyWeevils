@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ArcticFox.PolyType.FormEncoded;
-using BinWeevils.Protocol.Form;
+using BinWeevils.Protocol.Form.Puzzle;
 using BinWeevils.Protocol.Xml.Puzzle;
 
 namespace BinWeevils.Server.Services
