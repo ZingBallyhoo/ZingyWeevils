@@ -23,19 +23,11 @@ namespace BinWeevils.Server.Services
                 return config;
             }
             
-            var configText = await GetConfigText(name);
+            var fileInfo = m_fileProvider.GetFileInfo(Path.Combine("users", $"{name}.xml"));
+            var configText = await fileInfo.GetStringContentsAsync();
             config = XmlReadBuffer.ReadStatic<ItemConfig>(configText);
             m_cache[name] = config;
             return config;
-        }
-
-        private async Task<string> GetConfigText(string name)
-        {
-            var fileInfo = m_fileProvider.GetFileInfo(Path.Combine("users", $"{name}.xml"));
-            await using var stream = fileInfo.CreateReadStream();
-            
-            using var streamReader = new StreamReader(stream);
-            return await streamReader.ReadToEndAsync();
         }
     }
 }

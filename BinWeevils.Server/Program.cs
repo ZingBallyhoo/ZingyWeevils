@@ -78,6 +78,11 @@ public class Program
         builder.Services.AddSingleton<QuestRepository>();
         builder.Services.AddSingleton<TrackRepository>();
         builder.Services.AddSingleton<PuzzleRepository>();
+        builder.Services.AddSingleton<PuzzleConfigRepository<WordSearch>>();
+        builder.Services.Configure<PuzzleConfigRepositoryOptions<WordSearch>>(options =>
+        {
+            options.ConfigPath = "externalUIs/wordSearch";
+        });
         builder.Services.AddOptions<DatabaseSettings>().BindConfiguration("Database");
         builder.Services.AddOptions<EconomySettings>();
         builder.Services.AddOptions<PetsSettings>().BindConfiguration("Pets").Validate(settings =>
@@ -176,8 +181,10 @@ public class Program
             // remote requests will get via standard routing
             // todo: i don't like how this is inconsistent.. play/externalUIs/... works for remote but not locally
             // cdn/LoaderContent works for remote but not locally
+            
+            // todo: if you use WebRootFileProvider then walk dirs, you will see compressed (.gz) files -_-
             return new CompositeFileProvider(
-                hostEnvironment.WebRootFileProvider,
+                new PhysicalFileProvider(hostEnvironment.WebRootPath),
                 archiveFileProvider
             );
         });

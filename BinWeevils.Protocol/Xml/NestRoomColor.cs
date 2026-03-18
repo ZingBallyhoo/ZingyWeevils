@@ -33,12 +33,7 @@ namespace BinWeevils.Protocol.Xml
             var reader = new StrReader(s, '|');
             
             result = new NestRoomColor();
-            result.Deserialize(ref reader);
-            
-            if (reader.HasRemaining())
-            {
-                return false;
-            }
+            result.FullyDeserialize(ref reader);
             
             result.Validate();
             return true;
