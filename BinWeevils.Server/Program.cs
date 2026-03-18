@@ -78,17 +78,7 @@ public class Program
         builder.Services.AddSingleton<ItemConfigRepository>();
         builder.Services.AddSingleton<QuestRepository>();
         builder.Services.AddSingleton<TrackRepository>();
-        builder.Services.AddSingleton<PuzzleRepository>();
-        builder.Services.AddSingleton<PuzzleConfigRepository<WordSearch>>();
-        builder.Services.AddSingleton<PuzzleConfigRepository<Crossword>>();
-        builder.Services.Configure<PuzzleConfigRepositoryOptions<WordSearch>>(options =>
-        {
-            options.ConfigPath = "externalUIs/wordSearch";
-        });
-        builder.Services.Configure<PuzzleConfigRepositoryOptions<Crossword>>(options =>
-        {
-            options.ConfigPath = "externalUIs/crossword";
-        });
+        ConfigurePuzzles(builder);
         builder.Services.AddOptions<DatabaseSettings>().BindConfiguration("Database");
         builder.Services.AddOptions<EconomySettings>();
         builder.Services.AddOptions<PetsSettings>().BindConfiguration("Pets").Validate(settings =>
@@ -276,6 +266,16 @@ public class Program
         }
         
         await app.WaitForShutdownAsync();
+    }
+
+    private static void ConfigurePuzzles(WebApplicationBuilder builder)
+    {
+        builder.Services.AddSingleton<PuzzleRepository>();
+        builder.Services.AddSingleton<PuzzleConfigRepository<WordSearch>>();
+        builder.Services.AddSingleton<PuzzleConfigRepository<Crossword>>();
+        
+        builder.Services.Configure<PuzzleConfigRepositoryOptions<WordSearch>>(builder.Configuration.GetRequiredSection("WordSearches"));
+        builder.Services.Configure<PuzzleConfigRepositoryOptions<Crossword>>(builder.Configuration.GetRequiredSection("Crosswords"));
     }
     
     private static void ConfigureObservability(WebApplicationBuilder builder)

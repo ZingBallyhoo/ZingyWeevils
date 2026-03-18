@@ -1,4 +1,3 @@
-using BinWeevils.Protocol.Xml;
 using BinWeevils.Protocol.Xml.Puzzle;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -18,7 +17,7 @@ namespace BinWeevils.Server.Services
     }
     
     public class PuzzleConfigRepository<TPuzzle> : IPuzzleConfigRepository
-        where TPuzzle : PuzzleBase, IXmlSerializable, new()
+        where TPuzzle : PuzzleBase, new()
     {
         private readonly ILogger<PuzzleConfigRepository<TPuzzle>> m_logger;
         private readonly IFileProvider m_fileProvider;
