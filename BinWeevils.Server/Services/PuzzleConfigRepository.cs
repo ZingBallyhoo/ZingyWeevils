@@ -8,6 +8,7 @@ namespace BinWeevils.Server.Services
     public class PuzzleConfigRepositoryOptions<TPuzzle>
     {
         public string ConfigPath { get; set; } = "";
+        public List<PuzzleDefinition> Puzzles { get; set; } = [];
     }
     
     public interface IPuzzleConfigRepository
@@ -38,19 +39,24 @@ namespace BinWeevils.Server.Services
             m_logger = logger;
             m_fileProvider = fileProvider;
             m_optionsMonitor = optionsMonitor;
+
+            foreach (var puzzleDefinition in optionsMonitor.CurrentValue.Puzzles)
+            {
+                AddPuzzle(puzzleDefinition);
+            }
         }
 
         public void AddPuzzle(PuzzleDefinition puzzleDefinition)
         {
-            var fileInfo = m_fileProvider.GetFileInfo(Path.Combine(ConfigPath, puzzleDefinition.m_configPath));
+            var fileInfo = m_fileProvider.GetFileInfo(Path.Combine(ConfigPath, puzzleDefinition.ConfigPath));
             if (!fileInfo.Exists)
             {
-                var severity = puzzleDefinition.m_level switch
+                var severity = puzzleDefinition.Level switch
                 {
                     0 => LogLevel.Trace, // campaign, doesn't matter
                     _ => LogLevel.Critical
                 };
-                m_logger.Log(severity,"Puzzle {ConfigPath} doesn't exist on disk", puzzleDefinition.m_configPath);
+                m_logger.Log(severity,"Puzzle {ConfigPath} doesn't exist on disk", puzzleDefinition.ConfigPath);
                 return;
             }
             
@@ -68,20 +74,12 @@ namespace BinWeevils.Server.Services
 
             if (m_puzzles.TryGetValue(puzzleConfig.m_id, out var existingDefinition))
             {
-                m_logger.LogError("Puzzle {ID} has ID conflict: \"{Def1}\" & \"{Def2}\"", puzzleConfig.m_id, existingDefinition.m_name, puzzleDefinition.m_name);
+                m_logger.LogError("Puzzle {ID} has ID conflict: \"{Def1}\" & \"{Def2}\"", puzzleConfig.m_id, existingDefinition.Name, puzzleDefinition.Name);
                 return;
             }
             
             m_puzzles.Add(puzzleConfig.m_id, puzzleDefinition);
             m_puzzleConfigs.Add(puzzleConfig.m_id, puzzleConfig);
-        }
-        
-        public void AddPuzzles(IEnumerable<PuzzleDefinition> enumerable)
-        {
-            foreach (var puzzle in enumerable)
-            {
-                AddPuzzle(puzzle);
-            }
         }
     }
 }

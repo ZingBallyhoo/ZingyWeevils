@@ -270,10 +270,11 @@ public class Program
 
     private static void ConfigurePuzzles(WebApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<PuzzleRepository>();
         builder.Services.AddSingleton<PuzzleConfigRepository<WordSearch>>();
         builder.Services.AddSingleton<PuzzleConfigRepository<Crossword>>();
         
+        builder.Configuration.AddSubJson("WordSearches:Puzzles", Path.Combine("Data", "wordSearches.json"));
+        builder.Configuration.AddSubJson("Crosswords:Puzzles", Path.Combine("Data", "crosswords.json"));
         builder.Services.Configure<PuzzleConfigRepositoryOptions<WordSearch>>(builder.Configuration.GetRequiredSection("WordSearches"));
         builder.Services.Configure<PuzzleConfigRepositoryOptions<Crossword>>(builder.Configuration.GetRequiredSection("Crosswords"));
     }

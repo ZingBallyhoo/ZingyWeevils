@@ -1,0 +1,65 @@
+// no scraped data, so list is reconstructed
+// https://binweevilcompany.wordpress.com/puzzles/crossword-answers/
+// list names from https://www.youtube.com/watch?v=CBzBl5vWMLw
+[
+  {
+    "configPath": "xmas2015.xml",
+    "name": "Christmas 2015",
+    "level": 1
+  },
+  {
+    "configPath": "crossword91.xml",
+    "name": "General Crossword",
+    "level": 1
+  },
+  {
+    "configPath": "crossword92.xml",
+    "name": "Opposites",
+    "level": 2
+  },
+  {
+    "configPath": "crossword99.xml",
+    "name": "The Great Outdoors",
+    "level": 3
+  },
+  {
+    "configPath": "crossword96.xml",
+    "name": "Jobs and Work",
+    "level": 4
+  },
+  {
+    "configPath": "crossword95.xml",
+    "name": "General Crossword",
+    "level": 5
+  },
+  {
+    "configPath": "crossword93.xml",
+    "name": "Music Mania",
+    "level": 6
+  },
+  {
+    "configPath": "crossword94.xml",
+    "name": "General Crossword",
+    "level": 7
+  },
+  {
+    "configPath": "crossword97.xml",
+    "name": "Pets",
+    "level": 8
+  },
+  {
+    "configPath": "crossword98_1.xml",
+    "name": "Around the Binscape",
+    "level": 9
+  },
+  {
+    "configPath": "crossword100.xml",
+    "name": "Science Rocks",
+    "level": 10
+  },
+  {
+    "configPath": "crossword101.xml",
+    "name": "Summer Fun",
+    "level": 12
+  }
+]

@@ -13,11 +13,15 @@ namespace BinWeevils.Server.Controllers
     [Route("api")]
     public class PuzzleController : Controller
     {
-        private readonly PuzzleRepository m_repository;
+        private readonly PuzzleConfigRepository<WordSearch> m_wordSearches;
+        private readonly PuzzleConfigRepository<Crossword> m_crosswords;
 
-        public PuzzleController(PuzzleRepository repository)
+        public PuzzleController(
+            PuzzleConfigRepository<WordSearch> wordSearches,
+            PuzzleConfigRepository<Crossword> crosswords)
         {
-            m_repository = repository;
+            m_wordSearches = wordSearches;
+            m_crosswords = crosswords;
         }
         
         [StructuredFormPost("php/getPuzzleList.php")]
@@ -32,7 +36,7 @@ namespace BinWeevils.Server.Controllers
             {
                 case PuzzleTypeID.WordSearch:
                 {
-                    configRepo = m_repository.WordSearches;
+                    configRepo = m_wordSearches;
                     typeName = "wordsearch";
                     gamePath = "externalUIs/wordSearch_11_02_11.swf";
                     locName = "doing a wordsearch";
@@ -40,7 +44,7 @@ namespace BinWeevils.Server.Controllers
                 }
                 case PuzzleTypeID.Crossword:
                 {
-                    configRepo = m_repository.Crosswords;
+                    configRepo = m_crosswords;
                     typeName = "crossword";
                     gamePath = "externalUIs/crossword2.swf";
                     locName = "doing a crossword";
@@ -59,9 +63,9 @@ namespace BinWeevils.Server.Controllers
                 m_gamePath = gamePath,
                 m_configBasePath = $"{configRepo.ConfigPath}/",
                 m_locName = locName,
-                m_levelList = string.Join('|', puzzleList.Select(x => x.m_level.ToString())),
-                m_nameList = string.Join('|', puzzleList.Select(x => x.m_name.ToString())),
-                m_configList = string.Join('|', puzzleList.Select(x => x.m_configPath.ToString())),
+                m_levelList = string.Join('|', puzzleList.Select(x => x.Level.ToString())),
+                m_nameList = string.Join('|', puzzleList.Select(x => x.Name.ToString())),
+                m_configList = string.Join('|', puzzleList.Select(x => x.ConfigPath.ToString())),
                 m_completedList = string.Join('|', puzzleList.Select(x => '0')),
             };
         }
@@ -82,7 +86,7 @@ namespace BinWeevils.Server.Controllers
             // progress	"1,15,6,15"
             // userID "zingy"
 
-            if (!m_repository.WordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
+            if (!m_wordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
             {
                 throw new InvalidDataException("trying to solve a word search that doesn't exist");
             }
@@ -103,7 +107,7 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("php/saveCrosswordProgress.php")]
         public string SaveCrosswordProgress([FromBody] SaveCrosswordProgressRequest request)
         {
-            if (!m_repository.Crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossWord))
+            if (!m_crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossWord))
             {
                 throw new InvalidDataException("trying to solve a crossword that doesn't exist");
             }
