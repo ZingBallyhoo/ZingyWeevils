@@ -1,17 +1,18 @@
 using System.Collections.Concurrent;
 using BinWeevils.Protocol.Xml;
+using Microsoft.Extensions.FileProviders;
 using StackXML;
 
 namespace BinWeevils.Server.Services
 {
     public class ItemConfigRepository
     {
-        private readonly string m_basePath;
+        private readonly IFileProvider m_fileProvider;
         private readonly ConcurrentDictionary<string, ItemConfig> m_cache;
         
-        public ItemConfigRepository(IConfiguration configuration)
+        public ItemConfigRepository(IFileProvider fileProvider)
         {
-            m_basePath = Path.Combine(configuration["ArchivePath"]!, "users");
+            m_fileProvider = fileProvider;
             m_cache = new ConcurrentDictionary<string, ItemConfig>();
         }
         
@@ -22,10 +23,19 @@ namespace BinWeevils.Server.Services
                 return config;
             }
             
-            var path = Path.Combine(m_basePath, $"{name}.xml");
-            config = XmlReadBuffer.ReadStatic<ItemConfig>(await File.ReadAllTextAsync(path));
+            var configText = await GetConfigText(name);
+            config = XmlReadBuffer.ReadStatic<ItemConfig>(configText);
             m_cache[name] = config;
             return config;
+        }
+
+        private async Task<string> GetConfigText(string name)
+        {
+            var fileInfo = m_fileProvider.GetFileInfo(Path.Combine("users", $"{name}.xml"));
+            await using var stream = fileInfo.CreateReadStream();
+            
+            using var streamReader = new StreamReader(stream);
+            return await streamReader.ReadToEndAsync();
         }
     }
 }

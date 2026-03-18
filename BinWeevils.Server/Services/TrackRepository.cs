@@ -1,24 +1,23 @@
 using System.Text.Json;
+using Microsoft.Extensions.FileProviders;
 
 namespace BinWeevils.Server.Services
 {
     public class TrackRepository
     {
+        private readonly IFileProvider m_fileProvider;
         public readonly Dictionary<int, TrackArchiveJson> m_tracks;
-        private readonly string m_archivePathA;
-        private readonly string m_archivePathB;
         
-        public TrackRepository(IConfiguration configuration)
+        public TrackRepository(IFileProvider fileProvider)
         {
+            m_fileProvider = fileProvider;
+            
             var tracksPath = Path.Combine("Data", "tracks.json");
             m_tracks = JsonSerializer.Deserialize<Dictionary<int, TrackArchiveJson>>(File.ReadAllText(tracksPath))!;
             foreach (var trackPair in m_tracks)
             {
                 trackPair.Value.m_id = trackPair.Key;
             }
-            
-            m_archivePathA = Path.Combine(configuration["ArchivePath"]!, "bintunes");
-            m_archivePathB = Path.Combine(configuration["ArchivePath"]!, "play", "bintunes");
         }
         
         public class TrackArchiveJson
@@ -42,9 +41,11 @@ namespace BinWeevils.Server.Services
         {
             if (track.m_id == 53) return false; // duplicate of "fall in, flip out"
             
-            var fn = $"{track.m_file}_prev.mp3";
-            return File.Exists(Path.Combine(m_archivePathA, fn)) ||
-                   File.Exists(Path.Combine(m_archivePathB, fn));
+            var previewFileName = $"{track.m_file}_prev.mp3";
+            var previewFileInfo = m_fileProvider.GetFileInfo(previewFileName);
+
+            // if there is no preview file, this can't be a bin tune
+            return previewFileInfo.Exists;
         }
     }
 }

@@ -161,6 +161,13 @@ public class Program
             ConfigureObservability(builder);
         }
         
+        var archivePath = builder.Configuration["ArchivePath"]!;
+        var archiveFileProvider = new CompositeFileProvider(
+            new PhysicalFileProvider(archivePath),
+            new PhysicalFileProvider(Path.Combine(archivePath, "play"))
+        );
+        builder.Services.AddSingleton<IFileProvider>(archiveFileProvider);
+        
         await using var app = builder.Build();
 
         app.UseRouting();
@@ -209,18 +216,12 @@ public class Program
             .AddRedirect("^api//nest/get-all-stored", "api/nest/get-all-stored")
         );
         
-        var archivePath = app.Configuration["ArchivePath"]!;
-        
         // play stuff is older than root stuff
-        var playFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "");
-        app.UseStaticFiles(playFallbackFs);
-        var playFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "");
-        app.UseStaticFiles(playFs);
+        var rootFs = InitArchiveStaticFiles(archiveFileProvider, "");
+        app.UseStaticFiles(rootFs);
         
-        var cdnFs = InitArchiveStaticFiles(Path.Combine(archivePath, ""), "/cdn");
+        var cdnFs = InitArchiveStaticFiles(archiveFileProvider, "/cdn");
         app.UseStaticFiles(cdnFs);
-        var cdnFallbackFs = InitArchiveStaticFiles(Path.Combine(archivePath, "play"), "/cdn");
-        app.UseStaticFiles(cdnFallbackFs);
         
         using (var scope = app.Services.CreateScope())
         {
@@ -291,10 +292,8 @@ public class Program
         };
     }
 
-    private static StaticFileOptions InitArchiveStaticFiles(string dir, string requestPath)
+    private static StaticFileOptions InitArchiveStaticFiles(IFileProvider fileProvider, string requestPath)
     {
-        var fileProvider = new PhysicalFileProvider(dir);
-            
         var options = new StaticFileOptions
         {
             ServeUnknownFileTypes = true,

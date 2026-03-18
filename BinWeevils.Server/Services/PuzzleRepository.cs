@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ArcticFox.PolyType.FormEncoded;
 using BinWeevils.Protocol.Form;
+using Microsoft.Extensions.FileProviders;
 
 namespace BinWeevils.Server.Services
 {
@@ -10,7 +11,7 @@ namespace BinWeevils.Server.Services
     {
         public PuzzleDefinition[] WordSearches { get; }
         
-        public PuzzleRepository(IConfiguration configuration)
+        public PuzzleRepository(IConfiguration configuration, IFileProvider fileProvider)
         {
             var wordSearchesFile = Path.Combine("Data", "wordSearches.json");
             
@@ -19,7 +20,7 @@ namespace BinWeevils.Server.Services
             //{
             //    WriteIndented = true
             //}));
-            //CheckArchivedWordSearches(configuration);
+            //CheckArchivedWordSearches(fileProvider);
             
             // todo: anything at level 0 is ignored by the game
             // it's all campaign stuff
@@ -27,17 +28,14 @@ namespace BinWeevils.Server.Services
             WordSearches = JsonSerializer.Deserialize<PuzzleDefinition[]>(File.ReadAllText(wordSearchesFile))!;
         }
 
-        private void CheckArchivedWordSearches(IConfiguration configuration)
+        private void CheckArchivedWordSearches(IFileProvider fileProvider)
         {
-            var archivePathA = Path.Combine(configuration["ArchivePath"]!, "externalUIs", "wordSearch");
-            var archivePathB = Path.Combine(configuration["ArchivePath"]!, "play", "externalUIs", "wordSearch");
-
             var okayCount = 0;
             var missingCount = 0;
             foreach (var puzzle in WordSearches)
             {
-                if (!Path.Exists(Path.Combine(archivePathA, puzzle.m_configPath)) &&
-                    !Path.Exists(Path.Combine(archivePathB, puzzle.m_configPath)))
+                var fileInfo = fileProvider.GetFileInfo(Path.Combine("externalUIs", "wordSearch", puzzle.m_configPath));
+                if (!fileInfo.Exists)
                 {
                     Console.Out.WriteLine($"{puzzle.m_configPath} (\"{puzzle.m_name}\") wasn't archived");
                     missingCount++;
