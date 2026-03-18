@@ -275,8 +275,8 @@ public class Program
         
         builder.Configuration.AddSubJson("WordSearches:Puzzles", Path.Combine("Data", "wordSearches.json"));
         builder.Configuration.AddSubJson("Crosswords:Puzzles", Path.Combine("Data", "crosswords.json"));
-        builder.Services.Configure<PuzzleConfigRepositoryOptions<WordSearch>>(builder.Configuration.GetRequiredSection("WordSearches"));
-        builder.Services.Configure<PuzzleConfigRepositoryOptions<Crossword>>(builder.Configuration.GetRequiredSection("Crosswords"));
+        builder.Services.AddOptions<PuzzleConfigRepositoryOptions<WordSearch>>().BindConfiguration("WordSearches");
+        builder.Services.AddOptions<PuzzleConfigRepositoryOptions<Crossword>>().BindConfiguration("Crosswords");
     }
     
     private static void ConfigureObservability(WebApplicationBuilder builder)

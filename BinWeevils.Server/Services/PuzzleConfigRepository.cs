@@ -17,12 +17,13 @@ namespace BinWeevils.Server.Services
         IReadOnlyDictionary<int, PuzzleDefinition> Puzzles { get; }
     }
     
-    public class PuzzleConfigRepository<TPuzzle> : IPuzzleConfigRepository
+    public class PuzzleConfigRepository<TPuzzle> : IPuzzleConfigRepository, IDisposable
         where TPuzzle : PuzzleBase, new()
     {
         private readonly ILogger<PuzzleConfigRepository<TPuzzle>> m_logger;
         private readonly IFileProvider m_fileProvider;
         private readonly IOptionsMonitor<PuzzleConfigRepositoryOptions<TPuzzle>> m_optionsMonitor;
+        private readonly IDisposable? m_onChangeListener;
         
         private readonly Dictionary<int, PuzzleDefinition> m_puzzles = [];
         private readonly Dictionary<int, TPuzzle> m_puzzleConfigs = [];
@@ -40,13 +41,28 @@ namespace BinWeevils.Server.Services
             m_fileProvider = fileProvider;
             m_optionsMonitor = optionsMonitor;
 
-            foreach (var puzzleDefinition in optionsMonitor.CurrentValue.Puzzles)
+            ReloadPuzzles();
+            m_onChangeListener = optionsMonitor.OnChange(_ =>
+            {
+                ReloadPuzzles();
+            });
+        }
+
+        private void ReloadPuzzles()
+        {
+            // todo: yes, this can race after we clear and before we add back
+            // but this isn't supposed to be reloading in prod
+            
+            m_puzzles.Clear();
+            m_puzzleConfigs.Clear();
+
+            foreach (var puzzleDefinition in m_optionsMonitor.CurrentValue.Puzzles)
             {
                 AddPuzzle(puzzleDefinition);
             }
         }
 
-        public void AddPuzzle(PuzzleDefinition puzzleDefinition)
+        private void AddPuzzle(PuzzleDefinition puzzleDefinition)
         {
             var fileInfo = m_fileProvider.GetFileInfo(Path.Combine(ConfigPath, puzzleDefinition.ConfigPath));
             if (!fileInfo.Exists)
@@ -80,6 +96,11 @@ namespace BinWeevils.Server.Services
             
             m_puzzles.Add(puzzleConfig.m_id, puzzleDefinition);
             m_puzzleConfigs.Add(puzzleConfig.m_id, puzzleConfig);
+        }
+
+        public void Dispose()
+        {
+            m_onChangeListener?.Dispose();
         }
     }
 }
