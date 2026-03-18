@@ -1,0 +1,512 @@
+[
+  {
+    "configPath": "wordsearch_sky.xml",
+    "name": "Sky Kids Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "starFighter_wordSearch.xml",
+    "name": "StarFighter WordSearch",
+    "level": 0
+  },
+  {
+    "configPath": "HYBW_wordsearch.xml",
+    "name": "HYBW wordseach",
+    "level": 0
+  },
+  {
+    "configPath": "panini_wordsearch.xml",
+    "name": "Panini wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "appGear2_wordsearch.xml",
+    "name": "AppGear2 Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "sportsStars_wordsearch.xml",
+    "name": "Sports Stars Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "characterOptions_wordsearch.xml",
+    "name": "CharacterOptions Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "doawk3_wordsearch.xml",
+    "name": "Diary of a Wimpy Kid 3 Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "BWstickerBook_wordsearch.xml",
+    "name": "BW Sticker Book",
+    "level": 0
+  },
+  {
+    "configPath": "TMNT_wordsearch",
+    "name": "Ninja Turtles Wordseach",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch.xml",
+    "name": "Honey Monster 2011",
+    "level": 0
+  },
+  {
+    "configPath": "leapFrog_wordsearch.xml",
+    "name": "leapFrog wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "MIP_wordsearch.xml",
+    "name": "A Monster In Paris Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch2.xml",
+    "name": "Honey Monster 2011 B",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch_zoo.xml",
+    "name": "Zookeeper Wordseach",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch_sky2.xml",
+    "name": "Sky Kids Wordsearch 2",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch.xml",
+    "name": "Horrid Henry",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch3.xml",
+    "name": "Honey Monster 2011 C",
+    "level": 0
+  },
+  {
+    "configPath": "deadly360_wordsearch.xml",
+    "name": "deadly360 Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "live_and_deadly_wordsearch.xml",
+    "name": "Live And Deadly Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch_Innocent2011",
+    "name": "Innocent Wordsearch 2011",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch_RioDVD.xml",
+    "name": "ReoDVD wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "chedds_wordsearch.xml",
+    "name": "chedds wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "wordsearch_drWho.xml",
+    "name": "Dr Who adCampaign",
+    "level": 0
+  },
+  {
+    "configPath": "getSanta_ws.xml",
+    "name": "Get Santa",
+    "level": 0
+  },
+  {
+    "configPath": "turbo_wordsearch.xml",
+    "name": "Turbo Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "epic_wordsearch.xml",
+    "name": "Epic AdCampaign",
+    "level": 0
+  },
+  {
+    "configPath": "WWD_wordsearch.xml",
+    "name": "WWD Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "RLB_wordsearch.xml",
+    "name": "RLB_wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "RBA_wordsearch.xml",
+    "name": "Rocks Word Search",
+    "level": 0
+  },
+  {
+    "configPath": "HYBW2014_wordsearch.xml",
+    "name": "HYBW2014 Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "boomco_wordsearch.xml",
+    "name": "BoomCo Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "PP_wordsearch.xml",
+    "name": "Postman Pat Wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "tomGates_wordsearch.xml",
+    "name": "TomGates wordsearch",
+    "level": 0
+  },
+  {
+    "configPath": "ballgames.xml",
+    "name": "Ball Games",
+    "level": 1
+  },
+  {
+    "configPath": "pets.xml",
+    "name": "Pets",
+    "level": 1
+  },
+  {
+    "configPath": "bodyparts.xml",
+    "name": "Body Talk",
+    "level": 2
+  },
+  {
+    "configPath": "flower.xml",
+    "name": "Flowers",
+    "level": 2
+  },
+  {
+    "configPath": "vegetables.xml",
+    "name": "Eat Your Greens",
+    "level": 3
+  },
+  {
+    "configPath": "weather.xml",
+    "name": "Weather",
+    "level": 3
+  },
+  {
+    "configPath": "musical_instruments.xml",
+    "name": "Musical Instruments",
+    "level": 4
+  },
+  {
+    "configPath": "recycling.xml",
+    "name": "Recycling",
+    "level": 4
+  },
+  {
+    "configPath": "parties.xml",
+    "name": "Party Time",
+    "level": 4
+  },
+  {
+    "configPath": "halloween.xml",
+    "name": "Halloween",
+    "level": 5
+  },
+  {
+    "configPath": "ice_cream.xml",
+    "name": "Ice Cream Flavours",
+    "level": 5
+  },
+  {
+    "configPath": "football.xml",
+    "name": "Football Frenzy",
+    "level": 5
+  },
+  {
+    "configPath": "art.xml",
+    "name": "Art Attack",
+    "level": 5
+  },
+  {
+    "configPath": "african.xml",
+    "name": "African Countries ",
+    "level": 6
+  },
+  {
+    "configPath": "monopoly.xml",
+    "name": "Monopoly",
+    "level": 6
+  },
+  {
+    "configPath": "languages.xml",
+    "name": "Languages",
+    "level": 7
+  },
+  {
+    "configPath": "fiesta.xml",
+    "name": "Fiesta",
+    "level": 7
+  },
+  {
+    "configPath": "wwords.xml",
+    "name": "W is for ...",
+    "level": 7
+  },
+  {
+    "configPath": "school_ws.xml",
+    "name": "School",
+    "level": 8
+  },
+  {
+    "configPath": "fairy_tale.xml",
+    "name": "Fairy Tale",
+    "level": 8
+  },
+  {
+    "configPath": "goodvsweevil.xml",
+    "name": "TOP SECRET",
+    "level": 8
+  },
+  {
+    "configPath": "sealife.xml",
+    "name": "Sea Life",
+    "level": 9
+  },
+  {
+    "configPath": "tennis.xml",
+    "name": "Tennis",
+    "level": 9
+  },
+  {
+    "configPath": "science_lab.xml",
+    "name": "Science Lab",
+    "level": 9
+  },
+  {
+    "configPath": "animals_ws.xml",
+    "name": "Animals",
+    "level": 10
+  },
+  {
+    "configPath": "tinks_tree.xml",
+    "name": "Tinks Tree",
+    "level": 10
+  },
+  {
+    "configPath": "celeb_party.xml",
+    "name": "Celebrity Party",
+    "level": 10
+  },
+  {
+    "configPath": "lost_binpet.xml",
+    "name": "Lost Bin Pet",
+    "level": 10
+  },
+  {
+    "configPath": "fruits_ws.xml",
+    "name": "Types of Fruit",
+    "level": 11
+  },
+  {
+    "configPath": "circus.xml",
+    "name": "At The Circus",
+    "level": 11
+  },
+  {
+    "configPath": "weevil_wheels.xml",
+    "name": "Zoom Zoom... Weevil Wheels!",
+    "level": 12
+  },
+  {
+    "configPath": "vehicles.xml",
+    "name": "Vehicles",
+    "level": 12
+  },
+  {
+    "configPath": "famous.xml",
+    "name": "Fame and Fortune",
+    "level": 12
+  },
+  {
+    "configPath": "hockey.xml",
+    "name": "Hockey",
+    "level": 13
+  },
+  {
+    "configPath": "Type of Jobs.xml",
+    "name": "Types of Job",
+    "level": 13
+  },
+  {
+    "configPath": "DINOSAURS.xml",
+    "name": "Dinosaurs",
+    "level": 14
+  },
+  {
+    "configPath": "insects.xml",
+    "name": "Insects",
+    "level": 14
+  },
+  {
+    "configPath": "AfternoonTEA.xml",
+    "name": "Afternoon Tea Time ",
+    "level": 15
+  },
+  {
+    "configPath": "secret.xml",
+    "name": "Secret Weevil Service",
+    "level": 15
+  },
+  {
+    "configPath": "christmas_ws.xml",
+    "name": "Christmas",
+    "level": 16
+  },
+  {
+    "configPath": "trees.xml",
+    "name": "Types of Trees",
+    "level": 16
+  },
+  {
+    "configPath": "summer.xml",
+    "name": "Summer Holidays",
+    "level": 17
+  },
+  {
+    "configPath": "wordSearch4.xml",
+    "name": "Sports",
+    "level": 17
+  },
+  {
+    "configPath": "asiancountries_ws.xml",
+    "name": "Asian Countries ",
+    "level": 18
+  },
+  {
+    "configPath": "nestinspector.xml",
+    "name": "Nest Inspector",
+    "level": 18
+  },
+  {
+    "configPath": "europeancountries_ws.xml",
+    "name": "European Countries",
+    "level": 19
+  },
+  {
+    "configPath": "filmgenres.xml",
+    "name": "Film Genres",
+    "level": 19
+  },
+  {
+    "configPath": "fish.xml",
+    "name": "Types of Fish",
+    "level": 20
+  },
+  {
+    "configPath": "wordSearch2.xml",
+    "name": "Types of Rubbish",
+    "level": 20
+  },
+  {
+    "configPath": "valentines.xml",
+    "name": "Valentines Day",
+    "level": 21
+  },
+  {
+    "configPath": "zwords.xml",
+    "name": "Z is for...",
+    "level": 21
+  },
+  {
+    "configPath": "maths.xml",
+    "name": "Mathematics",
+    "level": 22
+  },
+  {
+    "configPath": "scooby_doo.xml",
+    "name": "Scooby Doo",
+    "level": 22
+  },
+  {
+    "configPath": "monsters.xml",
+    "name": "Mythical Monsters",
+    "level": 23
+  },
+  {
+    "configPath": "space.xml",
+    "name": "Space",
+    "level": 23
+  },
+  {
+    "configPath": "elements.xml",
+    "name": "Elements",
+    "level": 24
+  },
+  {
+    "configPath": "pasta.xml",
+    "name": "Types of Pasta",
+    "level": 25
+  },
+  {
+    "configPath": "painters.xml",
+    "name": "Famous Painters",
+    "level": 25
+  },
+  {
+    "configPath": "skateboarding.xml",
+    "name": "Skateboarding",
+    "level": 26
+  },
+  {
+    "configPath": "africancapitals.xml",
+    "name": "African Capitals",
+    "level": 27
+  },
+  {
+    "configPath": "gardening.xml",
+    "name": "Gardening",
+    "level": 28
+  },
+  {
+    "configPath": "cheese.xml",
+    "name": "Types of Cheese",
+    "level": 29
+  },
+  {
+    "configPath": "mwords.xml",
+    "name": "M is for...",
+    "level": 30
+  },
+  {
+    "configPath": "europeancapitals.xml",
+    "name": "European Capitals",
+    "level": 31
+  },
+  {
+    "configPath": "plumbing.xml",
+    "name": "Plumbing",
+    "level": 32
+  },
+  {
+    "configPath": "birds.xml",
+    "name": "Types of Birds",
+    "level": 33
+  },
+  {
+    "configPath": "airplanes.xml",
+    "name": "Airplanes",
+    "level": 34
+  },
+  {
+    "configPath": "photography.xml",
+    "name": "Photography",
+    "level": 35
+  }
+]

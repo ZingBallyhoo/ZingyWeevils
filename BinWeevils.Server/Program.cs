@@ -77,6 +77,7 @@ public class Program
         builder.Services.AddSingleton<ItemConfigRepository>();
         builder.Services.AddSingleton<QuestRepository>();
         builder.Services.AddSingleton<TrackRepository>();
+        builder.Services.AddSingleton<PuzzleRepository>();
         builder.Services.AddOptions<DatabaseSettings>().BindConfiguration("Database");
         builder.Services.AddOptions<EconomySettings>();
         builder.Services.AddOptions<PetsSettings>().BindConfiguration("Pets").Validate(settings =>
