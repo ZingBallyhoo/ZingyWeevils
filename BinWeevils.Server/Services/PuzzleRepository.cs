@@ -3,21 +3,24 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ArcticFox.PolyType.FormEncoded;
 using BinWeevils.Protocol.Form;
-using Microsoft.Extensions.FileProviders;
+using BinWeevils.Protocol.Xml.Puzzle;
 
 namespace BinWeevils.Server.Services
 {
     public class PuzzleRepository
     {
-        public PuzzleDefinition[] WordSearches { get; }
-        public PuzzleDefinition[] Crosswords { get; }
+        public PuzzleConfigRepository<WordSearch> WordSearches { get; }
+        public PuzzleConfigRepository<Crossword> Crosswords { get; }
         
-        public PuzzleRepository(IConfiguration configuration, IFileProvider fileProvider)
+        public PuzzleRepository(PuzzleConfigRepository<WordSearch> wordSearchRepo, PuzzleConfigRepository<Crossword> crossWordsRepo)
         {
+            WordSearches = wordSearchRepo;
+            Crosswords = crossWordsRepo;
+            
             var wordSearchesFile = Path.Combine("Data", "wordSearches.json");
             
-            //WordSearches = ParseScrapedWordSearchResponse();
-            //File.WriteAllText(wordSearchesFile, JsonSerializer.Serialize(WordSearches, new JsonSerializerOptions
+            //var wordSearches = ParseScrapedWordSearchResponse();
+            //File.WriteAllText(wordSearchesFile, JsonSerializer.Serialize(wordSearches, new JsonSerializerOptions
             //{
             //    WriteIndented = true
             //}));
@@ -26,12 +29,13 @@ namespace BinWeevils.Server.Services
             // todo: anything at level 0 is ignored by the game
             // it's all campaign stuff
             // the order is also sorted by level on the server side
-            WordSearches = JsonSerializer.Deserialize<PuzzleDefinition[]>(File.ReadAllText(wordSearchesFile))!;
+            var wordSearches = JsonSerializer.Deserialize<PuzzleDefinition[]>(File.ReadAllText(wordSearchesFile))!;
+            WordSearches.AddPuzzles(wordSearches);
 
             // no scraped data, so list is reconstructed
             // https://binweevilcompany.wordpress.com/puzzles/crossword-answers/
             // list names from https://www.youtube.com/watch?v=CBzBl5vWMLw
-            Crosswords = [
+            Crosswords.AddPuzzles([
                 new PuzzleDefinition("xmas2015.xml", "Christmas 2015", 1),
                 new PuzzleDefinition("crossword91.xml", "General Crossword", 1),
                 new PuzzleDefinition("crossword92.xml", "Opposites", 2),
@@ -44,28 +48,7 @@ namespace BinWeevils.Server.Services
                 new PuzzleDefinition("crossword98_1.xml", "Around the Binscape", 9),
                 new PuzzleDefinition("crossword100.xml", "Science Rocks", 10),
                 new PuzzleDefinition("crossword101.xml", "Summer Fun", 12),
-            ];
-        }
-
-        private void CheckArchivedWordSearches(IFileProvider fileProvider)
-        {
-            var okayCount = 0;
-            var missingCount = 0;
-            foreach (var puzzle in WordSearches)
-            {
-                var fileInfo = fileProvider.GetFileInfo(Path.Combine("externalUIs", "wordSearch", puzzle.m_configPath));
-                if (!fileInfo.Exists)
-                {
-                    Console.Out.WriteLine($"{puzzle.m_configPath} (\"{puzzle.m_name}\") wasn't archived");
-                    missingCount++;
-                } else
-                {
-                    okayCount++;
-                }
-            }
-            
-            Console.Out.WriteLine($"{okayCount} archived");
-            Console.Out.WriteLine($"{missingCount} missing");
+            ]);
         }
 
         private static PuzzleDefinition[] ParseScrapedWordSearchResponse()

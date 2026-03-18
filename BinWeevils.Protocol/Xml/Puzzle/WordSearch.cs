@@ -2,26 +2,15 @@ using System.Text;
 using BinWeevils.Protocol.Str;
 using StackXML;
 
-namespace BinWeevils.Protocol.Xml
+namespace BinWeevils.Protocol.Xml.Puzzle
 {
-    [XmlCls(null)]
-    public abstract partial class PuzzleBase
-    {
-        [XmlField("id")] public byte m_id;
-        
-        public virtual ReadOnlySpan<char> GetNodeName()
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
     [XmlCls("wordSearch")]
-    public partial class WordSearch : PuzzleBase
+    public partial class WordSearch : Puzzle.PuzzleBase
     {
         [XmlField("hideWords")] public bool m_hideWords;
         [XmlField("heading")] public string m_heading;
 
-        [XmlBody] public List<WordSearchRow> m_rows;
+        [XmlBody] public List<PuzzleRow> m_rows;
         [XmlBody] public List<WordSearchWord> m_words; // todo: why can't this be list<string> with name specified :)
 
         public string ReadSpan(WordSearchSpan span)
@@ -51,13 +40,6 @@ namespace BinWeevils.Protocol.Xml
                 m_words.Any(x => x.m_text.Equals(word, StringComparison.InvariantCultureIgnoreCase)) ||
                 m_words.Any(x => x.m_text.Equals(reversedWord, StringComparison.InvariantCultureIgnoreCase));
         }
-    }
-
-    [XmlCls("row")]
-    public partial class WordSearchRow
-    {
-        [XmlField("id")] public byte m_id;
-        [XmlBody] public string m_text;
     }
 
     [XmlCls("word")]

@@ -65,11 +65,6 @@
     "level": 0
   },
   {
-    "configPath": "wordsearch2.xml",
-    "name": "Honey Monster 2011 B",
-    "level": 0
-  },
-  {
     "configPath": "wordsearch_zoo.xml",
     "name": "Zookeeper Wordseach",
     "level": 0

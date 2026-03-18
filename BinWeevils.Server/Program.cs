@@ -7,6 +7,7 @@ using BinWeevils.Common.Database;
 using BinWeevils.GameServer;
 using BinWeevils.Protocol.Amf;
 using BinWeevils.Protocol.Xml;
+using BinWeevils.Protocol.Xml.Puzzle;
 using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
 using BinWeevils.Server.Services;
@@ -79,9 +80,14 @@ public class Program
         builder.Services.AddSingleton<TrackRepository>();
         builder.Services.AddSingleton<PuzzleRepository>();
         builder.Services.AddSingleton<PuzzleConfigRepository<WordSearch>>();
+        builder.Services.AddSingleton<PuzzleConfigRepository<Crossword>>();
         builder.Services.Configure<PuzzleConfigRepositoryOptions<WordSearch>>(options =>
         {
             options.ConfigPath = "externalUIs/wordSearch";
+        });
+        builder.Services.Configure<PuzzleConfigRepositoryOptions<Crossword>>(options =>
+        {
+            options.ConfigPath = "externalUIs/crossword";
         });
         builder.Services.AddOptions<DatabaseSettings>().BindConfiguration("Database");
         builder.Services.AddOptions<EconomySettings>();
