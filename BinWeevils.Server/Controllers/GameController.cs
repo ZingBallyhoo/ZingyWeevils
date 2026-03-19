@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
@@ -117,6 +118,7 @@ namespace BinWeevils.Server.Controllers
             
             if (!m_singlePlayerSettings.Games.TryGetValue(request.m_gameID, out var gameSettings) || gameSettings.OneTimeAward != null)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new SubmitScoreResponse
                 {
                     m_result = SubmitScoreResponse.ERR_WRONG_GAME

@@ -5,6 +5,7 @@ namespace BinWeevils.Protocol.Enums
         Invalid,
         MulchShoot = 1,
         SpotTheDifference = 2,
+        WhackAWeevil = 3,
         BrainTrain = 4,
         CatchBinKill = 5,
         TinksBlocks = 6,
