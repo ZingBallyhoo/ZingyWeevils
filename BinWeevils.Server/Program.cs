@@ -201,7 +201,6 @@ public class Program
             KeepAliveTimeout = TimeSpan.FromSeconds(15)
         });
         
-        ;
         app.MapAmfGateway("api/php/amfphp/gateway.php", new AmfGatewaySettings
         {
             m_options = app.Services.GetRequiredService<AmfOptions>(),

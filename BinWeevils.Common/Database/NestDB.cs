@@ -86,7 +86,6 @@ namespace BinWeevils.Common.Database
         
         [ForeignKey(nameof(m_nestID))] public virtual NestDB m_nest { get; set; }
         [ForeignKey(nameof(m_itemTypeID))] public virtual ItemType m_itemType { get; set; }
-
     }
     
     public class NestPlacedItemDB

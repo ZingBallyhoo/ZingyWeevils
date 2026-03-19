@@ -30,7 +30,7 @@ namespace BinWeevils.Server.Controllers
             }
             
             // look up the username in the database to try and get the correct casing for the username
-            // this can race if two people create the same normalized name at the same time
+            // note: this can race if two people create the same normalized name at the same time
             var foundUser = await m_identityManager.FindByNameAsync(username);
             if (foundUser != null)
             {

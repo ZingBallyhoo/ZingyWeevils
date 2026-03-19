@@ -250,18 +250,18 @@ namespace BinWeevils.Server.Controllers
 
             await foreach (var apparelType in m_dbContext.m_apparelTypes
                 .OrderBy(x => x.m_id)
-                .Select(x => new
+                .Select(apparel => new
                 {
-                    x.m_id,
-                    x.m_category,
-                    x.m_paletteID,
+                    apparel.m_id,
+                    apparel.m_category,
+                    apparel.m_paletteID,
                     m_entries = m_dbContext.m_paletteEntries
-                        .Where(y => x.m_paletteID == y.m_paletteID)
-                        .OrderBy(y => y.m_index)
-                        .Select(y => new
+                        .Where(palette => palette.m_paletteID == apparel.m_paletteID)
+                        .OrderBy(palette => palette.m_index)
+                        .Select(palette => new
                         {
-                            y.m_index,
-                            y.m_colorString
+                            palette.m_index,
+                            palette.m_colorString
                         })
                         .ToList()
                 })

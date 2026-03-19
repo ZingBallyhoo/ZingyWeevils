@@ -9,7 +9,7 @@ namespace BinWeevils.GameServer
     {
         private void HandleSfsLoadBuddyList(ReadOnlySpan<char> body)
         {
-            m_services.GetLogger().LogDebug("Buddy: Load List");
+            m_services.GetLogger().LogDebug("Buddy - Load List");
             m_services.GetActorSystem().Root.Send(GetUser().GetUserData<WeevilData>().GetUserAddress(), new BuddyListActor.LoadBuddyListRequest());
         }
         
