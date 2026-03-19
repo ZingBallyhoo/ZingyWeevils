@@ -56,6 +56,11 @@ namespace BinWeevils.Tests.Integration
             
                 progressResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetWordSearchProgressResponse>("api/php/getWordSearchProgress.php", progressReq);
                 Assert.Equal(saveRequest.m_progress.m_spans.Count, progressResp.m_result.m_spans.Count);
+                
+                // saving the same span again won't do anything
+                saveResponse = await client.PostSimpleFormAsync<SaveWordSearchProgressRequest, SaveWordSearchProgressResponse>("api/php/saveWordSearchProgress.php", saveRequest);
+                Assert.Equal(0, saveResponse.m_mulch);
+                Assert.Equal(0u, saveResponse.m_xp);
             }
             
             Assert.Equal(spans.Length, progressResp.m_result.m_spans.Count);
@@ -121,13 +126,7 @@ namespace BinWeevils.Tests.Integration
             Assert.Equal(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
             Assert.NotEqual(0, saveResponse.m_mulch);
             Assert.NotEqual(0u, saveResponse.m_xp);
-            
-            // second time completing will be ignored
-            saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
-            Assert.NotEqual(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
-            Assert.Equal(0, saveResponse.m_mulch);
-            Assert.Equal(0u, saveResponse.m_xp);
-            
+                        
             getResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetCrosswordProgressResponse>("api/php/getCrosswordProgress.php", new GetPuzzleProgressRequest
             {
                 m_userID = account.UserName!,
@@ -141,6 +140,12 @@ namespace BinWeevils.Tests.Integration
                 m_typeID = PuzzleTypeID.Crossword
             });
             Assert.Single(listResponse.m_completedList.Split('|'), "1");
+            
+            // second time completing will be ignored
+            saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            Assert.NotEqual(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
+            Assert.Equal(0, saveResponse.m_mulch);
+            Assert.Equal(0u, saveResponse.m_xp);
         }
 
         [Theory]

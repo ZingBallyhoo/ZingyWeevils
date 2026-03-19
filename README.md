@@ -15,7 +15,6 @@ How to run:
 ----------------------
 
 Game TODO:
-- Word search, cross words (missing data)
 - Nest score calculation isn't the same
 - Castle Gam room events
 - Brain train leaderboard/mode scores

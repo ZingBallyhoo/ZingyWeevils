@@ -201,6 +201,7 @@ namespace BinWeevils.Server.Controllers
             var progressUpdated = await m_dbContext.m_wordSearchProgress
                 .Where(x => x.m_weevilIdx == idx)
                 .Where(x => x.m_puzzleID == request.m_gridID)
+                .Where(x => x.m_complete == false)
                 .Where(x => x.m_spans.Count >= wordSearch.m_words.Count) // all words completed
                 .ExecuteUpdateAsync(setter => setter
                     .SetProperty(x => x.m_complete, true));
