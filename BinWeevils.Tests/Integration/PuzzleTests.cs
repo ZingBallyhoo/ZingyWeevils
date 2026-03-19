@@ -37,7 +37,7 @@ namespace BinWeevils.Tests.Integration
                 m_completed = false,
                 m_progress = completedProgress
             };
-            var saveIncompleteResp = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            var saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
             // todo: no fields yet
             
             getResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetCrosswordProgressResponse>("api/php/getCrosswordProgress.php", new GetPuzzleProgressRequest
@@ -48,9 +48,18 @@ namespace BinWeevils.Tests.Integration
             Assert.Equal(completedProgress, getResp.m_progress);
             Assert.False(getResp.m_completed);
 
+            // "check answers" clicked
             saveRequest.m_completed = true;
-            saveIncompleteResp = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
-            // todo: no fields yet
+            saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            Assert.NotEqual(0, saveResponse.m_mulch);
+            Assert.NotEqual(0u, saveResponse.m_xp);
+            Assert.Equal(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
+            
+            // second time completing will be ignored
+            saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            Assert.Equal(0, saveResponse.m_mulch);
+            Assert.Equal(0u, saveResponse.m_xp);
+            Assert.NotEqual(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
             
             getResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetCrosswordProgressResponse>("api/php/getCrosswordProgress.php", new GetPuzzleProgressRequest
             {

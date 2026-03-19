@@ -226,20 +226,34 @@ namespace BinWeevils.Server.Controllers
             if (rowsUpdated != 1)
             {
                 await transaction.RollbackAsync();
-                // todo: response
+                
+                // todo: what result code?
                 return new SaveCrosswordProgressResponse();
             }
-
+            
+            SaveCrosswordProgressResponse response;
             if (request.m_completed)
             {
-                // todo: xp
+                // todo: xp from options
                 await m_dbContext.GiveMulchAndXp(idx, crossword.m_reward, 30);
+                var mulchAndXp = await m_dbContext.GetMulchAndXp(idx);
+                
                 // todo: metrics
+
+                response = new SaveCrosswordProgressResponse
+                {
+                    m_result = SaveCrosswordProgressResponse.RESULT_COMPLETED,
+                    m_mulch = mulchAndXp.m_mulch,
+                    m_xp = mulchAndXp.m_xp,
+                };
+            } else
+            {
+                // todo: what result code?
+                response = new SaveCrosswordProgressResponse();
             }
             await transaction.CommitAsync();
             
-            // todo: response
-            return new SaveCrosswordProgressResponse();
+            return response;
         }
     }
 }
