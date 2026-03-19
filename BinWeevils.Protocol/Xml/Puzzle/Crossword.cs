@@ -19,7 +19,7 @@ namespace BinWeevils.Protocol.Xml.Puzzle
             var sb = new StringBuilder();
             foreach (var row in m_rows)
             {
-                sb.Append(row.m_text);
+                sb.Append(row.m_text.Replace('-', '.'));
             }
 
             return sb.ToString();

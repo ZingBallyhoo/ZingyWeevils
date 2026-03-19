@@ -297,6 +297,14 @@ namespace BinWeevils.Common.Database
             return parsedColor;
         }
         
+        public Task<uint> GetIdx(string name)
+        {
+            return m_weevilDBs
+                .Where(x => x.m_name == name)
+                .Select(x => x.m_idx)
+                .SingleAsync();
+        }
+        
         public Task<IdxAndNestID> GetIdxAndNestID(string name)
         {
             return m_weevilDBs

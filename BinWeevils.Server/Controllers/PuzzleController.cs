@@ -47,7 +47,6 @@ namespace BinWeevils.Server.Controllers
             string gamePath;
             string locName;
             IQueryable<WeevilPuzzleProgressDB> puzzleProgressQueryable;
-            HashSet<byte> completedPuzzles;
             
             switch (request.m_typeID)
             {
@@ -101,6 +100,8 @@ namespace BinWeevils.Server.Controllers
         [HttpPost("php/getWordSearchProgress.php")]
         public string GetWordSearchProgress()
         {
+            // todo: user id
+            
             return "result=0";
             return "result=0,11,4,11";
             return "result=0,11,4,11|13,13,13,6";
@@ -113,6 +114,8 @@ namespace BinWeevils.Server.Controllers
             // completed "0"
             // progress	"1,15,6,15"
             // userID "zingy"
+            
+            // todo: user id
 
             if (!m_wordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
             {
@@ -131,16 +134,56 @@ namespace BinWeevils.Server.Controllers
 
             return "";
         }
-        
-        [StructuredFormPost("php/saveCrosswordProgress.php")]
-        public string SaveCrosswordProgress([FromBody] SaveCrosswordProgressRequest request)
+
+        [StructuredFormPost("php/getCrosswordProgress.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetCrosswordProgressResponse> GetCrosswordProgress([FromBody] GetPuzzleProgressRequest request)
         {
-            if (!m_crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossWord))
+            using var activity = ApiServerObservability.StartActivity("PuzzleController.GetCrosswordProgress");
+            activity?.SetTag("userID", request.m_userID);
+            activity?.SetTag("gridID", request.m_gridID);
+            
+            if (request.m_userID != ControllerContext.HttpContext.User.Identity!.Name)
             {
-                throw new InvalidDataException("trying to solve a crossword that doesn't exist");
+                throw new Exception("trying to get someone else's crossword progress");
+            }
+            
+            if (!m_crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossword))
+            {
+                throw new InvalidDataException("trying to get progress of a crossword that doesn't exist");
             }
 
-            var completedText = crossWord.GetSolutionText();
+            var userProgress = await m_dbContext.m_crosswordProgress
+                .Where(x => x.m_weevil.m_name == request.m_userID)
+                .SingleOrDefaultAsync(x => x.m_puzzleID == request.m_gridID);
+
+            return new GetCrosswordProgressResponse
+            {
+                m_progress = userProgress?.m_progress ?? "0",
+                m_completed = userProgress?.m_complete ?? false
+            };
+        }
+        
+        [StructuredFormPost("php/saveCrosswordProgress.php")]
+        public async Task<string> SaveCrosswordProgress([FromBody] SaveCrosswordProgressRequest request)
+        {
+            using var activity = ApiServerObservability.StartActivity("PuzzleController.SaveCrosswordProgress");
+            activity?.SetTag("userID", request.m_userID);
+            activity?.SetTag("gridID", request.m_gridID);
+            activity?.SetTag("progress", request.m_progress);
+            activity?.SetTag("completed", request.m_completed);
+            
+            if (request.m_userID != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to save someone else's crossword progress");
+            }
+
+            if (!m_crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossword))
+            {
+                throw new InvalidDataException("trying to save a crossword that doesn't exist");
+            }
+
+            var completedText = crossword.GetSolutionText();
             if (request.m_progress.Length != completedText.Length)
             {
                 throw new InvalidDataException($"wrong crossword solution length. got {request.m_progress.Length}, expected {completedText.Length}");
@@ -150,19 +193,51 @@ namespace BinWeevils.Server.Controllers
             {
                 if (char.IsAsciiLetterUpper(request.m_progress[i]))
                 {
-                    if (completedText[i] == '-') throw new InvalidDataException("attempt to save into blank space of crossword solution");
+                    if (completedText[i] == '.') throw new InvalidDataException("attempt to save into blank space of crossword solution");
                 } else if (request.m_progress[i] != '.') 
                 {
                     throw new InvalidDataException($"invalid char \"{request.m_progress[i]}\" in crossword solution");
                 }
             }
 
+            // note: the player can save the completed result without checking the answers, and therefore have m_completed = false
             var actuallyCompleted = completedText.Equals(request.m_progress, StringComparison.InvariantCultureIgnoreCase);
-            if (actuallyCompleted != request.m_completed)
+            if (request.m_completed && !actuallyCompleted)
             {
                 throw new InvalidDataException("completed status of request doesn't match expected");
             }
             
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+
+            var idx = await m_dbContext.GetIdx(request.m_userID);
+            var rowsUpdated = await m_dbContext.m_crosswordProgress
+                .Upsert(new WeevilCrosswordProgressDB
+                {
+                    m_weevilIdx = idx,
+                    m_puzzleID = request.m_gridID,
+                    m_complete = request.m_completed,
+    
+                    m_progress = request.m_progress,
+                })
+                .UpdateIf(x => x.m_complete == false)
+                .RunAsync();
+            
+            if (rowsUpdated != 1)
+            {
+                await transaction.RollbackAsync();
+                // todo: response
+                return "";
+            }
+
+            if (request.m_completed)
+            {
+                // todo: xp
+                await m_dbContext.GiveMulchAndXp(idx, crossword.m_reward, 30);
+                // todo: metrics
+            }
+            await transaction.CommitAsync();
+            
+            // todo: response
             return "";
         }
     }
