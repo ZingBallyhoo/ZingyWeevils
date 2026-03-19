@@ -1,7 +1,6 @@
 using ArcticFox.PolyType.Amf;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
-using BinWeevils.Protocol;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +14,11 @@ namespace BinWeevils.Tests.Integration
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureAppConfiguration(configuration =>
+            {
+                configuration.AddJsonFile("appsettings.Tests.json");
+            });
+            
             builder.ConfigureTestServices(services =>
             {
                 services.AddSingleton<IntegrationAuthStorage>();

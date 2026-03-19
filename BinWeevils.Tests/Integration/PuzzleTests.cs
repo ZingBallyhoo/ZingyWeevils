@@ -1,4 +1,5 @@
 using BinWeevils.Protocol.Form.Puzzle;
+using BinWeevils.Protocol.Str;
 
 namespace BinWeevils.Tests.Integration
 {
@@ -10,6 +11,64 @@ namespace BinWeevils.Tests.Integration
         public PuzzleTests(IntegrationAppFactory factory)
         {
             m_factory = factory;
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(-1)]
+        public async Task CompleteWordSearch(int spanSign)
+        {
+            var account = await m_factory.CreateAccount($"{nameof(CompleteWordSearch)} {spanSign}");
+            m_factory.SetAccount(account.UserName!);
+            
+            var client = m_factory.CreateClient();
+
+            var progressReq = new GetPuzzleProgressRequest
+            {
+                m_userID = account.UserName!,
+                m_gridID = 254
+            };
+            var progressResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetWordSearchProgressResponse>("api/php/getWordSearchProgress.php", progressReq);
+            Assert.Equal("0", progressResp.m_result.ToString());
+
+            var saveRequest = new SaveWordSearchProgressRequest
+            {
+                m_userID = account.UserName!,
+                m_gridID = progressReq.m_gridID,
+                m_progress = new WordSearchProgress(),
+                m_completed = false
+            };
+
+            WordSearchSpan[] spans =
+            [
+                CreateSpan(0, 0, 15, 0, spanSign),
+                CreateSpan(0, 0, 0, 15, spanSign),
+                CreateSpan(0, 0, 15, 15, spanSign),
+                CreateSpan(15, 0, 0, 15, spanSign)
+            ];
+
+            foreach (var span in spans)
+            {
+                saveRequest.m_progress.m_spans.Add(span);
+            
+                var saveResponse = await client.PostSimpleFormAsync<SaveWordSearchProgressRequest, SaveWordSearchProgressResponse>("api/php/saveWordSearchProgress.php", saveRequest);
+                Assert.NotEqual(0, saveResponse.m_mulch);
+            
+                progressResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetWordSearchProgressResponse>("api/php/getWordSearchProgress.php", progressReq);
+                Assert.Equal(saveRequest.m_progress.m_spans.Count, progressResp.m_result.m_spans.Count);
+            }
+            
+            Assert.Equal(spans.Length, progressResp.m_result.m_spans.Count);
+        }
+
+        private static WordSearchSpan CreateSpan(byte iStart, byte jStart, byte iEnd, byte jEnd, int sign)
+        {
+            return sign switch
+            {
+                1 => new WordSearchSpan { m_iStart = iStart, m_jStart = jStart, m_iEnd = iEnd, m_jEnd = jEnd },
+                -1 => new WordSearchSpan { m_iStart = iEnd, m_jStart = jEnd, m_iEnd = iStart, m_jEnd = jStart },
+                _ => throw new InvalidDataException($"invalid span sign: {sign}")
+            };
         }
         
         [Theory]
