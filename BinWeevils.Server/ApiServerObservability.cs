@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
+using BinWeevils.Protocol.Form.Puzzle;
 using BinWeevils.Protocol.Sql;
 
 namespace BinWeevils.Server
@@ -81,6 +82,12 @@ namespace BinWeevils.Server
         public static readonly Counter<double> s_kartMultiplayerMulchRewarded = s_meter.CreateCounter<double>("bw_kart_multiplayer_mulch_rewarded");
         public static readonly Counter<double> s_kartMultiplayerXpRewarded = s_meter.CreateCounter<double>("bw_kart_multiplayer_xp_rewarded");
         
+        public static readonly Counter<int> s_puzzleCompleted = s_meter.CreateCounter<int>("bw_puzzle_completed");
+        public static readonly Counter<int> s_puzzleWordSearchSpansCompleted = s_meter.CreateCounter<int>("bw_puzzle_word_search_spans_completed");
+        public static readonly Counter<int> s_puzzleCrosswordsSaved = s_meter.CreateCounter<int>("bw_puzzle_cross_words_saved");
+        public static readonly Counter<double> s_puzzleMulchRewarded = s_meter.CreateCounter<double>("bw_puzzle_mulch_rewarded");
+        public static readonly Counter<double> s_puzzleXpRewarded = s_meter.CreateCounter<double>("bw_puzzle_xp_rewarded");
+        
         public static Activity? StartActivity(string name)
         {
             return s_source.StartActivity(name);
@@ -99,6 +106,16 @@ namespace BinWeevils.Server
         public static void AddPlantRemoved(SeedCategory category)
         {
             s_gardenPlantsRemoved.Add(1, GetSeedCategoryTag(category));
+        }
+
+        public static KeyValuePair<string, object?>[] GetPuzzleTags(byte id, string configPath, PuzzleTypeID type)
+        {
+            return
+            [
+                new KeyValuePair<string, object?>("id", id),
+                new KeyValuePair<string, object?>("config", configPath),
+                new KeyValuePair<string, object?>("type", type),
+            ];
         }
     }
 }

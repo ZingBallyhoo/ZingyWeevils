@@ -119,9 +119,8 @@ namespace BinWeevils.Server.Controllers
 
             var spans = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == request.m_userID)
-                .SelectMany(x => x.m_wordSearchProgress)
+                .SelectMany(x => x.m_wordSearchSpans)
                 .Where(x => x.m_puzzleID == request.m_gridID)
-                .SelectMany(x => x.m_spans)
                 .ToListAsync();
 
             var convertedSpans = spans.Select(x => new WordSearchSpan
@@ -227,7 +226,14 @@ namespace BinWeevils.Server.Controllers
 
             await transaction.CommitAsync();
             
-            // todo: metrics
+            var puzzleTags = ApiServerObservability.GetPuzzleTags(
+                wordSearch.m_id,
+                wordSearches.Puzzles[wordSearch.m_id].ConfigPath,
+                PuzzleTypeID.WordSearch);
+            ApiServerObservability.s_puzzleCompleted.Add(progressUpdated, puzzleTags);
+            ApiServerObservability.s_puzzleWordSearchSpansCompleted.Add(spansUpdated, puzzleTags);
+            ApiServerObservability.s_puzzleMulchRewarded.Add(mulchReward, puzzleTags);
+            ApiServerObservability.s_puzzleXpRewarded.Add(xpReward, puzzleTags);
 
             return new SaveWordSearchProgressResponse
             {
@@ -334,28 +340,44 @@ namespace BinWeevils.Server.Controllers
                 return new SaveCrosswordProgressResponse();
             }
             
-            SaveCrosswordProgressResponse response;
+            int result = 0;
+            var mulchReward = 0u;
+            var xpReward = 0u;
+            
             if (request.m_completed)
             {
-                await m_dbContext.GiveMulchAndXp(idx, crossword.m_reward, crosswords.XpReward);
-                var mulchAndXp = await m_dbContext.GetMulchAndXp(idx);
-                
-                // todo: metrics
-
-                response = new SaveCrosswordProgressResponse
-                {
-                    m_result = SaveCrosswordProgressResponse.RESULT_COMPLETED,
-                    m_mulch = mulchAndXp.m_mulch,
-                    m_xp = mulchAndXp.m_xp,
-                };
-            } else
-            {
-                // todo: what result code?
-                response = new SaveCrosswordProgressResponse();
+                mulchReward = crossword.m_reward;
+                xpReward = crosswords.XpReward;
+                result = SaveCrosswordProgressResponse.RESULT_COMPLETED;
             }
+            
+            MulchAndXpDto? dto = null;
+            if (mulchReward > 0 || xpReward > 0)
+            {
+                await m_dbContext.GiveMulchAndXp(idx, mulchReward, xpReward);
+                dto = await m_dbContext.GetMulchAndXp(idx);
+            }
+            
             await transaction.CommitAsync();
             
-            return response;
+            var puzzleTags = ApiServerObservability.GetPuzzleTags(
+                crossword.m_id,
+                crosswords.Puzzles[crossword.m_id].ConfigPath,
+                PuzzleTypeID.Crossword);
+            if (request.m_completed)
+            {
+                ApiServerObservability.s_puzzleCompleted.Add(1, puzzleTags);
+            }
+            ApiServerObservability.s_puzzleCrosswordsSaved.Add(1, puzzleTags);
+            ApiServerObservability.s_puzzleMulchRewarded.Add(mulchReward, puzzleTags);
+            ApiServerObservability.s_puzzleXpRewarded.Add(xpReward, puzzleTags);
+
+            return new SaveCrosswordProgressResponse
+            {
+                m_result = result,
+                m_mulch = dto?.m_mulch ?? 0,
+                m_xp = dto?.m_xp ?? 0,
+            };
         }
     }
 }

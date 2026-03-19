@@ -43,6 +43,7 @@ namespace BinWeevils.Common.Database
         public virtual ICollection<WeevilTurnBasedGamePlayedDB> m_turnBasedGamesPlayed { get; set; }
         public virtual ICollection<WeevilTrackPersonalBestDB> m_trackPBs { get; set; }
         public virtual ICollection<WeevilWordSearchProgressDB> m_wordSearchProgress { get; set; }
+        public virtual ICollection<WeevilWordSearchSpanDB> m_wordSearchSpans { get; set; }
         public virtual ICollection<WeevilCrosswordProgressDB> m_crosswordProgress { get; set; }
     }
     
