@@ -15,6 +15,8 @@ namespace BinWeevils.Common.Database
         public DbSet<WeevilGamePlayedDB> m_weevilGamesPlayed { get; set; }
         public DbSet<WeevilTurnBasedGamePlayedDB> m_weevilTurnBasedGamesPlayed { get; set; }
         public DbSet<WeevilTrackPersonalBestDB> m_trackPersonalBests { get; set; }
+        public DbSet<WeevilWordSearchProgressDB> m_wordSearchProgress { get; set; }
+        public DbSet<WeevilCrosswordProgressDB> m_crosswordProgress { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<BuddyMessageDB> m_buddyMessages { get; set; }
         public DbSet<IgnoreRecordDB> m_ignoreRecords { get; set; }
@@ -72,6 +74,23 @@ namespace BinWeevils.Common.Database
             {
                 b.ToTable("WeevilTrackPersonalBestDB");
             });
+            modelBuilder.Entity<WeevilWordSearchProgressDB>(b =>
+            {
+                b.ToTable("WeevilWordSearchProgressDB");
+            });
+            modelBuilder.Entity<WeevilWordSearchSpanDB>(b =>
+            {
+                b.ToTable("WeevilWordSearchSpanDB");
+            });
+            modelBuilder.Entity<WeevilCrosswordProgressDB>(b =>
+            {
+                b.ToTable("WeevilCrosswordProgressDB");
+            });
+
+            // todo: disabling puzzle entities as the design is not complete
+            modelBuilder.Ignore<WeevilWordSearchProgressDB>();
+            modelBuilder.Ignore<WeevilWordSearchSpanDB>();
+            modelBuilder.Ignore<WeevilCrosswordProgressDB>();
             
             modelBuilder.Entity<BuddyRecordDB>(b =>
             {

@@ -42,6 +42,8 @@ namespace BinWeevils.Common.Database
         public virtual ICollection<WeevilGamePlayedDB> m_gamesPlayed { get; set; }
         public virtual ICollection<WeevilTurnBasedGamePlayedDB> m_turnBasedGamesPlayed { get; set; }
         public virtual ICollection<WeevilTrackPersonalBestDB> m_trackPBs { get; set; }
+        public virtual ICollection<WeevilWordSearchProgressDB> m_wordSearchProgress { get; set; }
+        public virtual ICollection<WeevilCrosswordProgressDB> m_crosswordProgress { get; set; }
     }
     
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_action))]
@@ -89,5 +91,45 @@ namespace BinWeevils.Common.Database
         [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
         
         public double m_total => m_lap1 + m_lap2 + m_lap3;
+    }
+
+    [PrimaryKey(nameof(m_weevilIdx), nameof(m_puzzleID))]
+    public class WeevilWordSearchProgressDB
+    {
+        [Key] public uint m_weevilIdx { get; set; }
+        [Key] public byte m_puzzleID { get; set;}
+        
+        public bool m_complete { get; set; }
+        
+        [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+        public virtual ICollection<WeevilWordSearchSpanDB> m_spans { get; set; }
+    }
+
+    [PrimaryKey(nameof(m_weevilIdx), nameof(m_puzzleID))]
+    public class WeevilCrosswordProgressDB
+    {
+        [Key] public uint m_weevilIdx { get; set; }
+        [Key] public byte m_puzzleID { get; set;}
+        
+        public bool m_complete { get; set; }
+        public string m_progress { get; set; } = "";
+        
+        [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+    }
+    
+    [PrimaryKey(nameof(m_weevilIdx), nameof(m_puzzleID), nameof(m_iStart), nameof(m_jStart), nameof(m_iEnd), nameof(m_jEnd))]
+    public class WeevilWordSearchSpanDB
+    {
+        [Key] public uint m_weevilIdx { get; set; }
+        [Key] public byte m_puzzleID { get; set;}
+        
+        // todo: would like to use WordSearchSpan directly, but composite properties can't be used in keys
+        [Key] public byte m_iStart { get; set; }
+        [Key] public byte m_jStart { get; set; }
+        [Key] public byte m_iEnd { get; set; }
+        [Key] public byte m_jEnd { get; set; }
+        
+        [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+        [ForeignKey("m_weevilIdx, m_puzzleID")] public virtual WeevilWordSearchProgressDB m_wordSearchProgress { get; set; }
     }
 }

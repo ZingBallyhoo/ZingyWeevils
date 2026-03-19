@@ -25,8 +25,8 @@ namespace BinWeevils.Server.Services
         private readonly IOptionsMonitor<PuzzleConfigRepositoryOptions<TPuzzle>> m_optionsMonitor;
         private readonly IDisposable? m_onChangeListener;
         
-        private readonly Dictionary<int, PuzzleDefinition> m_puzzles = [];
-        private readonly Dictionary<int, TPuzzle> m_puzzleConfigs = [];
+        private readonly OrderedDictionary<int, PuzzleDefinition> m_puzzles = [];
+        private readonly OrderedDictionary<int, TPuzzle> m_puzzleConfigs = [];
 
         public string ConfigPath => m_optionsMonitor.CurrentValue.ConfigPath;
         public IReadOnlyDictionary<int, PuzzleDefinition> Puzzles => m_puzzles;

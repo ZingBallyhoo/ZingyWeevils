@@ -1,9 +1,11 @@
 using System.Net.Mime;
+using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Form.Puzzle;
 using BinWeevils.Protocol.Xml.Puzzle;
 using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StackXML.Str;
 
 namespace BinWeevils.Server.Controllers
@@ -15,23 +17,37 @@ namespace BinWeevils.Server.Controllers
     {
         private readonly PuzzleConfigRepository<WordSearch> m_wordSearches;
         private readonly PuzzleConfigRepository<Crossword> m_crosswords;
+        private readonly WeevilDBContext m_dbContext;
 
         public PuzzleController(
             PuzzleConfigRepository<WordSearch> wordSearches,
-            PuzzleConfigRepository<Crossword> crosswords)
+            PuzzleConfigRepository<Crossword> crosswords,
+            WeevilDBContext dbContext)
         {
             m_wordSearches = wordSearches;
             m_crosswords = crosswords;
+            m_dbContext = dbContext;
         }
         
         [StructuredFormPost("php/getPuzzleList.php")]
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
-        public GetPuzzleListResponse GetPuzzleList([FromBody] GetPuzzleListRequest request)
+        public async Task<GetPuzzleListResponse> GetPuzzleList([FromBody] GetPuzzleListRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("PuzzleController.GetPuzzleList");
+            activity?.SetTag("userID", request.m_userID);
+            activity?.SetTag("typeID", request.m_typeID);
+            
+            if (request.m_userID != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to get someone else's puzzle list");
+            }
+            
             IPuzzleConfigRepository configRepo;
             string typeName;
             string gamePath;
             string locName;
+            HashSet<byte> completedPuzzles;
+            
             switch (request.m_typeID)
             {
                 case PuzzleTypeID.WordSearch:
@@ -40,6 +56,11 @@ namespace BinWeevils.Server.Controllers
                     typeName = "wordsearch";
                     gamePath = "externalUIs/wordSearch_11_02_11.swf";
                     locName = "doing a wordsearch";
+                    completedPuzzles = await m_dbContext.m_wordSearchProgress
+                        .Where(x => x.m_weevil.m_name == request.m_userID)
+                        .Where(x => x.m_complete)
+                        .Select(x => x.m_puzzleID)
+                        .ToHashSetAsync();
                     break;
                 }
                 case PuzzleTypeID.Crossword:
@@ -48,6 +69,11 @@ namespace BinWeevils.Server.Controllers
                     typeName = "crossword";
                     gamePath = "externalUIs/crossword2.swf";
                     locName = "doing a crossword";
+                    completedPuzzles = await m_dbContext.m_crosswordProgress
+                        .Where(x => x.m_weevil.m_name == request.m_userID)
+                        .Where(x => x.m_complete)
+                        .Select(x => x.m_puzzleID)
+                        .ToHashSetAsync();
                     break;
                 }
                 default:
@@ -57,6 +83,10 @@ namespace BinWeevils.Server.Controllers
             }
 
             var puzzleList = configRepo.Puzzles.Values.ToArray();
+            var completedList = configRepo.Puzzles.Keys
+                .Select(x => completedPuzzles.Contains(checked((byte)x)))
+                .Select(x => x ? '1' : '0');
+            
             return new GetPuzzleListResponse
             {
                 m_typeName = typeName,
@@ -66,7 +96,7 @@ namespace BinWeevils.Server.Controllers
                 m_levelList = string.Join('|', puzzleList.Select(x => x.Level.ToString())),
                 m_nameList = string.Join('|', puzzleList.Select(x => x.Name.ToString())),
                 m_configList = string.Join('|', puzzleList.Select(x => x.ConfigPath.ToString())),
-                m_completedList = string.Join('|', puzzleList.Select(x => '0')),
+                m_completedList = string.Join('|', completedList),
             };
         }
         
