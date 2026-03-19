@@ -4,7 +4,11 @@ namespace BinWeevils.Server.Services
 {
     public class PuzzlesOptions
     {
+        public string TypeName { get; set; } = "";
+        public string GamePath { get; set; } = "";
         public string ConfigPath { get; set; } = "";
+        public string LocName { get; set; } = "";
+        
         public List<PuzzleDefinition> RawPuzzles { get; set; } = [];
         
         public OrderedDictionary<int, PuzzleDefinition> Puzzles { get; set; } = [];

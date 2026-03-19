@@ -51,7 +51,7 @@ namespace BinWeevils.Server.Services
                 puzzleConfig = XmlReadBuffer.ReadStatic<TPuzzle>(stringContents, CDataMode.Off);
             } catch (Exception e)
             {
-                m_logger.LogCritical(e, "Unable to parse puzzle {FileName}", fileInfo.Name);
+                m_logger.LogError(e, "Unable to parse puzzle {FileName}", fileInfo.Name);
                 return;
             }
 

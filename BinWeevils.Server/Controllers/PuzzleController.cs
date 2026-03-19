@@ -54,18 +54,12 @@ namespace BinWeevils.Server.Controllers
                 case PuzzleTypeID.WordSearch:
                 {
                     puzzlesOptions = m_wordSearches.CurrentValue;
-                    typeName = "wordsearch";
-                    gamePath = "externalUIs/wordSearch_11_02_11.swf";
-                    locName = "doing a wordsearch";
                     puzzleProgressQueryable = m_dbContext.m_wordSearchProgress;
                     break;
                 }
                 case PuzzleTypeID.Crossword:
                 {
                     puzzlesOptions = m_crosswords.CurrentValue;
-                    typeName = "crossword";
-                    gamePath = "externalUIs/crossword2.swf";
-                    locName = "doing a crossword";
                     puzzleProgressQueryable = m_dbContext.m_crosswordProgress;
                     break;
                 }
@@ -87,10 +81,10 @@ namespace BinWeevils.Server.Controllers
             var puzzleList = puzzlesOptions.Puzzles.Values;
             return new GetPuzzleListResponse
             {
-                m_typeName = typeName,
-                m_gamePath = gamePath,
+                m_typeName = puzzlesOptions.TypeName,
+                m_gamePath = puzzlesOptions.GamePath,
                 m_configBasePath = $"{puzzlesOptions.ConfigPath}/",
-                m_locName = locName,
+                m_locName = puzzlesOptions.LocName,
                 m_levelList = string.Join('|', puzzleList.Select(x => x.Level.ToString())),
                 m_nameList = string.Join('|', puzzleList.Select(x => x.Name.ToString())),
                 m_configList = string.Join('|', puzzleList.Select(x => x.ConfigPath.ToString())),
