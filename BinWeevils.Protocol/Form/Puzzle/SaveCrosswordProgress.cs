@@ -10,4 +10,10 @@ namespace BinWeevils.Protocol.Form.Puzzle
         [PropertyShape(Name = "progress")] public string m_progress { get; set; }
         [PropertyShape(Name = "completed")] public bool m_completed { get; set; }
     }
+
+    [GenerateShape]
+    public partial class SaveCrosswordProgressResponse
+    {
+        // todo
+    }
 }

@@ -165,7 +165,8 @@ namespace BinWeevils.Server.Controllers
         }
         
         [StructuredFormPost("php/saveCrosswordProgress.php")]
-        public async Task<string> SaveCrosswordProgress([FromBody] SaveCrosswordProgressRequest request)
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SaveCrosswordProgressResponse> SaveCrosswordProgress([FromBody] SaveCrosswordProgressRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("PuzzleController.SaveCrosswordProgress");
             activity?.SetTag("userID", request.m_userID);
@@ -226,7 +227,7 @@ namespace BinWeevils.Server.Controllers
             {
                 await transaction.RollbackAsync();
                 // todo: response
-                return "";
+                return new SaveCrosswordProgressResponse();
             }
 
             if (request.m_completed)
@@ -238,7 +239,7 @@ namespace BinWeevils.Server.Controllers
             await transaction.CommitAsync();
             
             // todo: response
-            return "";
+            return new SaveCrosswordProgressResponse();
         }
     }
 }
