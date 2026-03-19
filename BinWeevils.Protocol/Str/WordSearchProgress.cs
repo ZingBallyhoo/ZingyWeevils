@@ -36,8 +36,13 @@ namespace BinWeevils.Protocol.Str
                 result = null;
                 return false;
             }
-
+            
             result = new WordSearchProgress();
+            if (s is "0")
+            {
+                // empty
+                return true;
+            }
             
             var reader = new StrReader(s, '|');
             while (reader.HasRemaining())
@@ -55,13 +60,19 @@ namespace BinWeevils.Protocol.Str
             
             return true;
         }
+
+        public override string ToString()
+        {
+            if (m_spans.Count == 0) return "0";
+            return string.Join('|', m_spans.Select(span => span.AsString(',')));
+        }
     }
 
     public class WordSearchProgressMarshaller : IMarshaler<WordSearchProgress, string>
     {
         public string? Marshal(WordSearchProgress? value)
         {
-            throw new NotImplementedException();
+            return value?.ToString();
         }
 
         public WordSearchProgress? Unmarshal(string? value)

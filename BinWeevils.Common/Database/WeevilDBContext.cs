@@ -16,6 +16,7 @@ namespace BinWeevils.Common.Database
         public DbSet<WeevilTurnBasedGamePlayedDB> m_weevilTurnBasedGamesPlayed { get; set; }
         public DbSet<WeevilTrackPersonalBestDB> m_trackPersonalBests { get; set; }
         public DbSet<WeevilWordSearchProgressDB> m_wordSearchProgress { get; set; }
+        public DbSet<WeevilWordSearchSpanDB> m_wordSearchSpans { get; set; }
         public DbSet<WeevilCrosswordProgressDB> m_crosswordProgress { get; set; }
         public DbSet<BuddyRecordDB> m_buddyRecords { get; set; }
         public DbSet<BuddyMessageDB> m_buddyMessages { get; set; }

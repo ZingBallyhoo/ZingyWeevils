@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Form.Puzzle;
+using BinWeevils.Protocol.Str;
 using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -97,25 +98,63 @@ namespace BinWeevils.Server.Controllers
             };
         }
         
-        [HttpPost("php/getWordSearchProgress.php")]
-        public string GetWordSearchProgress()
+        [StructuredFormPost("php/getWordSearchProgress.php")]
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<GetWordSearchProgressResponse> GetWordSearchProgress([FromBody] GetPuzzleProgressRequest request)
         {
-            // todo: user id
+            using var activity = ApiServerObservability.StartActivity("PuzzleController.GetCrosswordProgress");
+            activity?.SetTag("userID", request.m_userID);
+            activity?.SetTag("gridID", request.m_gridID);
             
-            return "result=0";
-            return "result=0,11,4,11";
-            return "result=0,11,4,11|13,13,13,6";
+            if (request.m_userID != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to get someone else's word search progress");
+            }
+            
+            var wordSearches = m_wordSearches.CurrentValue;
+            if (!wordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
+            {
+                throw new InvalidDataException("trying to get progress of a word search that doesn't exist");
+            }
+
+            var spans = await m_dbContext.m_weevilDBs
+                .Where(x => x.m_name == request.m_userID)
+                .SelectMany(x => x.m_wordSearchProgress)
+                .Where(x => x.m_puzzleID == request.m_gridID)
+                .SelectMany(x => x.m_spans)
+                .ToListAsync();
+
+            var convertedSpans = spans.Select(x => new WordSearchSpan
+            {
+                m_iStart = x.m_iStart,
+                m_jStart = x.m_jStart,
+                m_iEnd = x.m_iEnd,
+                m_jEnd = x.m_jEnd
+            }).ToList();
+            
+            return new GetWordSearchProgressResponse
+            {
+                m_result = new WordSearchProgress
+                {
+                    m_spans = convertedSpans
+                }
+            };
         }
         
         [StructuredFormPost("php/saveWordSearchProgress.php")]
-        public string SaveWordSearchProgress([FromBody] SaveWordSearchProgressRequest request)
+        [Produces(MediaTypeNames.Application.FormUrlEncoded)]
+        public async Task<SaveWordSearchProgressResponse> SaveWordSearchProgress([FromBody] SaveWordSearchProgressRequest request)
         {
-            // gridID "24"
-            // completed "0"
-            // progress	"1,15,6,15"
-            // userID "zingy"
+            using var activity = ApiServerObservability.StartActivity("PuzzleController.GetCrosswordProgress");
+            activity?.SetTag("userID", request.m_userID);
+            activity?.SetTag("gridID", request.m_gridID);
+            activity?.SetTag("progress", request.m_progress);
+            activity?.SetTag("completed", request.m_completed);
             
-            // todo: user id
+            if (request.m_userID != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to save someone else's word search progress");
+            }
 
             var wordSearches = m_wordSearches.CurrentValue;
             if (!wordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
@@ -132,8 +171,69 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new InvalidDataException($"{spanText} ({newestSpan.AsString(',')}) is not a word in {request.m_gridID}:\"{wordSearch.m_heading}\"");
             }
+            
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            
+            var idx = await m_dbContext.GetIdx(request.m_userID);
+            
+            // make sure the word search is tracked first
+            await m_dbContext.m_wordSearchProgress.Upsert(new WeevilWordSearchProgressDB
+            {
+                m_weevilIdx = idx,
+                m_puzzleID = request.m_gridID,
+                m_complete = false
+            }).NoUpdate().RunAsync();
+            
+            // attempt to add the new span
+            var spansUpdated = await m_dbContext.m_wordSearchSpans
+                .Upsert(new WeevilWordSearchSpanDB
+                {
+                    m_weevilIdx = idx,
+                    m_puzzleID = request.m_gridID,
+                    
+                    m_iStart = newestSpan.m_iStart,
+                    m_jStart = newestSpan.m_jStart,
+                    m_iEnd = newestSpan.m_iEnd,
+                    m_jEnd = newestSpan.m_jEnd,
+                })
+                .NoUpdate()
+                .RunAsync();
 
-            return "";
+            var progressUpdated = await m_dbContext.m_wordSearchProgress
+                .Where(x => x.m_weevilIdx == idx)
+                .Where(x => x.m_puzzleID == request.m_gridID)
+                .Where(x => x.m_spans.Count >= wordSearch.m_words.Count) // all words completed
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(x => x.m_complete, true));
+
+            var mulchReward = 0u;
+            var xpReward = 0u;
+            if (spansUpdated > 0)
+            {
+                mulchReward += (uint)spansUpdated * wordSearches.MulchRewardPerWord;
+            }
+            if (progressUpdated > 0)
+            {
+                mulchReward += wordSearches.MulchRewardComplete;
+                xpReward += wordSearches.XpRewardComplete;
+            }
+
+            MulchAndXpDto? dto = null;
+            if (mulchReward > 0 || xpReward > 0)
+            {
+                await m_dbContext.GiveMulchAndXp(idx, mulchReward, xpReward);
+                dto = await m_dbContext.GetMulchAndXp(idx);
+            }
+
+            await transaction.CommitAsync();
+            
+            // todo: metrics
+
+            return new SaveWordSearchProgressResponse
+            {
+                m_mulch = dto?.m_mulch ?? 0,
+                m_xp = dto?.m_xp ?? 0
+            };
         }
 
         [StructuredFormPost("php/getCrosswordProgress.php")]

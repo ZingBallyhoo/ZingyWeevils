@@ -20,6 +20,11 @@ namespace BinWeevils.Protocol.Xml.Puzzle
             foreach (var (i, j) in span.Enumerate())
             {
                 sb.Append(m_rows[j].m_text[i]);
+
+                if (sb.Length > 16 * 16)
+                {
+                    throw new ArgumentException("ReadSpan: too many iterations");
+                }
             }
 
             return sb.ToString();

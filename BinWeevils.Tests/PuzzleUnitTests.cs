@@ -9,6 +9,7 @@ namespace BinWeevils.Tests
         [InlineData(0, 0, 0, 15)] // flat, j
         [InlineData(0, 0, 15, 15)] // diagonal
         [InlineData(15, 15, 0, 0)] // diagonal
+        [InlineData(15, 0, 0, 15)] // diagonal
         public void NormalizeSpan(byte iStart, byte jStart, byte iEnd, byte jEnd)
         {
             var normalized1 = new WordSearchSpan

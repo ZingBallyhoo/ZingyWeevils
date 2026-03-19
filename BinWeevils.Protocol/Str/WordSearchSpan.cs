@@ -53,7 +53,7 @@ namespace BinWeevils.Protocol.Str
                 return;
             }
 
-            if (deltaI != deltaJ)
+            if (deltaI != deltaJ && deltaI != -deltaJ)
             {
                 throw new InvalidDataException($"word search span is not a valid diagonal. i:{deltaI} j:{deltaJ}");
             }
@@ -67,13 +67,17 @@ namespace BinWeevils.Protocol.Str
             Debug.Assert(iSign != 0 || m_iStart == m_iEnd);
             Debug.Assert(jSign != 0 || m_jStart == m_jEnd);
             
-            for (int i = m_iStart; i <= m_iEnd; i += iSign)
+            int i = m_iStart;
+            int j = m_jStart;
+            do
             {
-                for (int j = m_jStart; j <= m_jEnd; j += jSign)
-                {
-                    yield return (i, j);
-                }
-            }
+                yield return (i, j);
+                
+                j += jSign;
+                i += iSign;
+            } while (j != m_jEnd || i != m_iEnd);
+            
+            yield return (i, j);
         }
     }
 }

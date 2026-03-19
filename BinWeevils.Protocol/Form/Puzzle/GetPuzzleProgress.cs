@@ -1,3 +1,4 @@
+using BinWeevils.Protocol.Str;
 using PolyType;
 
 namespace BinWeevils.Protocol.Form.Puzzle
@@ -7,6 +8,12 @@ namespace BinWeevils.Protocol.Form.Puzzle
     {
         [PropertyShape(Name = "userID")] public string m_userID { get; set; }
         [PropertyShape(Name = "gridID")] public byte m_gridID { get; set; }
+    }
+
+    [GenerateShape]
+    public partial class GetWordSearchProgressResponse
+    {
+        [PropertyShape(Name = "result")] public WordSearchProgress m_result { get; set; } = new WordSearchProgress();
     }
     
     [GenerateShape]
