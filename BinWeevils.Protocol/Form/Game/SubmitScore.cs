@@ -7,7 +7,7 @@ namespace BinWeevils.Protocol.Form.Game
     public partial class SubmitScoreRequest
     {
         [PropertyShape(Name = "gameID")] public EGameType m_gameID { get; set; }
-        [PropertyShape(Name = "score")] public uint m_score { get; set; }
+        [PropertyShape(Name = "score")] public int m_score { get; set; }
     }
     
     [GenerateShape]

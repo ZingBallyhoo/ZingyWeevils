@@ -41,6 +41,26 @@ namespace BinWeevils.Tests.Integration
         }
         
         [Fact]
+        public async Task CantScoreNegative()
+        {
+            var account = await m_factory.CreateAccount(nameof(CantScoreNegative));
+            m_factory.SetAccount(account.UserName!);
+            
+            var client = m_factory.CreateClient();
+            
+            var req = new SubmitScoreRequest
+            {
+                m_gameID = EGameType.MulchShoot,
+                m_score = -100
+            };
+
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
+            {
+                await client.PostSimpleFormAsync<SubmitScoreRequest, SubmitScoreResponse>("api/game/submit-single", req);
+            });
+        }
+        
+        [Fact]
         public async Task OneTimeAward()
         {
             var account = await m_factory.CreateAccount(nameof(OneTimeAward));

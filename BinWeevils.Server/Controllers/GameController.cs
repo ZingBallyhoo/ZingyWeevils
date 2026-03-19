@@ -108,6 +108,12 @@ namespace BinWeevils.Server.Controllers
             using var activity = ApiServerObservability.StartActivity("GameController.SubmitSingle");
             activity?.SetTag("gameID", request.m_gameID);
             activity?.SetTag("score", request.m_score);
+
+            if (request.m_score < 0)
+            {
+                // todo: what is sending this?
+                throw new InvalidDataException("negative game score doesn't make sense");
+            }
             
             if (!m_singlePlayerSettings.Games.TryGetValue(request.m_gameID, out var gameSettings) || gameSettings.OneTimeAward != null)
             {
