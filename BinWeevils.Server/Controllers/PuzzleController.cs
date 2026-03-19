@@ -46,6 +46,7 @@ namespace BinWeevils.Server.Controllers
             string typeName;
             string gamePath;
             string locName;
+            IQueryable<WeevilPuzzleProgressDB> puzzleProgressQueryable;
             HashSet<byte> completedPuzzles;
             
             switch (request.m_typeID)
@@ -56,11 +57,7 @@ namespace BinWeevils.Server.Controllers
                     typeName = "wordsearch";
                     gamePath = "externalUIs/wordSearch_11_02_11.swf";
                     locName = "doing a wordsearch";
-                    completedPuzzles = await m_dbContext.m_wordSearchProgress
-                        .Where(x => x.m_weevil.m_name == request.m_userID)
-                        .Where(x => x.m_complete)
-                        .Select(x => x.m_puzzleID)
-                        .ToHashSetAsync();
+                    puzzleProgressQueryable = m_dbContext.m_wordSearchProgress;
                     break;
                 }
                 case PuzzleTypeID.Crossword:
@@ -69,11 +66,7 @@ namespace BinWeevils.Server.Controllers
                     typeName = "crossword";
                     gamePath = "externalUIs/crossword2.swf";
                     locName = "doing a crossword";
-                    completedPuzzles = await m_dbContext.m_crosswordProgress
-                        .Where(x => x.m_weevil.m_name == request.m_userID)
-                        .Where(x => x.m_complete)
-                        .Select(x => x.m_puzzleID)
-                        .ToHashSetAsync();
+                    puzzleProgressQueryable = m_dbContext.m_crosswordProgress;
                     break;
                 }
                 default:
@@ -81,12 +74,17 @@ namespace BinWeevils.Server.Controllers
                     throw new InvalidDataException($"invalid puzzle type: {request.m_typeID}");
                 }
             }
+            
+            var allCompletedPuzzles = await puzzleProgressQueryable
+                .Where(x => x.m_weevil.m_name == request.m_userID)
+                .Where(x => x.m_complete)
+                .Select(x => x.m_puzzleID)
+                .ToHashSetAsync();
+            var completedList = configRepo.Puzzles.Keys
+                .Select(x => allCompletedPuzzles.Contains(checked((byte)x)))
+                .Select(x => x ? '1' : '0');
 
             var puzzleList = configRepo.Puzzles.Values.ToArray();
-            var completedList = configRepo.Puzzles.Keys
-                .Select(x => completedPuzzles.Contains(checked((byte)x)))
-                .Select(x => x ? '1' : '0');
-            
             return new GetPuzzleListResponse
             {
                 m_typeName = typeName,

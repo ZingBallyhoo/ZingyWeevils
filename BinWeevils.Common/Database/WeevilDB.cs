@@ -94,7 +94,7 @@ namespace BinWeevils.Common.Database
     }
 
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_puzzleID))]
-    public class WeevilWordSearchProgressDB
+    public class WeevilPuzzleProgressDB
     {
         [Key] public uint m_weevilIdx { get; set; }
         [Key] public byte m_puzzleID { get; set;}
@@ -102,19 +102,16 @@ namespace BinWeevils.Common.Database
         public bool m_complete { get; set; }
         
         [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
+    }
+
+    public class WeevilWordSearchProgressDB : WeevilPuzzleProgressDB
+    {
         public virtual ICollection<WeevilWordSearchSpanDB> m_spans { get; set; }
     }
 
-    [PrimaryKey(nameof(m_weevilIdx), nameof(m_puzzleID))]
-    public class WeevilCrosswordProgressDB
+    public class WeevilCrosswordProgressDB : WeevilPuzzleProgressDB
     {
-        [Key] public uint m_weevilIdx { get; set; }
-        [Key] public byte m_puzzleID { get; set;}
-        
-        public bool m_complete { get; set; }
         public string m_progress { get; set; } = "";
-        
-        [ForeignKey(nameof(m_weevilIdx))] public virtual WeevilDB m_weevil { get; set; }
     }
     
     [PrimaryKey(nameof(m_weevilIdx), nameof(m_puzzleID), nameof(m_iStart), nameof(m_jStart), nameof(m_iEnd), nameof(m_jEnd))]

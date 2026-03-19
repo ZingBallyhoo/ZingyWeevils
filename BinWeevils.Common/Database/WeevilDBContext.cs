@@ -85,6 +85,8 @@ namespace BinWeevils.Common.Database
             modelBuilder.Entity<WeevilCrosswordProgressDB>(b =>
             {
                 b.ToTable("WeevilCrosswordProgressDB");
+                b.Property(x => x.m_progress)
+                 .HasMaxLength(256);
             });
 
             // todo: disabling puzzle entities as the design is not complete
