@@ -1,4 +1,3 @@
-using BinWeevils.Protocol.Form;
 using BinWeevils.Protocol.Form.Puzzle;
 
 namespace BinWeevils.Tests.Integration
@@ -67,6 +66,29 @@ namespace BinWeevils.Tests.Integration
                 m_gridID = puzzleID
             });
             Assert.True(getResp.m_completed);
+        }
+
+        [Theory]
+        [InlineData(91, "hellooo")] // valid puzzle, but invalid data
+        [InlineData(254, "hellooo")] // invalid puzzle
+        public async Task CantSaveInvalidCrossword(byte puzzleID, string progress)
+        {
+            var account = await m_factory.CreateAccount(nameof(CantSaveInvalidCrossword));
+            m_factory.SetAccount(account.UserName!);
+            
+            var client = m_factory.CreateClient();
+            
+            var saveRequest = new SaveCrosswordProgressRequest
+            {
+                m_userID = account.UserName!,
+                m_gridID = puzzleID,
+                m_completed = false,
+                m_progress = progress
+            };
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
+            {
+                await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            });
         }
     }
 }

@@ -1,11 +1,11 @@
 using System.Net.Mime;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Form.Puzzle;
-using BinWeevils.Protocol.Xml.Puzzle;
 using BinWeevils.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using StackXML.Str;
 
 namespace BinWeevils.Server.Controllers
@@ -15,13 +15,13 @@ namespace BinWeevils.Server.Controllers
     [Route("api")]
     public class PuzzleController : Controller
     {
-        private readonly PuzzleConfigRepository<WordSearch> m_wordSearches;
-        private readonly PuzzleConfigRepository<Crossword> m_crosswords;
+        private readonly IOptionsMonitor<WordSearchesOptions> m_wordSearches;
+        private readonly IOptionsMonitor<CrosswordsOptions> m_crosswords;
         private readonly WeevilDBContext m_dbContext;
 
         public PuzzleController(
-            PuzzleConfigRepository<WordSearch> wordSearches,
-            PuzzleConfigRepository<Crossword> crosswords,
+            IOptionsMonitor<WordSearchesOptions> wordSearches,
+            IOptionsMonitor<CrosswordsOptions> crosswords,
             WeevilDBContext dbContext)
         {
             m_wordSearches = wordSearches;
@@ -42,7 +42,7 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("trying to get someone else's puzzle list");
             }
             
-            IPuzzleConfigRepository configRepo;
+            PuzzlesOptions puzzlesOptions;
             string typeName;
             string gamePath;
             string locName;
@@ -52,7 +52,7 @@ namespace BinWeevils.Server.Controllers
             {
                 case PuzzleTypeID.WordSearch:
                 {
-                    configRepo = m_wordSearches;
+                    puzzlesOptions = m_wordSearches.CurrentValue;
                     typeName = "wordsearch";
                     gamePath = "externalUIs/wordSearch_11_02_11.swf";
                     locName = "doing a wordsearch";
@@ -61,7 +61,7 @@ namespace BinWeevils.Server.Controllers
                 }
                 case PuzzleTypeID.Crossword:
                 {
-                    configRepo = m_crosswords;
+                    puzzlesOptions = m_crosswords.CurrentValue;
                     typeName = "crossword";
                     gamePath = "externalUIs/crossword2.swf";
                     locName = "doing a crossword";
@@ -79,16 +79,16 @@ namespace BinWeevils.Server.Controllers
                 .Where(x => x.m_complete)
                 .Select(x => x.m_puzzleID)
                 .ToHashSetAsync();
-            var completedList = configRepo.Puzzles.Keys
+            var completedList = puzzlesOptions.Puzzles.Keys
                 .Select(x => allCompletedPuzzles.Contains(checked((byte)x)))
                 .Select(x => x ? '1' : '0');
 
-            var puzzleList = configRepo.Puzzles.Values.ToArray();
+            var puzzleList = puzzlesOptions.Puzzles.Values;
             return new GetPuzzleListResponse
             {
                 m_typeName = typeName,
                 m_gamePath = gamePath,
-                m_configBasePath = $"{configRepo.ConfigPath}/",
+                m_configBasePath = $"{puzzlesOptions.ConfigPath}/",
                 m_locName = locName,
                 m_levelList = string.Join('|', puzzleList.Select(x => x.Level.ToString())),
                 m_nameList = string.Join('|', puzzleList.Select(x => x.Name.ToString())),
@@ -117,7 +117,8 @@ namespace BinWeevils.Server.Controllers
             
             // todo: user id
 
-            if (!m_wordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
+            var wordSearches = m_wordSearches.CurrentValue;
+            if (!wordSearches.PuzzleConfigs.TryGetValue(request.m_gridID, out var wordSearch))
             {
                 throw new InvalidDataException("trying to solve a word search that doesn't exist");
             }
@@ -147,8 +148,9 @@ namespace BinWeevils.Server.Controllers
             {
                 throw new Exception("trying to get someone else's crossword progress");
             }
-            
-            if (!m_crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossword))
+
+            var crosswords = m_crosswords.CurrentValue;
+            if (!crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossword))
             {
                 throw new InvalidDataException("trying to get progress of a crossword that doesn't exist");
             }
@@ -179,7 +181,8 @@ namespace BinWeevils.Server.Controllers
                 throw new Exception("trying to save someone else's crossword progress");
             }
 
-            if (!m_crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossword))
+            var crosswords = m_crosswords.CurrentValue;
+            if (!crosswords.PuzzleConfigs.TryGetValue(request.m_gridID, out var crossword))
             {
                 throw new InvalidDataException("trying to save a crossword that doesn't exist");
             }
@@ -235,7 +238,7 @@ namespace BinWeevils.Server.Controllers
             if (request.m_completed)
             {
                 // todo: xp from options
-                await m_dbContext.GiveMulchAndXp(idx, crossword.m_reward, 30);
+                await m_dbContext.GiveMulchAndXp(idx, crossword.m_reward, crosswords.XpReward);
                 var mulchAndXp = await m_dbContext.GetMulchAndXp(idx);
                 
                 // todo: metrics

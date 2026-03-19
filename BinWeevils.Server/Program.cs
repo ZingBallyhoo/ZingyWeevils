@@ -270,13 +270,15 @@ public class Program
 
     private static void ConfigurePuzzles(WebApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<PuzzleConfigRepository<WordSearch>>();
-        builder.Services.AddSingleton<PuzzleConfigRepository<Crossword>>();
+        builder.Configuration.AddSubJson("WordSearches:RawPuzzles", Path.Combine("Data", "wordSearches.json"));
+        builder.Configuration.AddSubJson("Crosswords:RawPuzzles", Path.Combine("Data", "crosswords.json"));
+        builder.Services.AddOptions<WordSearchesOptions>().BindConfiguration("WordSearches");
+        builder.Services.AddOptions<CrosswordsOptions>().BindConfiguration("Crosswords");
         
-        builder.Configuration.AddSubJson("WordSearches:Puzzles", Path.Combine("Data", "wordSearches.json"));
-        builder.Configuration.AddSubJson("Crosswords:Puzzles", Path.Combine("Data", "crosswords.json"));
-        builder.Services.AddOptions<PuzzleConfigRepositoryOptions<WordSearch>>().BindConfiguration("WordSearches");
-        builder.Services.AddOptions<PuzzleConfigRepositoryOptions<Crossword>>().BindConfiguration("Crosswords");
+        // note: it's important to use IOptionsMonitor when using this type
+        // otherwise PostConfigure will be called on every request
+        builder.Services.AddSingleton<IPostConfigureOptions<WordSearchesOptions>, PuzzleOptionsPostConfigure<WordSearch>>();
+        builder.Services.AddSingleton<IPostConfigureOptions<CrosswordsOptions>, PuzzleOptionsPostConfigure<Crossword>>();
     }
     
     private static void ConfigureObservability(WebApplicationBuilder builder)
