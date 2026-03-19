@@ -5,13 +5,13 @@ using StackXML;
 
 namespace BinWeevils.Server.Services
 {
-    public class PuzzleOptionsPostConfigure<TPuzzle> : IPostConfigureOptions<PuzzlesOptions<TPuzzle>> where TPuzzle : PuzzleBase, new()
+    public class PuzzlesOptionsPostConfigure<TPuzzle> : IPostConfigureOptions<PuzzlesOptions<TPuzzle>> where TPuzzle : PuzzleBase, new()
     {
-        private readonly ILogger<PuzzleOptionsPostConfigure<TPuzzle>> m_logger;
+        private readonly ILogger<PuzzlesOptionsPostConfigure<TPuzzle>> m_logger;
         private readonly IFileProvider m_fileProvider;
         
-        public PuzzleOptionsPostConfigure(
-            ILogger<PuzzleOptionsPostConfigure<TPuzzle>> logger,
+        public PuzzlesOptionsPostConfigure(
+            ILogger<PuzzlesOptionsPostConfigure<TPuzzle>> logger,
             IFileProvider fileProvider)
         {
             m_logger = logger;

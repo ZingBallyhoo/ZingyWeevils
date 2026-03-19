@@ -89,11 +89,6 @@ namespace BinWeevils.Common.Database
                 b.Property(x => x.m_progress)
                  .HasMaxLength(256);
             });
-
-            // todo: disabling puzzle entities as the design is not complete
-            modelBuilder.Ignore<WeevilWordSearchProgressDB>();
-            modelBuilder.Ignore<WeevilWordSearchSpanDB>();
-            modelBuilder.Ignore<WeevilCrosswordProgressDB>();
             
             modelBuilder.Entity<BuddyRecordDB>(b =>
             {

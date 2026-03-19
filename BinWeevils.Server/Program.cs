@@ -277,8 +277,8 @@ public class Program
         
         // note: it's important to use IOptionsMonitor when using this type
         // otherwise PostConfigure will be called on every request
-        builder.Services.AddSingleton<IPostConfigureOptions<WordSearchesOptions>, PuzzleOptionsPostConfigure<WordSearch>>();
-        builder.Services.AddSingleton<IPostConfigureOptions<CrosswordsOptions>, PuzzleOptionsPostConfigure<Crossword>>();
+        builder.Services.AddSingleton<IPostConfigureOptions<WordSearchesOptions>, PuzzlesOptionsPostConfigure<WordSearch>>();
+        builder.Services.AddSingleton<IPostConfigureOptions<CrosswordsOptions>, PuzzlesOptionsPostConfigure<Crossword>>();
     }
     
     private static void ConfigureObservability(WebApplicationBuilder builder)
