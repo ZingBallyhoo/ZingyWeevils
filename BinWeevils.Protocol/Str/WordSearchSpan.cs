@@ -12,6 +12,17 @@ namespace BinWeevils.Protocol.Str
 
         public void Normalize()
         {
+            if (m_iStart != m_iEnd && m_jStart != m_jEnd)
+            {
+                if (m_iStart > m_iEnd)
+                {
+                    (m_iStart, m_iEnd) = (m_iEnd, m_iStart);
+                    (m_jStart, m_jEnd) = (m_jEnd, m_jStart);
+                }
+                
+                return;
+            }
+
             if (m_iStart > m_iEnd)
             {
                 (m_iStart, m_iEnd) = (m_iEnd, m_iStart);
@@ -20,7 +31,6 @@ namespace BinWeevils.Protocol.Str
             {
                 (m_jStart, m_jEnd) = (m_jEnd, m_jStart);
             }
-
             Debug.Assert(m_iStart <= m_iEnd);
             Debug.Assert(m_jStart <= m_jEnd);
         }
@@ -46,6 +56,23 @@ namespace BinWeevils.Protocol.Str
             if (deltaI != deltaJ)
             {
                 throw new InvalidDataException($"word search span is not a valid diagonal. i:{deltaI} j:{deltaJ}");
+            }
+        }
+
+        public IEnumerable<(int, int)> Enumerate()
+        {
+            var iSign = Math.Sign(m_iEnd - m_iStart);
+            var jSign = Math.Sign(m_jEnd - m_jStart);
+            
+            Debug.Assert(iSign != 0 || m_iStart == m_iEnd);
+            Debug.Assert(jSign != 0 || m_jStart == m_jEnd);
+            
+            for (int i = m_iStart; i <= m_iEnd; i += iSign)
+            {
+                for (int j = m_jStart; j <= m_jEnd; j += jSign)
+                {
+                    yield return (i, j);
+                }
             }
         }
     }

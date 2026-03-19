@@ -237,7 +237,6 @@ namespace BinWeevils.Server.Controllers
             SaveCrosswordProgressResponse response;
             if (request.m_completed)
             {
-                // todo: xp from options
                 await m_dbContext.GiveMulchAndXp(idx, crossword.m_reward, crosswords.XpReward);
                 var mulchAndXp = await m_dbContext.GetMulchAndXp(idx);
                 

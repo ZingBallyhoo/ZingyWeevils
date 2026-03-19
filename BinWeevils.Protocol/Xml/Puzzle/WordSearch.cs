@@ -5,7 +5,7 @@ using StackXML;
 namespace BinWeevils.Protocol.Xml.Puzzle
 {
     [XmlCls("wordSearch")]
-    public partial class WordSearch : Puzzle.PuzzleBase
+    public partial class WordSearch : PuzzleBase
     {
         [XmlField("hideWords")] public bool m_hideWords;
         [XmlField("heading")] public string m_heading;
@@ -15,17 +15,11 @@ namespace BinWeevils.Protocol.Xml.Puzzle
 
         public string ReadSpan(WordSearchSpan span)
         {
-            // sanity. non-normalized here would be critical
-            span.Normalize();
-            
             var sb = new StringBuilder();
-            
-            for (int i = span.m_iStart; i <= span.m_iEnd; i++)
+
+            foreach (var (i, j) in span.Enumerate())
             {
-                for (int j = span.m_jStart; j <= span.m_jEnd; j++)
-                {
-                    sb.Append(m_rows[j].m_text[i]);
-                }
+                sb.Append(m_rows[j].m_text[i]);
             }
 
             return sb.ToString();
