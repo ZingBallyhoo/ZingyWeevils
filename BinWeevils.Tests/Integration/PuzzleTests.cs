@@ -59,6 +59,13 @@ namespace BinWeevils.Tests.Integration
             }
             
             Assert.Equal(spans.Length, progressResp.m_result.m_spans.Count);
+            
+            var listResponse = await client.PostSimpleFormAsync<GetPuzzleListRequest, GetPuzzleListResponse>("api/php/getPuzzleList.php", new GetPuzzleListRequest
+            {
+                m_userID = account.UserName!,
+                m_typeID = PuzzleTypeID.WordSearch
+            });
+            Assert.Single(listResponse.m_completedList.Split('|'), "1");
         }
 
         private static WordSearchSpan CreateSpan(byte iStart, byte jStart, byte iEnd, byte jEnd, int sign)
@@ -96,7 +103,9 @@ namespace BinWeevils.Tests.Integration
                 m_progress = completedProgress
             };
             var saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
-            // todo: no fields yet
+            Assert.NotEqual(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
+            Assert.Equal(0, saveResponse.m_mulch);
+            Assert.Equal(0u, saveResponse.m_xp);
             
             getResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetCrosswordProgressResponse>("api/php/getCrosswordProgress.php", new GetPuzzleProgressRequest
             {
@@ -109,15 +118,15 @@ namespace BinWeevils.Tests.Integration
             // "check answers" clicked
             saveRequest.m_completed = true;
             saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            Assert.Equal(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
             Assert.NotEqual(0, saveResponse.m_mulch);
             Assert.NotEqual(0u, saveResponse.m_xp);
-            Assert.Equal(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
             
             // second time completing will be ignored
             saveResponse = await client.PostSimpleFormAsync<SaveCrosswordProgressRequest, SaveCrosswordProgressResponse>("api/php/saveCrosswordProgress.php", saveRequest);
+            Assert.NotEqual(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
             Assert.Equal(0, saveResponse.m_mulch);
             Assert.Equal(0u, saveResponse.m_xp);
-            Assert.NotEqual(SaveCrosswordProgressResponse.RESULT_COMPLETED, saveResponse.m_result);
             
             getResp = await client.PostSimpleFormAsync<GetPuzzleProgressRequest, GetCrosswordProgressResponse>("api/php/getCrosswordProgress.php", new GetPuzzleProgressRequest
             {
@@ -125,6 +134,13 @@ namespace BinWeevils.Tests.Integration
                 m_gridID = puzzleID
             });
             Assert.True(getResp.m_completed);
+            
+            var listResponse = await client.PostSimpleFormAsync<GetPuzzleListRequest, GetPuzzleListResponse>("api/php/getPuzzleList.php", new GetPuzzleListRequest
+            {
+                m_userID = account.UserName!,
+                m_typeID = PuzzleTypeID.Crossword
+            });
+            Assert.Single(listResponse.m_completedList.Split('|'), "1");
         }
 
         [Theory]
