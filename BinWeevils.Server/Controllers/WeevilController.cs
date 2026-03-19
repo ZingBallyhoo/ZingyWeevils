@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol;
@@ -46,6 +47,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (dto == null)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 m_logger.LogWarning("Tried to get data for unknown weevil: {Name}", request.m_name);
                 return new WeevilDataResponse
                 {
@@ -104,6 +106,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_mulch, x => x.m_mulch - request.m_cost));
             if (rowsUpdated == 0)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 m_logger.LogError("Not enough money to buy food! Cost: {Cost}", request.m_cost);
                 return new BuyFoodResponse
                 {
@@ -137,6 +140,9 @@ namespace BinWeevils.Server.Controllers
         public async Task<UpdateStatsResponse> UpdateStats([FromBody] UpdateStatsRequest request)
         {
             using var activity = ApiServerObservability.StartActivity("WeevilController.UpdateStats");
+            activity?.SetTag("food", request.m_food);
+            activity?.SetTag("fitness", request.m_fitness);
+            activity?.SetTag("happiness", request.m_happiness);
 
             var rowsUpdated = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
@@ -147,6 +153,12 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_food, Math.Min(request.m_food, (byte)100))
                     .SetProperty(x => x.m_fitness, Math.Min(request.m_fitness, (byte)100))
                     .SetProperty(x => x.m_happiness, Math.Min(request.m_happiness, (byte)100)));
+            
+            if (rowsUpdated <= 0)
+            {
+                activity?.SetStatus(ActivityStatusCode.Error);
+            }
+            
             return new UpdateStatsResponse
             {
                 m_result = rowsUpdated
@@ -220,6 +232,7 @@ namespace BinWeevils.Server.Controllers
             
             if (rowsUpdated == 0)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new ChangeWeevilDefResponse
                 {
                     m_error = ChangeWeevilDefResponse.ERR_NOT_ENOUGH_MONEY

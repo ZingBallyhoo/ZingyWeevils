@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
@@ -93,6 +94,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (item == null)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new BuyGardenItemResponse
                 {
                     m_error = 12, // ERR_CANT_BUY
@@ -166,6 +168,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (seed == null)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new BuyGardenItemResponse
                 {
                     m_error = 12, // ERR_CANT_BUY

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol;
@@ -782,6 +783,7 @@ namespace BinWeevils.Server.Controllers
                 await m_dbContext.SaveChangesAsync();
             } catch (DbUpdateException)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new PurchaseNestRoomResponse 
                 {
                     m_error = PurchaseNestRoomResponse.ERROR_ALREADY_OWNED
@@ -846,6 +848,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_mulch, x => x.m_mulch - cost));
             if (weevRowsUpdated == 0)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new BuyNestFuelResponse
                 {
                     m_success = false
@@ -859,6 +862,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_fuel, x => Math.Min(x.m_fuel + fuelToAdd, MAX_FUEL)));
             if (nestRowsUpdated == 0)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new BuyNestFuelResponse
                 {
                     m_success = false

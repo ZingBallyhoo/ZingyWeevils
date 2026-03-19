@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Form;
@@ -86,6 +87,7 @@ namespace BinWeevils.Server.Controllers
             
             if (!m_questRepository.TryGetTask(request.m_taskID, out var task))
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 m_logger.LogWarning("Request for unknown task: {TaskID}", request.m_taskID);
                 return new TaskCompletedResponse
                 {

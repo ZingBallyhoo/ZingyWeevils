@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
@@ -102,6 +103,7 @@ namespace BinWeevils.Server.Controllers
                 .SingleOrDefaultAsync();
             if (itemToBuy == null)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new BuyItemResponse
                 {
                     m_result = 3, // ERR_CANT_BUY
@@ -117,6 +119,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_xp, x => x.m_xp + itemToBuy.m_expPoints));
             if (rowsUpdated == 0)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new BuyItemResponse
                 {
                     m_result = 2, // ERR_CANT_AFFORD

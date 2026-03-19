@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ArcticFox.RPC.AmfGateway;
 using BinWeevils.Common;
 using BinWeevils.Common.Database;
@@ -68,6 +69,7 @@ namespace BinWeevils.Server.Controllers
             
             if (ValidatePetName(request.m_name) != 1)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return 0;
             }
             
@@ -83,6 +85,7 @@ namespace BinWeevils.Server.Controllers
             if (rowsUpdated == 0)
             {
                 // can't afford
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return 0;
             }
             
@@ -132,6 +135,7 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_petFoodStock, x => x.m_petFoodStock + foodPack.Feeds));
             if (rowsUpdated == 0)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return 0;
             }
             

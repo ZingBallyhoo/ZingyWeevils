@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Protocol.Form;
 using BinWeevils.Server.Services;
@@ -22,8 +23,12 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public TrackDetailsResponse GetTrackDetails([FromBody] TrackDetailsRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("TrackDetailsController.GetTrackDetails");
+            activity?.SetTag("trackID", request.m_trackID);
+            
             if (!m_repository.TryGetTrack(request.m_trackID, out var track))
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new TrackDetailsResponse
                 {
                     m_responseCode = 2
@@ -44,6 +49,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public Dictionary<string, string> GetBinTunes()
         {
+            using var activity = ApiServerObservability.StartActivity("TrackDetailsController.GetBinTunes");
+            
             var binTunes = m_repository.GetBinTunes().ToArray();
             var resp = new Dictionary<string, string>
             {

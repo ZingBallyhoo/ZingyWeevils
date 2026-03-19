@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using BinWeevils.Common.Database;
 using BinWeevils.Protocol.Enums;
@@ -99,7 +100,8 @@ namespace BinWeevils.Server.Controllers
                     .SetProperty(x => x.m_mulch, x => x.m_mulch - cost));
             if (rowsUpdated == 0)
             {
-                m_logger.LogError("Not enouch mulch to buy {BusinessType} (cost: {Cost})", businessType, cost);
+                activity?.SetStatus(ActivityStatusCode.Error);
+                m_logger.LogError("Not enough mulch to buy {BusinessType} (cost: {Cost})", businessType, cost);
                 return new BuyPremisesResponse
                 {
                     m_result = BuyPremisesResponse.RESULT_POOR
@@ -220,6 +222,7 @@ namespace BinWeevils.Server.Controllers
             
             if (dto == null)
             {
+                activity?.SetStatus(ActivityStatusCode.Error);
                 return new GetPlayListIDsForRoomResponse
                 {
                     m_success = false
