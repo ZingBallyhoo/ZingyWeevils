@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Threading.RateLimiting;
 using ArcticFox.PolyType.Amf;
 using ArcticFox.RPC.AmfGateway;
@@ -12,7 +13,6 @@ using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
 using BinWeevils.Server.Services;
 using Grafana.OpenTelemetry;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -128,12 +128,16 @@ public class Program
         builder.Services.AddDataProtection()
             .PersistKeysToDbContext<WeevilDBContext>();
         
-        builder.Services
-            .AddAuthentication()
-            .AddScheme<AuthenticationSchemeOptions, UsernameOnlyAuthenticationHandler>("UsernameOnly", _ => { });
+        builder.Services.AddAuthentication(o =>
+        {
+            o.RequireAuthenticatedSignIn = false;
+            
+            o.DefaultScheme = "UsernameOnly";
+            o.AddScheme<UsernameOnlyAuthenticationHandler>("UsernameOnly", null);
+        });
         builder.Services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
+                .RequireClaim(ClaimTypes.Name) // todo: if using an actual auth scheme, use RequireAuthenticatedUser
                 .AddAuthenticationSchemes("UsernameOnly")
                 .Build());
         

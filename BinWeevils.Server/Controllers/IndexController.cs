@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using BinWeevils.Common.Database;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PolyType;
@@ -37,10 +39,14 @@ namespace BinWeevils.Server.Controllers
                 username = foundUser.UserName!;
             }
             
-            Response.Cookies.Append("username", username, new CookieOptions
-            {
-                Expires = DateTime.MaxValue
-            });
+            // forward to whatever the default sign-in handler is
+            // this principal has IsAuthenticated set to false
+            // which means it would be rejected by standard handlers
+            var principal = new ClaimsPrincipal(new ClaimsIdentity([
+                new Claim(ClaimTypes.Name, username)
+            ]));
+            await HttpContext.SignInAsync(principal);
+            
             return Results.Redirect("/game.php");
         }
         
