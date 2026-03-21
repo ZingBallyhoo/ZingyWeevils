@@ -86,7 +86,7 @@ namespace BinWeevils.GameServer.Actors
             
             if (!m_gameReady)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sent user ready before the game is ready", context.Self, slot.m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sent user ready before the game is ready", context.Self, slot.m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }

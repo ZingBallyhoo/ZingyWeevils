@@ -51,7 +51,7 @@ namespace BinWeevils.GameServer.Actors
             
             if (!m_notifiedDriveOff)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sent drive-off before notified", context.Self, slot.m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sent drive-off before notified", context.Self, slot.m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -152,7 +152,7 @@ namespace BinWeevils.GameServer.Actors
             }
             
             // invalid pos
-            m_logger.LogError("Kart/{PID}: player {PID} sending position out of valid area", context.Self, m_slots[index].m_user);
+            m_logger.LogError("Kart/{PID}: player {Player} sending position out of valid area", context.Self, m_slots[index].m_user);
             await ForceDisconnectPlayer(context, index);
             return false;
         }
@@ -161,7 +161,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != update.m_kartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending position update for someone else", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending position update for someone else", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -178,7 +178,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != jump.m_kartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending jump for someone else", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending jump for someone else", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -195,7 +195,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != spinOut.m_kartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending spin out for someone else", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending spin out for someone else", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -211,7 +211,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != mulchBomb.m_id.m_kartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending invalid mulch bomb", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending invalid mulch bomb", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -228,7 +228,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != homingMulch.m_id.m_kartID || index != homingMulch.m_creatorKartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending invalid homing mulch", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending invalid homing mulch", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -240,7 +240,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != deployHomingMulch.m_id.m_kartID || index == deployHomingMulch.m_targetKartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending invalid deploy homing mulch", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending invalid deploy homing mulch", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -259,7 +259,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != plungeHomingMulch.m_targetKartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending invalid plunge homing mulch", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending invalid plunge homing mulch", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -271,7 +271,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != mulchBomb.m_same.m_id.m_kartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending invalid exploding mulch", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending invalid exploding mulch", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
@@ -283,7 +283,7 @@ namespace BinWeevils.GameServer.Actors
         {
             if (index != detonateExplodingMulch.m_id.m_kartID)
             {
-                m_logger.LogError("Kart/{PID}: player {PID} sending detonate exploding mulch for someone else", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending detonate exploding mulch for someone else", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }

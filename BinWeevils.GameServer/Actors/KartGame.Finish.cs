@@ -13,7 +13,7 @@ namespace BinWeevils.GameServer.Actors
             if (time <= 1000 || slot.m_finishTime != null || !m_raceStarted) 
             {
                 // todo: not that useful of a check even. just preventing 0
-                m_logger.LogError("Kart/{PID}: player {PID} sending fake finish time", context.Self, m_slots[index].m_user);
+                m_logger.LogError("Kart/{PID}: player {Player} sending fake finish time", context.Self, m_slots[index].m_user);
                 await ForceDisconnectPlayer(context, index);
                 return;
             }
