@@ -123,6 +123,8 @@ namespace BinWeevils.GameServer
         
         private async Task<bool> ValidateUserName(string userName) 
         {
+            using var activity = GameServerObservability.StartActivity("LocNameMapper.ValidateUserName");
+            
             await using var scope = m_provider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             

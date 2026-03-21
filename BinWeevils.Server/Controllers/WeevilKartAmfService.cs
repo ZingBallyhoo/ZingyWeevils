@@ -117,6 +117,10 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> TryAwardTrophy(WeevilWheelsTrophyType trophy, WeevilWheelsTrackSettings track, uint nestID)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilKartAmfService.TryAwardTrophy");
+            activity?.SetTag("trophy", trophy);
+            activity?.SetTag("trackID", track.ID);
+            
             var itemTypeID = await m_dbContext.FindItemByConfigName(track.TrophyItem);
             if (itemTypeID == null) throw new Exception($"unable to find trophy item; {track.TrophyItem}");
             

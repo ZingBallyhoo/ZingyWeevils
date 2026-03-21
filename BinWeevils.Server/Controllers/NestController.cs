@@ -393,7 +393,7 @@ namespace BinWeevils.Server.Controllers
         
         private async Task AddItemToNestInternal(AddItemToNestRequest request)
         {
-            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            using var activity = ApiServerObservability.StartActivity("NestController.AddItemToNestInternal");
             
             if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
             {
@@ -404,8 +404,9 @@ namespace BinWeevils.Server.Controllers
                 throw new InvalidDataException("could break our query");
             }
             
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var dto = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_name == request.m_userName)
                 .Where(x => x.m_nest.m_id == request.m_nestID) // dont lie :(
                 //.Where(x => x.m_nest.m_rooms.Any(room => room.m_id == request.m_locationID))
                 .Where(x => 
@@ -503,6 +504,14 @@ namespace BinWeevils.Server.Controllers
         
         private async Task NormalizeItemPlacement(NormalizeItemParams para)
         {
+            using var activity = ApiServerObservability.StartActivity("NestController.NormalizeItemPlacement");
+            activity?.SetTag("itemType", para.m_itemType);
+            activity?.SetTag("posAnimationFrame", para.m_posAnimationFrame);
+            activity?.SetTag("placedOnFurnitureID", para.m_placedOnFurnitureID);
+            activity?.SetTag("spot", para.m_spot);
+            activity?.SetTag("configLocation", para.m_configLocation);
+            activity?.SetTag("placedOnConfigLocation", para.m_placedOnConfigLocation);
+            
             var itemConfig = await m_configRepo.GetConfig(para.m_configLocation);
             
             var isFurniture = itemConfig.m_type == "furniture";
@@ -575,8 +584,12 @@ namespace BinWeevils.Server.Controllers
         
         private async Task UpdateItemPositionInternal(UpdateNestItemPositionRequest request)
         {
-            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
+            using var activity = ApiServerObservability.StartActivity("NestController.UpdateItemPositionInternal");
             
+            if (request.m_userName != ControllerContext.HttpContext.User.Identity!.Name)
+            {
+                throw new Exception("trying to move an item in someone else's nest");
+            }
             if (request.m_itemType == "null")
             {
                 // even the client knows this request is invalid
@@ -584,8 +597,9 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
+            await using var transaction = await m_dbContext.Database.BeginTransactionAsync();
             var checkDto = await m_dbContext.m_weevilDBs
-                .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(weev => weev.m_name == request.m_userName)
                 .Where(weev => weev.m_nest.m_id == request.m_nestID)
                 .SelectMany(weev => weev.m_nest.m_items)
                 .Where(item => item.m_id == request.m_itemID)
@@ -676,7 +690,7 @@ namespace BinWeevils.Server.Controllers
             
             // todo: use a claim for nest too?
             var nest = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
+                .Where(x => x.m_name == request.m_userName)
                 .Select(x => x.m_nest)
                 .SingleAsync();
             if (nest.m_id != request.m_nestID)

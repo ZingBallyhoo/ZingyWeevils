@@ -311,7 +311,7 @@ namespace BinWeevils.Server.Controllers
             }
             
             var specialMoves = await m_dbContext.m_weevilDBs
-                .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name) 
+                .Where(x => x.m_name == request.m_userID) 
                 .SelectMany(x => x.m_specialMoves)
                 .OrderBy(x => x.m_action)
                 .Select(x => x.m_action)

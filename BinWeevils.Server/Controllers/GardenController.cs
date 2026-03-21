@@ -90,6 +90,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.Xml)]
         public async Task<PlantConfigs> GetPlantConfigs([FromBody] GetStoredGardenItemsRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("GardenController.GetPlantConfigs");
+            activity?.SetTag("userID", request.m_userID);
+            
             return await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == request.m_userID)
                 .Select(weev => new PlantConfigs
@@ -522,6 +525,9 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task RemovePlant([FromBody] HarvestPlantRequest request)
         {
+            using var activity = ApiServerObservability.StartActivity("GardenController.RemovePlant");
+            activity?.SetTag("plantID", request.m_plantID);
+            
             var dto = await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .SelectMany(weev => weev.m_nest.m_gardenSeeds)

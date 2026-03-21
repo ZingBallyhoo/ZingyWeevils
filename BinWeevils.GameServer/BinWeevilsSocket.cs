@@ -74,7 +74,7 @@ namespace BinWeevils.GameServer
         {
             if (input is "<policy-file-request/>")
             {
-                this.BroadcastZeroTerminatedAscii("<cross-domain-policy><allow-access-from domain='*' to-ports='9339' /></cross-domain-policy>");
+                m_taskQueue.Enqueue(() => this.BroadcastZeroTerminatedAscii("<cross-domain-policy><allow-access-from domain='*' to-ports='9339' /></cross-domain-policy>"));
                 return;
             }
             

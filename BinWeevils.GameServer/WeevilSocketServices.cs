@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Proto;
-using Stl.Collections;
 
 namespace BinWeevils.GameServer
 {
@@ -21,9 +20,9 @@ namespace BinWeevils.GameServer
         public WeevilSocketServices(IServiceProvider rootProvider)
         {
             m_rootProvider = rootProvider;
-            m_logger = m_rootProvider.GetRequiredService<ILogger<BinWeevilsSocket>>();
             
-            m_activity = GameServerObservability.s_source.StartActivity("socket");
+            m_activity = GameServerObservability.StartActivity("socket");
+            m_logger = m_rootProvider.GetRequiredService<ILogger<BinWeevilsSocket>>();
         }
         
         public ActorSystem GetActorSystem()
@@ -58,6 +57,9 @@ namespace BinWeevils.GameServer
         
         public async Task<uint> Login(string name, string token)
         {
+            using var activity = GameServerObservability.StartActivity("Socket Login");
+            activity?.SetTag("name", name);
+            
             await using var scope = m_rootProvider.CreateAsyncScope();
             var idx = await LoginInternal(scope, name, token);
             if (idx == 0)
@@ -85,8 +87,6 @@ namespace BinWeevils.GameServer
                 throw new InvalidDataException("invalid username");
             }
             
-            using var loginActivity = GameServerObservability.StartActivity("Attempt Login");
-            loginActivity?.SetTag("userName", name);
             GameServerObservability.s_loginAttempts.Add(1);
             
             var identityManager = scope.ServiceProvider.GetRequiredService<UserManager<WeevilAccount>>();
@@ -111,6 +111,9 @@ namespace BinWeevils.GameServer
 
         private async Task<uint> CreateNewWeevil(AsyncServiceScope scope, UserManager<WeevilAccount> identityManager, string name)
         {
+            using var activity = GameServerObservability.StartActivity("Create New Weevil");
+            activity?.SetTag("name", name);
+            
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
             var initializer = scope.ServiceProvider.GetRequiredService<WeevilInitializer>();
             await using var transaction = await context.Database.BeginTransactionAsync();
@@ -305,6 +308,7 @@ namespace BinWeevils.GameServer
             if (!GetPetsSettings().Enabled) return [];
             
             using var activity = GameServerObservability.StartActivity("Init Pet Data");
+            
             await using var scope = m_rootProvider.CreateAsyncScope();
             var context = scope.ServiceProvider.GetRequiredService<WeevilDBContext>();
 

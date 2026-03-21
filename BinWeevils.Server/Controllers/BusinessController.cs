@@ -43,6 +43,8 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<uint> ValidateNest(uint locID)
         {
+            using var activity = ApiServerObservability.StartActivity("BusinessController.ValidateNest");
+            
             var checkDto = await m_dbContext.m_weevilDBs
                 .Where(weev => weev.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Where(weev => weev.m_nest.m_rooms.Any(x => x.m_id == locID))

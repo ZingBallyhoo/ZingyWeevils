@@ -12,6 +12,9 @@ namespace BinWeevils.Server.Controllers
     {
         public async ValueTask<object> RouteRequest(AmfGatewayContext context, CancellationToken cancellationToken)
         {
+            using var activity = ApiServerObservability.StartActivity("WeevilController.RouteRequest");
+            activity?.SetTag("targetUri", context.m_message.m_targetUri);
+            
             switch (context.m_message.m_targetUri)
             {
                 case "weevilservices.cWeevilLoginService.getLoginDetails":

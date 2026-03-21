@@ -18,6 +18,9 @@ namespace BinWeevils.Server.Services
         
         public async Task<ItemConfig> GetConfig(string name)
         {
+            using var activity = ApiServerObservability.StartActivity("ItemConfigRepository.GetConfig");
+            activity?.SetTag("name", name);
+            
             if (m_cache.TryGetValue(name, out var config))
             {
                 return config;

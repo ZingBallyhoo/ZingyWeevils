@@ -40,6 +40,8 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<uint> GetIdx()
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.GetIdx");
+            
             var dto = await m_dbContext.m_weevilDBs
                 .Where(x => x.m_name == ControllerContext.HttpContext.User.Identity!.Name)
                 .Select(x => new
@@ -52,6 +54,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> UpsertGame(uint weevilIdx, EGameType gameType)
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.UpsertGame");
+            activity?.SetTag("gameType", gameType);
+            
             var now = m_timeProvider.GetUtcNow().UtcDateTime;
             var deadline = now - m_singlePlayerSettings.Cooldown; 
 
@@ -69,6 +74,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> UpsertGameAwardGiven(uint weevilIdx, EGameType gameType)
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.UpsertGameAwardGiven");
+            activity?.SetTag("gameType", gameType);
+            
             var rowsUpserted = await m_dbContext.m_weevilGamesPlayed
                 .Upsert(new WeevilGamePlayedDB
                 {
@@ -87,6 +95,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> UpsertGame(uint weevilIdx, ETurnBasedGameType gameType)
         {
+            using var activity = ApiServerObservability.StartActivity("GameController.UpsertGame");
+            activity?.SetTag("gameType", gameType);
+            
             var now = m_timeProvider.GetUtcNow().UtcDateTime;
             var deadline = now - m_turnBasedSettings.Cooldown; 
             

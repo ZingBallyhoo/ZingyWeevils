@@ -62,6 +62,8 @@ namespace BinWeevils.Server.Controllers
         
         private bool IsMissionSectionInProgress(List<int> completedTasks, int startTask, int endTask)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.IsMissionSectionInProgress");
+
             // todo: lookups here aren't efficient...
             
             var sectionStarted = completedTasks.Any(x => x == startTask);
@@ -141,6 +143,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task TryReward(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response) 
         {
+            using var outerActivity = ApiServerObservability.StartActivity("QuestController.TryReward");
+            outerActivity?.SetTag("taskID", task.m_scrapedData.m_id);
+            
             var rowsInserted = await m_dbContext.m_rewardedTasks.Upsert(new RewardedTaskDB
             {
                 m_weevilID = weevilIdx,
@@ -152,8 +157,14 @@ namespace BinWeevils.Server.Controllers
                 return;
             }
             
-            using var activity = ApiServerObservability.StartActivity("QuestController.Reward");
             m_logger.LogTrace("Granting rewards for task {TaskID}", task.m_scrapedData.m_id);
+            await Reward(weevilIdx, task, response);
+;        }
+
+        private async Task Reward(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
+        {
+            using var activity = ApiServerObservability.StartActivity("QuestController.Reward");
+            activity?.SetTag("taskID", task.m_scrapedData.m_id);
             
             await m_dbContext.GiveMulchAndXp(weevilIdx, 
                 (uint)task.m_scrapedData.m_rewardMulch, 
@@ -178,6 +189,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task RewardItems(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.RewardItems");
+            activity?.SetTag("taskID", task.m_scrapedData.m_id);
+            
             if (task.m_scrapedData.m_rewardItems == null &&
                 task.m_scrapedData.m_rewardGardenItems == null &&
                 task.m_scrapedData.m_rewardGardenSeeds == null)
@@ -277,6 +291,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task RewardSpecialMoves(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.RewardSpecialMoves");
+            activity?.SetTag("taskID", task.m_scrapedData.m_id);
+            
             if (task.m_scrapedData.m_rewardMoves == null) return;
             
             foreach (var rewardMove in task.m_scrapedData.m_rewardMoves)
@@ -297,6 +314,8 @@ namespace BinWeevils.Server.Controllers
         
         private async Task AddCommonCompletedData(uint weevilIdx, TaskCompletedResponse resp)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.AddCommonCompletedData");
+            
             var dto = await m_dbContext.GetMulchAndXp(weevilIdx);
             
             resp.m_mulch = dto.m_mulch;
@@ -305,6 +324,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<TaskCompletedResponse?> TaskCompleted_AlreadyCompleted(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.TaskCompleted_AlreadyCompleted");
+            activity?.SetTag("taskID", task.m_scrapedData.m_id);
+            
             if (task.m_scrapedData.m_questID.HasValue && task.m_scrapedData.m_nonRestartable)
             {
                 if (!await IsMissionComplete(weevilIdx, task.m_scrapedData.m_questID.Value))
@@ -334,6 +356,9 @@ namespace BinWeevils.Server.Controllers
         
         private async ValueTask<bool> IsMissionComplete(uint weevilIdx, int questID, CancellationToken cancellationToken=default)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.IsMissionComplete");
+            activity?.SetTag("questID", questID);
+            
             var quest = m_questRepository.GetQuest(questID);
             if (quest.m_completeTask == null) return false;
             
@@ -345,6 +370,9 @@ namespace BinWeevils.Server.Controllers
         
         private async Task<bool> TryRestartTask(uint weevilIdx, int taskID)
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.TryRestartTask");
+            activity?.SetTag("taskID", taskID);
+            
             var rowsDeleted = await m_dbContext.m_completedTasks
                 .Where(x => x.m_weevilID == weevilIdx)
                 .Where(x => x.m_taskID == taskID)
@@ -361,6 +389,8 @@ namespace BinWeevils.Server.Controllers
         [Produces(MediaTypeNames.Application.FormUrlEncoded)]
         public async Task<MissionList> GetMissionList()
         {
+            using var activity = ApiServerObservability.StartActivity("QuestController.GetMissionList");
+            
             var missions = m_questRepository.GetQuests()
                 .Where(x => x.m_showInList)
                 .ToArray();
