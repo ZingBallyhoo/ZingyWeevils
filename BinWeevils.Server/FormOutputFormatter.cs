@@ -19,6 +19,9 @@ namespace BinWeevils.Server
         
         public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
+            using var activity = ApiServerObservability.StartActivity("FormInputFormatter.WriteResponseBodyAsync");
+            activity?.SetTag("modelType", context.ObjectType);
+            
             var options = new FormOptions();
 
             string encoded;
@@ -32,7 +35,6 @@ namespace BinWeevils.Server
                     .MakeGenericMethod(context.ObjectType!);
                 encoded = (string)polyTypeMethod.Invoke(options, [context.Object])!;
             }
-            
             
             return context.HttpContext.Response.WriteAsync(encoded, selectedEncoding);
         }

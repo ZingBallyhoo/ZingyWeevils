@@ -23,6 +23,9 @@ namespace BinWeevils.Server
 
         public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
+            using var activity = ApiServerObservability.StartActivity("StackXMLOutputFormatter.WriteResponseBodyAsync");
+            activity?.SetTag("modelType", context.ObjectType);
+            
             var encoded = XmlWriteBuffer.SerializeStatic((IXmlSerializable)context.Object!, CDataMode.Off);
             return context.HttpContext.Response.WriteAsync(encoded, selectedEncoding);
         }

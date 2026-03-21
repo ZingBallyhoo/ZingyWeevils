@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
@@ -18,8 +19,13 @@ namespace BinWeevils.Server
         
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
         {
+            using var activity = ApiServerObservability.StartActivity("FormInputFormatter.ReadRequestBodyAsync");
+            activity?.SetTag("modelType", context.ModelType);
+            
             using var reader = new StreamReader(context.HttpContext.Request.Body, encoding);
             var bodyText = await reader.ReadToEndAsync();
+            
+            activity?.AddEvent(new ActivityEvent("Body Read Complete"));
             
             var options = new FormOptions();
                 
@@ -29,10 +35,11 @@ namespace BinWeevils.Server
 
             object? result;
             try
-            { 
+            {
                 result = polyTypeMethod.Invoke(options, [bodyText]);
             } catch (Exception e)
             {
+                activity?.SetTag("body", bodyText);
                 throw new AggregateException($"Error parsing {context.ModelType} from form data", e);
             }
             return await InputFormatterResult.SuccessAsync(result);
