@@ -159,7 +159,7 @@ namespace BinWeevils.Server.Controllers
             
             m_logger.LogTrace("Granting rewards for task {TaskID}", task.m_scrapedData.m_id);
             await Reward(weevilIdx, task, response);
-;        }
+        }
 
         private async Task Reward(uint weevilIdx, QuestRepository.TaskRuntimeData task, TaskCompletedResponse response)
         {
