@@ -43,10 +43,7 @@ namespace BinWeevils.Server
 
         protected override Task HandleSignInAsync(ClaimsPrincipal user, AuthenticationProperties? properties)
         {
-            Response.Cookies.Append("username", user.FindFirstValue(ClaimTypes.Name)!, new CookieOptions
-            {
-                Expires = DateTime.MaxValue
-            });
+            AppendUsernameCookie(Response, user);
             return Task.CompletedTask;
         }
 
@@ -59,6 +56,14 @@ namespace BinWeevils.Server
             }
             
             return base.HandleChallengeAsync(properties);
+        }
+
+        public static void AppendUsernameCookie(HttpResponse response, ClaimsPrincipal user)
+        {
+            response.Cookies.Append("username", user.FindFirstValue(ClaimTypes.Name)!, new CookieOptions
+            {
+                Expires = DateTime.MaxValue
+            });
         }
     }
 }

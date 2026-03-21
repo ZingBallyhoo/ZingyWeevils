@@ -127,18 +127,50 @@ public class Program
         
         builder.Services.AddDataProtection()
             .PersistKeysToDbContext<WeevilDBContext>();
+
+        const string authenticationScheme = "UsernameOnly";
+        //var authenticationScheme = IdentityConstants.ApplicationScheme;
         
         builder.Services.AddAuthentication(o =>
         {
+            // no password or other verification is involved
+            // so technically these identities are non-authenticated
             o.RequireAuthenticatedSignIn = false;
             
-            o.DefaultScheme = "UsernameOnly";
+            // remove defaults specified by AddIdentity
+            o.DefaultAuthenticateScheme = null;
+            o.DefaultChallengeScheme = null;
+            o.DefaultSignInScheme = null;
+            
+            // add our specific schemes
             o.AddScheme<UsernameOnlyAuthenticationHandler>("UsernameOnly", null);
+
+            // set which scheme we want to actively use
+            o.DefaultScheme = authenticationScheme;
+        });
+        builder.Services.ConfigureApplicationCookie(o =>
+        {
+            // todo: increase expiration if using persistent
+            o.ExpireTimeSpan = TimeSpan.FromHours(6);
+            o.SlidingExpiration = true;
+
+            o.Events.OnRedirectToLogin += context =>
+            {
+                // doing this instead of LoginPath means the redirect parameter won't be used
+                context.Response.Redirect("/");
+                return Task.CompletedTask;
+            };
+            o.Events.OnSignedIn += context =>
+            {
+                // append the username cookie to persist the login form
+                UsernameOnlyAuthenticationHandler.AppendUsernameCookie(context.HttpContext.Response, context.Principal!);
+                return Task.CompletedTask;
+            };
         });
         builder.Services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder()
                 .RequireClaim(ClaimTypes.Name) // todo: if using an actual auth scheme, use RequireAuthenticatedUser
-                .AddAuthenticationSchemes("UsernameOnly")
+                .AddAuthenticationSchemes(authenticationScheme)
                 .Build());
         
         builder.Services.AddRateLimiter(options =>

@@ -45,6 +45,8 @@ namespace BinWeevils.Server.Controllers
             var principal = new ClaimsPrincipal(new ClaimsIdentity([
                 new Claim(ClaimTypes.Name, username)
             ]));
+            
+            // todo: to make a standard cookie persistent, use `AuthenticationProperties { IsPersistent = true}`
             await HttpContext.SignInAsync(principal);
             
             return Results.Redirect("/game.php");
