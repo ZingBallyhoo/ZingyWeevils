@@ -13,6 +13,7 @@ using BinWeevils.Server;
 using BinWeevils.Server.Controllers;
 using BinWeevils.Server.Services;
 using Grafana.OpenTelemetry;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -128,7 +129,8 @@ public class Program
         builder.Services.AddDataProtection()
             .PersistKeysToDbContext<WeevilDBContext>();
 
-        const string authenticationScheme = "UsernameOnly";
+        //const string authenticationScheme = "UsernameOnly";
+        const string authenticationScheme = UsernameOnlyTicketDataFormat.Scheme;
         //var authenticationScheme = IdentityConstants.ApplicationScheme;
         
         builder.Services.AddAuthentication(o =>
@@ -142,11 +144,26 @@ public class Program
             o.DefaultChallengeScheme = null;
             o.DefaultSignInScheme = null;
             
-            // add our specific schemes
-            o.AddScheme<UsernameOnlyAuthenticationHandler>("UsernameOnly", null);
-
             // set which scheme we want to actively use
             o.DefaultScheme = authenticationScheme;
+        }).AddCookie(UsernameOnlyTicketDataFormat.Scheme, o =>
+        {
+            // use our custom "ticket format"
+            // which is actually just the username as a string
+            o.TicketDataFormat = new UsernameOnlyTicketDataFormat();
+            
+            o.Cookie.Name = "username";
+            o.Cookie.HttpOnly = false; // used to fill login input
+
+            o.Events.OnSigningIn += context =>
+            {
+                // manually set this cookie to persist "forever"
+                context.Properties.IsPersistent = true;
+                context.Properties.ExpiresUtc = DateTimeOffset.MaxValue;
+                
+                return Task.CompletedTask;
+            };
+            ConfigureCommonCookieAuth(o);
         });
         builder.Services.ConfigureApplicationCookie(o =>
         {
@@ -154,18 +171,16 @@ public class Program
             o.ExpireTimeSpan = TimeSpan.FromHours(6);
             o.SlidingExpiration = true;
 
-            o.Events.OnRedirectToLogin += context =>
-            {
-                // doing this instead of LoginPath means the redirect parameter won't be used
-                context.Response.Redirect("/");
-                return Task.CompletedTask;
-            };
             o.Events.OnSignedIn += context =>
             {
                 // append the username cookie to persist the login form
-                UsernameOnlyAuthenticationHandler.AppendUsernameCookie(context.HttpContext.Response, context.Principal!);
+                context.HttpContext.Response.Cookies.Append("username", context.Principal!.FindFirstValue(ClaimTypes.Name)!, new CookieOptions
+                {
+                    Expires = DateTime.MaxValue
+                });
                 return Task.CompletedTask;
             };
+            ConfigureCommonCookieAuth(o);
         });
         builder.Services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder()
@@ -315,6 +330,23 @@ public class Program
         // otherwise PostConfigure will be called on every request
         builder.Services.AddSingleton<IPostConfigureOptions<WordSearchesOptions>, PuzzlesOptionsPostConfigure<WordSearch>>();
         builder.Services.AddSingleton<IPostConfigureOptions<CrosswordsOptions>, PuzzlesOptionsPostConfigure<Crossword>>();
+    }
+
+    private static void ConfigureCommonCookieAuth(CookieAuthenticationOptions options)
+    {
+        // note: not +=, replacing original event
+        options.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Path == "/game.php")
+            {
+                context.Response.Redirect("/");
+            } else
+            {
+                context.Response.StatusCode = 401;
+            }
+            
+            return Task.CompletedTask;
+        };
     }
     
     private static void ConfigureObservability(WebApplicationBuilder builder)
