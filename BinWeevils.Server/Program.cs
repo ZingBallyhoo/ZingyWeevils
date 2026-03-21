@@ -226,6 +226,7 @@ public class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseMiddleware<UsernameTracingMiddleware>();
         app.UseRateLimiter();
 
         app.MapStaticAssets().Finally(DisableTracing);

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
@@ -20,11 +19,6 @@ namespace BinWeevils.Server
             if (!Context.Request.Cookies.TryGetValue("username", out var username))
             {
                 return Task.FromResult(AuthenticateResult.Fail("No username cookie"));
-            }
-            
-            if (Activity.Current is {} currentActivity)
-            {
-                currentActivity.SetTag("userName", username);
             }
             
             // note: not passing the scheme to the principal
