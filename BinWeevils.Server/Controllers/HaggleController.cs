@@ -59,7 +59,6 @@ namespace BinWeevils.Server.Controllers
                         m_value = m_economySettings.GetItemCost(x.m_itemType.m_price, x.m_itemType.m_currency),
                     }).ToArray()
                 })
-                .AsSplitQuery()
                 .SingleAsync();
             
             var resultItems = new List<HaggleItem>();

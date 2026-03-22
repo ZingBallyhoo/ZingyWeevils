@@ -296,7 +296,6 @@ namespace BinWeevils.Server.Controllers
                         weev.m_nest.m_items.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum() +
                         weev.m_nest.m_gardenItems.Where(item => item.m_placedItem != null).Select(x => x.m_itemType.m_coolness).Sum()
                 })
-                .AsSplitQuery()
                 .SingleAsync();
             
             var nestConfig = new NestConfig
@@ -428,7 +427,8 @@ namespace BinWeevils.Server.Controllers
                         })
                         .SingleOrDefault(),
                     m_itemData = x.m_nest.m_items
-                        .Where(item => item.m_id == request.m_itemID && item.m_placedItem == null)
+                        .Where(item => item.m_id == request.m_itemID && 
+                                       item.m_placedItem == null)
                         .Select(item => new
                         {
                             item.m_itemType.m_itemTypeID,
@@ -438,9 +438,9 @@ namespace BinWeevils.Server.Controllers
                         .Single(),
                     m_roomType = x.m_nest.m_rooms
                         .Where(room => room.m_id == request.m_locationID)
-                        .Select(room => room.m_type).Single()
+                        .Select(room => room.m_type)
+                        .Single()
                 })
-                .AsSplitQuery()
                 .SingleAsync();
             
             var validateParams = new NormalizeItemParams

@@ -75,7 +75,6 @@ namespace BinWeevils.Server.Controllers
                         })
                         .ToList()
                 })
-                .AsSplitQuery()
                 .SingleAsync();
             
             var items = new StoredGardenItems
@@ -119,7 +118,6 @@ namespace BinWeevils.Server.Controllers
                         })
                         .ToList()
                 })
-                .AsSplitQuery()
                 .SingleAsync();
         }
         
