@@ -19,7 +19,6 @@ namespace WeevilWorld.Server.Net
 
         public WeevilWorldSocketHost()
         {
-            m_batchMessages = true;
             m_smartFoxManager = CreateMgr();
         }
 

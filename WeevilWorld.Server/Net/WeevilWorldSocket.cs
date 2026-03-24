@@ -23,7 +23,8 @@ namespace WeevilWorld.Server.Net
         
         public WeevilWorldSocket(SocketInterface socket, SmartFoxManager manager) : base(socket, manager)
         {
-            m_netInputCodec = new CodecChain().AddCodec(new WeevilWorldBufferCodec()).AddCodec(this);
+            m_netInputCodec = new WeevilWorldBufferCodec()
+                .ChainTo(this);
         }
 
         public void Input(ReadOnlySpan<byte> input, ref object? state)
@@ -282,7 +283,7 @@ namespace WeevilWorld.Server.Net
                                     Result = ResultType.Ko
                                 }
                             }));
-                        return;
+                        break;
                     }
 
                     var dir = "Default";
@@ -843,11 +844,6 @@ namespace WeevilWorld.Server.Net
             await user.MoveTo(newRoom);
 
             return existingWeevils.Select(x => x.m_object).ToArray();
-        }
-
-        public void Abort()
-        {
-            Close();
         }
     }
 }

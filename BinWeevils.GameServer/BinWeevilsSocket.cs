@@ -29,10 +29,9 @@ namespace BinWeevils.GameServer
             m_services = new WeevilSocketServices(manager.m_provider);
             
             // todo: will differ for bluebox/socket...
-            m_netInputCodec = new CodecChain()
-                .AddCodec(new ZeroDelimitedDecodeCodec())
-                .AddCodec(new TextDecodeCodec(Encoding.ASCII))
-                .AddCodec(this);
+            m_netInputCodec = new ZeroDelimitedDecodeCodec(4096)
+                .ChainTo(new TextDecodeCodec(Encoding.ASCII))
+                .ChainTo(this);
         }
         
         public WeevilData GetWeevilData() => GetUser().GetUserData<WeevilData>();
@@ -371,11 +370,6 @@ namespace BinWeevils.GameServer
             }
             m_services.GetLogger().LogError(e, "Disconnecting due to exception");
             m_services.GetActivity()?.SetStatus(ActivityStatusCode.Error);
-        }
-
-        public void Abort()
-        {
-            Close();
         }
     }
 }
