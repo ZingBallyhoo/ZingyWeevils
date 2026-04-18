@@ -240,7 +240,7 @@ namespace BinWeevils.GameServer.Actors
                 m_kartID = slot.m_index
             });
             
-            if (m_raceSequenceStarted && slot.m_ranking == null)
+            if (m_raceSequenceStarted)
             {
                 if (slot.m_ranking == null)
                 {
@@ -293,6 +293,7 @@ namespace BinWeevils.GameServer.Actors
             if (m_notifiedDriveOff)
             {
                 // we cant send force dc as it won't work at this point...
+                m_logger.LogError("Kart/{PID}: fully disconnecting {Player} as they can't be removed from the game", context.Self, user);
                 context.Stop(user);
                 return;
             }
