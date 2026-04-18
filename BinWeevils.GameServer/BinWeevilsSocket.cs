@@ -351,15 +351,15 @@ namespace BinWeevils.GameServer
             return base.BroadcastEvent(ev);
         }
 
-        public override ValueTask CleanupAsync()
+        public override async ValueTask CleanupAsync()
         {
             var user = GetUser();
             if (user.GetUserDataAs<WeevilData>() is {} weevilData)
             {
-                m_services.GetActorSystem().Root.Stop(weevilData.GetUserAddress());
+                await m_services.GetActorSystem().Root.StopAsync(weevilData.GetUserAddress());
             }
             m_services.Dispose();
-            return base.CleanupAsync();
+            await base.CleanupAsync();
         }
 
         public override void HandleException(Exception e)

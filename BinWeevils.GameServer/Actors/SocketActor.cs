@@ -55,6 +55,7 @@ namespace BinWeevils.GameServer.Actors
                     if (kickFromNest.userName == m_user.m_name)
                     {
                         // something has gone horribly wrong
+                        // todo: log
                         context.Stop(context.Self);
                         return;
                     }
