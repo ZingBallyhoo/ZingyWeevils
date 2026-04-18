@@ -341,6 +341,14 @@ namespace BinWeevils.Server.Controllers
             activity?.SetTag("authKey", request.m_authKey);
             activity?.SetTag("gameResult", request.m_gameResult);
             
+            // BallGame uses -1 to signify the other player left
+            // but this will only be sent if a turn is not currently active
+            // lets keep it consistent by always awarding noting
+            if (request.m_gameResult == -1)
+            {
+                return new SubmitTurnBasedResponse();
+            }
+            
             if (request.m_gameResult != 0 && request.m_gameResult != 1)
             {
                 throw new InvalidDataException("invalid game result");
@@ -364,8 +372,10 @@ namespace BinWeevils.Server.Controllers
                 return new SubmitTurnBasedResponse();
             }
             
-            var rewardMulch = m_turnBasedSettings.BaseMulch + request.m_gameResult * m_turnBasedSettings.WinMulch;
-            var rewardXp = m_turnBasedSettings.BaseXp + request.m_gameResult * m_turnBasedSettings.WinXp;
+            // any non-zero value should be considered a win
+            var winFactor = request.m_gameResult != 0 ? 1u : 0;
+            var rewardMulch = m_turnBasedSettings.BaseMulch + winFactor * m_turnBasedSettings.WinMulch;
+            var rewardXp = m_turnBasedSettings.BaseXp + winFactor * m_turnBasedSettings.WinXp;
             
             await m_dbContext.GiveMulchAndXp(idx, rewardMulch, rewardXp);
             var dto = await m_dbContext.GetMulchAndXp(idx);
