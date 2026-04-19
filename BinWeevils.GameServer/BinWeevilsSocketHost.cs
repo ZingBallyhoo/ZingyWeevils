@@ -7,12 +7,11 @@ using BinWeevils.GameServer.Rooms;
 using BinWeevils.GameServer.Sfs;
 using BinWeevils.GameServer.TurnBased;
 using BinWeevils.Protocol.Xml;
-using Microsoft.Extensions.Hosting;
 using Proto;
 
 namespace BinWeevils.GameServer
 {
-    public class BinWeevilsSocketHost : SocketHost, IHostedLifecycleService
+    public class BinWeevilsSocketHost : SocketHost
     {
         private readonly SmartFoxManager m_manager;
         private readonly ActorSystem m_actorSystem;
@@ -155,25 +154,10 @@ namespace BinWeevils.GameServer
             m_tcpServer.StartAcceptWorker();
         }
 
-        public Task StartingAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task StartedAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        public async Task StoppingAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await base.StopAsync(cancellationToken);
             m_tcpServer.Dispose();
-        }
-
-        public Task StoppedAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }
