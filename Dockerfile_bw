@@ -1,4 +1,6 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+﻿# -extra tag is required because app needs time zone info
+# https://github.com/dotnet/dotnet-docker/blob/main/documentation/image-variants.md
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled-extra AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
