@@ -1,7 +1,6 @@
 using ArcticFox.SmartFoxServer;
 using BinWeevils.Protocol.DataObj;
 using BinWeevils.Protocol.KeyValue;
-using CommunityToolkit.HighPerformance;
 
 namespace BinWeevils.GameServer.TurnBased
 {
@@ -19,8 +18,7 @@ namespace BinWeevils.GameServer.TurnBased
             
             var turnResponse = MakeResponse<Mulch4TurnResponse>(request, data);
             
-            // todo: why is cast required :(
-            var firstEmptyRow = columnData.AsSpan().Cast<TileBasedGameData.TileState, byte>().IndexOf((byte)TileBasedGameData.TileState.Empty);
+            var firstEmptyRow = columnData.IndexOf(TileBasedGameData.TileState.Empty);
             if (firstEmptyRow == -1)
             {
                 // can't place there :(
