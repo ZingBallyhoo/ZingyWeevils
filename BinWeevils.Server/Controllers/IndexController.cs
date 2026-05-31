@@ -25,10 +25,16 @@ namespace BinWeevils.Server.Controllers
         [StructuredFormPost("")]
         public async Task<IResult> PostUsername([FromBody] UsernameForm form)
         {
+            if (form.m_username == null!)
+            {
+                // crawler bots POSTing the form
+                return Results.BadRequest();
+            }
+            
             using var activity = ApiServerObservability.StartActivity("IndexController.PostUsername");
             activity?.SetTag("userName", form.m_username);
             
-            var username = form.m_username.Trim().Replace('+', ' ');
+            var username = form.m_username.Replace('+', ' ').Trim();
             if (string.IsNullOrWhiteSpace(username))
             {
                 return Results.Redirect("/");
