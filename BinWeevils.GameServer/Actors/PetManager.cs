@@ -88,13 +88,13 @@ namespace BinWeevils.GameServer.Actors
                 case ClientPetJoinNestLoc joinNestLoc:
                 {
                     ValidatePetID(joinNestLoc.m_shared.m_petID);
-                    var petInNest = await ValidateBroadcastSwitch(joinNestLoc.m_shared.m_petID, joinNestLoc.m_broadcastSwitch);
-                    if (!petInNest)
+                    var petInOwnNest = await ValidateBroadcastSwitch(joinNestLoc.m_shared.m_petID, joinNestLoc.m_broadcastSwitch);
+                    if (!petInOwnNest && !await UserInAnyNest())
                     {
                         throw new InvalidDataException("how could a pet outside of the nest join a nest loc...?");
                     }
                     
-                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_JOIN_NEST_LOC, joinNestLoc.m_shared, petInNest));
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_JOIN_NEST_LOC, joinNestLoc.m_shared, petInOwnNest));
                     
                     var pet = m_pets[joinNestLoc.m_shared.m_petID];
                     UpdatePetState(joinNestLoc.m_shared.m_petID, pet.m_state with
@@ -110,13 +110,13 @@ namespace BinWeevils.GameServer.Actors
                 case ClientPetSetNestDoor setNestDoor:
                 {
                     ValidatePetID(setNestDoor.m_shared.m_petID);
-                    var petInNest = await ValidateBroadcastSwitch(setNestDoor.m_shared.m_petID, setNestDoor.m_broadcastSwitch);
-                    if (!petInNest)
+                    var petInOwnNest = await ValidateBroadcastSwitch(setNestDoor.m_shared.m_petID, setNestDoor.m_broadcastSwitch);
+                    if (!petInOwnNest && !await UserInAnyNest())
                     {
                         throw new InvalidDataException("how could a pet outside of the nest set a nest door...?");
                     }
                     
-                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_SET_NEST_DOOR, setNestDoor.m_shared, petInNest));
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_SET_NEST_DOOR, setNestDoor.m_shared, petInOwnNest));
                     break;
                 }
                 case ClientPetExpression expression:
@@ -126,9 +126,9 @@ namespace BinWeevils.GameServer.Actors
                     {
                         throw new InvalidDataException($"invalid pet expression: {expression.m_shared.m_expressionID}");
                     }
-                    var petInNest = await ValidateBroadcastSwitch(expression.m_shared.m_petID, expression.m_broadcastSwitch);
+                    var petInOwnNest = await ValidateBroadcastSwitch(expression.m_shared.m_petID, expression.m_broadcastSwitch);
                     
-                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_EXPRESSION, expression.m_shared, petInNest));
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_EXPRESSION, expression.m_shared, petInOwnNest));
                     GameServerObservability.s_petExpressionsSent.Add(1);
                     break;
                 }
@@ -139,7 +139,7 @@ namespace BinWeevils.GameServer.Actors
                     {
                         throw new InvalidDataException($"invalid pet action: {action.m_actionID}");
                     }
-                    var petInNest = await ValidateBroadcastSwitch(action.m_petID, action.m_broadcastSwitch);
+                    var petInOwnNest = await ValidateBroadcastSwitch(action.m_petID, action.m_broadcastSwitch);
                     
                     // todo: validate extra params
                     
@@ -165,7 +165,7 @@ namespace BinWeevils.GameServer.Actors
                         m_actionID = action.m_actionID,
                         m_extraParams = action.m_extraParams
                     };
-                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_ACTION, serverAction, petInNest));
+                    context.Send(m_weevilData.GetUserAddress(), new PetNotification(Modules.PET_MODULE_ACTION, serverAction, petInOwnNest));
                     GameServerObservability.s_petActionsSent.Add(1);
                     break;
                 }
@@ -218,23 +218,31 @@ namespace BinWeevils.GameServer.Actors
         
         private async ValueTask<bool> ValidateBroadcastSwitch(uint petID, byte val) 
         {
-            var petInNest = petID != m_equippedPet || await UserInNest();
-            if (petInNest != (val == 0))
+            var petOwnInNest = petID != m_equippedPet || await UserInOwnNest();
+            if (petOwnInNest != (val == 0))
             {
                 throw new InvalidDataException("client disagrees on pet being in nest or not");
             }
-            return petInNest;
+            return petOwnInNest;
         }
         
-        private async ValueTask<bool> UserInNest()
+        private async ValueTask<bool> UserInOwnNest()
+        {
+            var nestRoom = await GetActiveNestRoom();
+            if (nestRoom == null) return false;
+            return nestRoom.m_ownerWeevil.m_user.m_name == m_weevilData.m_user.m_name;
+        }
+        
+        private async ValueTask<bool> UserInAnyNest()
+        {
+            var nestRoom = await GetActiveNestRoom();
+            return nestRoom != null;
+        }
+
+        private async ValueTask<NestRoom?> GetActiveNestRoom()
         {
             var room = await m_weevilData.m_user.GetRoomOrNull();
-            if (room == null) return false;
-            
-            var nestRoom = room.GetDataAs<NestRoom>();
-            if (nestRoom == null) return false;
-            
-            return nestRoom.m_ownerWeevil.m_user.m_name == m_weevilData.m_user.m_name;
+            return room?.GetDataAs<NestRoom>();
         }
         
         private async ValueTask HandleUserVars(IContext context, SetUserVarsRequest setUserVars)
@@ -330,7 +338,7 @@ namespace BinWeevils.GameServer.Actors
         
         private async Task UserPetDefChanged(PetDefVar? def)
         {
-            if (!await UserInNest())
+            if (!await UserInOwnNest())
             {
                 if (def == null)
                 {
