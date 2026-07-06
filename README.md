@@ -39,7 +39,6 @@ Technical TODO:
 
 Ruffle Todo:
 - Graphics:
-  - Line thickness is scaled instead of being in screen coordinates
   - 9-slice scaling / scale9Grid not implemented
   - Totem of the aztecs missing dial rotation graphic (other missions too i assume)
   - Tink's Blocks rotation gets stuck
