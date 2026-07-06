@@ -89,7 +89,7 @@ namespace BinWeevils.GameServer.Actors
                 {
                     ValidatePetID(joinNestLoc.m_shared.m_petID);
                     var petInOwnNest = await ValidateBroadcastSwitch(joinNestLoc.m_shared.m_petID, joinNestLoc.m_broadcastSwitch);
-                    if (!petInOwnNest && !await UserInAnyNest())
+                    if (!petInOwnNest && !await UserInAnyNestWithPetEquipped(joinNestLoc.m_shared.m_petID))
                     {
                         throw new InvalidDataException("how could a pet outside of the nest join a nest loc...?");
                     }
@@ -111,7 +111,7 @@ namespace BinWeevils.GameServer.Actors
                 {
                     ValidatePetID(setNestDoor.m_shared.m_petID);
                     var petInOwnNest = await ValidateBroadcastSwitch(setNestDoor.m_shared.m_petID, setNestDoor.m_broadcastSwitch);
-                    if (!petInOwnNest && !await UserInAnyNest())
+                    if (!petInOwnNest && !await UserInAnyNestWithPetEquipped(setNestDoor.m_shared.m_petID))
                     {
                         throw new InvalidDataException("how could a pet outside of the nest set a nest door...?");
                     }
@@ -218,7 +218,9 @@ namespace BinWeevils.GameServer.Actors
         
         private async ValueTask<bool> ValidateBroadcastSwitch(uint petID, byte val) 
         {
-            var petOwnInNest = petID != m_equippedPet || await UserInOwnNest();
+            var petOwnInNest = 
+                petID != m_equippedPet || // pet is unequipped, i.e. we left it at home
+                await UserInOwnNest(); // or, we're at home. therefore logically the pet must be too
             if (petOwnInNest != (val == 0))
             {
                 throw new InvalidDataException("client disagrees on pet being in nest or not");
@@ -233,10 +235,10 @@ namespace BinWeevils.GameServer.Actors
             return nestRoom.m_ownerWeevil.m_user.m_name == m_weevilData.m_user.m_name;
         }
         
-        private async ValueTask<bool> UserInAnyNest()
+        private async ValueTask<bool> UserInAnyNestWithPetEquipped(uint petID)
         {
             var nestRoom = await GetActiveNestRoom();
-            return nestRoom != null;
+            return nestRoom != null && m_equippedPet == petID;
         }
 
         private async ValueTask<NestRoom?> GetActiveNestRoom()
